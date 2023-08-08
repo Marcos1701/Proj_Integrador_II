@@ -9,9 +9,7 @@
 
 - ## **Ferramenta de Gerenciamento de Projeto utilizada:**
 
-    - Notion/Trello/Github.
-    
-           Link: [null]
+  <a href="https://www.notion.so/e65c7907ef2a483581872dbf16c1074c?v=41dd9e9825c247e8a0fe487dc81a7c2c&pvs=4">Notion/Trello/Github</a>
 
 ## :heavy_check_mark: **. Tema Principal:**
 
