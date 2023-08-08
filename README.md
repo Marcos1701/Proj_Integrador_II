@@ -3,7 +3,7 @@
 - ## **Membros da equipe:**
     - <a href="https://github.com/Marcos1701">*Marcos Eduardo*</a>
     - <a href="https://github.com/MrMorgam">*Gabriel Morais*</a>
-    - <a href="https://github.com/cibellemc">*Cibele*</a>
+    - <a href="https://github.com/cibellemc">*Cibelle Maciel*</a>
     
 
 
