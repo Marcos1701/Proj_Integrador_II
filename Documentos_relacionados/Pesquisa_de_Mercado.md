@@ -19,29 +19,17 @@ Esses primeiros softwares permitiam que as pessoas controlassem suas despesas, g
 
 ### Linha do tempo
 
-1983: O Quicken, desenvolvido pela Intuit, foi lançado como um dos primeiros softwares de gestão financeira pessoal.
-
-1996: A Microsoft lançou o Money, uma alternativa ao Quicken, como parte da sua suíte de produtos.
-
-2006: Surgimento do Mint, uma plataforma de gestão financeira online, que mais tarde foi adquirida pela Intuit.
-
-2010: Lançamento do Personal Capital, introduzindo uma abordagem de agregação de contas e planejamento financeiro baseado na web.
-
-2014: O You Need A Budget (YNAB) ganha destaque com sua abordagem de orçamentação baseada em regras.
-
-2015: A Intuit incorpora recursos de análise financeira mais avançados no Quicken.
-
-2016: Empresas de tecnologia financeira (fintechs) como o Albert começam a oferecer assistentes financeiros virtuais para ajudar os usuários com suas finanças.
-
-2017: A Microsoft descontinua o Microsoft Money.
-
-2019: O PocketGuard ganha popularidade como uma plataforma de gestão financeira que foca na simplicidade e na visão geral das finanças.
-
-2020: O Quicken continua evoluindo, integrando recursos de inteligência artificial e aprendizado de máquina para melhorar suas análises financeiras.
-
-2021: Mais plataformas de fintechs surgem, oferecendo uma combinação de serviços bancários e ferramentas de gestão financeira, como o Nubank e o Banco Inter.
-
-2022: O mercado de gestão financeira pessoal continua a se expandir, com várias plataformas oferecendo integração com carteiras de criptomoedas e investimentos.
+- **Principais marcos**
+  - 1983: Lançamento do Quicken, um dos primeiros softwares de gestão financeira.
+  - 1996: A Microsoft lança o Money como concorrente do Quicken.
+  - 2006: Mint, uma plataforma de gestão financeira online, é lançada.
+  - 2010: Personal Capital introduz agregação de contas e planejamento financeiro baseado na web.
+  - 2014: O You Need A Budget (YNAB) se destaca com sua abordagem de orçamentação baseada em regras.
+  - 2016: Surgimento de assistentes financeiros virtuais, como o Albert.
+  - 2017: A Microsoft descontinua o Microsoft Money.
+  - 2020: Quicken incorpora IA e aprendizado de máquina em suas análises financeiras.
+  - 2021: Fintechs como Nubank e Banco Inter oferecem serviços bancários integrados com ferramentas de gestão financeira.
+  - 2022: Expansão das plataformas para integração com investimentos em criptomoedas.
 
 ## Principais concorrentes
 
