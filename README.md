@@ -3,7 +3,7 @@
 - ## **Membros da equipe:**
     - <a href="https://github.com/Marcos1701">*Marcos Eduardo*</a>
     - <a href="https://github.com/MrMorgam">*Gabriel Morais*</a>
-    - <a href="https://github.com/cibellemc">*Erick Amorim*</a>
+    - <a href="https://github.com/sla">*Erick Amorim*</a>
     
 
 
@@ -17,7 +17,8 @@
        Área de Gestão Financeira
 
  - ### :speech_balloon: Descrição do projeto:
-       [null]
+       Trata-se de uma aplicação que permite aos usuários monitorar suas despesas, criar orçamentos e definir metas financeiras.
+       Ela pode fornecer gráficos e análises para ajudar os usuários a tomar decisões informadas.
 
 - ### :gem: Benefícios do Projeto:
       [null]
