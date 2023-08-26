@@ -19,7 +19,7 @@ Esses primeiros softwares permitiam que as pessoas controlassem suas despesas, g
 
 ### Linha do tempo
 
-- **Principais marcos**
+- **Principais destaques:**
   - 1983: Lançamento do Quicken, um dos primeiros softwares de gestão financeira.
   - 1996: A Microsoft lança o Money como concorrente do Quicken.
   - 2006: Mint, uma plataforma de gestão financeira online, é lançada.
@@ -50,6 +50,7 @@ Esses primeiros softwares permitiam que as pessoas controlassem suas despesas, g
 </details>
 <details>
   <summary>Organizze</summary>
+  
   - No Organizze, você tem acesso a várias contas ao mesmo tempo, podendo analisar todas elas de forma completa e integrada.
   - Além disso, recebe um demonstrativo dos lançamentos do mês, pode organizar por categorias — e subcategorias — o que permite entender exatamente o seu orçamento.
   
