@@ -14,7 +14,7 @@
 ## :heavy_check_mark: **. Tema Principal:**
 
  - ### :construction_worker: Área de atuação:
-       Área de Gestão Financeira
+       Gestão Financeira Pessoal
 
  - ### :speech_balloon: Descrição do projeto:
        Trata-se de uma aplicação que permite aos usuários monitorar suas despesas, criar orçamentos e definir metas financeiras.
