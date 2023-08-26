@@ -3,7 +3,7 @@
 - ## **Membros da equipe:**
     - <a href="https://github.com/Marcos1701">*Marcos Eduardo*</a>
     - <a href="https://github.com/MrMorgam">*Gabriel Morais*</a>
-    - <a href="https://github.com/cibellemc">*Cibelle Maciel*</a>
+    - <a href="https://github.com/cibellemc">*Erick Amorim*</a>
     
 
 
@@ -14,7 +14,7 @@
 ## :heavy_check_mark: **. Tema Principal:**
 
  - ### :construction_worker: Área de atuação:
-       Área da saúde
+       Área de Gestão Financeira
 
  - ### :speech_balloon: Descrição do projeto:
        [null]
