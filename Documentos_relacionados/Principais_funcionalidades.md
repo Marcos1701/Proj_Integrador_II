@@ -1,6 +1,6 @@
 # Principais Funcionalidades 
 
-- ### Inserção/definição de metas.
-- ### Alteração de metas
-- ### Geração Graficos a partir das metas definidas (ou de apenas uma mea específica).
-- ...
+- ### Controlar gastos financeiros (O que sai)
+- ### Controlar ganhos financeiros (O que entra)
+- ### Metas financeiras (Cofrinhos)
+- ### Gerar estatísticas orçamentárias de mês a mês
