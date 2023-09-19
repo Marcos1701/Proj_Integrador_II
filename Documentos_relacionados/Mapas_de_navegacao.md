@@ -1,16 +1,16 @@
 # Mapas de navegação das principais funcionalidades
 
 ## Controlar gastos financeiros (O que sai).
-Pagina inicial --> Click no botão "Adicionar Ganho/Gasto" --> Tela de adicionar ganho/gasto --> Click no botão "Gasto" --> Tela de adicionar gastos --> Click no botão "Salvar" --> Tela de gastos
+Pagina inicial --> Click no botão "Adicionar Gasto" --> Tela de adicionar gasto --> Tela de adicionar gastos --> Click no botão "Salvar" --> Tela de gastos
 
 ## Controlar ganhos financeiros (O que entra).
-Pagina inicial --> Click no botão "Adicionar Ganho/Gasto" --> Tela de adicionar ganho/gasto --> Click no botão "Ganho" --> Tela de adicionar ganhos --> Click no botão "Salvar" --> Tela de ganhos
+Pagina inicial --> Click no botão "Adicionar Ganho" --> Tela de adicionar ganho --> Tela de adicionar ganhos --> Click no botão "Salvar" --> Tela de ganhos
 
 ## Metas financeiras (Cofrinhos).
 Pagina inicial --> Click no botão "Adicionar Meta" --> Tela de adicionar meta  --> Escrever o nome da meta --> Escrever o valor da meta --> Escrever a data limite da meta --> Click no botão "Salvar" --> Tela de metas
 
-## Gerar relatórios de gastos e ganhos (Relação de gastos e ganhos por mês/periodo).
-Pagina inicial --> Click no botão "relatórios" --> Tela de relatórios --> Click no botão "Gerar" --> Tela de relatórios.
+## Acessar relatórios de gastos e ganhos (Relação de gastos e ganhos por mês/periodo).
+Pagina inicial --> Click no botão "Acessar Relatórios" --> Tela de relatórios --> Escolher o mês/periodo --> Click no botão "Gerar Relatório" --> Tela de relatórios
 
 # flat backlog (sem prioridade)
 
