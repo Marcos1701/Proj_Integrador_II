@@ -1,0 +1,40 @@
+
+
+<div align="center">
+  <h1>Projeto e Prototipação</h1>
+
+<h2>Documento de Arquitetura</h2>
+
+<h3>Tecnologias de Apresentação: </h3>
+
+<ul>
+<li>Utilizaremos React + Typescript para desenvolver a interface do usuário. </li>
+</ul>
+
+<h3>Tecnologias de Negócios: </h3>
+
+<ul>
+<li>Utilizaremos Nestjs para desenvolver o backend da aplicação. </li>
+</ul>
+
+<h3>Tecnologias de Dados: </h3>
+
+<ul style="margin-bottom: 60px;">
+<li>Utilizaremos Postgres via supabase para armazenar os dados da aplicação. </li>
+</ul>
+
+<img src="./Arquitetura.png" alt="Arquitetura" width="500" height="250" style="margin-bottom: 60px;"/>
+
+
+
+<h2 style="margin-bottom: 60px;"><a href="https://trello.com/b/rRJM6sxG" target="_blank"><strong>Sprint Backlog</strong></a></h2>
+
+<h2>Modelo de Dados</h2>
+
+<h3>Diagrama de Dados (Lógico)</h3>
+
+<img src="./Diagrama_de_Dados.png" alt="Diagrama de Dados" width="500" height="250" style="margin-bottom: 60px;">
+
+
+
+</div>
