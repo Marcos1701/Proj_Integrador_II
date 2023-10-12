@@ -23,7 +23,7 @@
 <li>Utilizaremos Postgres via supabase para armazenar os dados da aplicação. </li>
 </ul>
 
-<img src="./Arquitetura.png" alt="Arquitetura" width="500" height="250" style="margin-bottom: 60px;"/>
+<img src="./Arquitetura.png" alt="Arquitetura" width="1000" height="500" style="margin-bottom: 60px;"/>
 
 
 
@@ -33,7 +33,7 @@
 
 <h3>Diagrama de Dados (Lógico)</h3>
 
-<img src="./Diagrama_de_Dados.png" alt="Diagrama de Dados" width="500" height="250" style="margin-bottom: 60px;">
+<img src="./Diagrama_de_dados.png" alt="Diagrama de Dados" width="1000" height="500" style="margin-bottom: 60px;">
 
 
 
