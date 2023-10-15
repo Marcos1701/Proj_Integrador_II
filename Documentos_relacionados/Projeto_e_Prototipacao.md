@@ -38,6 +38,6 @@
 
 <h3><a href="https://www.figma.com/file/S2YIduEFrUhXukCl5XWJbu/Wireframe_FinnApp?type=design&node-id=0%3A1&mode=design&t=OHh0hbuhagdd3TUU-1">Wireframe</a></h3>
 
-
+J
 
 </div>
