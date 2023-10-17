@@ -12,14 +12,16 @@
   - <a href="https://www.notion.so/e65c7907ef2a483581872dbf16c1074c?v=41dd9e9825c247e8a0fe487dc81a7c2c&pvs=4">**Notion**</a>
   - <a href="https://trello.com/b/rRJM6sxG">**Trello**</a>
 
-## :heavy_check_mark: **. Tema Principal:**
+## :heavy_check_mark: **. Descrição do Projeto**
 
- - ### :construction_worker: Área de atuação:
-       Gestão Financeira Pessoal
+ - ### :construction_worker: Nome:
+       FinnApp
 
  - ### :speech_balloon: Descrição do projeto:
        Trata-se de uma aplicação que permite aos usuários monitorar suas despesas, criar orçamentos e definir metas financeiras.
        Ela pode fornecer gráficos e análises para ajudar os usuários a tomar decisões informadas.
+   
+## :anchor: Artefatos e Documentos
 
 - ### :dizzy: Documento de Arquitetura:
   <img src="./Documentos_relacionados/Arquitetura.png" alt="Arquitetura" width="1000" height="500" style="margin-bottom: 60px;"/>
