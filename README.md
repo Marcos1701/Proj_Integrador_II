@@ -10,6 +10,7 @@
 - ## **Ferramenta de Gerenciamento de Projeto utilizada:**
 
   - <a href="https://www.notion.so/e65c7907ef2a483581872dbf16c1074c?v=41dd9e9825c247e8a0fe487dc81a7c2c&pvs=4">**Notion**</a>
+  - <a href="https://trello.com/b/rRJM6sxG">**Trello**</a>
 
 ## :heavy_check_mark: **. Tema Principal:**
 
@@ -20,6 +21,12 @@
        Trata-se de uma aplicação que permite aos usuários monitorar suas despesas, criar orçamentos e definir metas financeiras.
        Ela pode fornecer gráficos e análises para ajudar os usuários a tomar decisões informadas.
 
-- ### :gem: Benefícios do Projeto:
-      [null]
+- ### 📘 Documento de Arquitetura:
+  <img src="./Documentos_relacionado/Arquitetura.png" alt="Arquitetura" width="1000" height="500" style="margin-bottom: 60px;"/>
+  <a href="./Documentos_relacionados/Projeto_e_Prototipacao.md"> Tecnologias (Detalhes)</a>
+
+- ### 📖 Diagrama de Dados (Lógico)
+
+    <img src="./Documentos_relacionado/Diagrama_de_dados.png" alt="Diagrama de Dados" width="1000" height="500" style="margin-bottom: 60px;">
+  
  
