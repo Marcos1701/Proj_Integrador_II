@@ -14,20 +14,20 @@
 
 ## :heavy_check_mark: **. Descrição do Projeto**
 
- - ### :construction_worker: Nome:
+ - ### *:dizzy: - Nome:*
        FinnApp
 
- - ### :speech_balloon: Descrição do projeto:
+ - ### *:speech_balloon: - Descrição do projeto:*
        Trata-se de uma aplicação que permite aos usuários monitorar suas despesas, criar orçamentos e definir metas financeiras.
        Ela pode fornecer gráficos e análises para ajudar os usuários a tomar decisões informadas.
    
-## :anchor: Artefatos e Documentos
+## **:anchor:. Artefatos e Documentos**
 
-- ### :dizzy: Documento de Arquitetura:
+- ### Documento de Arquitetura:
   <img src="./Documentos_relacionados/Arquitetura.png" alt="Arquitetura" width="1000" height="500" style="margin-bottom: 60px;"/>
   <a href="./Documentos_relacionados/Projeto_e_Prototipacao.md"> Tecnologias (Detalhes)</a>
 
-- ### :space_invader: Diagrama de Dados (Lógico)
+- ### Diagrama de Dados (Lógico)
 
     <img src="./Documentos_relacionados/Diagrama_de_dados.png" alt="Diagrama de Dados" width="1000" height="500" style="margin-bottom: 60px;">
 
