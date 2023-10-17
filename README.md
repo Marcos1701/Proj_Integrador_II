@@ -21,12 +21,14 @@
        Trata-se de uma aplicação que permite aos usuários monitorar suas despesas, criar orçamentos e definir metas financeiras.
        Ela pode fornecer gráficos e análises para ajudar os usuários a tomar decisões informadas.
 
-- ### 📘 Documento de Arquitetura:
+- ### :dizzy: Documento de Arquitetura:
   <img src="./Documentos_relacionados/Arquitetura.png" alt="Arquitetura" width="1000" height="500" style="margin-bottom: 60px;"/>
   <a href="./Documentos_relacionados/Projeto_e_Prototipacao.md"> Tecnologias (Detalhes)</a>
 
-- ### 📖 Diagrama de Dados (Lógico)
+- ### :space_invader: Diagrama de Dados (Lógico)
 
     <img src="./Documentos_relacionados/Diagrama_de_dados.png" alt="Diagrama de Dados" width="1000" height="500" style="margin-bottom: 60px;">
+
+- ###  <a href="https://www.figma.com/file/S2YIduEFrUhXukCl5XWJbu/Wireframe_FinnApp?type=design&node-id=0%3A1&mode=design&t=OHh0hbuhagdd3TUU-1" >**Wireframe**</a>
   
  
