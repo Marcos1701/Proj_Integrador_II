@@ -1,4 +1,4 @@
-# **:sparkles:Repositório destinado á postagem de atividades/projetos da disciplina de Projeto Integrador II.:sparkles:**
+# **:sparkles:Projeto Integrador II.:sparkles:**
 
 ## **:dizzy: - Nome do Projeto:**
        FinnApp
