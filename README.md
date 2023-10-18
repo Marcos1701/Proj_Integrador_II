@@ -27,7 +27,9 @@
 - ### :beginner:**. Artefatos e Documentos**
 
     - #### <a href="./Documentos_relacionados/Arquitetura.md">**:pencil:. Documento de Arquitetura** </a>
+    
+    - #### <a href="https://trello.com/b/rRJM6sxG">**:bookmark_tabs:. Sprint Backlog - Trello**</a>
 
     - #### <a href="./Documentos_relacionados/Diagrama_de_dados.png" >**:page_with_curl: Diagrama de Dados**</a>
 
-    - ####  <a href="https://www.figma.com/file/S2YIduEFrUhXukCl5XWJbu/Wireframe_FinnApp?type=design&node-id=0%3A1&mode=design&t=OHh0hbuhagdd3TUU-1" >**:iphone: Protótipo inicial**</a>
+    - ####  <a href="https://www.figma.com/file/S2YIduEFrUhXukCl5XWJbu/Wireframe_FinnApp?type=design&node-id=0%3A1&mode=design&t=OHh0hbuhagdd3TUU-1" >**:iphone: Protótipo (Figma)**</a>
