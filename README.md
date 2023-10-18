@@ -23,13 +23,8 @@
 ## :anchor: - <a href="./Documentos_relacionados/Principais_funcionalidades_com_detalhamento_basico.md">**Inseption (Mapas de Navegação, flat backlog e rabisco frame)**</a>
 
 ## **:round_pushpin: - Projeto e Prototipação**
-
-- ### :beginner:**. Artefatos e Documentos**
-
-    - #### <a href="./Documentos_relacionados/Arquitetura.md">**:pencil:. Documento de Arquitetura** </a>
-    
+  - ### :beginner:**. Artefatos e Documentos**
+    - #### <a href="./Documentos_relacionados/Arquitetura.md">**:pencil:. Documento de Arquitetura** </a>  
     - #### <a href="https://trello.com/b/rRJM6sxG">**:bookmark_tabs:. Sprint Backlog - Trello**</a>
-
     - #### <a href="./Documentos_relacionados/Diagrama_de_dados.png" >**:page_with_curl: Diagrama de Dados**</a>
-
     - ####  <a href="https://www.figma.com/file/S2YIduEFrUhXukCl5XWJbu/Wireframe_FinnApp?type=design&node-id=0%3A1&mode=design&t=OHh0hbuhagdd3TUU-1" >**:iphone: Protótipo (Figma)**</a>
