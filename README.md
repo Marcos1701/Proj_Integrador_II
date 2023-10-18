@@ -26,9 +26,7 @@
 
 - ### :beginner:**. Artefatos e Documentos**
 
-    - #### :pencil:. Documento de Arquitetura:
-      - <a href="./Documentos_relacionados/Arquitetura.png" >**Imagem Ilustrativa**</a> <br/>
-      - <a href="./Documentos_relacionados/Arquitetura.md">**Tecnologias que serão utilizadas**</a>
+    - #### <a href="./Documentos_relacionados/Arquitetura.md">**:pencil:. Documento de Arquitetura** </a>
 
     - #### <a href="./Documentos_relacionados/Diagrama_de_dados.png" >**:page_with_curl: Diagrama de Dados**</a>
 
