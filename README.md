@@ -1,36 +1,35 @@
 # **:sparkles:Repositório destinado á postagem de atividades/projetos da disciplina de Projeto Integrador II.:sparkles:**
 
-- ## **Membros da equipe:**
-    - <a href="https://github.com/Marcos1701">*Marcos Eduardo*</a>
-    - <a href="https://github.com/MrMorgam">*Gabriel Morais*</a>
-    - <a href="https://github.com/erick7amorim">*Erick Amorim*</a>
-    
+## **:dizzy: - Nome do Projeto:**
+       FinnApp
+       
+## **:dart: - Área de Atuação**
+      Finanças Pessoais
 
+## **:speech_balloon: - Descrição do projeto:**
+       Trata-se de uma aplicação que permite aos usuários monitorar suas despesas, criar orçamentos e definir metas financeiras.
+       Ela pode fornecer gráficos para ajudar os usuários a tomar decisões informadas.
 
-- ## **Ferramenta de Gerenciamento de Projeto utilizada:**
+## **:busts_in_silhouette: - Membros da equipe:**
+- <a href="https://github.com/Marcos1701">*Marcos Eduardo*</a>
+- <a href="https://github.com/MrMorgam">*Gabriel Morais*</a>
+- <a href="https://github.com/erick7amorim">*Erick Amorim*</a>
+
+## :pushpin: - **Ferramentas de Gerenciamento de Projeto utilizadas:**
 
   - <a href="https://www.notion.so/e65c7907ef2a483581872dbf16c1074c?v=41dd9e9825c247e8a0fe487dc81a7c2c&pvs=4">**Notion**</a>
   - <a href="https://trello.com/b/rRJM6sxG">**Trello**</a>
 
-## :heavy_check_mark: **. Descrição do Projeto**
+## :anchor: - <a href="./Documentos_relacionados/Principais_funcionalidades_com_detalhamento_basico.md">**Inseption (Mapas de Navegação, flat backlog e rabisco frame)**</a>
 
- - ### *:dizzy: - Nome:*
-       FinnApp
+## **:round_pushpin: - Projeto e Prototipação**
 
- - ### *:speech_balloon: - Descrição do projeto:*
-       Trata-se de uma aplicação que permite aos usuários monitorar suas despesas, criar orçamentos e definir metas financeiras.
-       Ela pode fornecer gráficos e análises para ajudar os usuários a tomar decisões informadas.
-   
-## **:anchor:. Artefatos e Documentos**
+- ### :beginner:**. Artefatos e Documentos**
 
-- ### Documento de Arquitetura:
-  <img src="./Documentos_relacionados/Arquitetura.png" alt="Arquitetura" width="1000" height="500" style="margin-bottom: 60px;"/>
-  <a href="./Documentos_relacionados/Projeto_e_Prototipacao.md"> Tecnologias (Detalhes)</a>
+    - #### :pencil:. Documento de Arquitetura:
+      - <a href="./Documentos_relacionados/Arquitetura.png" >**Imagem Ilustrativa**</a> <br/>
+      - <a href="./Documentos_relacionados/Arquitetura.md">**Tecnologias que serão utilizadas**</a>
 
-- ### Diagrama de Dados (Lógico)
+    - #### <a href="./Documentos_relacionados/Diagrama_de_dados.png" >**:page_with_curl:. Diagrama de Dados**</a>
 
-    <img src="./Documentos_relacionados/Diagrama_de_dados.png" alt="Diagrama de Dados" width="1000" height="500" style="margin-bottom: 60px;">
-
-- ###  <a href="https://www.figma.com/file/S2YIduEFrUhXukCl5XWJbu/Wireframe_FinnApp?type=design&node-id=0%3A1&mode=design&t=OHh0hbuhagdd3TUU-1" >**Wireframe**</a>
-  
- 
+    - ####  <a href="https://www.figma.com/file/S2YIduEFrUhXukCl5XWJbu/Wireframe_FinnApp?type=design&node-id=0%3A1&mode=design&t=OHh0hbuhagdd3TUU-1" >**:iphone:. Wireframe**</a>
