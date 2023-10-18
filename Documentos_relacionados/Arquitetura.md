@@ -21,4 +21,4 @@
 
 <h3>Imagem representativa: </h3> <br/>
 
-<img src="./Documentos_relacionados/Arquitetura.png" alt="Arquitetura" width="1000" height="500" style="margin-bottom: 60px;"/>
+<img src="./Arquitetura.png" alt="Arquitetura" width="1000" height="500" style="margin-bottom: 60px;"/>
