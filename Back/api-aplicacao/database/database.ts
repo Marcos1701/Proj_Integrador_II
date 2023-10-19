@@ -3,7 +3,8 @@ import { Client } from "pg";
 import { createClient } from '@supabase/supabase-js';
 import { Database } from "./database.types";
 
-dotenv.config({ path: ".env.local" });
+dotenv.config({ path: "../.env.local" });
+
 
 const db = new Client({
     host: process.env.DB_HOST,
@@ -128,6 +129,14 @@ export default db;
 
 
 // via typeORM + Supabase
+
+// para gerar a tipagem do banco de dados, é necessário instalar o supabase cli e rodar o comando
+// supabase gen types typescript --project-id tpjjacgapstyjpzkibag > database.types.ts
+// o arquivo gerado deve ser colocado na pasta database
+// quanto as migrations, basta rodar o comando
+// supabase migrate up --project-id tpjjacgapstyjpzkibag
+// e para trazer as migrations para o projeto, basta rodar o comando
+// supabase migrate save --project-id tpjjacgapstyjpzkibag
 
 const supabase = createClient<Database>(
     process.env.SUPABASE_URL,
