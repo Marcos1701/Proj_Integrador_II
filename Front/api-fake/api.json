@@ -1,0 +1,406 @@
+{
+    "Usuarios": [
+        {
+            "id": "sla",
+            "nome": "Santiago",
+            "Saldo": 1000.00,
+            "Email": "Sant@tester.ts",
+            "Senha": "123456"
+        },
+        {
+            "id": "sla2",
+            "nome": "Jose",
+            "Saldo": 100.00,
+            "Email": "Jose@tester.ts",
+            "Senha": "123456"
+        },
+        {
+            "id": "sla3",
+            "nome": "Maria",
+            "Saldo": 500.00,
+            "Email": "Mari@teste.ts",
+            "Senha": "123456"
+        }
+    ],
+    "Categoria": [
+        {
+            "id": "1",
+            "id_usuario": "sla",
+            "nome": "Alimentação",
+            "descricao": "Comida e bebida"
+        },
+        {
+            "id": "2",
+            "id_usuario": "sla",
+            "nome": "Transporte",
+            "descricao": "Transporte publico"
+        },
+        {
+            "id": "3",
+            "id_usuario": "sla2",
+            "nome": "Lazer",
+            "descricao": "Cinema, parque, etc"
+        },
+        {
+            "id": "4",
+            "id_usuario": "sla2",
+            "nome": "Salario",
+            "descricao": "Salario mensal"
+        },
+        {
+            "id": "5",
+            "id_usuario": "sla3",
+            "nome": "Alimentação",
+            "descricao": "Comida e bebida"
+        },
+        {
+            "id": "6",
+            "id_usuario": "sla3",
+            "nome": "Transporte",
+            "descricao": "Transporte publico"
+        },
+        {
+            "id": "7",
+            "id_usuario": "sla3",
+            "nome": "Lazer",
+            "descricao": "Cinema, parque, etc"
+        },
+        {
+            "id": "8",
+            "id_usuario": "sla3",
+            "nome": "Salario",
+            "descricao": "Salario mensal"
+        }
+    ],
+    "Orcamento": [
+        {
+            "id": "1",
+            "id_categoria": "1",
+            "Limite": 100.00
+        },
+        {
+            "id": "2",
+            "id_categoria": "2",
+            "Limite": 1000.00
+        },
+        {
+            "id": "3",
+            "id_categoria": "3",
+            "Limite": 500.00
+        },
+        {
+            "id": "4",
+            "id_categoria": "4",
+            "Limite": 400.00
+        },
+        {
+            "id": "5",
+            "id_categoria": "5",
+            "Limite": 600.00
+        },
+        {
+            "id": "6",
+            "id_categoria": "6",
+            "Limite": 140.00
+        },
+        {
+            "id": "7",
+            "id_categoria": "7",
+            "Limite": 200.00
+        },
+        {
+            "id": "8",
+            "id_categoria": "8",
+            "Limite": 150.00
+        }
+    ],
+    "Transacao": [
+        {
+            "id": "1",
+            "id_categoria": "1",
+            "id_usuario": "sla",
+            "tipo": "Gasto",
+            "Valor": 10.00,
+            "Data": "2021-02-13",
+            "Descricao": "Comida"
+        },
+        {
+            "id": "2",
+            "id_categoria": "2",
+            "id_usuario": "sla",
+            "tipo": "Gasto",
+            "Valor": 10.00,
+            "Data": "2022-10-01",
+            "Descricao": "Transporte"
+        },
+        {
+            "id": "3",
+            "id_categoria": "3",
+            "id_usuario": "sla",
+            "tipo": "Gasto",
+            "Valor": 10.00,
+            "Data": "2021-02-07",
+            "Descricao": "Lazer"
+        },
+        {
+            "id": "4",
+            "id_categoria": "4",
+            "id_usuario": "sla",
+            "tipo": "Ganho",
+            "Valor": 10.00,
+            "Data": "2023-04-03",
+            "Descricao": "Salario"
+        },
+        {
+            "id": "5",
+            "id_categoria": "5",
+            "id_usuario": "sla2",
+            "tipo": "Gasto",
+            "Valor": 10.00,
+            "Data": "2020-12-20",
+            "Descricao": "Comida"
+        },
+        {
+            "id": "6",
+            "id_categoria": "6",
+            "id_usuario": "sla2",
+            "tipo": "Gasto",
+            "Valor": 10.00,
+            "Data": "2022-10-10",
+            "Descricao": "Transporte"
+        },
+        {
+            "id": "7",
+            "id_categoria": "7",
+            "id_usuario": "sla2",
+            "tipo": "Gasto",
+            "Valor": 10.00,
+            "Data": "2020-12-13",
+            "Descricao": "Lazer"
+        },
+        {
+            "id": "8",
+            "id_categoria": "8",
+            "id_usuario": "sla2",
+            "tipo": "Ganho",
+            "Valor": 10.00,
+            "Data": "2023-08-11",
+            "Descricao": "Salario"
+        },
+        {
+            "id": "9",
+            "id_categoria": "1",
+            "id_usuario": "sla3",
+            "tipo": "Gasto",
+            "Valor": 10.00,
+            "Data": "2023-10-10"
+        },
+        {
+            "id": "10",
+            "id_categoria": "2",
+            "id_usuario": "sla3",
+            "tipo": "Entrada",
+            "Valor": 10.00,
+            "Data": "2020-10-10",
+            "Descricao": "Transporte"
+        },
+        {
+            "id": "11",
+            "id_categoria": "3",
+            "id_usuario": "sla3",
+            "tipo": "Gasto",
+            "Valor": 10.00,
+            "Data": "2020-10-10",
+            "Descricao": "Lazer"
+        },
+        {
+            "id": "12",
+            "id_categoria": "4",
+            "id_usuario": "sla3",
+            "tipo": "Entrada",
+            "Valor": 10.00,
+            "Data": "2020-10-10",
+            "Descricao": "Salario"
+        }
+    ],
+    "Meta": [
+        {
+            "id": "1",
+            "id_usuario": "sla",
+            "Nome": "Meta 1",
+            "Valor_Desejado": 100.00,
+            "Valor_Obtido": 50.00,
+            "DataFinal": "2023-12-13",
+            "progresso": 50.00
+        },
+        {
+            "id": "2",
+            "id_usuario": "sla",
+            "Nome": "Meta 2",
+            "Valor_Desejado": 100.00,
+            "Valor_Obtido": 50.00,
+            "DataFinal": "2023-12-30",
+            "progresso": 50.00,
+            "Descricao": "Meta 2"
+        },
+        {
+            "id": "3",
+            "id_usuario": "sla2",
+            "Nome": "Meta 3",
+            "Valor_Desejado": 1000.00,
+            "Valor_Obtido": 80.00,
+            "DataFinal": "2024-06-13",
+            "progresso": 8.00,
+            "Descricao": "Meta 3"
+        },
+        {
+            "id": "4",
+            "id_usuario": "sla2",
+            "Nome": "Meta 4",
+            "Valor_Desejado": 1400.00,
+            "Valor_Obtido": 700.00,
+            "DataFinal": "2024-10-13",
+            "progresso": 50.00
+        },
+        {
+            "id": "5",
+            "id_usuario": "sla3",
+            "Nome": "Meta 5",
+            "Valor_Desejado": 2000.00,
+            "Valor_Obtido": 800.00,
+            "DataFinal": "2024-10-03",
+            "progresso": 40.00
+        },
+        {
+            "id": "6",
+            "id_usuario": "sla3",
+            "Nome": "Meta 6",
+            "Valor_Desejado": 1000.00,
+            "Valor_Obtido": 300.00,
+            "DataFinal": "2023-12-15",
+            "progresso": 30.00,
+            "Descricao": "Meta 6"
+        }
+    ],
+    "Marco": [
+        {
+            "id": "1",
+            "id_meta": "4",
+            "Nome": "Marco 1",
+            "Valor_Obtido": 300.00,
+            "Data": "2022-02-13",
+            "Descricao": "Marco 1"
+        },
+        {
+            "id": "2",
+            "id_meta": "4",
+            "Nome": "Marco 2",
+            "Valor_Obtido": 700.00,
+            "Data": "2022-12-13",
+            "Descricao": "Marco 2"
+        },
+        {
+            "id": "3",
+            "id_meta": "2",
+            "Nome": "Marco 3",
+            "Valor_Obtido": 10.00,
+            "Data": "2023-02-13",
+            "Descricao": "Marco 3"
+        },
+        {
+            "id": "4",
+            "id_meta": "2",
+            "Nome": "Marco 4",
+            "Valor_Obtido": 50.00,
+            "Data": "2023-02-20",
+            "Descricao": "Marco 4"
+        },
+        {
+            "id": "5",
+            "id_meta": "3",
+            "Nome": "Marco 5",
+            "Valor_Obtido": 10.00,
+            "Data": "2023-05-23",
+            "Descricao": "Marco 5"
+        },
+        {
+            "id": "6",
+            "id_meta": "3",
+            "Nome": "Marco 6",
+            "Valor_Obtido": 40.00,
+            "Data": "2023-06-13",
+            "Descricao": "Marco 6"
+        },
+        {
+            "id": "7",
+            "id_meta": "1",
+            "Nome": "Marco 7",
+            "Valor_Obtido": 10.00,
+            "Data": "2023-02-13",
+            "Descricao": "Marco 7"
+        },
+        {
+            "id": "8",
+            "id_meta": "1",
+            "Nome": "Marco 8",
+            "Valor_Obtido": 50.00,
+            "Data": "2023-02-16",
+            "Descricao": "Marco 8"
+        },
+        {
+            "id": "9",
+            "id_meta": "5",
+            "Nome": "Marco 9",
+            "Valor_Obtido": 300.00,
+            "Data": "2023-07-13",
+            "Descricao": "Marco 9"
+        }
+    ],
+    "SubMeta": [
+        {
+            "id": "1",
+            "id_meta": "1",
+            "Nome": "SubMeta 1",
+            "Valor_Desejavel": 100.00,
+            "Valor_Obtido": 50.00
+        },
+        {
+            "id": "2",
+            "id_meta": "2",
+            "Nome": "SubMeta 2",
+            "Valor_Desejavel": 100.00,
+            "Valor_Obtido": 50.00
+        },
+        {
+            "id": "3",
+            "id_meta": "3",
+            "Nome": "SubMeta 3",
+            "Valor_Desejavel": 100.00,
+            "Valor_Obtido": 50.00,
+            "Descricao": "SubMeta 3"
+        },
+        {
+            "id": "4",
+            "id_meta": "4",
+            "Nome": "SubMeta 4",
+            "Valor_Desejavel": 100.00,
+            "Valor_Obtido": 50.00,
+            "Descricao": "SubMeta 4"
+        },
+        {
+            "id": "5",
+            "id_meta": "5",
+            "Nome": "SubMeta 5",
+            "Valor_Desejavel": 100.00,
+            "Valor_Obtido": 50.00
+        },
+        {
+            "id": "6",
+            "id_meta": "6",
+            "Nome": "SubMeta 6",
+            "Valor_Desejavel": 100.00,
+            "Valor_Obtido": 50.00,
+            "Descricao": "SubMeta 6"
+        }
+    ]
+}
