@@ -3,7 +3,10 @@ import NextAuth from "next-auth/next";
 import EmailProvider from "next-auth/providers/email";
 
 // testando o next-auth com o supabase
+
+// emoji usando oculos escuros no commit: :dark_sunglasses:
 export default NextAuth({
+
     providers: [
         EmailProvider({
             server: {
