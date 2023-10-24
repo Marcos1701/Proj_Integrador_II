@@ -3,7 +3,7 @@
 <h2>Tecnologias de Apresentação: </h2>
 
 <ul>
-<li>Utilizaremos React + Typescript para desenvolver a interface do usuário. </li>
+<li>Utilizaremos Nextjs (React + algumas ferramentas..) + Typescript para desenvolver a interface do usuário. </li>
 </ul>
 
 <h2>Tecnologias de Negócios: </h2>
@@ -21,4 +21,4 @@
 
 <h3>Imagem representativa: </h3> <br/>
 
-<img src="./Arquitetura.png" alt="Arquitetura" width="1000" height="500" style="margin-bottom: 60px;"/>
+<img src="./Arquitetura.jpg" alt="Arquitetura" width="1000" height="500" style="margin-bottom: 60px;"/>
