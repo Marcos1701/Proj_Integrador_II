@@ -1,22 +1,23 @@
 import { useSession } from 'next-auth/react'
-import { Session } from '@auth0/nextjs-auth0'
 import { redirect } from 'next/navigation';
 
-export default function Home() {
+export default function Dashboard() {
 
   // verificar se o usuário está logado
   // se estiver logado, mostrar o conteúdo
   // se não estiver logado, redirecionar para a página de login
 
   const { data: session } = useSession();
-  const user = session?.user as Session['user'];
+  if (!session) {
+    return redirect('/login');
+  }
+
   return (
     <main>
-      {!user && (
-        redirect('/login')
-      )}
       <h1>Home</h1>
-      <p>Olá, {user?.name}</p>
     </main>
   )
 }
+
+Dashboard.auth = true;
+// agora, o nextjs sabe que essa página precisa de autenticação

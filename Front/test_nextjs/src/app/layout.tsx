@@ -1,5 +1,9 @@
+import { Session } from '@auth0/nextjs-auth0'
 import type { Metadata } from 'next'
+import { useSession } from 'next-auth/react'
+import { redirect } from 'next/dist/server/api-utils'
 import { Inter } from 'next/font/google'
+import Link from 'next/link'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -13,9 +17,49 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+
+
+  const { data: session } = useSession();
+
+  const user: Session['user'] = session?.user!;
+
   return (
     <html lang="pt-br">
+      <header>
+        {session ? (
+          <p>Olá, {user.name}</p>
+        ) : (
+          <p>Olá, visitante</p>
+        )}
+        <nav>
+          <ul>
+            {session ? (
+              <>
+                <li>
+                  <Link href="/dashboard">Dashboard</Link>
+                </li>
+                <li>
+                  <Link href="/api/auth/logout">Logout</Link>
+                </li>
+              </>
+            ) : (
+              <>
+                <li>
+                  <Link href="/login">Login</Link>
+                </li>
+                <li>
+                  <Link href="/cadastro">Cadastro</Link>
+                </li>
+              </>
+            )}
+          </ul>
+        </nav>
+      </header>
       <body className={inter.className}>{children}</body>
+      <footer>
+        <Link href="https://github.com/Marcos1701/Projeto_integrador_II">Projeto Integrador II - 2023</Link>
+        <p>&#169; Todos os direitos reservados</p>
+      </footer>
     </html>
   )
 }
