@@ -1,11 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { CreateCategoriaDto } from './dto/create-categoria.dto';
 import { UpdateCategoriaDto } from './dto/update-categoria.dto';
+import { EntityManager } from 'typeorm';
+import { Categoria } from './entities/categoria.entity';
 
 @Injectable()
 export class CategoriasService {
-  create(createCategoriaDto: CreateCategoriaDto) {
-    return 'This action adds a new categoria';
+  constructor(private readonly entityManager: EntityManager) {}
+
+  async create(createCategoriaDto: CreateCategoriaDto) {
+    const categoria = new Categoria(createCategoriaDto);
+    await this.entityManager.save(categoria);
   }
 
   findAll() {
