@@ -3,18 +3,24 @@ import { CreateCategoriaDto } from './dto/create-categoria.dto';
 import { UpdateCategoriaDto } from './dto/update-categoria.dto';
 import { EntityManager } from 'typeorm';
 import { Categoria } from './entities/categoria.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm/repository/Repository';
 
 @Injectable()
 export class CategoriasService {
-  constructor(private readonly entityManager: EntityManager) {}
+  constructor(
+    @InjectRepository(Categoria)
+    private readonly categoriasRepository: Repository<Categoria>,
+    private readonly entityManager: EntityManager,
+    ) {}
 
   async create(createCategoriaDto: CreateCategoriaDto) {
     const categoria = new Categoria(createCategoriaDto);
     await this.entityManager.save(categoria);
   }
 
-  findAll() {
-    return `This action returns all categorias`;
+  async findAll() {
+    return this.categoriasRepository.find();
   }
 
   findOne(id: number) {

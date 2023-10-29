@@ -13,7 +13,7 @@ export class CategoriasController {
   }
 
   @Get()
-  findAll() {
+  async findAll() {
     return this.categoriasService.findAll();
   }
 
