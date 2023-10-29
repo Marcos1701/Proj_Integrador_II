@@ -23,8 +23,8 @@ export class CategoriasService {
     return this.categoriasRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} categoria`;
+  async findOne(id: number) {
+    return this.categoriasRepository.findOneBy({ id });
   }
 
   update(id: number, updateCategoriaDto: UpdateCategoriaDto) {
