@@ -1,41 +1,38 @@
 import { ITransacao } from "@/Components/Transacao";
 import { useAuth } from "@/Contexts/AuthContext";
 import { Suspense } from "react";
+import { Saldo } from "./Components/Saldo";
+import { Button } from '../../../Button';
+import { AdicionarTransacaoForm } from "../AdicionarTransacaoForm";
+import { AdicionarCategoriaForm } from "../AdicionarCategoriaForm/intex";
 
 
-export async function Saldo() {
+export async function SecaoActions_Home() {
+
     const { user } = useAuth();
 
-    // o saldo é a soma de todas as transações
-    const saldo = await fetch(`http://localhost:3000/Transacao?id_usuario=${user!.id}`)
-        .then(res => res.json().then(transacoes => {
-            return transacoes.reduce((acc: number, transacao: ITransacao) => {
-                if (transacao.tipo === 'Entrada') {
-                    return acc + transacao.valor
-                }
-                return acc - transacao.valor
-            }, 0)
-        })
-        ).catch(err => {
-            console.log(err)
-            return []
-        })
-
     return (
-        <Suspense fallback={
-            <div className="saldo-home-skeleton">
-            </div>
-        }>
-            <div className="saldo-home">
-                <div className="Saldo-icon">
-                    <img src="/icons/saldo.svg" alt="saldo" />
-                </div>
+        <div>
+            <Saldo />
+            <ul className="buttons_Action">
+                <Button placeholder="Adicionar Transação" onClick={() => {
+                    return (
+                        <div className="Background-form">
+                            <AdicionarTransacaoForm />
+                        </div>
+                    )
+                }} />
 
-                <div className="saldo-info">
-                    <h3>Saldo</h3>
-                    <span>{saldo}</span>
-                </div>
-            </div>
-        </Suspense>
+                <Button placeholder="Adicionar Categoria" onClick={() => {
+                    return (
+                        <div className="Background-form">
+                            <AdicionarCategoriaForm />
+                        </div>
+                    )
+                }} />
+
+                <Button placeholder="Adicionar Meta" onClick={() => { }} /> {/* Ainda não implementado */}
+            </ul>
+        </div>
     )
 }
