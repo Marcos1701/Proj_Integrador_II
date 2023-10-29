@@ -1,6 +1,5 @@
-import { Session } from '@auth0/nextjs-auth0';
-import { useSession } from 'next-auth/react'
-import { redirect } from 'next/navigation';
+import { Main } from '@/Components/Home';
+import { ProtectedRoute } from '@/Components/ProtectedRoute';
 
 export default function Dashboard() {
 
@@ -15,14 +14,12 @@ export default function Dashboard() {
 
   // const user: Session['user'] = session.user!;
 
-  const 
-
   return (
-    <main>
-      
-    </main>
+    <ProtectedRoute>
+      <Main />
+    </ProtectedRoute>
   )
 }
 
-Dashboard.auth = true;
+// Dashboard.auth = true;
 // agora, o nextjs sabe que essa página precisa de autenticação

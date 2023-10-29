@@ -1,24 +1,25 @@
-import { useUser } from "@/utils";
-import { User } from "next-auth";
-import { ICategoria } from "../Categoria";
-import { IMeta } from "../Meta";
-import { ITransacao, Transacao } from '../Transacao';
+import { ICategoria } from "@/Components/Categoria";
+import { ITransacao, Transacao } from "@/Components/Transacao";
+import { useAuth } from "@/Contexts/AuthContext";
+import { Suspense } from "react";
 
-export async function Main() {
+export async function ListTransacoes() {
 
-    const user: User = await useUser();
-
-    const [transacoes, categorias, metas]: [ITransacao[], ICategoria[], IMeta[]]
-        = await Promise.all([
-            await fetch(`http://localhost:3000/Transacao/${user.id}`).then(res => res.json()),
-            await fetch(`http://localhost:3000/Categoria/${user.id}`).then(res => res.json()),
-            await fetch(`http://localhost:3000/Meta/${user.id}`).then(res => res.json())
-        ]);
-
+    const { user } = useAuth();
+    const transacoes: ITransacao[] = await fetch(`http://localhost:3000/Transacao/${user!.id}`).then(res => res.json()).catch(err => {
+        console.log(err)
+        return []
+    })
+    const categorias: ICategoria[] = await fetch(`http://localhost:3000/Categoria/${user!.id}`).then(res => res.json()).catch(err => {
+        console.log(err)
+        return []
+    })
 
     return (
-        <main>
-
+        <Suspense fallback={
+            <div className="transacoes-home-skeleton">
+            </div>
+        }>
             <div className="transacoes-home">
                 {
                     transacoes.map(
@@ -41,7 +42,6 @@ export async function Main() {
                     )
                 }
             </div>
-
-        </main>
+        </Suspense>
     )
 }

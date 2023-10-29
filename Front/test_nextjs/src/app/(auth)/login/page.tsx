@@ -1,5 +1,11 @@
 import { FormLogin } from "@/Components/Auth/FormLogin";
+import { Metadata } from "next";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+    title: 'Login',
+    description: 'Pagina de Login',
+}
 
 export default function Login() {
     return (

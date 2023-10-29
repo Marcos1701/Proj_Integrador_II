@@ -1,6 +1,11 @@
 import { FormCadastro } from "@/Components/Auth/FormCadastro";
+import { Metadata } from "next";
 import Link from "next/link";
 
+export const metadata: Metadata = {
+    title: 'Cadastro',
+    description: 'Pagina de Cadastro',
+}
 
 export default function Cadastro() {
     return (
