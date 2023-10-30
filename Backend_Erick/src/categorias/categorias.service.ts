@@ -23,15 +23,18 @@ export class CategoriasService {
     return this.categoriasRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} categoria`;
+  async findOne(id: number) {
+    return this.categoriasRepository.findOneBy({ id });
   }
 
-  update(id: number, updateCategoriaDto: UpdateCategoriaDto) {
-    return `This action updates a #${id} categoria`;
+  async update(id: number, updateCategoriaDto: UpdateCategoriaDto) {
+    const categoria = await this.categoriasRepository.findOneBy({ id });
+    categoria.nome = updateCategoriaDto.nome;
+    categoria.descricao = updateCategoriaDto.descricao;
+    await this.entityManager.save(categoria);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} categoria`;
+  async remove(id: number) {
+    await this.categoriasRepository.delete(id);
   }
 }
