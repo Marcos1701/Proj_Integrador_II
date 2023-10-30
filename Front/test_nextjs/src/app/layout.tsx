@@ -1,8 +1,9 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import Link from 'next/link'
-import { useAuth } from '../Contexts/AuthContext';
 import NextAuthSessionProvider from '@/providers/sessionProvider';
+import { useUser } from '@/EncapsulatedContext';
+import { signOut } from "next-auth/react"
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -24,37 +25,38 @@ export const metadata: Metadata = {
   ]
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
 
 
-  const { user, signout, isAuthenticated } = useAuth();
+  const user = await useUser();
+
 
   return (
     <html lang="pt-br">
 
       <NextAuthSessionProvider>
         <header>
-          {isAuthenticated ? (
-            <p>Olá, {user?.username}</p>
+          {user ? (
+            <p>Olá, {user.name}</p>
           ) : (
             <p>Olá, visitante</p>
           )}
           <nav>
             <ul>
-              {isAuthenticated ? (
+              {user ? (
                 <>
                   <li>
-                    <Link href="/dashboard">Dashboard</Link>
+                    <Link href="/Home">Home</Link>
                   </li>
-                  <li>
+                  {/* <li>
                     <Link href="/perfil">Perfil</Link>
-                  </li>
+                  </li> */}
                   <li>
-                    <button onClick={signout}>Sair</button>
+                    <button onClick={() => signOut()}>Sair</button>
                   </li>
                 </>
               ) : (

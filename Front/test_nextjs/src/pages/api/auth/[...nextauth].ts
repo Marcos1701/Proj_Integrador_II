@@ -12,14 +12,14 @@ export const options: NextAuthOptions = {
                 password: { label: "Password", type: "password" }
             },
             async authorize(credentials, req) {
-                if (!credentials) {
-                    return null;
-                }
+                // if (!credentials) {
+                //     return null;
+                // }
 
                 const user: User = {
                     id: "sla",
                     name: "John Smith",
-                    email: credentials.email
+                    email: "teste@qwewew.com"
                 }
 
                 return user;
@@ -34,7 +34,8 @@ export const options: NextAuthOptions = {
         })
     ],
     pages: {
-        signIn: "/"
+        signIn: "/login",
+        error: "/login"
     },
     callbacks: {
         async jwt({ token, user }) {
@@ -48,6 +49,9 @@ export const options: NextAuthOptions = {
     }
 }
 
+// para realizar o signout, é necessário passar o método POST
+// da seguinte forma: /api/auth/signout
+// exemplo: fetch("/api/auth/signout", { method: "POST" })
 
 const handler: NextApiHandler = NextAuth(options);
 
