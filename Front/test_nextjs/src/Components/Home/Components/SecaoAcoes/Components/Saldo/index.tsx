@@ -1,13 +1,13 @@
 import { ITransacao } from "@/Components/Transacao";
-import { useAuth } from "@/Contexts/AuthContext";
+import { useUser } from "@/EncapsulatedContext";
 import { Suspense } from "react";
 
 
 export async function Saldo() {
-    const { user } = useAuth();
+    const user = await useUser();
 
     // o saldo é a soma de todas as transações
-    const saldo = await fetch(`http://localhost:3000/Transacao?id_usuario=${user!.id}`)
+    const saldo = await fetch(`http://localhost:3300/Transacao?id_usuario=${user.id}`)
         .then(res => res.json().then(transacoes => {
             return transacoes.reduce((acc: number, transacao: ITransacao) => {
                 if (transacao.tipo === 'Entrada') {

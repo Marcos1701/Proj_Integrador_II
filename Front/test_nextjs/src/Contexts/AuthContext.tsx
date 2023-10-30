@@ -1,4 +1,4 @@
-import { getServerSideProps } from "next/dist/build/templates/pages";
+'use client'
 import React, { createContext, useContext, useMemo, useState } from "react";
 import { ulid } from 'ulidx';
 
@@ -7,7 +7,7 @@ export type User = {
     username: string;
     email: string;
     password: string;
-    lembrar: boolean
+    lembrar?: boolean
 }
 
 type singinData = {
@@ -53,7 +53,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
     const signin = async (data: singinData): Promise<string | void> => {
         const { error, user }: { error?: ErrorAuth, user: User }
-            = await fetch(`http://localhost:3000/auth/login`, {
+            = await fetch(`http://localhost:3300/auth/login`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -81,7 +81,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
     const singup = async (user: User): Promise<string | void> => {
 
-        const { error }: { error?: ErrorAuth } = await fetch(`http://localhost:3000/auth/register`, {
+        const { error }: { error?: ErrorAuth } = await fetch(`http://localhost:3300/auth/register`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

@@ -1,7 +1,18 @@
+'use client'
 import { Main } from '@/Components/Home';
 import { ProtectedRoute } from '@/Components/ProtectedRoute';
+import { signIn, useSession } from 'next-auth/react';
 
-export default function Dashboard() {
+export default async function Home() {
+
+  const result = await signIn('credentials', {
+    redirect: false,
+    email: '',
+    password: ''
+  });
+
+  const { data: session } = useSession();
+  console.log(session);
 
   // verificar se o usuário está logado
   // se estiver logado, mostrar o conteúdo

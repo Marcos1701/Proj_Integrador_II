@@ -1,11 +1,13 @@
+'use client'
 import { useAuth } from "@/Contexts/AuthContext";
+import { useUser } from "@/EncapsulatedContext";
 import { useRef } from "react";
 import { ulid } from "ulidx";
 
 
 export async function AdicionarCategoriaForm() {
 
-    const { user } = useAuth();
+    const user = await useUser();
 
     const nome = useRef<HTMLInputElement>(null);
     const descricao = useRef<HTMLTextAreaElement>(null);
@@ -26,7 +28,7 @@ export async function AdicionarCategoriaForm() {
             descricao: descricao.current?.value,
         }
 
-        await fetch('http://localhost:3000/Categoria', {
+        await fetch('http://localhost:3300/Categoria', {
             method: 'POST',
             body: JSON.stringify(categoria),
             headers: {
@@ -44,7 +46,7 @@ export async function AdicionarCategoriaForm() {
                 Limite: orcamento.current?.value,
             }
 
-            await fetch('http://localhost:3000/Orcamento', {
+            await fetch('http://localhost:3300/Orcamento', {
                 method: 'POST',
                 body: JSON.stringify(orcamento_novo),
                 headers: {

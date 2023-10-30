@@ -1,21 +1,19 @@
-import { ITransacao } from "@/Components/Transacao";
-import { useAuth } from "@/Contexts/AuthContext";
-import { Suspense } from "react";
 import { Saldo } from "./Components/Saldo";
 import { Button } from '../../../Button';
 import { AdicionarTransacaoForm } from "../AdicionarTransacaoForm";
 import { AdicionarCategoriaForm } from "../AdicionarCategoriaForm/intex";
+import { useUser } from "@/EncapsulatedContext";
 
 
 export async function SecaoActions_Home() {
 
-    const { user } = useAuth();
+    const user = await useUser()
 
     return (
         <div>
             <Saldo />
             <ul className="buttons_Action">
-                <Button placeholder="Adicionar Transação" onClick={() => {
+                <Button text="Adicionar Transação" onClick={() => {
                     return (
                         <div className="Background-form">
                             <AdicionarTransacaoForm />
@@ -23,7 +21,7 @@ export async function SecaoActions_Home() {
                     )
                 }} />
 
-                <Button placeholder="Adicionar Categoria" onClick={() => {
+                <Button text="Adicionar Categoria" onClick={() => {
                     return (
                         <div className="Background-form">
                             <AdicionarCategoriaForm />
@@ -31,7 +29,7 @@ export async function SecaoActions_Home() {
                     )
                 }} />
 
-                <Button placeholder="Adicionar Meta" onClick={() => { }} /> {/* Ainda não implementado */}
+                <Button text="Adicionar Meta" onClick={() => { }} /> {/* Ainda não implementado */}
             </ul>
         </div>
     )

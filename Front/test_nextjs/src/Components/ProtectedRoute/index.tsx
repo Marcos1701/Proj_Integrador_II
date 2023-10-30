@@ -1,6 +1,8 @@
 import React from "react";
 import { useAuth } from "../../Contexts/AuthContext";
 import { redirect } from "next/navigation";
+import { getServerSession } from "next-auth";
+import { options } from "@/pages/api/auth/[...nextauth]/route";
 
 interface ProtectedRouteProps {
     children: React.ReactNode
@@ -8,9 +10,9 @@ interface ProtectedRouteProps {
 
 export function ProtectedRoute({ children }: ProtectedRouteProps) {
 
-    const { isAuthenticated } = useAuth()
+    const session = getServerSession(options);
 
-    if (!isAuthenticated) {
+    if (!session) {
         redirect('/login')
     }
 

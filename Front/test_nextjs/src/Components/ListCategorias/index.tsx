@@ -1,11 +1,11 @@
 import { Categoria, ICategoria } from "@/Components/Categoria";
-import { useAuth } from "@/Contexts/AuthContext";
+import { useUser } from "@/EncapsulatedContext";
 import { Suspense } from "react";
 
 
 export async function ListCategorias() {
 
-    const { user } = useAuth();
+    const user = await useUser();
     // const categorias = await fetch(`http://localhost:3000/Categoria`,
     //     {
     //         method: 'POST',
@@ -19,7 +19,7 @@ export async function ListCategorias() {
     //     return []
     // })
 
-    const categorias = await fetch(`http://localhost:3000/Categoria?id_usuario=${user!.id}`).then(res => res.json()).catch(err => {
+    const categorias = await fetch(`http://localhost:3300/Categoria?id_usuario=${user!.id}`).then(res => res.json()).catch(err => {
         console.log(err)
         return []
     })

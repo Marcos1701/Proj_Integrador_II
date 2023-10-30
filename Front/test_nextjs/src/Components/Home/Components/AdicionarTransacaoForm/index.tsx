@@ -1,12 +1,13 @@
+'use client'
 import { ICategoria } from "@/Components/Categoria";
-import { useAuth } from "@/Contexts/AuthContext";
+import { useUser } from "@/EncapsulatedContext";
 import { useRef } from "react";
 import { ulid } from "ulidx";
 
 
 export async function AdicionarTransacaoForm() {
 
-    const { user } = useAuth();
+    const user = await useUser();
 
     const nome = useRef<HTMLInputElement>(null);
     const valor = useRef<HTMLInputElement>(null);
@@ -29,7 +30,7 @@ export async function AdicionarTransacaoForm() {
 
         const transacao = {
             id: ulid(),
-            id_usuario: user!.id,
+            id_usuario: user.id,
             id_categoria: categoria.current?.value,
             nome: nome.current?.value,
             valor: valor.current?.value,
@@ -38,7 +39,7 @@ export async function AdicionarTransacaoForm() {
             descricao: descricao.current?.value,
         }
 
-        await fetch('http://localhost:3000/Transacao', {
+        await fetch('http://localhost:3300/Transacao', {
             method: 'POST',
             body: JSON.stringify(transacao),
             headers: {

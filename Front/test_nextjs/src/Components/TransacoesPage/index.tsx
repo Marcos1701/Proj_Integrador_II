@@ -4,7 +4,6 @@ import { Button } from "../Button";
 import { ListTransacoes } from "../ListTransacoes";
 
 export async function TransacoesPage() {
-    const { user } = useAuth();
 
     const [page, setPage] = useState(1);
     const pageRef = useRef<HTMLDivElement>(null);

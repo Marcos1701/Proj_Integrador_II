@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import Link from 'next/link'
 import { useAuth } from '../Contexts/AuthContext';
+import NextAuthSessionProvider from '@/providers/sessionProvider';
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -34,44 +35,47 @@ export default function RootLayout({
 
   return (
     <html lang="pt-br">
-      <header>
-        {isAuthenticated ? (
-          <p>Olá, {user?.username}</p>
-        ) : (
-          <p>Olá, visitante</p>
-        )}
-        <nav>
-          <ul>
-            {isAuthenticated ? (
-              <>
-                <li>
-                  <Link href="/dashboard">Dashboard</Link>
-                </li>
-                <li>
-                  <Link href="/perfil">Perfil</Link>
-                </li>
-                <li>
-                  <button onClick={signout}>Sair</button>
-                </li>
-              </>
-            ) : (
-              <>
-                <li>
-                  <Link href="/login">Login</Link>
-                </li>
-                <li>
-                  <Link href="/cadastro">Cadastro</Link>
-                </li>
-              </>
-            )}
-          </ul>
-        </nav>
-      </header>
-      <body className={inter.className}>{children}</body>
-      <footer>
-        <Link href="https://github.com/Marcos1701/Projeto_integrador_II">Projeto Integrador II - 2023</Link>
-        <p>&#169; Todos os direitos reservados</p>
-      </footer>
+
+      <NextAuthSessionProvider>
+        <header>
+          {isAuthenticated ? (
+            <p>Olá, {user?.username}</p>
+          ) : (
+            <p>Olá, visitante</p>
+          )}
+          <nav>
+            <ul>
+              {isAuthenticated ? (
+                <>
+                  <li>
+                    <Link href="/dashboard">Dashboard</Link>
+                  </li>
+                  <li>
+                    <Link href="/perfil">Perfil</Link>
+                  </li>
+                  <li>
+                    <button onClick={signout}>Sair</button>
+                  </li>
+                </>
+              ) : (
+                <>
+                  <li>
+                    <Link href="/login">Login</Link>
+                  </li>
+                  <li>
+                    <Link href="/cadastro">Cadastro</Link>
+                  </li>
+                </>
+              )}
+            </ul>
+          </nav>
+        </header>
+        <body className={inter.className}>{children}</body>
+        <footer>
+          <Link href="https://github.com/Marcos1701/Projeto_integrador_II">Projeto Integrador II - 2023</Link>
+          <p>&#169; Todos os direitos reservados</p>
+        </footer>
+      </NextAuthSessionProvider>
     </html>
   )
 }

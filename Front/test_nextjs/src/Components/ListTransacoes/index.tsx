@@ -1,6 +1,7 @@
 import { ICategoria } from "@/Components/Categoria";
 import { ITransacao, Transacao } from "@/Components/Transacao";
 import { useAuth } from "@/Contexts/AuthContext";
+import { useUser } from "@/EncapsulatedContext";
 import { Suspense } from "react";
 
 
@@ -11,12 +12,12 @@ interface IListTransacoesProps {
 
 export async function ListTransacoes({ page = 1, limit = 10 }: IListTransacoesProps) {
 
-    const { user } = useAuth();
-    const transacoes: ITransacao[] = await fetch(`http://localhost:3000/Transacao/${user!.id}`).then(res => res.json()).catch(err => {
+    const user = await useUser();
+    const transacoes: ITransacao[] = await fetch(`http://localhost:3300/Transacao/${user!.id}`).then(res => res.json()).catch(err => {
         console.log(err)
         return []
     })
-    const categorias: ICategoria[] = await fetch(`http://localhost:3000/Categoria/${user!.id}`).then(res => res.json()).catch(err => {
+    const categorias: ICategoria[] = await fetch(`http://localhost:3300/Categoria/${user!.id}`).then(res => res.json()).catch(err => {
         console.log(err)
         return []
     })
