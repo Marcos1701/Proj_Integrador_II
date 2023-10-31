@@ -1,6 +1,7 @@
 import { NavLink } from "react-router-dom"
-import { useAuth } from "../Contexts/AuthContext"
+import { useAuth } from "../../Contexts/AuthContext"
 import { Menu } from "./Menu"
+import './Header.css'
 
 export function Header() {
 
@@ -24,7 +25,6 @@ export function Header() {
                             </li>
                             <li>
                                 <Menu />
-
                             </li>
                         </>
                     ) : (

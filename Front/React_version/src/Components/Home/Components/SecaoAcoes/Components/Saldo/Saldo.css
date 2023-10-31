@@ -1,5 +1,7 @@
 .saldo-home {
-    width: 190px;
+    /* width minimo 190px e max fit-content*/
+    min-width: 190px;
+    max-width: fit-content;
     height: 66.943px;
     filter: drop-shadow(0px 8.310344696044922px 21.36945915222168px rgba(134, 136, 239, 0.37));
     background: #373737;
@@ -12,6 +14,7 @@
     gap: 1.5em;
     flex-direction: row;
     padding-left: 1em;
+    padding-right: 1.5em;
 }
 
 .Saldo-icon {

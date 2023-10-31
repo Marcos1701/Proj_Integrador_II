@@ -1,8 +1,8 @@
 import { useRef } from "react";
-import { useUser } from "../../../EncapsulatedContext";
 import { ulid } from "ulidx";
 import { useAuth } from "../../../../Contexts/AuthContext";
 import axios from "axios";
+import './AdicionarCategoria.css'
 
 
 export function AdicionarCategoriaForm() {
@@ -55,5 +55,6 @@ export function AdicionarCategoriaForm() {
             }
             <button type="submit">Adicionar Categoria</button>
         </form>
+
     )
 }

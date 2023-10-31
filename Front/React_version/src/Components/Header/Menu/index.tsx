@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { useAuth } from "../../Contexts/AuthContext";
+import { useAuth } from "../../../Contexts/AuthContext";
+import './Menu.css'
 
 
 export function Menu() {
@@ -26,13 +27,18 @@ export function Menu() {
         <div className="menu">
             {!isMenuOpen ? (
                 <div className="menu">
-                    <button onClick={() => setIsMenuOpen(!isMenuOpen)}>...</button>
+                    <a href="#" onClick={() => setIsMenuOpen(!isMenuOpen)} className="anchor-menu">
+                        <img src="\assets\Menu\Menu_icon.svg" alt="Menu" className="menu-icon" />
+                    </a>
                 </div>
             ) : (
-                <div className="menu">
+                <div className="menu-actived">
+                    <a href="#" onClick={() => setIsMenuOpen(!isMenuOpen)} className="anchor-menu">
+                        <img src="\assets\Menu\Menu_icon.svg" alt="Menu" className="menu-icon" />
+                    </a>
                     <button onClick={() => { }}>Perfil</button>
                     <button onClick={() => { }}>Configurações</button>
-                    <button onClick={() => signout()}>Sair</button>
+                    <button className="singnout-button" onClick={() => signout()}>Sair</button>
                 </div>
             )
             }

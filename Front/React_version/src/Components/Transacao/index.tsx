@@ -1,4 +1,5 @@
 import { ICategoria } from "../Categoria";
+import './Transacao.css'
 
 export interface ITransacao {
     id: string;
@@ -20,13 +21,13 @@ export function Transacao({ transacao, categoria }: ITransacaoProps) {
 
     return (
         <div className="transacao" id={transacao.id}>
-            <div className="names">
+            <div className="line">
                 <p id="nome-transacao">{transacao.nome}</p>
-                <p id="nome-categoria">{categoria.nome}</p>
+                <p id="valor-transacao">{transacao.Valor}</p>
             </div>
 
-            <div className="valores">
-                <p id="valor-transacao">{transacao.Valor}</p>
+            <div className="line">
+                <p id="nome-categoria">{categoria.nome}</p>
                 <p id="data-transacao">{transacao.Data}</p>
             </div>
         </div>

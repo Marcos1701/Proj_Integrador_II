@@ -32,34 +32,37 @@ export function SecaoActions_Home() {
         getCategorias();
     }, []);
 
+    const [showAdicionarTransacaoForm, setShowAdicionarTransacaoForm] = useState<boolean>(false);
+    const [showAdicionarCategoriaForm, setShowAdicionarCategoriaForm] = useState<boolean>(false);
+
+
     return (
         <div>
             <Saldo />
             <ul className="buttons_Action">
                 <li key="adicionarTransacao">
-                    <Button text="Adicionar Transação" onClick={() => {
-                        return (
-                            <div className="Background-form">
-                                <AdicionarTransacaoForm categorias={categorias} />
-                            </div>
-                        )
-                    }} />
+                    <Button text="Adicionar Transação" onClick={() => setShowAdicionarTransacaoForm(!showAdicionarTransacaoForm)} />
                 </li>
 
                 <li key="adicionarCategoria">
-                    <Button text="Adicionar Categoria" onClick={() => {
-                        return (
-                            <div className="Background-form">
-                                <AdicionarCategoriaForm />
-                            </div>
-                        )
-                    }} />
+                    <Button text="Adicionar Categoria" onClick={() => setShowAdicionarCategoriaForm(!showAdicionarCategoriaForm)} />
                 </li>
 
                 <li key="adicionarMeta">
                     <Button text="Adicionar Meta" onClick={() => { }} /> {/* Ainda não implementado */}
                 </li>
             </ul>
+            {showAdicionarTransacaoForm &&
+                <div className="Background-form">
+                    <AdicionarTransacaoForm categorias={categorias} />
+                </div>
+            }
+
+            {showAdicionarCategoriaForm &&
+                <div className="Background-form">
+                    <AdicionarCategoriaForm />
+                </div>
+            }
         </div>
     )
 }

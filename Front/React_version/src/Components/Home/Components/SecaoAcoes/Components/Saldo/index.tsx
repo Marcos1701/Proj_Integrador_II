@@ -29,6 +29,40 @@ export function Saldo() {
         getSaldo();
     }, []);
 
+
+    const realizarTratamentoSaldo = (saldo: number) => {
+        //O tipo 'boolean' não pode ser comparável ao tipo 'number'
+        // para resolver isso, é necessário fazer um switch case
+        if (saldo < 1000000) {
+            return saldo.toLocaleString('pt-br', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            })
+        }
+
+        if (saldo < 1000000000) {
+            return `${(saldo / 1000000).toLocaleString('pt-br', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            })} mi`.replace(',', '.')
+        }
+
+        if (saldo < 1000000000000) {
+            return `${(saldo / 1000000000).toLocaleString('pt-br', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            })} bi`.replace(',', '.')
+        }
+
+        if (saldo < 1000000000000000) {
+            return `${(saldo / 1000000000000).toLocaleString('pt-br', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            })} tri`.replace(',', '.')
+        }
+
+    }
+
     // o saldo é a soma de todas as transações
 
     return (
@@ -43,7 +77,7 @@ export function Saldo() {
 
                 <div className="saldo-info">
                     <p>Saldo</p>
-                    <span>R$ {saldo}</span>
+                    <span>R$ {realizarTratamentoSaldo(saldo)}</span>
                 </div>
             </div>
         </Suspense>

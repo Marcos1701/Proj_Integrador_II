@@ -45,25 +45,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         ) : null
     )
 
-    /*
-    index.tsx:34  Uncaught (in promise) TypeError: signin is not a function
-    at handleSubmit (index.tsx:34:29)
-    at HTMLUnknownElement.callCallback2 (react-dom.development.js:4164:14)
-    at Object.invokeGuardedCallbackDev (react-dom.development.js:4213:16)
-    at invokeGuardedCallback (react-dom.development.js:4277:31)
-    at invokeGuardedCallbackAndCatchFirstError (react-dom.development.js:4291:25)
-    at executeDispatch (react-dom.development.js:9041:3)
-    at processDispatchQueueItemsInOrder (react-dom.development.js:9073:7)
-    at processDispatchQueue (react-dom.development.js:9086:5)
-    at dispatchEventsForPlugins (react-dom.development.js:9097:3)
-    at react-dom.development.js:9288:12
-    
-    // o erro acima ocorre, pois o método signin não está definido
-    // para resolver esse problema, basta definir o método signin
-    // definindo o método signin, o erro acima é resolvido
-    // da seguinte forma:
-    */
-
     const signin = async (data: singinData): Promise<string | void> => {
 
         const response = await fetch(`http://localhost:3300/Usuario?email=${data.email}&Senha=${data.password}`, {
@@ -76,7 +57,19 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
             if (res.length === 0) {
                 return { error: { status: 404, message: 'Usuário não encontrado' } }
             }
-            setUser(res[0])
+
+            const user = res[0]
+
+            const userToSave: User
+                = {
+                id: user.id,
+                nome: user.nome,
+                email: user.email,
+                Senha: user.Senha,
+                lembrar: data.lembrar
+            }
+            setUser(userToSave)
+            data.lembrar && localStorage.setItem('user', JSON.stringify(userToSave))
         }).catch(err => {
             console.log(err)
             return { error: { status: 500, message: 'Erro no servidor' } }
@@ -84,10 +77,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
         if (response && response.error.message) {
             return response.error.message
-        }
-
-        if (data.lembrar) {
-            localStorage.setItem('user', JSON.stringify(user))
         }
     }
 

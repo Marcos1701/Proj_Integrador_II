@@ -5,36 +5,6 @@
   text-align: center;
 }
 
-#root header {
-  position: fixed;
-  top: 20px;
-  left: 0;
-  right: 0;
-  height: 3rem;
-  margin: 0 auto;
-
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  margin-bottom: 2rem;
-  width: 70vw;
-}
-
-#root header ul {
-  display: flex;
-  list-style: none;
-  justify-content: space-between;
-  align-items: center;
-  width: 60%;
-}
-
-#root header ul li {
-  margin: 0 1rem;
-  border: 1px solid #ccc;
-  padding: 0.5rem 1rem;
-  border-radius: 0.25rem;
-}
-
 footer {
   position: fixed;
   bottom: 10px;
@@ -60,4 +30,12 @@ input {
 
 input:focus {
   outline: none;
+}
+
+main{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin-top: 2em;
 }
