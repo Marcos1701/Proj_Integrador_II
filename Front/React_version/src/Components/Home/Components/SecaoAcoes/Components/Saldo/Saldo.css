@@ -1,0 +1,55 @@
+.saldo-home {
+    width: 190px;
+    height: 66.943px;
+    filter: drop-shadow(0px 8.310344696044922px 21.36945915222168px rgba(134, 136, 239, 0.37));
+    background: #373737;
+    border-radius: 15px;
+    color: #E9E9E9;
+
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 1.5em;
+    flex-direction: row;
+    padding-left: 1em;
+}
+
+.Saldo-icon {
+    width: 37.99px;
+    height: 37.99px;
+    background: #E9E9E9;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.saldo-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+}
+
+.saldo-info p {
+    align-self: start;
+    text-align: center;
+    font-family: Eina03-SemiBold;
+    font-size: 14.25px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 23.37px;
+    margin: 0;
+
+    background: radial-gradient(167.28% 167.28% at 0% -12.5%, #FFF 0%, #E9E9E9 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.saldo-info span {
+    padding-left: .2em;
+    font-size: 18.25px;
+    margin: 0;
+}

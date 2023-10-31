@@ -4,11 +4,11 @@ export interface ITransacao {
     id: string;
     id_categoria: string;
     id_usuario: string;
-    name: string;
+    nome: string;
     tipo: "Gasto" | "Entrada";
-    valor: number;
-    data: string;
-    descricao: string;
+    Valor: number;
+    Data: string;
+    Descricao: string;
 }
 
 export interface ITransacaoProps {
@@ -16,18 +16,18 @@ export interface ITransacaoProps {
     categoria: ICategoria;
 }
 
-export async function Transacao({ transacao, categoria }: ITransacaoProps) {
+export function Transacao({ transacao, categoria }: ITransacaoProps) {
 
     return (
         <div className="transacao" id={transacao.id}>
             <div className="names">
-                <p id="nome-transacao">{transacao.name}</p>
+                <p id="nome-transacao">{transacao.nome}</p>
                 <p id="nome-categoria">{categoria.nome}</p>
             </div>
 
             <div className="valores">
-                <p id="valor-transacao">{transacao.valor}</p>
-                <p id="data-transacao">{transacao.data}</p>
+                <p id="valor-transacao">{transacao.Valor}</p>
+                <p id="data-transacao">{transacao.Data}</p>
             </div>
         </div>
     )

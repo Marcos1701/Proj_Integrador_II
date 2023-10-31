@@ -1,14 +1,14 @@
-import { useAuth } from "@/Contexts/AuthContext"
+import { useUser } from "@/EncapsulatedContext";
+import { SignInResponse, signIn } from "next-auth/react";
 import { redirect } from "next/navigation";
 import { useRef, useState } from "react";
 import { ulid } from "ulidx";
 
-export function FormLogin() {
+export async function FormLogin() {
 
-    const { isAuthenticated, signin } = useAuth()
-
-    if (isAuthenticated) {
-        redirect('/');
+    const user = await useUser()
+    if (user) {
+        redirect('/')
     }
 
     const email = useRef<HTMLInputElement>(null)
@@ -34,11 +34,16 @@ export function FormLogin() {
             lembrar: lembrar.current.checked
         }
 
-        const error: string | void = await signin(dados);
+        const Response: SignInResponse | undefined = await signIn('credentials', {
+            redirect: false,
+            email: dados.email,
+            password: dados.password
+        });
 
-        if (error) {
+        if (Response && !Response.ok) {
             setIsError(true)
-            setMsgError(error)
+            const error = Response.error
+            setMsgError(error!)
             return
         }
         redirect('/');

@@ -1,7 +1,7 @@
 import { Navigate } from "react-router-dom";
 import { useAuth } from "../../../Contexts/AuthContext";
 import { FormLogin } from "./Components/FormLogin";
-
+import './Loginpage.css'
 
 export function LoginPage() {
 
@@ -12,8 +12,8 @@ export function LoginPage() {
     }
 
     return (
-        <>
+        <main>
             <FormLogin />
-        </>
+        </main>
     )
 }

@@ -1,5 +1,3 @@
-'use client'
-import { useAuth } from "@/Contexts/AuthContext";
 import { useUser } from "@/EncapsulatedContext";
 import { useRef } from "react";
 import { ulid } from "ulidx";
@@ -8,7 +6,6 @@ import { ulid } from "ulidx";
 export async function AdicionarCategoriaForm() {
 
     const user = await useUser();
-
     const nome = useRef<HTMLInputElement>(null);
     const descricao = useRef<HTMLTextAreaElement>(null);
     const OrcamentoCheckbox = useRef<HTMLInputElement>(null);

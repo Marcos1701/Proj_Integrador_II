@@ -2,13 +2,14 @@ import { NextApiHandler } from "next";
 import { NextAuthOptions, Session, User } from "next-auth";
 import NextAuth from "next-auth/next";
 import Credentials from "next-auth/providers/credentials";
+import Email from "next-auth/providers/email";
 
 export const options: NextAuthOptions = {
     providers: [
         Credentials({
             name: "Credentials",
             credentials: {
-                email: { label: "Email", type: "text", placeholder: "jsmith" },
+                email: { label: "Email", type: "text", placeholder: "Digite o seu email" },
                 password: { label: "Password", type: "password" }
             },
             async authorize(credentials, req) {
@@ -33,10 +34,6 @@ export const options: NextAuthOptions = {
             }
         })
     ],
-    pages: {
-        signIn: "/login",
-        error: "/login"
-    },
     callbacks: {
         async jwt({ token, user }) {
             user && (token.user = user);

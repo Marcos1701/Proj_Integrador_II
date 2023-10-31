@@ -3,7 +3,6 @@ import { Inter } from 'next/font/google'
 import Link from 'next/link'
 import NextAuthSessionProvider from '@/providers/sessionProvider';
 import { useUser } from '@/EncapsulatedContext';
-import { signOut } from "next-auth/react"
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -56,7 +55,7 @@ export default async function RootLayout({
                     <Link href="/perfil">Perfil</Link>
                   </li> */}
                   <li>
-                    <button onClick={() => signOut()}>Sair</button>
+                    <button >Sair</button>
                   </li>
                 </>
               ) : (

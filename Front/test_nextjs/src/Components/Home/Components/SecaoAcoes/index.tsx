@@ -8,6 +8,10 @@ import { useUser } from "@/EncapsulatedContext";
 export async function SecaoActions_Home() {
 
     const user = await useUser()
+    const categorias = await fetch(`http://localhost:3300/Categoria?id_usuario=${user.id}`).then(res => res.json()).catch(err => {
+        console.log(err)
+        return []
+    });
 
     return (
         <div>
@@ -16,7 +20,7 @@ export async function SecaoActions_Home() {
                 <Button text="Adicionar Transação" onClick={() => {
                     return (
                         <div className="Background-form">
-                            <AdicionarTransacaoForm />
+                            <AdicionarTransacaoForm categorias={categorias} />
                         </div>
                     )
                 }} />

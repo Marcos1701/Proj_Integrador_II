@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import { ulid } from "ulidx";
 import { Navigate } from "react-router-dom";
 import { useAuth } from "../../../../../Contexts/AuthContext";
+import './styles.css'
 
 export function FormLogin() {
 
@@ -47,16 +48,22 @@ export function FormLogin() {
         <form onSubmit={handleSubmit} className='form-login' >
             {isAltenticado && <Navigate to="/" />}
             {isError && <p className='error-msg'>{msgError}</p>}
-            <label className='label-email' htmlFor='input-email' >Email</label>
-            <input type="email" placeholder="Email" className='input-email' ref={email} />
+            <div className="propiety-login-div">
+                <label className='label-email' htmlFor='input-email' >Email</label>
+                <input type="email" placeholder="Email" className='input-email' ref={email} />
+            </div>
 
-            <label className='label-senha' htmlFor='input-senha' >Senha</label>
-            <input type="password" placeholder="Senha" className='input-senha' ref={senha} />
+            <div className="propiety-login-div">
+                <label className='label-senha' htmlFor='input-senha' >Senha</label>
+                <input type="password" placeholder="Senha" className='input-senha' ref={senha} />
+            </div>
 
-            <input type='checkbox' className='checkbox-lembrar' ref={lembrar} />
-            <label className='label-lembrar' htmlFor='checkbox-lembrar'  >Lembrar-me</label>
+            <div className="Lembrar-login-div">
+                <input type='checkbox' className='checkbox-lembrar' ref={lembrar} />
+                <label className='label-lembrar' htmlFor='checkbox-lembrar'  >Lembrar-me</label>
+            </div>
 
-            <input type="submit" value="Entrar" className='button-entrar' />
+            <button type='submit' className='btn-login'>Entrar</button>
         </form >
 
     )

@@ -30,7 +30,7 @@ export function ListCategorias() {
             setCategorias(categorias);
         }
         getCategorias();
-    })
+    }, [user])
 
     return (
         <Suspense fallback={

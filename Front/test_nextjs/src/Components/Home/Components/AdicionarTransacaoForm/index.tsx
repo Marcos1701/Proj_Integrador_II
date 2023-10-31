@@ -1,11 +1,15 @@
-'use client'
+
 import { ICategoria } from "@/Components/Categoria";
 import { useUser } from "@/EncapsulatedContext";
-import { useRef } from "react";
+import { Suspense, useRef } from "react";
 import { ulid } from "ulidx";
 
 
-export async function AdicionarTransacaoForm() {
+interface IAdicionarTransacaoFormProps {
+    categorias: ICategoria[];
+}
+
+export async function AdicionarTransacaoForm({ categorias }: IAdicionarTransacaoFormProps) {
 
     const user = await useUser();
 
@@ -15,11 +19,6 @@ export async function AdicionarTransacaoForm() {
     const tipo = useRef<HTMLSelectElement>(null);
     const categoria = useRef<HTMLSelectElement>(null);
     const descricao = useRef<HTMLTextAreaElement>(null);
-
-    const categorias: ICategoria[] = await fetch(`http://localhost:3000/Categoria?id_usuario=${user!.id}`).then(res => res.json()).catch(err => {
-        console.log(err)
-        return []
-    })
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -53,23 +52,28 @@ export async function AdicionarTransacaoForm() {
     }
 
     return (
-        <form className="adicionar-transacao-form" onSubmit={handleSubmit}>
-            <input type="text" placeholder="Nome da Transação" ref={nome} />
-            <input type="number" placeholder="Valor" ref={valor} />
-            <input type="date" placeholder="Data" ref={data} />
-            <select ref={tipo}>
-                <option value="Entrada">Entrada</option>
-                <option value="Saída">Saída</option>
-            </select>
-            <select ref={categoria}>
-                {categorias.length > 0 ?
-                    categorias.map(categoria => (
-                        <option value={categoria.id}>{categoria.nome}</option>
-                    ))
-                    : <option value="Sem categoria">Sem categoria</option>
-                }
-            </select>
-            <button type="submit">Adicionar</button>
-        </form>
+        <Suspense fallback={
+            <div className="transacoes-home-skeleton">
+            </div>
+        }>
+            <form className="adicionar-transacao-form" onSubmit={handleSubmit}>
+                <input type="text" placeholder="Nome da Transação" ref={nome} />
+                <input type="number" placeholder="Valor" ref={valor} />
+                <input type="date" placeholder="Data" ref={data} />
+                <select ref={tipo}>
+                    <option value="Entrada">Entrada</option>
+                    <option value="Saída">Saída</option>
+                </select>
+                <select ref={categoria}>
+                    {categorias.length > 0 ?
+                        categorias.map(categoria => (
+                            <option value={categoria.id}>{categoria.nome}</option>
+                        ))
+                        : <option value="Sem categoria">Sem categoria</option>
+                    }
+                </select>
+                <button type="submit">Adicionar</button>
+            </form>
+        </Suspense>
     )
 }

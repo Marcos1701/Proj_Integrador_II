@@ -1,15 +1,16 @@
 import { User, useAuth } from "@/Contexts/AuthContext"
+import { useUser } from "@/EncapsulatedContext"
+import { SignInResponse, signIn } from "next-auth/react"
 import { redirect } from "next/navigation"
 import { Suspense, useRef, useState } from "react"
 import { ulid } from "ulidx"
 
 
-export function FormCadastro() {
+export async function FormCadastro() {
 
-    const { isAuthenticated, singup } = useAuth()
-
-    if (isAuthenticated) {
-        redirect('/');
+    const user = await useUser()
+    if (user) {
+        redirect('/')
     }
 
     const nome = useRef<HTMLInputElement>(null)
@@ -37,11 +38,16 @@ export function FormCadastro() {
             password: senha.current.value,
             lembrar: lembrar.current.checked
         }
-        const error: string | void = await singup(dados);
+        const Response: SignInResponse | undefined = await signIn('credentials', {
+            redirect: false,
+            email: dados.email,
+            password: dados.password
+        });
 
-        if (error) {
+        if (Response && !Response.ok) {
             setIsError(true)
-            setMsgError(error)
+            const error = Response.error
+            setMsgError(error!)
             return
         }
         redirect('/');

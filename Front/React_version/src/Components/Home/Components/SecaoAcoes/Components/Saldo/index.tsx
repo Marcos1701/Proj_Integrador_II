@@ -3,6 +3,7 @@ import { useUser } from "../../../../../EncapsulatedContext";
 import { Suspense, useEffect, useState } from "react";
 import { User } from "../../../../../../Contexts/AuthContext";
 import axios from "axios";
+import './Saldo.css'
 
 
 export function Saldo() {
@@ -37,12 +38,12 @@ export function Saldo() {
         }>
             <div className="saldo-home">
                 <div className="Saldo-icon">
-                    <img src="/icons/saldo.svg" alt="saldo" />
+                    <img src="/assets/Saldo/wallet.svg" alt="Saldo" />
                 </div>
 
                 <div className="saldo-info">
-                    <h3>Saldo</h3>
-                    <span>{saldo}</span>
+                    <p>Saldo</p>
+                    <span>R$ {saldo}</span>
                 </div>
             </div>
         </Suspense>

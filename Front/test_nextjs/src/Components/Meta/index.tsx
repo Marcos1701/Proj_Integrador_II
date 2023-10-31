@@ -14,7 +14,7 @@ export interface IMeta {
 export function Meta({ meta }: { meta: IMeta }) {
 
     return (
-        <div id={meta.id} className="meta">
+        <div key={meta.id} id={meta.id} className="meta">
             {meta.icon &&
                 <div className="meta-icon">
                     <img src={meta.icon} alt={meta.icon_descricao} />

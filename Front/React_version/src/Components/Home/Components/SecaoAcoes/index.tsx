@@ -6,6 +6,7 @@ import { useUser } from "../../../EncapsulatedContext";
 import { useEffect, useState } from "react";
 import { ICategoria } from "../../../Categoria";
 import { User } from "../../../../Contexts/AuthContext";
+import './Secao.css'
 
 
 export function SecaoActions_Home() {
@@ -35,23 +36,29 @@ export function SecaoActions_Home() {
         <div>
             <Saldo />
             <ul className="buttons_Action">
-                <Button text="Adicionar Transação" onClick={() => {
-                    return (
-                        <div className="Background-form">
-                            <AdicionarTransacaoForm categorias={categorias} />
-                        </div>
-                    )
-                }} />
+                <li key="adicionarTransacao">
+                    <Button text="Adicionar Transação" onClick={() => {
+                        return (
+                            <div className="Background-form">
+                                <AdicionarTransacaoForm categorias={categorias} />
+                            </div>
+                        )
+                    }} />
+                </li>
 
-                <Button text="Adicionar Categoria" onClick={() => {
-                    return (
-                        <div className="Background-form">
-                            <AdicionarCategoriaForm />
-                        </div>
-                    )
-                }} />
+                <li key="adicionarCategoria">
+                    <Button text="Adicionar Categoria" onClick={() => {
+                        return (
+                            <div className="Background-form">
+                                <AdicionarCategoriaForm />
+                            </div>
+                        )
+                    }} />
+                </li>
 
-                <Button text="Adicionar Meta" onClick={() => { }} /> {/* Ainda não implementado */}
+                <li key="adicionarMeta">
+                    <Button text="Adicionar Meta" onClick={() => { }} /> {/* Ainda não implementado */}
+                </li>
             </ul>
         </div>
     )

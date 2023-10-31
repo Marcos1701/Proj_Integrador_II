@@ -1,4 +1,4 @@
-
+"use client"
 
 interface ButtonProps {
     text?: string;
@@ -11,7 +11,7 @@ interface ButtonProps {
 export function Button({ text, onClick, children, disabled = false }: ButtonProps) {
     if (!text && !children) throw new Error("You must provide a text or children")
     return (
-        <button className="button" onClick={onClick} disabled={disabled}>
+        <button className="button" onClick={() => onClick} disabled={disabled}>
             {text ? text : children}
         </button>
     )

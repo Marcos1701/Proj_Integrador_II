@@ -11,9 +11,9 @@ export async function Saldo() {
         .then(res => res.json().then(transacoes => {
             return transacoes.reduce((acc: number, transacao: ITransacao) => {
                 if (transacao.tipo === 'Entrada') {
-                    return acc + transacao.valor
+                    return acc + transacao.Valor
                 }
-                return acc - transacao.valor
+                return acc - transacao.Valor
             }, 0)
         })
         ).catch(err => {

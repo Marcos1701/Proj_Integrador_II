@@ -18,7 +18,6 @@ export interface IOrcamento {
 
 export async function Categoria({ categoria }: { categoria: ICategoria }) {
 
-    const { user } = useAuth();
     // const { valorGasto, valorOrcamento }: { valorGasto: number, valorOrcamento?: number }
     //     = await fetch(`http://localhost:3000/Categoria/${categoria.id}/valores`,
     //         {
@@ -42,9 +41,9 @@ export async function Categoria({ categoria }: { categoria: ICategoria }) {
 
     const valorGasto: number = transacoes.reduce((acc: number, transacao: ITransacao) => {
         if (transacao.tipo === 'Gasto') {
-            return acc + transacao.valor
+            return acc + transacao.Valor
         }
-        return acc - transacao.valor // Entrada
+        return acc - transacao.Valor // Entrada
     }, 0)
 
     const valorOrcamento: number | undefined = Orcamento?.Limite
