@@ -1,0 +1,41 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+footer {
+  position: fixed;
+  bottom: 10px;
+  left: 0;
+  right: 0;
+  height: 2.5rem;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+input {
+  border-radius: 12px;
+  background-color: #CCCFE0;
+  font-family: Eina03-Regular;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 21.32px;
+  color: #13201E;
+  opacity: 0.9;
+}
+
+input:focus {
+  outline: none;
+}
+
+main{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin-top: 2em;
+}

@@ -1,0 +1,179 @@
+{
+  "Usuario": [
+    {
+      "id": "sla",
+      "nome": "Marcos Neiva",
+      "email": "teste@teste.com",
+      "Saldo": 1000,
+      "Senha": "123456"
+    },
+    {
+      "id": "01HE13PT6AEYN5SR0WG83X1EGP",
+      "nome": "sasjasj",
+      "email": "teste@teste123.com",
+      "Senha": "12345",
+      "lembrar": false
+    }
+  ],
+  "Categoria": [
+    {
+      "id": "1",
+      "id_usuario": "sla",
+      "nome": "Alimentação",
+      "descricao": "Comida e bebida"
+    },
+    {
+      "id": "2",
+      "id_usuario": "sla",
+      "nome": "Transporte",
+      "descricao": "Transporte publico"
+    },
+    {
+      "id": "3",
+      "id_usuario": "sla",
+      "nome": "Lazer",
+      "descricao": "Cinema, parque, etc"
+    },
+    {
+      "id": "4",
+      "id_usuario": "sla",
+      "nome": "Salario",
+      "descricao": "Salario mensal"
+    }
+  ],
+  "Orcamento": [
+    {
+      "id": "1",
+      "id_categoria": "1",
+      "Limite": 100
+    },
+    {
+      "id": "2",
+      "id_categoria": "2",
+      "Limite": 1000
+    },
+    {
+      "id": "3",
+      "id_categoria": "3",
+      "Limite": 500
+    },
+    {
+      "id": "4",
+      "id_categoria": "4",
+      "Limite": 400
+    }
+  ],
+  "Transacao": [
+    {
+      "id": "1",
+      "id_categoria": "1",
+      "id_usuario": "sla",
+      "nome": "Alimentação",
+      "tipo": "Gasto",
+      "Valor": 10,
+      "Data": "2021-02-13",
+      "Descricao": "Comida"
+    },
+    {
+      "id": "2",
+      "id_categoria": "2",
+      "id_usuario": "sla",
+      "nome": "Transporte",
+      "tipo": "Gasto",
+      "Valor": 10,
+      "Data": "2022-10-01",
+      "Descricao": "Transporte"
+    },
+    {
+      "id": "3",
+      "id_categoria": "3",
+      "id_usuario": "sla",
+      "nome": "Lazer",
+      "tipo": "Gasto",
+      "Valor": 10,
+      "Data": "2021-02-07",
+      "Descricao": "Lazer"
+    },
+    {
+      "id": "4",
+      "id_categoria": "4",
+      "id_usuario": "sla",
+      "nome": "Salario",
+      "tipo": "Entrada",
+      "Valor": 10,
+      "Data": "2023-04-03",
+      "Descricao": "Salario"
+    }
+  ],
+  "Meta": [
+    {
+      "id": "1",
+      "id_usuario": "sla",
+      "Nome": "Meta 1",
+      "Valor_Desejado": 100,
+      "Valor_Obtido": 50,
+      "DataFinal": "2023-12-13",
+      "progresso": 50
+    },
+    {
+      "id": "2",
+      "id_usuario": "sla",
+      "Nome": "Meta 2",
+      "Valor_Desejado": 100,
+      "Valor_Obtido": 50,
+      "DataFinal": "2023-12-30",
+      "progresso": 50,
+      "Descricao": "Meta 2"
+    }
+  ],
+  "Marco": [
+    {
+      "id": "1",
+      "id_meta": "2",
+      "Nome": "Marco 3",
+      "Valor_Obtido": 10,
+      "Data": "2023-02-13",
+      "Descricao": "Marco 3"
+    },
+    {
+      "id": "2",
+      "id_meta": "2",
+      "Nome": "Marco 4",
+      "Valor_Obtido": 50,
+      "Data": "2023-02-20",
+      "Descricao": "Marco 4"
+    },
+    {
+      "id": "3",
+      "id_meta": "1",
+      "Nome": "Marco 7",
+      "Valor_Obtido": 10,
+      "Data": "2023-02-13",
+      "Descricao": "Marco 7"
+    },
+    {
+      "id": "4",
+      "id_meta": "1",
+      "Nome": "Marco 8",
+      "Valor_Obtido": 50,
+      "Data": "2023-02-16",
+      "Descricao": "Marco 8"
+    }
+  ],
+  "SubMeta": [
+    {
+      "id": "1",
+      "id_meta": "1",
+      "Nome": "SubMeta 1",
+      "Valor_Desejavel": 100,
+      "Valor_Obtido": 50
+    },
+    {
+      "id": "2",
+      "id_meta": "2",
+      "Nome": "SubMeta 2",
+      "Valor_Desejavel": 100,
+      "Valor_Obtido": 50
+    }
+  ]
+}
