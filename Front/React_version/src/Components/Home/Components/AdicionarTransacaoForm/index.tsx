@@ -1,6 +1,6 @@
 import axios from "axios";
 import { ICategoria } from "../../../Categoria";
-import { useAuth } from "../../../../Contexts/AuthContext";
+import { useAuth, api_url } from "../../../../Contexts/AuthContext";
 import { Suspense, useRef } from "react";
 import { ulid } from "ulidx";
 
@@ -41,7 +41,7 @@ export function AdicionarTransacaoForm({ categorias }: IAdicionarTransacaoFormPr
             descricao: descricao.current?.value,
         }
 
-        await axios.post('http://localhost:3300/Transacao', transacao).then(res => res.data).catch(err => {
+        await axios.post('${api_url}Transacao', transacao).then(res => res.data).catch(err => {
             console.log(err)
         });
     }

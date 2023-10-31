@@ -1,15 +1,8 @@
 {
   "Usuario": [
     {
-      "id": "sla",
-      "nome": "Marcos Neiva",
-      "email": "teste@teste.com",
-      "Saldo": 1000,
-      "Senha": "123456"
-    },
-    {
       "id": "01HE13PT6AEYN5SR0WG83X1EGP",
-      "nome": "sasjasj",
+      "nome": "Marcos Neiva",
       "email": "teste@teste123.com",
       "Senha": "12345",
       "lembrar": false
@@ -18,25 +11,25 @@
   "Categoria": [
     {
       "id": "1",
-      "id_usuario": "sla",
+      "id_usuario": "01HE13PT6AEYN5SR0WG83X1EGP",
       "nome": "Alimentação",
       "descricao": "Comida e bebida"
     },
     {
       "id": "2",
-      "id_usuario": "sla",
+      "id_usuario": "01HE13PT6AEYN5SR0WG83X1EGP",
       "nome": "Transporte",
       "descricao": "Transporte publico"
     },
     {
       "id": "3",
-      "id_usuario": "sla",
+      "id_usuario": "01HE13PT6AEYN5SR0WG83X1EGP",
       "nome": "Lazer",
       "descricao": "Cinema, parque, etc"
     },
     {
       "id": "4",
-      "id_usuario": "sla",
+      "id_usuario": "01HE13PT6AEYN5SR0WG83X1EGP",
       "nome": "Salario",
       "descricao": "Salario mensal"
     }
@@ -67,7 +60,7 @@
     {
       "id": "1",
       "id_categoria": "1",
-      "id_usuario": "sla",
+      "id_usuario": "01HE13PT6AEYN5SR0WG83X1EGP",
       "nome": "Alimentação",
       "tipo": "Gasto",
       "Valor": 10,
@@ -77,7 +70,7 @@
     {
       "id": "2",
       "id_categoria": "2",
-      "id_usuario": "sla",
+      "id_usuario": "01HE13PT6AEYN5SR0WG83X1EGP",
       "nome": "Transporte",
       "tipo": "Gasto",
       "Valor": 10,
@@ -87,7 +80,7 @@
     {
       "id": "3",
       "id_categoria": "3",
-      "id_usuario": "sla",
+      "id_usuario": "01HE13PT6AEYN5SR0WG83X1EGP",
       "nome": "Lazer",
       "tipo": "Gasto",
       "Valor": 10,
@@ -97,7 +90,7 @@
     {
       "id": "4",
       "id_categoria": "4",
-      "id_usuario": "sla",
+      "id_usuario": "01HE13PT6AEYN5SR0WG83X1EGP",
       "nome": "Salario",
       "tipo": "Entrada",
       "Valor": 10,
@@ -108,7 +101,7 @@
   "Meta": [
     {
       "id": "1",
-      "id_usuario": "sla",
+      "id_usuario": "01HE13PT6AEYN5SR0WG83X1EGP",
       "Nome": "Meta 1",
       "Valor_Desejado": 100,
       "Valor_Obtido": 50,
@@ -117,7 +110,7 @@
     },
     {
       "id": "2",
-      "id_usuario": "sla",
+      "id_usuario": "01HE13PT6AEYN5SR0WG83X1EGP",
       "Nome": "Meta 2",
       "Valor_Desejado": 100,
       "Valor_Obtido": 50,

@@ -38,6 +38,8 @@ interface AuthProviderProps {
     children: React.ReactNode
 }
 
+export const api_url: string = "https://legendary-space-spoon-gvjqgjx7gx92vv5g-3300.app.github.dev/"
+
 // AuthProvider encapsula o AuthContextProvider e o AuthContext
 export const AuthProvider = ({ children }: AuthProviderProps) => {
     const [user, setUser] = useState<User | null>(
@@ -45,9 +47,10 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         ) : null
     )
 
+
     const signin = async (data: singinData): Promise<string | void> => {
 
-        const response = await fetch(`http://localhost:3300/Usuario?email=${data.email}&Senha=${data.password}`, {
+        const response = await fetch(`${api_url}Usuario?email=${data.email}&Senha=${data.password}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
@@ -82,7 +85,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
     const singup = async (user: User): Promise<string | void> => {
 
-        const { error }: { error?: ErrorAuth } = await fetch(`http://localhost:3300/Usuario`, {
+        const { error }: { error?: ErrorAuth } = await fetch(`${api_url}Usuario`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

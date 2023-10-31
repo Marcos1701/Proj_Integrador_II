@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import { ulid } from "ulidx";
-import { useAuth } from "../../../../Contexts/AuthContext";
+import { useAuth, api_url } from "../../../../Contexts/AuthContext";
 import axios from "axios";
 import './AdicionarCategoria.css'
 
@@ -29,7 +29,7 @@ export function AdicionarCategoriaForm() {
             descricao: descricao.current?.value,
         }
 
-        await axios.post('http://localhost:3300/Categoria', categoria).then(res => res.data).catch(err => {
+        await axios.post('${api_url}Categoria', categoria).then(res => res.data).catch(err => {
             console.log(err)
         });
 
@@ -39,7 +39,7 @@ export function AdicionarCategoriaForm() {
                 Limite: orcamento.current?.value,
             }
 
-            await axios.post('http://localhost:3300/Orcamento', orcamento_novo).then(res => res.data).catch(err => {
+            await axios.post('${api_url}Orcamento', orcamento_novo).then(res => res.data).catch(err => {
                 console.log(err)
             });
         }

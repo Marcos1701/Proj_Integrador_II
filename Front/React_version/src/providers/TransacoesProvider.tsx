@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { ITransacao } from "../Components/Transacao"
 import axios from "axios"
-import { useAuth } from "../Contexts/AuthContext"
+import { useAuth, api_url } from "../Contexts/AuthContext"
 import { TransacoesContext } from "../Contexts/TransacoesContext"
 
 
@@ -16,7 +16,7 @@ export function TransacoesProvider({ children }: TransacoesProviderProps) {
     useEffect(() => {
         async function loadTransacoes() {
             if (!user) return
-            const response = await axios.get("http://localhost:3300/Transacao?id_usuario=" + user.id)
+            const response = await axios.get(`${api_url}Transacao?id_usuario=${user.id}`)
             setTransacoes(response.data)
         }
         loadTransacoes()

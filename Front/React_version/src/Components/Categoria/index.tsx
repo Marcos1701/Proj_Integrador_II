@@ -1,6 +1,7 @@
 import axios from "axios";
 import { ITransacao } from "../Transacao";
 import { useEffect, useState } from "react";
+import { api_url } from "../../Contexts/AuthContext";
 
 export interface ICategoria {
     id: string;
@@ -20,7 +21,7 @@ export interface IOrcamento {
 export function Categoria({ categoria }: { categoria: ICategoria }) {
 
     // const { valorGasto, valorOrcamento }: { valorGasto: number, valorOrcamento?: number }
-    //     = await fetch(`http://localhost:3000/Categoria/${categoria.id}/valores`,
+    //     = await fetch(`${api_url}Categoria/${categoria.id}/valores`,
     //         {
     //             method: 'POST',
     //             headers: {
@@ -36,7 +37,7 @@ export function Categoria({ categoria }: { categoria: ICategoria }) {
 
     useEffect(() => {
         const getTransacoes = async () => {
-            const transacoes = await axios.get<ITransacao[]>(`http://localhost:3300/Transacao?id_categoria=${categoria.id}`).then(res => res.data).catch(err => {
+            const transacoes = await axios.get<ITransacao[]>(`${api_url}Transacao?id_categoria=${categoria.id}`).then(res => res.data).catch(err => {
                 console.log(err)
                 return []
             });
@@ -45,7 +46,7 @@ export function Categoria({ categoria }: { categoria: ICategoria }) {
         getTransacoes();
 
         const getOrcamento = async () => {
-            const Orcamento = await axios.get<IOrcamento | undefined>(`http://localhost:3300/Orcamento?id_categoria=${categoria.id}`)
+            const Orcamento = await axios.get<IOrcamento | undefined>(`${api_url}Orcamento?id_categoria=${categoria.id}`)
                 .then(res => res.data)
                 .catch(err => {
                     console.log(err)

@@ -1,16 +1,7 @@
-import { options } from "@/pages/api/auth/[...nextauth]";
-import { User } from "next-auth";
-import { getServerSession } from "next-auth";
-import { signIn, useSession } from "next-auth/react";
-import { redirect } from "next/navigation";
+import { useAuth } from "../../Contexts/AuthContext";
 
-
-export const useUser = async (): Promise<User> => {
-    const defaulUser: User = {
-        id: "sla",
-        name: 'Usuário Padrão',
-        email: 'teste@teste.com'
-    }
+export const useUser = ()=> {
+    const {user} = useAuth();
 
     // signIn('credentials', {
     //     redirect: true,
@@ -26,5 +17,5 @@ export const useUser = async (): Promise<User> => {
     //     redirect('/login')
     // }
 
-    return defaulUser;
+    return user;
 }

@@ -1,6 +1,7 @@
 import { Categoria, ICategoria } from "../Categoria";
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, useContext, useEffect, useState } from "react";
 import { useAuth } from "../../Contexts/AuthContext";
+import { CategoriasContext } from "../../Contexts/CategoriasContext";
 
 
 export function ListCategorias() {
@@ -19,18 +20,7 @@ export function ListCategorias() {
     //     return []
     // })
 
-    const [categorias, setCategorias] = useState<ICategoria[]>([])
-
-    useEffect(() => {
-        const getCategorias = async () => {
-            const categorias = await fetch(`http://localhost:3300/Categoria?id_usuario=${user!.id}`).then(res => res.json()).catch(err => {
-                console.log(err)
-                return []
-            });
-            setCategorias(categorias);
-        }
-        getCategorias();
-    }, [user])
+    const categorias: ICategoria[] = useContext<ICategoria[]>(CategoriasContext);
 
     return (
         <Suspense fallback={
