@@ -14,13 +14,14 @@ export interface IMeta {
 export function Meta({ meta }: { meta: IMeta }) {
 
     return (
-        <div key={meta.id} id={meta.id} className="meta">
+        <div id={meta.id} className="meta">
             {meta.icon &&
                 <div className="meta-icon">
                     <img src={meta.icon} alt={meta.icon_descricao} />
                 </div>
             }
-            <div className="meta-info">
+            <div className="meta-info"
+            >
                 <h3>{meta.descricao}</h3>
                 <span>{meta.dataFinal}</span>
             </div>

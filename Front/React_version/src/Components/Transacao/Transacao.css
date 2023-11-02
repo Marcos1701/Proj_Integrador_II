@@ -1,25 +1,48 @@
 .transacao {
-    width: fit-content;
-    height: fit-content;
+    width: 20em;
+    height: 5.5em;
     padding: 1em 2em;
     border-radius: 14.246px;
-    background: #EEE;
+    background: #D2E2E0;
+    /*essa cor está muito clara,
+    uma cor mais escura seria melhor, como #E2EEEC ou #D2E2E0
+    */
 
-    backdrop-filter: blur(62.32758712768555px);
+    -webkit-backdrop-filter: blur(70.32758712768555px);
+    backdrop-filter: blur(70.32758712768555px);
 
     display: flex;
-    align-items: flex-start;
-    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
     gap: 10px;
+}
+
+.transacao-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
 }
 
 .line {
     display: flex;
-
     align-items: center;
     justify-content: space-between;
+    width: fit-content;
+}
 
-    width: 10em;
+#line1 {
+    gap: 83px;
+}
+
+#data-transacao {
+    /* não quebrar quando o texto for muito grande 
+     */
+    white-space: nowrap;
+}
+
+#line2 {
+    margin-left: .2em;
+    gap: 4.4em;
 }
 
 #nome-transacao {

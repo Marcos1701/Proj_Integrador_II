@@ -3,6 +3,7 @@ import { TransacoesContext } from "../../Contexts/TransacoesContext";
 import { ICategoria } from "../Categoria";
 import { ITransacao, Transacao } from "../Transacao"
 import { Suspense, useContext, useState } from "react";
+import './ListTransacoes.css'
 
 
 interface IListTransacoesProps {
@@ -11,7 +12,7 @@ interface IListTransacoesProps {
     pagination?: boolean;
 }
 
-export function ListTransacoes({ page = 1, limit = 10, pagination = true }: IListTransacoesProps) {
+export function ListTransacoes({ page = 1, limit = 2, pagination = true }: IListTransacoesProps) {
 
     const transacoes: ITransacao[] = useContext(TransacoesContext)
     const categorias: ICategoria[] = useContext(CategoriasContext)
@@ -22,8 +23,8 @@ export function ListTransacoes({ page = 1, limit = 10, pagination = true }: ILis
             <div className="transacoes-home-skeleton">
             </div>
         }>
-            <div className="list_transacoes">
-                <ul id="list-Transacoes">
+            <div className="list_transacoes" key="lista-transacoes">
+                <ul className="list-values-2columns" id="list-Transacoes">
                     {
                         transacoes
                             .slice((pageAtual - 1) * limit, pageAtual * limit)
@@ -44,6 +45,7 @@ export function ListTransacoes({ page = 1, limit = 10, pagination = true }: ILis
                                             <Transacao
                                                 transacao={transacao}
                                                 categoria={categoria}
+                                                key={transacao.id}
                                             />
                                         </li>
                                     )

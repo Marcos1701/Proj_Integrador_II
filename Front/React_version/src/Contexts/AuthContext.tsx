@@ -38,7 +38,8 @@ interface AuthProviderProps {
     children: React.ReactNode
 }
 
-export const api_url: string = "https://legendary-space-spoon-gvjqgjx7gx92vv5g-3300.app.github.dev/"
+export const api_url: string = "http://localhost:3300/"
+//"https://legendary-space-spoon-gvjqgjx7gx92vv5g-3300.app.github.dev/"
 
 // AuthProvider encapsula o AuthContextProvider e o AuthContext
 export const AuthProvider = ({ children }: AuthProviderProps) => {

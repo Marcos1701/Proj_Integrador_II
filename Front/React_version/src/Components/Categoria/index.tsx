@@ -67,7 +67,7 @@ export function Categoria({ categoria }: { categoria: ICategoria }) {
     const valorOrcamento: number | undefined = Orcamento?.Limite
 
     return (
-        <div className="categoria">
+        <div className="categoria" id={categoria.id}>
             {categoria.icone &&
                 <div className="categoria-icon">
                     <img src={categoria.icone} alt={categoria.nome} />

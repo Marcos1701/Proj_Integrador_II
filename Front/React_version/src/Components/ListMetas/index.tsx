@@ -15,13 +15,15 @@ export function ListMetas() {
             </div>
         }>
 
-            <div className="metas-home">
-                {
-                    metas.map(
-                        (meta: IMeta) => <Meta meta={meta} />
-                    )
-                }
+            <div className="lista-metas" key="lista-metas">
+                <ul className="list-values-2columns">
+                    {
+                        metas.map(
+                            (meta: IMeta) => <li key={meta.id}> <Meta meta={meta} key={meta.id} /></li>
+                        )
+                    }
+                </ul>
             </div>
-        </Suspense>
+        </Suspense >
     )
 }

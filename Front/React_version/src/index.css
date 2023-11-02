@@ -13,12 +13,15 @@
   color: #13201E;
   border-radius: 64.108px;
   background: var(--background, #E2EEEC);
+  fill: rgba(255, 255, 255, 0.80);
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+
 }
 
 a {
@@ -63,6 +66,17 @@ button:hover {
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
+}
+
+ul.list-values-2columns {
+
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1em;
+  align-items: flex-start;
 }
 
 /* @media (prefers-color-scheme: light) {

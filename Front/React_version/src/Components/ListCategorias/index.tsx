@@ -27,12 +27,14 @@ export function ListCategorias() {
             <div className="categorias-home-skeleton">
             </div>
         }>
-            <div className="categorias-home">
-                {
-                    categorias.map(
-                        (categoria: ICategoria) => <Categoria categoria={categoria} />
-                    )
-                }
+            <div className="lista-categorias">
+                <ul className="list-values-2columns">
+                    {
+                        categorias.map(
+                            (categoria: ICategoria) => <li key={categoria.id}><Categoria categoria={categoria} key={categoria.id} /> </li>
+                        )
+                    }
+                </ul>
             </div>
         </Suspense>
     )
