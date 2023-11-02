@@ -1,21 +1,15 @@
 import { ITransacao } from "../../../../../Transacao";
-import { useUser } from "../../../../../EncapsulatedContext";
 import { Suspense, useEffect, useState } from "react";
-import { User } from "../../../../../../Contexts/AuthContext";
+import { useAuth } from "../../../../../../Contexts/AuthContext";
 import axios from "axios";
 import './Saldo.css'
 
 
 export function Saldo() {
-    const [user, setUser] = useState<User>();
+    const { user } = useAuth();
     const [saldo, setSaldo] = useState<number>(0);
 
     useEffect(() => {
-        async function getUser() {
-            const user: User = await useUser();
-            setUser(user);
-        }
-        getUser();
         async function getSaldo() {
             if (!user) return 0;
             const saldo: number = (await axios.get<ITransacao[]>(`http://localhost:3300/Transacao?id_usuario=${user.id}`)).data.reduce((acc: number, transacao: ITransacao) => {

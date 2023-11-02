@@ -3,7 +3,7 @@ import { ulid } from "ulidx";
 import { useAuth, api_url } from "../../../../Contexts/AuthContext";
 import axios from "axios";
 import './AdicionarCategoria.css'
-
+import { MoneyValidation } from "../AdicionarTransacaoForm";
 
 export function AdicionarCategoriaForm() {
 
@@ -14,6 +14,7 @@ export function AdicionarCategoriaForm() {
     const descricao = useRef<HTMLTextAreaElement>(null);
     const OrcamentoCheckbox = useRef<HTMLInputElement>(null);
     const orcamento = useRef<HTMLInputElement>(null);
+
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -29,7 +30,7 @@ export function AdicionarCategoriaForm() {
             descricao: descricao.current?.value,
         }
 
-        await axios.post('${api_url}Categoria', categoria).then(res => res.data).catch(err => {
+        await axios.post(`${api_url}Categoria`, categoria).then(res => res.data).catch(err => {
             console.log(err)
         });
 
@@ -39,19 +40,20 @@ export function AdicionarCategoriaForm() {
                 Limite: orcamento.current?.value,
             }
 
-            await axios.post('${api_url}Orcamento', orcamento_novo).then(res => res.data).catch(err => {
+            await axios.post(`${api_url}Orcamento`, orcamento_novo).then(res => res.data).catch(err => {
                 console.log(err)
             });
         }
     }
 
     return (
-        <form className="adicionar-categoria-form" onSubmit={handleSubmit}>
-            <input type="text" placeholder="Nome da Categoria" ref={nome} />
-            <textarea placeholder="Descrição" ref={descricao} />
+        <form className="add-element-form" onSubmit={handleSubmit}>
+            <h2>Adicionar Categoria</h2>
+            <input type="text" placeholder="Nome da Categoria" className="input-nome" ref={nome} />
+            <textarea placeholder="Descrição" ref={descricao} className="input-descricao" />
             <input type="checkbox" ref={OrcamentoCheckbox} />
             {OrcamentoCheckbox.current?.checked &&
-                <input type="number" placeholder="Orçamento" ref={orcamento} />
+                <input type="text" placeholder="R$ 0" ref={orcamento} className="input-orcamento" onChange={MoneyValidation} />
             }
             <button type="submit">Adicionar Categoria</button>
         </form>

@@ -4,9 +4,33 @@ import { useAuth, api_url } from "../../../../Contexts/AuthContext";
 import { Suspense, useRef } from "react";
 import { ulid } from "ulidx";
 
-
 interface IAdicionarTransacaoFormProps {
     categorias: ICategoria[];
+}
+
+
+export const MoneyValidation = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+    if (value === '') {
+        return
+    }
+
+    // remover tudo o que não for número
+    const valueAsNumber = Number(value.replace(/[^0-9]/g, ''));
+    if (isNaN(valueAsNumber) || valueAsNumber < 0 || valueAsNumber > 100000000000) {
+        event.target.value = event.target.value.slice(0, -1);
+        return;
+    }
+
+    // formatar o número para dinheiro, sem as casas decimais
+    const valueAsMoney = valueAsNumber.toLocaleString('pt-br', {
+        style: 'currency',
+        currency: 'BRL',
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0
+    });
+
+    event.target.value = valueAsMoney;
 }
 
 export function AdicionarTransacaoForm({ categorias }: IAdicionarTransacaoFormProps) {
@@ -41,20 +65,27 @@ export function AdicionarTransacaoForm({ categorias }: IAdicionarTransacaoFormPr
             descricao: descricao.current?.value,
         }
 
-        await axios.post('${api_url}Transacao', transacao).then(res => res.data).catch(err => {
+        await axios.post(`${api_url}Transacao`, transacao).then(res => res.data).catch(err => {
             console.log(err)
         });
     }
+
 
     return (
         <Suspense fallback={
             <div className="transacoes-home-skeleton">
             </div>
         }>
-            <form className="adicionar-transacao-form" onSubmit={handleSubmit}>
-                <input type="text" placeholder="Nome da Transação" ref={nome} />
-                <input type="number" placeholder="Valor" ref={valor} />
-                <input type="date" placeholder="Data" ref={data} />
+            <form className="add-element-form" onSubmit={handleSubmit}>
+                <h2>Adicionar Transação</h2>
+                <input type="text" placeholder="Nome da Transação" ref={nome} className="input-nome" />
+                <input type="text"
+                    onChange={MoneyValidation}
+                    placeholder="R$ 0"
+                    pattern="R\$ [0-9]{1,3}(\.[0-9]{3})*(\,[0-9]{2})?"
+                    ref={valor} className="input-valor"
+                />
+                <input type="date" placeholder="Data" ref={data} className="input-data" />
                 <select ref={tipo}>
                     <option value="Entrada">Entrada</option>
                     <option value="Saída">Saída</option>

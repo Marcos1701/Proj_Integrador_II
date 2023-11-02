@@ -1,4 +1,4 @@
-import axios from "axios";
+// import axios from "axios";
 import React, { createContext, useContext, useMemo, useState } from "react";
 // import { ulid } from 'ulidx';
 
@@ -136,3 +136,24 @@ export const useAuth = (): AuthContextType => {
 
     return authContext
 }
+
+
+/* Uncaught (in promise) Error: Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://reactjs.org/link/invalid-hook-call for tips about how to debug and fix this problem.
+    at Object.throwInvalidHookError (react-dom.development.js:16227:9)
+    at useContext (react.development.js:1618:21)
+    at useAuth (AuthContext.tsx:132:25)
+    at useUser (index.tsx:4:20)
+    at getUser (index.tsx:19:32)
+    at index.tsx:31:9
+    at commitHookEffectListMount (react-dom.development.js:23150:26)
+    at commitPassiveMountOnFiber (react-dom.development.js:24926:13)
+    at commitPassiveMountEffects_complete (react-dom.development.js:24891:9)
+    at commitPassiveMountEffects_begin (react-dom.development.js:24878:7) 
+    
+    este erro ocorre quando se tenta usar um hook fora de um componente funcional, ou seja, fora de uma função que retorna um JSX
+    para resolver, basta colocar o hook dentro de uma função que retorna um JSX
+    */

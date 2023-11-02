@@ -4,11 +4,14 @@
     padding: 1em 2em;
     border-radius: 14.246px;
     background: #D2E2E0;
-    /*essa cor está muito clara,
+    box-shadow: #13201E -3px 1px 10px; /* 
+    box-shadow: cor x-offset y-offset blur;
+    */
+        /*essa cor está muito clara,
     uma cor mais escura seria melhor, como #E2EEEC ou #D2E2E0
     */
 
-    -webkit-backdrop-filter: blur(70.32758712768555px);
+        -webkit-backdrop-filter: blur(70.32758712768555px);
     backdrop-filter: blur(70.32758712768555px);
 
     display: flex;
@@ -46,21 +49,31 @@
 }
 
 #nome-transacao {
-    color: var(--text, #13201E);
     font-family: Eina03-SemiBold;
     font-size: 18px;
+    line-height: 29.52px;
+}
+
+#nome-transacao,
+#nome-categoria {
+    max-width: 10em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+#nome-categoria,
+#data-transacao,
+#nome-transacao {
+    color: var(--text, #13201E);
     font-style: normal;
     font-weight: 400;
-    line-height: 29.52px;
 }
 
 #nome-categoria,
 #data-transacao {
-    color: var(--text, #13201E);
     font-family: Eina03-Regular;
     font-size: 11.872px;
-    font-style: normal;
-    font-weight: 400;
     line-height: 19.47px;
     opacity: 0.4;
 }

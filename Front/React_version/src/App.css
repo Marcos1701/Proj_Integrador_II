@@ -50,3 +50,60 @@ main {
     width: .5em;
   }
 }
+
+form.add-element-form {
+  width: 35em;
+  height: 35em;
+  flex-shrink: 0;
+  /* flex-shrink = 0 para não diminuir o tamanho do elemento */
+  border-radius: 14.246px;
+  background: rgba(238, 238, 238, 0.982);
+
+  box-shadow: 0px 4.74877px 17.80788px 4px rgba(0, 0, 0, 0.817);
+
+  & input {
+
+    &.input-nome {
+      width: 80%;
+      height: 2.5em;
+      margin: 1em auto;
+      padding-left: 1em;
+    }
+
+    &.input-descricao {
+      /* text-area */
+      width: 80%;
+      height: 5em;
+      margin: 1em auto;
+      padding-left: 1em;
+    }
+
+    &.input-valor {
+      /* tipo number*/
+      width: 40%;
+      height: 2.5em;
+      margin: 1em auto;
+      padding-left: 1em;
+      /* remover a barra de rolagem 
+       */
+      -moz-appearance: textfield;
+      appearance: textfield;
+    }
+
+    &.input-data {
+      width: 30%;
+      height: 2.5em;
+      margin: 1em auto;
+      padding-left: 1em;
+    }
+  }
+
+  & h2 {
+    font-family: Eina03-SemiBold;
+    font-size: 1.5em;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 0px;
+    color: var(--text, #13201E);
+  }
+}
