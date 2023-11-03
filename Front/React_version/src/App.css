@@ -61,28 +61,39 @@ form.add-element-form {
 
   box-shadow: 0px 4.74877px 17.80788px 4px rgba(0, 0, 0, 0.817);
 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+  & * {
+    margin: .8em 1.5em;
+    /* margin: 1em 0 = margin-top: 1em; margin-bottom: 1em; */
+
+  }
+
   & input {
+    align-self: flex-start;
 
     &.input-nome {
-      width: 80%;
-      height: 2.5em;
-      margin: 1em auto;
+      width: 25em;
+      height: 3em;
       padding-left: 1em;
-    }
+      border-radius: 12px;
+      background: var(--buttons-secondary, #CCCFE0);
 
-    &.input-descricao {
-      /* text-area */
-      width: 80%;
-      height: 5em;
-      margin: 1em auto;
-      padding-left: 1em;
+      color: var(--text, #13201E);
+      font-family: Eina03-Regular;
+      font-size: 13px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 21.32px;
     }
 
     &.input-valor {
       /* tipo number*/
       width: 40%;
       height: 2.5em;
-      margin: 1em auto;
       padding-left: 1em;
       /* remover a barra de rolagem 
        */
@@ -93,9 +104,131 @@ form.add-element-form {
     &.input-data {
       width: 30%;
       height: 2.5em;
-      margin: 1em auto;
       padding-left: 1em;
     }
+
+  }
+
+  & textarea {
+    align-self: flex-start;
+    width: 25em;
+    height: 10em;
+    padding: 0.5em 1em;
+    border-radius: 12px;
+    background: var(--buttons-secondary, #CCCFE0);
+
+    color: var(--text, #13201E);
+    font-family: Eina03-Regular;
+    font-size: 13px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 21.32px;
+
+    resize: none;
+    /* resize = redimensionar o textarea */
+
+    &::-webkit-scrollbar {
+      /* barra de rolagem */
+      width: .5em;
+    }
+  }
+
+  & select {
+    align-self: flex-start;
+    width: fit-content;
+    height: 2.5em;
+    padding: 0 1em;
+
+    border-radius: 6px;
+    background-color: #CCCFE0;
+    font-family: Eina03-Regular;
+    font-size: 13px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 21.32px;
+    color: #13201E;
+    opacity: 0.9;
+    border: 1px solid var(--accent, #2844BD);
+
+    & option {
+      font-family: Eina03-Regular;
+      font-size: 13px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 21.32px;
+      color: #13201E;
+      opacity: 0.9;
+    }
+
+    &hover {
+      cursor: pointer;
+    }
+
+    &::-ms-expand {
+      /* -ms-expand = pseudo-elemento para o select */
+      display: none;
+    }
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+  & .button-div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 2em;
+    gap: 2em;
+  }
+
+  & .cancel-form-button {
+    width: 145px;
+    height: 33px;
+    flex-shrink: 0;
+    border-radius: 14.246px;
+    border: 0.5px solid var(--accent, #2844BD);
+    background: var(--buttons-secondary, #CCCFE0);
+    box-shadow: 0px 4.74877px 10px 0px rgba(0, 0, 0, 0.08);
+    padding: 0;
+
+    color: var(--text, #13201E);
+    font-family: Eina03-Bold;
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 21.32px;
+
+    &:hover {
+      background: var(--buttons-secondary-hover, #E2EEEC);
+      color: var(--accent, #2844BD);
+      border: 0.5px solid var(--accent, #2844BD);
+    }
+  }
+
+  & .submit-form-button {
+    width: 185px;
+    height: 33px;
+    flex-shrink: 0;
+    border-radius: 14.246px;
+    border: 0.8px solid var(--text, #13201E);
+    background: var(--accent, #2844BD);
+    box-shadow: 0px 4.74877px 10px 0px rgba(0, 0, 0, 0.08);
+    padding: 0;
+
+    color: var(--buttons-primary-text, #FFFFFF);
+
+    font-family: Eina03-SemiBold;
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 21.32px;
+
+    &:hover {
+      background: var(--accent-hover, #2844BD);
+      border: 0.8px solid var(--accent-hover, #2844BD);
+      box-shadow: 0px 4.74877px 10px 0px rgba(0, 0, 0, 0.539);
+    }
+
+
   }
 
   & h2 {

@@ -3,9 +3,11 @@ import { ICategoria } from "../../../Categoria";
 import { useAuth, api_url } from "../../../../Contexts/AuthContext";
 import { Suspense, useRef } from "react";
 import { ulid } from "ulidx";
+import { redirect } from "react-router-dom";
 
 interface IAdicionarTransacaoFormProps {
     categorias: ICategoria[];
+    setExibirAdicionarTransacaoForm: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 
@@ -33,8 +35,12 @@ export const MoneyValidation = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.target.value = valueAsMoney;
 }
 
-export function AdicionarTransacaoForm({ categorias }: IAdicionarTransacaoFormProps) {
+export function AdicionarTransacaoForm({ categorias, setExibirAdicionarTransacaoForm }: IAdicionarTransacaoFormProps) {
 
+    if (!categorias || categorias.length === 0) {
+        confirm("Você precisa adicionar uma categoria antes de adicionar uma transação");
+        redirect('/');
+    }
     const nome = useRef<HTMLInputElement>(null);
     const valor = useRef<HTMLInputElement>(null);
     const data = useRef<HTMLInputElement>(null);
@@ -50,24 +56,47 @@ export function AdicionarTransacaoForm({ categorias }: IAdicionarTransacaoFormPr
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
-        if (!nome.current?.value || !valor.current?.value || !data.current?.value || !tipo.current?.value || !categoria.current?.value || !descricao.current?.value) {
+        if (!nome.current?.value || !valor.current?.value || !data.current?.value || !tipo.current?.value || !categoria.current?.value) {
             return
         }
 
-        const transacao = {
-            id: ulid(),
-            id_usuario: user.id,
-            id_categoria: categoria.current?.value,
-            nome: nome.current?.value,
-            valor: valor.current?.value,
-            data: data.current?.value,
-            tipo: tipo.current?.value,
-            descricao: descricao.current?.value,
-        }
+        const transacao =
+            !descricao.current?.value || descricao.current?.value === '' ?
+                {
+                    id: ulid(),
+                    id_usuario: user.id,
+                    id_categoria: categoria.current.value,
+                    nome: nome.current.value,
+                    valor: valor.current.value.replace(/[^0-9]/g, ''),
+                    data: data.current.value,
+                    tipo: tipo.current.value,
+                } :
+                {
+                    id: ulid(),
+                    id_usuario: user.id,
+                    id_categoria: categoria.current.value,
+                    nome: nome.current.value,
+                    valor: valor.current.value.replace(/[^0-9]/g, ''),
+                    data: data.current.value,
+                    tipo: tipo.current.value,
+                    descricao: descricao.current.value,
+                }
 
         await axios.post(`${api_url}Transacao`, transacao).then(res => res.data).catch(err => {
             console.log(err)
         });
+
+        // limpar os campos
+        // nome.current.value = '';
+        // valor.current.value = '';
+        // data.current.value = '';
+        // tipo.current.value = '';
+        // categoria.current.value = '';
+        // if (descricao.current) {
+        //     descricao.current.value = '';
+        // }
+
+        setExibirAdicionarTransacaoForm(false);
     }
 
 
@@ -78,27 +107,40 @@ export function AdicionarTransacaoForm({ categorias }: IAdicionarTransacaoFormPr
         }>
             <form className="add-element-form" onSubmit={handleSubmit}>
                 <h2>Adicionar Transação</h2>
-                <input type="text" placeholder="Nome da Transação" ref={nome} className="input-nome" />
+                <input type="text" placeholder="Nome da Transação" ref={nome} className="input-nome" required />
                 <input type="text"
                     onChange={MoneyValidation}
-                    placeholder="R$ 0"
-                    pattern="R\$ [0-9]{1,3}(\.[0-9]{3})*(\,[0-9]{2})?"
+                    defaultValue="R$ 0"
                     ref={valor} className="input-valor"
+                    required
                 />
-                <input type="date" placeholder="Data" ref={data} className="input-data" />
-                <select ref={tipo}>
+                <input type="date" placeholder="Data" ref={data} className="input-data"
+                    required // para aceitar apenas datas anteriores ou iguais à data atual
+                    max={new Date().toISOString().split('T')[0]}
+                    // initial value
+                    defaultValue={new Date().toISOString().split('T')[0]}
+                />
+                <select ref={tipo} required>
+                    <option value="" selected disabled>Selecione o tipo</option> {/* o value vazio é necessário para o required funcionar */}
                     <option value="Entrada">Entrada</option>
                     <option value="Saída">Saída</option>
                 </select>
-                <select ref={categoria}>
-                    {categorias.length > 0 ?
+                <select ref={categoria} required>
+                    <option value="" selected disabled>Selecione uma categoria</option>
+                    {
+                        // categorias.length > 0 ?
                         categorias.map(categoria => (
                             <option value={categoria.id}>{categoria.nome}</option>
                         ))
-                        : <option value="Sem categoria">Sem categoria</option>
+                        // : <option value="Sem categoria">Sem categoria</option>
                     }
                 </select>
-                <button type="submit">Adicionar</button>
+                <textarea placeholder="Descrição" ref={descricao} className="input-descricao" />
+
+                <div className="button-div">
+                    <button type="button" onClick={() => setExibirAdicionarTransacaoForm(false)} className="cancel-form-button">Cancelar</button>
+                    <button type="submit" className="submit-form-button">Adicionar</button>
+                </div>
             </form>
         </Suspense>
     )

@@ -49,13 +49,13 @@ export function SecaoActions_Home() {
             </div>
             {showAdicionarTransacaoForm &&
                 <div className="Background-form">
-                    <AdicionarTransacaoForm categorias={categorias} />
+                    <AdicionarTransacaoForm categorias={categorias} setExibirAdicionarTransacaoForm={setShowAdicionarTransacaoForm} />
                 </div>
             }
 
             {showAdicionarCategoriaForm &&
                 <div className="Background-form">
-                    <AdicionarCategoriaForm />
+                    <AdicionarCategoriaForm setExibirAdicionarCategoriaForm={setShowAdicionarCategoriaForm} />
                 </div>
             }
         </div>

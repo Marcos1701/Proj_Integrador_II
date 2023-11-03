@@ -5,7 +5,11 @@ import axios from "axios";
 import './AdicionarCategoria.css'
 import { MoneyValidation } from "../AdicionarTransacaoForm";
 
-export function AdicionarCategoriaForm() {
+interface IAdicionarCategoriaFormProps {
+    setExibirAdicionarCategoriaForm: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+export function AdicionarCategoriaForm({ setExibirAdicionarCategoriaForm }: IAdicionarCategoriaFormProps) {
 
     const { user } = useAuth();
     if (!user) return <p>Usuário não encontrado</p>
@@ -20,6 +24,7 @@ export function AdicionarCategoriaForm() {
         event.preventDefault();
 
         if (!nome.current?.value || !descricao.current?.value || !OrcamentoCheckbox.current?.value || !orcamento.current?.value) {
+            alert('Preencha todos os campos')
             return
         }
 
@@ -44,6 +49,8 @@ export function AdicionarCategoriaForm() {
                 console.log(err)
             });
         }
+
+        setExibirAdicionarCategoriaForm(false);
     }
 
     return (
@@ -55,7 +62,10 @@ export function AdicionarCategoriaForm() {
             {OrcamentoCheckbox.current?.checked &&
                 <input type="text" placeholder="R$ 0" ref={orcamento} className="input-orcamento" onChange={MoneyValidation} />
             }
-            <button type="submit">Adicionar Categoria</button>
+            <div className="button-div">
+                <button type="button" onClick={() => setExibirAdicionarCategoriaForm(false)} className="cancel-form-button">Cancelar</button>
+                <button type="submit" className="submit-form-button">Adicionar Categoria</button>
+            </div>
         </form>
 
     )
