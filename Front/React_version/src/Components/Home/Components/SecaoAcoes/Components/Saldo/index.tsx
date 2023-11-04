@@ -1,5 +1,5 @@
 import { ITransacao } from "../../../../../Transacao";
-import { Suspense, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "../../../../../../Contexts/AuthContext";
 import axios from "axios";
 import './Saldo.css'
@@ -14,9 +14,9 @@ export function Saldo() {
             if (!user) return 0;
             const saldo: number = (await axios.get<ITransacao[]>(`http://localhost:3300/Transacao?id_usuario=${user.id}`)).data.reduce((acc: number, transacao: ITransacao) => {
                 if (transacao.tipo === 'Entrada') {
-                    return acc + transacao.Valor
+                    return acc + transacao.valor
                 }
-                return acc - transacao.Valor
+                return acc - transacao.valor
             }, 0)
             setSaldo(saldo);
         }
@@ -60,20 +60,17 @@ export function Saldo() {
     // o saldo é a soma de todas as transações
 
     return (
-        <Suspense fallback={
-            <div className="saldo-home-skeleton">
-            </div>
-        }>
-            <div className="saldo-home">
-                <div className="Saldo-icon">
-                    <img src="/assets/Saldo/wallet.svg" alt="Saldo" />
-                </div>
 
-                <div className="saldo-info">
-                    <p>Saldo</p>
-                    <span>R$ {realizarTratamentoSaldo(saldo)}</span>
-                </div>
+        <div className="saldo-home">
+            <div className="Saldo-icon">
+                <img src="/assets/Saldo/wallet.svg" alt="Saldo" />
             </div>
-        </Suspense>
+
+            <div className="saldo-info">
+                <p>Saldo</p>
+                <span>R$ {realizarTratamentoSaldo(saldo)}</span>
+            </div>
+        </div>
+
     )
 }

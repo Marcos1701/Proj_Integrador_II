@@ -1,12 +1,9 @@
 import { Categoria, ICategoria } from "../Categoria";
-import { Suspense, useContext, useEffect, useState } from "react";
-import { useAuth } from "../../Contexts/AuthContext";
+import { useContext } from "react";
 import { CategoriasContext } from "../../Contexts/CategoriasContext";
 
 
 export function ListCategorias() {
-
-    const { user } = useAuth();
     // const categorias = await fetch(`http://localhost:3000/Categoria`,
     //     {
     //         method: 'POST',
@@ -22,11 +19,10 @@ export function ListCategorias() {
 
     const categorias: ICategoria[] = useContext<ICategoria[]>(CategoriasContext);
 
+    console.log(categorias)
+
     return (
-        <Suspense fallback={
-            <div className="categorias-home-skeleton">
-            </div>
-        }>
+        <>
             <div className="lista-categorias">
                 <ul className="list-values-2columns">
                     {
@@ -36,7 +32,7 @@ export function ListCategorias() {
                     }
                 </ul>
             </div>
-        </Suspense>
+        </>
     )
 
 }

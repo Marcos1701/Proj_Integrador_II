@@ -6,10 +6,10 @@ export interface ITransacao {
     id_categoria: string;
     id_usuario: string;
     nome: string;
-    tipo: "Gasto" | "Entrada";
-    Valor: number;
-    Data: string;
-    Descricao: string;
+    tipo: "Saida" | "Entrada";
+    valor: number;
+    data: string;
+    descricao: string;
 }
 
 export interface ITransacaoProps {
@@ -38,12 +38,12 @@ export function Transacao({ transacao, categoria }: ITransacaoProps) {
             <div className="transacao-info">
                 <div className="line" id="line1">
                     <p id="nome-transacao">{transacao.nome}</p>
-                    <p id="valor-transacao">R$ {transacao.Valor}</p>
+                    <p id="valor-transacao" className={transacao.tipo}>R$ {transacao.valor}</p>
                 </div>
 
                 <div className="line" id="line2">
                     <p id="nome-categoria">{categoria.nome}</p>
-                    <p id="data-transacao">{tratarData(transacao.Data)}</p>
+                    <p id="data-transacao">{tratarData(transacao.data)}</p>
                 </div>
             </div>
         </div>

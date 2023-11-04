@@ -1,7 +1,7 @@
 import axios from "axios";
 import { ICategoria } from "../../../Categoria";
 import { useAuth, api_url } from "../../../../Contexts/AuthContext";
-import { Suspense, useRef } from "react";
+import { useRef } from "react";
 import { ulid } from "ulidx";
 import { redirect } from "react-router-dom";
 
@@ -101,47 +101,73 @@ export function AdicionarTransacaoForm({ categorias, setExibirAdicionarTransacao
 
 
     return (
-        <Suspense fallback={
-            <div className="transacoes-home-skeleton">
-            </div>
-        }>
-            <form className="add-element-form" onSubmit={handleSubmit}>
-                <h2>Adicionar Transação</h2>
-                <input type="text" placeholder="Nome da Transação" ref={nome} className="input-nome" required />
-                <input type="text"
-                    onChange={MoneyValidation}
-                    defaultValue="R$ 0"
-                    ref={valor} className="input-valor"
-                    required
-                />
-                <input type="date" placeholder="Data" ref={data} className="input-data"
-                    required // para aceitar apenas datas anteriores ou iguais à data atual
-                    max={new Date().toISOString().split('T')[0]}
-                    // initial value
-                    defaultValue={new Date().toISOString().split('T')[0]}
-                />
-                <select ref={tipo} required>
-                    <option value="" selected disabled>Selecione o tipo</option> {/* o value vazio é necessário para o required funcionar */}
-                    <option value="Entrada">Entrada</option>
-                    <option value="Saída">Saída</option>
-                </select>
-                <select ref={categoria} required>
-                    <option value="" selected disabled>Selecione uma categoria</option>
-                    {
-                        // categorias.length > 0 ?
-                        categorias.map(categoria => (
-                            <option value={categoria.id}>{categoria.nome}</option>
-                        ))
-                        // : <option value="Sem categoria">Sem categoria</option>
-                    }
-                </select>
-                <textarea placeholder="Descrição" ref={descricao} className="input-descricao" />
 
-                <div className="button-div">
-                    <button type="button" onClick={() => setExibirAdicionarTransacaoForm(false)} className="cancel-form-button">Cancelar</button>
-                    <button type="submit" className="submit-form-button">Adicionar</button>
+        <form className="add-element-form" onSubmit={handleSubmit}>
+            <h2>Adicionar Transação</h2>
+
+            <div className="input-div">
+                <label htmlFor="nome">Nome</label>
+                <input type="text" placeholder="Nome da Transação" ref={nome} className="input-nome" required />
+            </div>
+
+            <div className="valor-data-div">
+                <div className="input-div">
+                    <label htmlFor="valor">Valor</label>
+                    <input type="text"
+                        onChange={MoneyValidation}
+                        defaultValue="R$ 0"
+                        ref={valor} className="input-valor"
+                        required
+                    />
                 </div>
-            </form>
-        </Suspense>
+
+                <div className="input-div">
+                    <label htmlFor="data">Data</label>
+                    <input type="date" placeholder="Data" ref={data} className="input-data"
+                        required // para aceitar apenas datas anteriores ou iguais à data atual
+                        max={new Date().toISOString().split('T')[0]}
+                        // initial value
+                        defaultValue={new Date().toISOString().split('T')[0]}
+                    />
+                </div>
+            </div>
+
+            <div className="select-group">
+
+                <div className="label-element-div">
+                    <label htmlFor="tipo">Tipo</label>
+                    <select ref={tipo} required>
+                        <option value="" selected disabled>Selecione o tipo</option> {/* o value vazio é necessário para o required funcionar */}
+                        <option value="Entrada">Entrada</option>
+                        <option value="Saída">Saída</option>
+                    </select>
+                </div>
+
+                <div className="label-element-div">
+                    <label htmlFor="categoria">Categoria</label>
+                    <select ref={categoria} required>
+                        <option value="" selected disabled>Selecione uma categoria</option>
+                        {
+                            // categorias.length > 0 ?
+                            categorias.map(categoria => (
+                                <option value={categoria.id}>{categoria.nome}</option>
+                            ))
+                            // : <option value="Sem categoria">Sem categoria</option>
+                        }
+                    </select>
+                </div>
+            </div>
+
+            <div className="label-element-div">
+                <label htmlFor="descricao">Descrição</label>
+                <textarea placeholder="Descrição" ref={descricao} className="input-descricao" />
+            </div>
+
+            <div className="button-div">
+                <button type="button" onClick={() => setExibirAdicionarTransacaoForm(false)} className="cancel-form-button">Cancelar</button>
+                <button type="submit" className="submit-form-button">Adicionar</button>
+            </div>
+        </form>
+
     )
 }

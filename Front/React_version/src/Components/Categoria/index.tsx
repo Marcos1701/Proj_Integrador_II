@@ -33,7 +33,7 @@ export function Categoria({ categoria }: { categoria: ICategoria }) {
 
 
     const [transacoes, setTransacoes] = useState<ITransacao[]>([])
-    const [Orcamento, setOrcamento] = useState<IOrcamento | undefined>()
+    const [Orcamento, setOrcamento] = useState<IOrcamento | null>()
 
     useEffect(() => {
         const getTransacoes = async () => {
@@ -46,11 +46,11 @@ export function Categoria({ categoria }: { categoria: ICategoria }) {
         getTransacoes();
 
         const getOrcamento = async () => {
-            const Orcamento = await axios.get<IOrcamento | undefined>(`${api_url}Orcamento?id_categoria=${categoria.id}`)
+            const Orcamento = await axios.get<IOrcamento | null>(`${api_url}Orcamento?id_categoria=${categoria.id}`)
                 .then(res => res.data)
                 .catch(err => {
                     console.log(err)
-                    return undefined
+                    return null
                 });
             setOrcamento(Orcamento);
         }
@@ -58,10 +58,10 @@ export function Categoria({ categoria }: { categoria: ICategoria }) {
     }, [categoria.id])
 
     const valorGasto: number = transacoes.reduce((acc: number, transacao: ITransacao) => {
-        if (transacao.tipo === 'Gasto') {
-            return acc + transacao.Valor
+        if (transacao.tipo === 'Saida') {
+            return acc + transacao.valor
         }
-        return acc - transacao.Valor // Entrada
+        return acc - transacao.valor // Entrada
     }, 0)
 
     const valorOrcamento: number | undefined = Orcamento?.Limite
@@ -79,8 +79,9 @@ export function Categoria({ categoria }: { categoria: ICategoria }) {
             </div>
 
             <div className="categoria-valores">
-                <p id="valorGasto">{valorGasto}</p>
-                {valorOrcamento && <p id="valorOrcamento">{valorOrcamento}</p>}
+                <p id="valorGasto">{valorGasto < 0 ? `R$ 0` : `R$ ${valorGasto}`
+                }</p>
+                {valorOrcamento !== undefined && <p id="valorOrcamento">{valorOrcamento}</p>}
             </div>
         </div>
     )

@@ -1,17 +1,18 @@
 .transacao {
-    width: 20em;
+    min-width: 20em;
     height: 5.5em;
     padding: 1em 2em;
     border-radius: 14.246px;
     background: #D2E2E0;
-    box-shadow: #13201E -3px 1px 10px; /* 
+    box-shadow: #13201E -3px 1px 10px;
+    /* 
     box-shadow: cor x-offset y-offset blur;
     */
-        /*essa cor está muito clara,
+    /*essa cor está muito clara,
     uma cor mais escura seria melhor, como #E2EEEC ou #D2E2E0
     */
 
-        -webkit-backdrop-filter: blur(70.32758712768555px);
+    -webkit-backdrop-filter: blur(70.32758712768555px);
     backdrop-filter: blur(70.32758712768555px);
 
     display: flex;
@@ -34,7 +35,7 @@
 }
 
 #line1 {
-    gap: 83px;
+    gap: 2.5em;
 }
 
 #data-transacao {
@@ -45,7 +46,7 @@
 
 #line2 {
     margin-left: .2em;
-    gap: 4.4em;
+    gap: 2.4em;
 }
 
 #nome-transacao {
@@ -56,10 +57,11 @@
 
 #nome-transacao,
 #nome-categoria {
-    max-width: 10em;
+    width: 90px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    text-align: left;
 }
 
 #nome-categoria,
@@ -79,14 +81,24 @@
 }
 
 #valor-transacao {
-    width: 56px;
-    height: 26.25px;
+    min-width: 56px;
+    height: 100%;
     flex-shrink: 0;
 
-    color: var(--value-discount, #E54444);
     font-family: Eina03-SemiBold;
     font-size: 20px;
     font-style: normal;
     font-weight: 400;
     line-height: 32.8px;
+    text-align: left;
+    margin: 0;
+
+    &.Saida {
+        color: var(--value-discount, #E54444);
+    }
+
+    &.Entrada {
+        color: var(--collors-green, rgba(0, 166, 15, 0.90));
+
+    }
 }

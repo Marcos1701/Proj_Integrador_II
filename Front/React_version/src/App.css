@@ -67,18 +67,75 @@ form.add-element-form {
   flex-direction: column;
 
   & * {
-    margin: .8em 1.5em;
+    margin: .5em;
     /* margin: 1em 0 = margin-top: 1em; margin-bottom: 1em; */
+  }
+
+  & label {
+    align-self: flex-start;
+    font-size: 12px;
+    margin: 0;
+    margin-bottom: 0.2em;
+  }
+
+  & :is(.label-element-div,
+    .input-div) {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+    border-radius: 4px;
 
   }
 
-  & input {
-    align-self: flex-start;
+  & .valor-data-div {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 5em;
+    width: 28em;
 
-    &.input-nome {
+    & div {
+      margin: 0;
+    }
+  }
+
+  & .input-div {
+    align-self: flex-start;
+    margin-left: 3.5em;
+
+    & input {
+      border: 1.4px solid var(--accent, #2844BD);
+
+      &:focus {
+        border: 1.4px solid var(--accent-hover, #2844BD);
+      }
+
+      &::-webkit-scrollbar {
+        width: .5em;
+      }
+
+      /* elemento quando seleciona um valor salvo no navegador*/
+      &::-webkit-outer-spin-button,
+      &::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+      }
+
+    }
+
+    & .input-valor {
+      min-width: 10em;
+      height: 2em;
+      padding-left: 8px;
+      margin: 0;
+    }
+
+    & .input-nome {
       width: 25em;
-      height: 3em;
+      height: 2.4em;
       padding-left: 1em;
+      padding-right: 1em;
       border-radius: 12px;
       background: var(--buttons-secondary, #CCCFE0);
 
@@ -88,32 +145,31 @@ form.add-element-form {
       font-style: normal;
       font-weight: 400;
       line-height: 21.32px;
+      margin: 0;
     }
 
-    &.input-valor {
-      /* tipo number*/
-      width: 40%;
-      height: 2.5em;
+    & .input-data {
+      width: 10em;
+      height: 2em;
       padding-left: 1em;
-      /* remover a barra de rolagem 
-       */
-      -moz-appearance: textfield;
-      appearance: textfield;
-    }
+      margin: 0;
+      /*tipo date */
 
-    &.input-data {
-      width: 30%;
-      height: 2.5em;
-      padding-left: 1em;
+      &::-webkit-calendar-picker-indicator {
+        /* -webkit-calendar-picker-indicator = pseudo-elemento para o input */
+        filter: invert(1);
+        /* inverter a cor do ícone */
+        margin-right: 0.5em;
+      }
     }
 
   }
 
   & textarea {
     align-self: flex-start;
-    width: 25em;
-    height: 10em;
-    padding: 0.5em 1em;
+    width: 35em;
+    height: 5em;
+    padding: 0.8em 1em;
     border-radius: 12px;
     background: var(--buttons-secondary, #CCCFE0);
 
@@ -123,6 +179,7 @@ form.add-element-form {
     font-style: normal;
     font-weight: 400;
     line-height: 21.32px;
+    margin: 0;
 
     resize: none;
     /* resize = redimensionar o textarea */
@@ -131,12 +188,21 @@ form.add-element-form {
       /* barra de rolagem */
       width: .5em;
     }
+
+  }
+
+  & .select-group {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 1em;
+    width: 30em;
   }
 
   & select {
     align-self: flex-start;
     width: fit-content;
-    height: 2.5em;
+    height: 2em;
     padding: 0 1em;
 
     border-radius: 6px;
@@ -179,7 +245,7 @@ form.add-element-form {
     justify-content: center;
     align-items: center;
     margin-top: 2em;
-    gap: 2em;
+    gap: 1.2em;
   }
 
   & .cancel-form-button {
@@ -206,7 +272,7 @@ form.add-element-form {
   }
 
   & .submit-form-button {
-    width: 185px;
+    width: 200px;
     height: 33px;
     flex-shrink: 0;
     border-radius: 14.246px;
@@ -237,6 +303,8 @@ form.add-element-form {
     font-style: normal;
     font-weight: 400;
     line-height: 0px;
-    color: var(--text, #13201E);
+    color: var(--accent, #2844BD);
+
+    margin-bottom: 1.5em;
   }
 }
