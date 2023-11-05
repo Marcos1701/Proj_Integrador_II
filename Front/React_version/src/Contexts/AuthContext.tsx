@@ -1,31 +1,30 @@
 // import axios from "axios";
+import axios from "axios";
 import React, { createContext, useContext, useMemo, useState } from "react";
 // import { ulid } from 'ulidx';
 
 export type User = {
-    id: string;
-    nome: string;
-    email: string;
-    senha: string;
-    lembrar?: boolean
+    access_token: string;
 }
 
 type singinData = {
     email: string;
-    password: string;
+    senha: string;
     lembrar?: boolean;
 }
 
-type ErrorAuth = {
-    status: number;
-    message: string;
+type singupData = {
+    nome: string;
+    email: string;
+    senha: string;
+    lembrar?: boolean;
 }
 
 
 interface AuthContextType {
     user: User | null
     signin: (data: singinData) => Promise<string | void>
-    singup: (user: User) => Promise<string | void>
+    singup: (user: singupData) => Promise<string | void>
     signout: () => void
     isAuthenticated: boolean
 }
@@ -44,77 +43,59 @@ export const api_url: string = "http://localhost:3300/"
 // AuthProvider encapsula o AuthContextProvider e o AuthContext
 export const AuthProvider = ({ children }: AuthProviderProps) => {
     const [user, setUser] = useState<User | null>(
-        localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')!
+        localStorage.getItem('access_token') ? JSON.parse(localStorage.getItem('user')!
         ) : null
     )
 
 
     const signin = async (data: singinData): Promise<string | void> => {
 
-        const response = await fetch(`${api_url}Usuario?email=${data.email}&Senha=${data.password}`, {
-            method: 'GET',
+        const response = await axios.post<User>(`${api_url}auth/login`, {
+            method: 'Post',
             headers: {
                 'Content-Type': 'application/json'
             },
-        }).then(res => res.json()
-        ).then(res => {
-            if (res.length === 0) {
-                return { error: { status: 404, message: 'Usuário não encontrado' } }
-            }
-
-            const user = res[0]
-
-            const userToSave: User
-                = {
-                id: user.id,
-                nome: user.nome,
-                email: user.email,
-                senha: user.Senha,
-                lembrar: data.lembrar
-            }
-            setUser(userToSave)
-            data.lembrar && localStorage.setItem('user', JSON.stringify(userToSave))
-        }).catch(err => {
-            console.log(err)
-            return { error: { status: 500, message: 'Erro no servidor' } }
+            body: JSON.stringify({
+                email: data.email,
+                senha: data.senha
+            })
         })
 
-        if (response && response.error.message) {
-            return response.error.message
+        if (response.status === 401) {
+            return response.statusText;
         }
+
+        if (data.lembrar) {
+            localStorage.setItem('access_token', JSON.stringify(response.data))
+        }
+        setUser(response.data);
+
     }
 
-    const singup = async (user: User): Promise<string | void> => {
+    const singup = async (user: singupData): Promise<string | void> => {
 
-        const { error }: { error?: ErrorAuth } = await fetch(`${api_url}Usuario`, {
-            method: 'POST',
+        const response = await axios.post<User>(`${api_url}auth/register`, {
+            method: 'Post',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(user)
-        }).then(res => res.json()
-        ).catch(err => {
-            console.log(err)
-            return { error: { status: 500, message: 'Erro no servidor' } }
+            body: JSON.stringify({
+                nome: user.nome,
+                email: user.email,
+                senha: user.senha
+            })
         })
 
-        if (error) {
-            return error.message
+        if (response.status === 401) {
+            return response.statusText;
         }
 
-        if (user.lembrar) {
-            localStorage.setItem('user', JSON.stringify(user))
-        }
-        setUser(user);
+        setUser(response.data);
     }
 
     const signout = (): void => {
-        if (!user?.lembrar) {
-            localStorage.setItem('user', JSON.stringify(user))
-        }
-
         setUser(null);
-        localStorage.removeItem('user');
+        localStorage.removeItem('access_token');
     }
 
     const value = useMemo(() => ({

@@ -1,9 +1,7 @@
 import axios from "axios";
 import { ICategoria } from "../../../Categoria";
 import { useAuth, api_url } from "../../../../Contexts/AuthContext";
-import { useRef } from "react";
-import { ulid } from "ulidx";
-import { redirect } from "react-router-dom";
+import { useRef, useState } from "react";
 
 interface IAdicionarTransacaoFormProps {
     categorias: ICategoria[];
@@ -39,7 +37,7 @@ export function AdicionarTransacaoForm({ categorias, setExibirAdicionarTransacao
 
     if (!categorias || categorias.length === 0) {
         confirm("Você precisa adicionar uma categoria antes de adicionar uma transação");
-        redirect('/');
+        setExibirAdicionarTransacaoForm(false);
     }
     const nome = useRef<HTMLInputElement>(null);
     const valor = useRef<HTMLInputElement>(null);
@@ -49,9 +47,9 @@ export function AdicionarTransacaoForm({ categorias, setExibirAdicionarTransacao
     const descricao = useRef<HTMLTextAreaElement>(null);
 
     const { user } = useAuth();
-    if (!user) return <>
-        <p>Usuário não encontrado</p>
-    </>
+    if (!user) return <p>Usuário não encontrado</p>
+
+    const [msgSucesso, setMsgSucesso] = useState<boolean>(false);
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -63,8 +61,6 @@ export function AdicionarTransacaoForm({ categorias, setExibirAdicionarTransacao
         const transacao =
             !descricao.current?.value || descricao.current?.value === '' ?
                 {
-                    id: ulid(),
-                    id_usuario: user.id,
                     id_categoria: categoria.current.value,
                     nome: nome.current.value,
                     valor: valor.current.value.replace(/[^0-9]/g, ''),
@@ -72,8 +68,6 @@ export function AdicionarTransacaoForm({ categorias, setExibirAdicionarTransacao
                     tipo: tipo.current.value,
                 } :
                 {
-                    id: ulid(),
-                    id_usuario: user.id,
                     id_categoria: categoria.current.value,
                     nome: nome.current.value,
                     valor: valor.current.value.replace(/[^0-9]/g, ''),
@@ -82,21 +76,32 @@ export function AdicionarTransacaoForm({ categorias, setExibirAdicionarTransacao
                     descricao: descricao.current.value,
                 }
 
-        await axios.post(`${api_url}Transacao`, transacao).then(res => res.data).catch(err => {
+        await axios.post(`${api_url}transacoes`, {
+            method: 'Post',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${user.access_token}`
+            },
+            body: JSON.stringify(transacao)
+
+        }).then(res => res.data).catch(err => {
             console.log(err)
         });
 
         // limpar os campos
-        // nome.current.value = '';
-        // valor.current.value = '';
-        // data.current.value = '';
-        // tipo.current.value = '';
-        // categoria.current.value = '';
-        // if (descricao.current) {
-        //     descricao.current.value = '';
-        // }
+        nome.current.value = '';
+        valor.current.value = '';
+        data.current.value = '';
+        tipo.current.value = '';
+        categoria.current.value = '';
+        if (descricao.current) {
+            descricao.current.value = '';
+        }
 
-        setExibirAdicionarTransacaoForm(false);
+        setMsgSucesso(true);
+        setTimeout(() => {
+            setMsgSucesso(false);
+        }, 3000);
     }
 
 
@@ -104,6 +109,8 @@ export function AdicionarTransacaoForm({ categorias, setExibirAdicionarTransacao
 
         <form className="add-element-form" onSubmit={handleSubmit}>
             <h2>Adicionar Transação</h2>
+
+            {msgSucesso && <p>Transação adicionada com sucesso!</p>}
 
             <div className="input-div">
                 <label htmlFor="nome">Nome</label>

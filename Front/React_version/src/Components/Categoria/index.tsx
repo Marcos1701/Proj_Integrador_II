@@ -6,19 +6,14 @@ import './Categoria.css'
 
 export interface ICategoria {
     id: string;
-    id_usuario: string;
     nome: string;
     descricao: string;
+    dataCriacao: Date;
+    orcamento?: number;
     gasto: number;
     icone?: string;
-    orcamento?: IOrcamento;
 }
 
-export interface IOrcamento {
-    id: string;
-    id_categoria: string;
-    limite: number;
-}
 
 export function Categoria({ categoria }: { categoria: ICategoria }) {
 
@@ -56,7 +51,7 @@ export function Categoria({ categoria }: { categoria: ICategoria }) {
                 return acc - transacao.valor // Entrada
             }, 0)
 
-    const valorOrcamento: number | undefined = categoria.orcamento ? categoria.orcamento.limite : undefined
+    const valorOrcamento: number | undefined = categoria.orcamento ? categoria.orcamento : undefined
 
     return (
         <div className="categoria" id={categoria.id}>

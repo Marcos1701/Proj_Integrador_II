@@ -1,116 +1,46 @@
 import { Categoria, ICategoria } from "../Categoria";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { CategoriasContext } from "../../Contexts/CategoriasContext";
-import { ITransacao } from "../Transacao";
-import { TransacoesContext } from "../../Contexts/TransacoesContext";
+import { Orderdiv } from "./Components/Orderdiv";
+import { Searchdiv } from "./Components/Searchdiv";
 
 
 interface ListCategoriasProps {
     pagination?: boolean
-    filter?: boolean
-    search?: boolean
+    orderSelect?: boolean
+    searchInput?: boolean
     limit?: number
-    order?: string
-    orderBy?: string
     page?: number
 }
 
 export function ListCategorias(
     {
         pagination = false,
-        filter = false,
-        search = false,
+        orderSelect = false,
+        searchInput = false,
         limit = 2,
-        order = 'ASC',
-        orderBy = 'data',
         page = 1
     }: ListCategoriasProps
 ) {
-    // const categorias = await fetch(`http://localhost:3000/Categoria`,
-    //     {
-    //         method: 'POST',
-    //         headers: {
-    //             'Content-Type': 'application/json'
-    //         },
-    //         body: JSON.stringify({ id_usuario: user!.id })
-    //     }
-    // ).then(res => res.json()).catch(err => {
-    //     console.log(err)
-    //     return []
-    // })
 
     const [pageAtual, setPageAtual] = useState<number>(page);
 
-    const transacoes: ITransacao[] = useContext<ITransacao[]>(TransacoesContext);
-    const categorias: ICategoria[] = useContext<ICategoria[]>(CategoriasContext).map((categoria: ICategoria) => {
-        const transacoesCategoria: ITransacao[] = transacoes.filter((transacao: ITransacao) => {
-            return transacao.id_categoria === categoria.id
-        })
-        const gasto: number = transacoesCategoria.reduce((acc: number, transacao: ITransacao) => {
-            return acc + transacao.valor
-        }, 0)
-        return {
-            ...categoria,
-            gasto
-        }
-    })
-
-    const [searchValue, setSearchValue] = useState<string>('');
-    const [filtrosbase, setFiltros] = useState<{ order: string, orderBy: string }>({ order, orderBy })
-
-    const filtros = {
-        order: ['ASC', 'DESC'].includes(order) ? filtrosbase.order : 'ASC',
-        orderBy: ['nome', 'Orçamento', 'Gasto'].includes(orderBy) ? filtrosbase.orderBy : 'data'
-    }
-
-    const orderCategorias = (categorias: ICategoria[]) => {
-        const categoriasOrdenadas = categorias.sort((a: ICategoria, b: ICategoria) => {
-            if (filtros.orderBy === 'nome') {
-                if (filtros.order === 'ASC') {
-                    return a.nome.localeCompare(b.nome)
-                }
-                return b.nome.localeCompare(a.nome)
-            }
-            if (filtros.orderBy === 'Orçamento') {
-                if (!a.orcamento || !b.orcamento) return 0
-
-                if (filtros.order === 'ASC') {
-                    return a.orcamento.limite - b.orcamento.limite
-                }
-                return b.orcamento.limite - a.orcamento.limite
-            }
-            if (filtros.orderBy === 'Gasto') {
-                if (filtros.order === 'ASC') {
-                    return a.gasto - b.gasto
-                }
-                return b.gasto - a.gasto
-            }
-            return 0
-        })
-        return categoriasOrdenadas
-    }
-
-    const [categoriasOrdenadas, setCategoriasOrdenadas] = useState<ICategoria[]>(categorias)
-
-    useEffect(() => {
-        const categoriasOrdenadas = orderCategorias(categorias)
-        setCategoriasOrdenadas(categoriasOrdenadas)
-    }, [])
+    const categorias: ICategoria[] = useContext<ICategoria[]>(CategoriasContext);
 
     return (
         <>
             <div className="lista-categorias">
 
-                {search || filter && (
+                {searchInput || orderSelect && (
                     <div className="search-filter">
-                        {search && <input type="text" placeholder="Pesquisar" />}
-                        {filter && <button> <i className="fas fa-search"></i> </button>}
+                        {searchInput && <Searchdiv />}
+                        {orderSelect && <Orderdiv />}
                     </div>
                 )}
 
                 <ul className="list-values-2columns">
                     {
-                        categoriasOrdenadas.slice(page * limit - limit, page * limit)
+                        categorias.slice(page * limit - limit, page * limit)
                             .map(
                                 (categoria: ICategoria) => <li key={categoria.id}><Categoria categoria={categoria} key={categoria.id} /> </li>
                             )

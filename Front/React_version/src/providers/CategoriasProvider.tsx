@@ -1,46 +1,62 @@
 import { useEffect, useState } from "react"
 import axios from "axios"
 import { useAuth, api_url } from "../Contexts/AuthContext"
-import { CategoriasContext } from "../Contexts/CategoriasContext"
-import { ICategoria, IOrcamento } from "../Components/Categoria"
+import { CategoriasContext, CategoriasOrderContext, CategoriasOrderContextData } from "../Contexts/CategoriasContext"
+import { ICategoria } from "../Components/Categoria"
 
 
 interface CategoriasProviderProps {
     children: React.ReactNode
 }
 
+export interface ordenarCategorias {
+    nome?: 'ASC' | 'DESC';
+    dataCriacao?: 'ASC' | 'DESC';
+    orcamento?: 'ASC' | 'DESC';
+}
+
 export function CategoriasProvider({ children }: CategoriasProviderProps) {
     const [categorias, setCategorias] = useState<ICategoria[]>([])
+    const [orders, setOrders] = useState<ordenarCategorias>({})
+    const [search, setSearch] = useState<string>('')
+
     const { user } = useAuth();
 
     useEffect(() => {
         async function loadCategorias() {
             if (!user) return
-            const [CategoriasResponse, OrcamentosResponse] = await Promise.all([
-                axios.get<ICategoria[]>(`${api_url}Categoria?id_usuario=${user.id}`),
-                axios.get<IOrcamento[]>(`${api_url}Orcamento?id_usuario=${user.id}`)
-            ])
 
-            const categorias = CategoriasResponse.data.map((categoria: ICategoria) => {
-                const orcamento = OrcamentosResponse.data.find((orcamento: IOrcamento) => {
-                    return orcamento.id_categoria === categoria.id
-                })
-                if (!orcamento) return categoria
-                return {
-                    ...categoria,
-                    orcamento
+            const orderQuery = orders ? `&order=${JSON.stringify(orders)}` : ''
+            const searchQuery = search ? `&search=${search}` : ''
+
+            const CategoriasResponse = await axios.get<ICategoria[]>(`${api_url}categorias${orderQuery}${searchQuery}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${user.access_token}`
+                    }
                 }
-            })
+            )
 
-            setCategorias(categorias)
+            if (CategoriasResponse.status == 404) {
+                console.log('Categorias not found')
+                return
+            }
+
+            setCategorias(CategoriasResponse.data)
         }
 
         loadCategorias()
     }, [])
 
+    const value: CategoriasOrderContextData = {
+        order: { order: orders, setOrder: setOrders },
+        search: { search, setSearch }
+    }
     return (
         <CategoriasContext.Provider value={categorias}>
-            {children}
+            <CategoriasOrderContext.Provider value={value}>
+                {children}
+            </CategoriasOrderContext.Provider>
         </CategoriasContext.Provider>
     )
 }
