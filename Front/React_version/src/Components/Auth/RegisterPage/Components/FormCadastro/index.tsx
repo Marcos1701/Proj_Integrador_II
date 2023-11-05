@@ -32,7 +32,7 @@ export function FormCadastro() {
             id: ulid(),
             nome: nome.current.value,
             email: email.current.value,
-            Senha: senha.current.value,
+            senha: senha.current.value,
             lembrar: lembrar.current.checked
         }
 

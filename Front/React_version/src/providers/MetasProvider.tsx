@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import axios from "axios"
-import { useAuth } from "../Contexts/AuthContext"
+import { useAuth, api_url } from "../Contexts/AuthContext"
 import { IMeta } from "../Components/Meta"
 import { MetasContext } from "../Contexts/MetasContext"
 
@@ -16,7 +16,7 @@ export function MetasProvider({ children }: MetasProviderProps) {
     useEffect(() => {
         async function loadTransacoes() {
             if (!user) return
-            const response = await axios.get("http://localhost:3300/Meta?id_usuario=" + user.id)
+            const response = await axios.get(`${api_url}Meta?id_usuario=${user.id}`)
             setMetas(response.data)
         }
         loadTransacoes()

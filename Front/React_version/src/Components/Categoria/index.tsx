@@ -1,26 +1,24 @@
 import axios from "axios";
 import { ITransacao } from "../Transacao";
 import { useEffect, useState } from "react";
+import { api_url } from "../../Contexts/AuthContext";
+import './Categoria.css'
 
 export interface ICategoria {
     id: string;
-    id_usuario: string;
     nome: string;
     descricao: string;
+    dataCriacao: Date;
+    orcamento?: number;
+    gasto: number;
     icone?: string;
-    tipo: string;
 }
 
-export interface IOrcamento {
-    id: string;
-    id_categoria: string;
-    Limite: number;
-}
 
 export function Categoria({ categoria }: { categoria: ICategoria }) {
 
     // const { valorGasto, valorOrcamento }: { valorGasto: number, valorOrcamento?: number }
-    //     = await fetch(`http://localhost:3000/Categoria/${categoria.id}/valores`,
+    //     = await fetch(`${api_url}Categoria/${categoria.id}/valores`,
     //         {
     //             method: 'POST',
     //             headers: {
@@ -32,54 +30,43 @@ export function Categoria({ categoria }: { categoria: ICategoria }) {
 
 
     const [transacoes, setTransacoes] = useState<ITransacao[]>([])
-    const [Orcamento, setOrcamento] = useState<IOrcamento | undefined>()
 
     useEffect(() => {
         const getTransacoes = async () => {
-            const transacoes = await axios.get<ITransacao[]>(`http://localhost:3300/Transacao?id_categoria=${categoria.id}`).then(res => res.data).catch(err => {
+            const transacoes = await axios.get<ITransacao[]>(`${api_url}Transacao?id_categoria=${categoria.id}`).then(res => res.data).catch(err => {
                 console.log(err)
                 return []
             });
             setTransacoes(transacoes);
         }
-        getTransacoes();
-
-        const getOrcamento = async () => {
-            const Orcamento = await axios.get<IOrcamento | undefined>(`http://localhost:3300/Orcamento?id_categoria=${categoria.id}`)
-                .then(res => res.data)
-                .catch(err => {
-                    console.log(err)
-                    return undefined
-                });
-            setOrcamento(Orcamento);
-        }
-        getOrcamento();
+        categoria.gasto === undefined && getTransacoes(); // Se o gasto já foi definido, não precisa buscar as transações
     }, [categoria.id])
 
-    const valorGasto: number = transacoes.reduce((acc: number, transacao: ITransacao) => {
-        if (transacao.tipo === 'Gasto') {
-            return acc + transacao.Valor
-        }
-        return acc - transacao.Valor // Entrada
-    }, 0)
+    const valorGasto: number =
+        categoria.gasto !== undefined ? categoria.gasto :
+            transacoes.reduce((acc: number, transacao: ITransacao) => {
+                if (transacao.tipo === 'Saida') {
+                    return acc + transacao.valor
+                }
+                return acc - transacao.valor // Entrada
+            }, 0)
 
-    const valorOrcamento: number | undefined = Orcamento?.Limite
+    const valorOrcamento: number | undefined = categoria.orcamento ? categoria.orcamento : undefined
 
     return (
-        <div className="categoria">
-            {categoria.icone &&
-                <div className="categoria-icon">
-                    <img src={categoria.icone} alt={categoria.nome} />
-                </div>
-            }
+        <div className="categoria" id={categoria.id}>
+            <div className="categoria-icon">
+                <img src={categoria.icone ? categoria.icone : "/assets/icons/Icon-barraquinha.svg"} alt={categoria.nome} />
+            </div>
 
             <div className="categoria-info">
                 <h3>{categoria.nome}</h3>
             </div>
 
             <div className="categoria-valores">
-                <p id="valorGasto">{valorGasto}</p>
-                {valorOrcamento && <p id="valorOrcamento">{valorOrcamento}</p>}
+                <p id="valorGasto">{valorGasto < 0 ? `R$ 0` : `R$ ${valorGasto}`
+                }</p>
+                {valorOrcamento != undefined && <p id="valorOrcamento">{valorOrcamento}</p>}
             </div>
         </div>
     )

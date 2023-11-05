@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { ITransacao } from "../Components/Transacao"
 import axios from "axios"
-import { useAuth } from "../Contexts/AuthContext"
+import { useAuth, api_url } from "../Contexts/AuthContext"
 import { TransacoesContext } from "../Contexts/TransacoesContext"
 
 
@@ -16,8 +16,13 @@ export function TransacoesProvider({ children }: TransacoesProviderProps) {
     useEffect(() => {
         async function loadTransacoes() {
             if (!user) return
-            const response = await axios.get("http://localhost:3300/Transacao?id_usuario=" + user.id)
-            setTransacoes(response.data)
+            const response = await axios.get<ITransacao[]>(`${api_url}Transacao?id_usuario=${user.id}`)
+            setTransacoes(response.data.sort((a, b) => {
+                const dateA = new Date(a.data)
+                const dateB = new Date(b.data)
+                return dateA > dateB ? -1 : dateA < dateB ? 1 : 0
+            })
+            ) // ordenar pela data
         }
         loadTransacoes()
     }, [])

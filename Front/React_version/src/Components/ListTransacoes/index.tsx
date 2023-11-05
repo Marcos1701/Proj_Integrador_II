@@ -2,7 +2,8 @@ import { CategoriasContext } from "../../Contexts/CategoriasContext";
 import { TransacoesContext } from "../../Contexts/TransacoesContext";
 import { ICategoria } from "../Categoria";
 import { ITransacao, Transacao } from "../Transacao"
-import { Suspense, useContext, useState } from "react";
+import { useContext, useState } from "react";
+import './ListTransacoes.css'
 
 
 interface IListTransacoesProps {
@@ -11,47 +12,42 @@ interface IListTransacoesProps {
     pagination?: boolean;
 }
 
-export function ListTransacoes({ page = 1, limit = 10, pagination = true }: IListTransacoesProps) {
+export function ListTransacoes({ page = 1, limit = 2, pagination = true }: IListTransacoesProps) {
 
     const transacoes: ITransacao[] = useContext(TransacoesContext)
     const categorias: ICategoria[] = useContext(CategoriasContext)
     const [pageAtual, setPageAtual] = useState<number>(page);
 
     return (
-        <Suspense fallback={
-            <div className="transacoes-home-skeleton">
-            </div>
-        }>
-            <div className="list_transacoes">
-                <ul id="list-Transacoes">
-                    {
-                        transacoes
-                            .slice((pageAtual - 1) * limit, pageAtual * limit)
-                            .map(
-                                (transacao: ITransacao) => {
-                                    const categoria: ICategoria | undefined = categorias.find(
-                                        (categoria: ICategoria) => {
-                                            return categoria.id === transacao.id_categoria
-                                        }
-                                    );
-
-                                    if (!categoria) {
-                                        return <></>
+        <div className="list_transacoes" >
+            <ul className="list-values-2columns" id="list-Transacoes">
+                {
+                    transacoes
+                        .slice((pageAtual - 1) * limit, pageAtual * limit)
+                        .map(
+                            (transacao: ITransacao) => {
+                                const categoria: ICategoria | undefined = categorias.find(
+                                    (categoria: ICategoria) => {
+                                        return categoria.id === transacao.id_categoria
                                     }
+                                );
 
-                                    return (
-                                        <li>
-                                            <Transacao
-                                                transacao={transacao}
-                                                categoria={categoria}
-                                            />
-                                        </li>
-                                    )
+                                if (!categoria) {
+                                    return <></>
                                 }
-                            )
-                    }
-                </ul>
-            </div>
+
+                                return (
+                                    <li key={"key" + transacao.id}>
+                                        <Transacao
+                                            transacao={transacao}
+                                            categoria={categoria}
+                                        />
+                                    </li>
+                                )
+                            }
+                        )
+                }
+            </ul>
 
             {pagination && <div className="pagination">
                 <button onClick={() => {
@@ -71,6 +67,6 @@ export function ListTransacoes({ page = 1, limit = 10, pagination = true }: ILis
                 }}>Próximo</button>
             </div>
             }
-        </Suspense>
+        </div>
     )
 }

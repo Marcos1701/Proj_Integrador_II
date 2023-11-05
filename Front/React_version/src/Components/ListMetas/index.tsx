@@ -1,4 +1,4 @@
-import { Suspense, useContext } from "react";
+import { useContext } from "react";
 import { IMeta, Meta } from "../Meta";
 import { useAuth } from "../../Contexts/AuthContext";
 import { MetasContext } from "../../Contexts/MetasContext";
@@ -10,18 +10,17 @@ export function ListMetas() {
     const metas: IMeta[] = useContext(MetasContext);
 
     return (
-        <Suspense fallback={
-            <div className="metas-home-skeleton">
-            </div>
-        }>
+        <>
 
-            <div className="metas-home">
-                {
-                    metas.map(
-                        (meta: IMeta) => <Meta meta={meta} />
-                    )
-                }
+            <div className="lista-metas" key="lista-metas">
+                <ul className="list-values-2columns">
+                    {
+                        metas.map(
+                            (meta: IMeta) => <li key={meta.id}> <Meta meta={meta} key={meta.id} /></li>
+                        )
+                    }
+                </ul>
             </div>
-        </Suspense>
+        </ >
     )
 }

@@ -1,50 +1,74 @@
 import { Categoria, ICategoria } from "../Categoria";
-import { Suspense, useEffect, useState } from "react";
-import { useAuth } from "../../Contexts/AuthContext";
+import { useContext, useState } from "react";
+import { CategoriasContext } from "../../Contexts/CategoriasContext";
+import { Orderdiv } from "./Components/Orderdiv";
+import { Searchdiv } from "./Components/Searchdiv";
 
 
-export function ListCategorias() {
+interface ListCategoriasProps {
+    pagination?: boolean
+    orderSelect?: boolean
+    searchInput?: boolean
+    limit?: number
+    page?: number
+}
 
-    const { user } = useAuth();
-    // const categorias = await fetch(`http://localhost:3000/Categoria`,
-    //     {
-    //         method: 'POST',
-    //         headers: {
-    //             'Content-Type': 'application/json'
-    //         },
-    //         body: JSON.stringify({ id_usuario: user!.id })
-    //     }
-    // ).then(res => res.json()).catch(err => {
-    //     console.log(err)
-    //     return []
-    // })
+export function ListCategorias(
+    {
+        pagination = false,
+        orderSelect = false,
+        searchInput = false,
+        limit = 2,
+        page = 1
+    }: ListCategoriasProps
+) {
 
-    const [categorias, setCategorias] = useState<ICategoria[]>([])
+    const [pageAtual, setPageAtual] = useState<number>(page);
 
-    useEffect(() => {
-        const getCategorias = async () => {
-            const categorias = await fetch(`http://localhost:3300/Categoria?id_usuario=${user!.id}`).then(res => res.json()).catch(err => {
-                console.log(err)
-                return []
-            });
-            setCategorias(categorias);
-        }
-        getCategorias();
-    }, [user])
+    const categorias: ICategoria[] = useContext<ICategoria[]>(CategoriasContext);
 
     return (
-        <Suspense fallback={
-            <div className="categorias-home-skeleton">
-            </div>
-        }>
-            <div className="categorias-home">
+        <>
+            <div className="lista-categorias">
+
+                {searchInput || orderSelect && (
+                    <div className="search-filter">
+                        {searchInput && <Searchdiv />}
+                        {orderSelect && <Orderdiv />}
+                    </div>
+                )}
+
+                <ul className="list-values-2columns">
+                    {
+                        categorias.slice(page * limit - limit, page * limit)
+                            .map(
+                                (categoria: ICategoria) => <li key={categoria.id}><Categoria categoria={categoria} key={categoria.id} /> </li>
+                            )
+                    }
+                </ul>
                 {
-                    categorias.map(
-                        (categoria: ICategoria) => <Categoria categoria={categoria} />
-                    )
+                    pagination && <div className="pagination">
+                        <button onClick={() => {
+                            if (pageAtual > 1) {
+                                setPageAtual(pageAtual - 1);
+                            }
+                        }}>Anterior</button>
+                        <button>{pageAtual}</button>
+                        {pageAtual < Math.ceil(categorias.length / limit) && <button>{pageAtual + 1}</button>}
+                        {pageAtual + 1 < Math.ceil(categorias.length / limit) && <button>{pageAtual + 2}</button>}
+                        <p className="dots">...</p>
+                        {pageAtual < Math.ceil(categorias.length / limit) && <button>{Math.ceil(categorias.length / limit)}</button>}
+                        <button onClick={() => {
+                            if (pageAtual < Math.ceil(categorias.length / limit)) {
+                                setPageAtual(pageAtual + 1);
+                            }
+                        }}>Próximo</button>
+                    </div>
                 }
             </div>
-        </Suspense>
+        </>
     )
 
 }
+
+// o codigo acima possui um erro, ele esta na linha 121, pois o botão de proximo esta aparecendo mesmo quando não tem mais paginas,

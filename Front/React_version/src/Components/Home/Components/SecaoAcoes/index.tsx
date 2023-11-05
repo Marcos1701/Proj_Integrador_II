@@ -2,65 +2,60 @@ import { Saldo } from "./Components/Saldo";
 import { Button } from '../../../Button';
 import { AdicionarTransacaoForm } from "../AdicionarTransacaoForm";
 import { AdicionarCategoriaForm } from "../AdicionarCategoriaForm/intex";
-import { useUser } from "../../../EncapsulatedContext";
 import { useEffect, useState } from "react";
 import { ICategoria } from "../../../Categoria";
-import { User } from "../../../../Contexts/AuthContext";
+import { api_url, useAuth } from "../../../../Contexts/AuthContext";
 import './Secao.css'
 
 
 export function SecaoActions_Home() {
 
-    const [user, setUser] = useState<User>();
+    const { user } = useAuth();
     const [categorias, setCategorias] = useState<ICategoria[]>([]);
 
     useEffect(() => {
-        async function getUser() {
-            const user = await useUser();
-            setUser(user);
-        }
-
         async function getCategorias() {
             if (!user) return;
-            const categorias = await fetch(`http://localhost:3300/Categoria?id_usuario=${user.id}`).then(res => res.json()).catch(err => {
+            const categorias = await fetch(`${api_url}Categoria?id_usuario=${user.id}`).then(res => res.json()).catch(err => {
                 console.log(err)
                 return []
             });
             setCategorias(categorias);
         }
-        getUser();
         getCategorias();
     }, []);
 
     const [showAdicionarTransacaoForm, setShowAdicionarTransacaoForm] = useState<boolean>(false);
     const [showAdicionarCategoriaForm, setShowAdicionarCategoriaForm] = useState<boolean>(false);
 
-
     return (
-        <div>
+        <div className="Secao_acoes">
             <Saldo />
-            <ul className="buttons_Action">
-                <li key="adicionarTransacao">
-                    <Button text="Adicionar Transação" onClick={() => setShowAdicionarTransacaoForm(!showAdicionarTransacaoForm)} />
-                </li>
 
-                <li key="adicionarCategoria">
-                    <Button text="Adicionar Categoria" onClick={() => setShowAdicionarCategoriaForm(!showAdicionarCategoriaForm)} />
-                </li>
+            <div className="buttons_Action_div">
+                <ul className="buttons_Action">
+                    <li key="adicionarTransacao">
+                        <button onClick={() => setShowAdicionarTransacaoForm(!showAdicionarTransacaoForm)}>Adicionar Transação</button>
+                    </li>
 
-                <li key="adicionarMeta">
-                    <Button text="Adicionar Meta" onClick={() => { }} /> {/* Ainda não implementado */}
-                </li>
-            </ul>
+                    <li key="adicionarCategoria">
+                        <button onClick={() => setShowAdicionarCategoriaForm(!showAdicionarCategoriaForm)}>Adicionar Categoria</button>
+                    </li>
+
+                    <li key="adicionarMeta">
+                        <Button text="Adicionar Meta" onClick={() => { }} /> {/* Ainda não implementado */}
+                    </li>
+                </ul>
+            </div>
             {showAdicionarTransacaoForm &&
                 <div className="Background-form">
-                    <AdicionarTransacaoForm categorias={categorias} />
+                    <AdicionarTransacaoForm categorias={categorias} setExibirAdicionarTransacaoForm={setShowAdicionarTransacaoForm} />
                 </div>
             }
 
             {showAdicionarCategoriaForm &&
                 <div className="Background-form">
-                    <AdicionarCategoriaForm />
+                    <AdicionarCategoriaForm setExibirAdicionarCategoriaForm={setShowAdicionarCategoriaForm} />
                 </div>
             }
         </div>

@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import { ProtectedRoute } from "../ProtectedRoute";
 import { Home } from "../Home";
 import { LoginPage } from "../Auth/LoginPage";
@@ -21,6 +21,13 @@ export function PatchRoutes() {
                 </ProtectedRoute>
             } />
 
+            <Route path="/Categorias" element={
+                <ProtectedRoute>
+                    <h1>Categorias</h1>
+                </ProtectedRoute>
+            } />
+
+            <Route path="*" element={<Navigate to="/" />} />
         </Routes>
     )
 }
