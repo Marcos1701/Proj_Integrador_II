@@ -1,27 +1,22 @@
 import { ITransacao } from "../../../../../Transacao";
-import { useEffect, useState } from "react";
-import { useAuth } from "../../../../../../Contexts/AuthContext";
-import axios from "axios";
+import { useContext, useEffect, useState } from "react";
 import './Saldo.css'
+import { TransacoesContext } from "../../../../../../Contexts/TransacoesContext";
 
 
 export function Saldo() {
-    const { user } = useAuth();
+    const transacoes: ITransacao[] = useContext<ITransacao[]>(TransacoesContext);
     const [saldo, setSaldo] = useState<number>(0);
 
     useEffect(() => {
-        async function getSaldo() {
-            if (!user) return 0;
-            const saldo: number = (await axios.get<ITransacao[]>(`http://localhost:3300/Transacao?id_usuario=${user.id}`)).data.reduce((acc: number, transacao: ITransacao) => {
-                if (transacao.tipo === 'Entrada') {
-                    return acc + transacao.valor
-                }
-                return acc - transacao.valor
-            }, 0)
-            setSaldo(saldo);
-        }
-        getSaldo();
-    }, []);
+        const saldo: number = transacoes.reduce((acc: number, transacao: ITransacao) => {
+            if (transacao.tipo === 'Entrada') {
+                return acc + transacao.valor
+            }
+            return acc - transacao.valor // Saída
+        }, 0)
+        setSaldo(saldo)
+    }, [transacoes])
 
 
     const realizarTratamentoSaldo = (saldo: number) => {

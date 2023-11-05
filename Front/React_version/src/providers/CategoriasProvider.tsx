@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import axios from "axios"
 import { useAuth, api_url } from "../Contexts/AuthContext"
 import { CategoriasContext } from "../Contexts/CategoriasContext"
-import { ICategoria } from "../Components/Categoria"
+import { ICategoria, IOrcamento } from "../Components/Categoria"
 
 
 interface CategoriasProviderProps {
@@ -14,12 +14,28 @@ export function CategoriasProvider({ children }: CategoriasProviderProps) {
     const { user } = useAuth();
 
     useEffect(() => {
-        async function loadTransacoes() {
+        async function loadCategorias() {
             if (!user) return
-            const response = await axios.get(`${api_url}Categoria?id_usuario=${user.id}`)
-            setCategorias(response.data)
+            const [CategoriasResponse, OrcamentosResponse] = await Promise.all([
+                axios.get<ICategoria[]>(`${api_url}Categoria?id_usuario=${user.id}`),
+                axios.get<IOrcamento[]>(`${api_url}Orcamento?id_usuario=${user.id}`)
+            ])
+
+            const categorias = CategoriasResponse.data.map((categoria: ICategoria) => {
+                const orcamento = OrcamentosResponse.data.find((orcamento: IOrcamento) => {
+                    return orcamento.id_categoria === categoria.id
+                })
+                if (!orcamento) return categoria
+                return {
+                    ...categoria,
+                    orcamento
+                }
+            })
+
+            setCategorias(categorias)
         }
-        loadTransacoes()
+
+        loadCategorias()
     }, [])
 
     return (

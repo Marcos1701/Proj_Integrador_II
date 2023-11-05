@@ -4,7 +4,7 @@
       "id": "01HE13PT6AEYN5SR0WG83X1EGP",
       "nome": "Marcos Neiva",
       "email": "teste@teste123.com",
-      "Senha": "12345",
+      "senha": "12345",
       "lembrar": false
     }
   ],
@@ -38,22 +38,22 @@
     {
       "id": "1",
       "id_categoria": "1",
-      "Limite": 100
+      "limite": 100
     },
     {
       "id": "2",
       "id_categoria": "2",
-      "Limite": 1000
+      "limite": 1000
     },
     {
       "id": "3",
       "id_categoria": "3",
-      "Limite": 500
+      "limite": 500
     },
     {
       "id": "4",
       "id_categoria": "4",
-      "Limite": 400
+      "limite": 400
     }
   ],
   "Transacao": [
@@ -62,30 +62,30 @@
       "id_categoria": "1",
       "id_usuario": "01HE13PT6AEYN5SR0WG83X1EGP",
       "nome": "Alimentação",
-      "tipo": "Gasto",
-      "Valor": 10,
-      "Data": "2021-02-13",
-      "Descricao": "Comida"
+      "tipo": "Saida",
+      "valor": 10,
+      "data": "2021-02-13",
+      "descricao": "Comida"
     },
     {
       "id": "2",
       "id_categoria": "2",
       "id_usuario": "01HE13PT6AEYN5SR0WG83X1EGP",
       "nome": "Transporte",
-      "tipo": "Gasto",
-      "Valor": 10,
-      "Data": "2022-10-01",
-      "Descricao": "Transporte"
+      "tipo": "Saida",
+      "valor": 10,
+      "data": "2022-10-01",
+      "descricao": "Transporte"
     },
     {
       "id": "3",
       "id_categoria": "3",
       "id_usuario": "01HE13PT6AEYN5SR0WG83X1EGP",
       "nome": "Lazer",
-      "tipo": "Gasto",
-      "Valor": 10,
-      "Data": "2021-02-07",
-      "Descricao": "Lazer"
+      "tipo": "Saida",
+      "valor": 10,
+      "data": "2021-02-07",
+      "descricao": "Lazer"
     },
     {
       "id": "4",
@@ -93,9 +93,19 @@
       "id_usuario": "01HE13PT6AEYN5SR0WG83X1EGP",
       "nome": "Salario",
       "tipo": "Entrada",
-      "Valor": 10,
-      "Data": "2023-04-03",
-      "Descricao": "Salario"
+      "valor": 1200,
+      "data": "2023-04-03",
+      "descricao": "Salario"
+    },
+    {
+      "id": "01HED75P4SHMEZB5GCX1Y8ZXPC",
+      "id_usuario": "01HE13PT6AEYN5SR0WG83X1EGP",
+      "id_categoria": "1",
+      "nome": "Teste 123",
+      "valor": 100,
+      "data": "2023-11-02",
+      "tipo": "Entrada",
+      "descricao": "Ah.. Sei lá ;-;"
     }
   ],
   "Meta": [
@@ -103,20 +113,20 @@
       "id": "1",
       "id_usuario": "01HE13PT6AEYN5SR0WG83X1EGP",
       "Nome": "Meta 1",
-      "Valor_Desejado": 100,
-      "Valor_Obtido": 50,
-      "DataFinal": "2023-12-13",
+      "valor_Desejado": 100,
+      "valor_Obtido": 50,
+      "dataFinal": "2023-12-13",
       "progresso": 50
     },
     {
       "id": "2",
       "id_usuario": "01HE13PT6AEYN5SR0WG83X1EGP",
       "Nome": "Meta 2",
-      "Valor_Desejado": 100,
-      "Valor_Obtido": 50,
-      "DataFinal": "2023-12-30",
+      "valor_Desejado": 100,
+      "valor_Obtido": 50,
+      "dataFinal": "2023-12-30",
       "progresso": 50,
-      "Descricao": "Meta 2"
+      "descricao": "Meta 2"
     }
   ],
   "Marco": [
@@ -124,33 +134,33 @@
       "id": "1",
       "id_meta": "2",
       "Nome": "Marco 3",
-      "Valor_Obtido": 10,
-      "Data": "2023-02-13",
-      "Descricao": "Marco 3"
+      "valor_Obtido": 10,
+      "data": "2023-02-13",
+      "descricao": "Marco 3"
     },
     {
       "id": "2",
       "id_meta": "2",
       "Nome": "Marco 4",
-      "Valor_Obtido": 50,
-      "Data": "2023-02-20",
-      "Descricao": "Marco 4"
+      "valor_Obtido": 50,
+      "data": "2023-02-20",
+      "descricao": "Marco 4"
     },
     {
       "id": "3",
       "id_meta": "1",
       "Nome": "Marco 7",
-      "Valor_Obtido": 10,
-      "Data": "2023-02-13",
-      "Descricao": "Marco 7"
+      "valor_Obtido": 10,
+      "data": "2023-02-13",
+      "descricao": "Marco 7"
     },
     {
       "id": "4",
       "id_meta": "1",
       "Nome": "Marco 8",
-      "Valor_Obtido": 50,
-      "Data": "2023-02-16",
-      "Descricao": "Marco 8"
+      "valor_Obtido": 50,
+      "data": "2023-02-16",
+      "descricao": "Marco 8"
     }
   ],
   "SubMeta": [
@@ -158,15 +168,15 @@
       "id": "1",
       "id_meta": "1",
       "Nome": "SubMeta 1",
-      "Valor_Desejavel": 100,
-      "Valor_Obtido": 50
+      "valor_Desejavel": 100,
+      "valor_Obtido": 50
     },
     {
       "id": "2",
       "id_meta": "2",
       "Nome": "SubMeta 2",
-      "Valor_Desejavel": 100,
-      "Valor_Obtido": 50
+      "valor_Desejavel": 100,
+      "valor_Obtido": 50
     }
   ]
 }

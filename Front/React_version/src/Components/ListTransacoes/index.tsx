@@ -19,37 +19,35 @@ export function ListTransacoes({ page = 1, limit = 2, pagination = true }: IList
     const [pageAtual, setPageAtual] = useState<number>(page);
 
     return (
-        <>
-            <div className="list_transacoes" >
-                <ul className="list-values-2columns" id="list-Transacoes">
-                    {
-                        transacoes
-                            .slice((pageAtual - 1) * limit, pageAtual * limit)
-                            .map(
-                                (transacao: ITransacao) => {
-                                    const categoria: ICategoria | undefined = categorias.find(
-                                        (categoria: ICategoria) => {
-                                            return categoria.id === transacao.id_categoria
-                                        }
-                                    );
-
-                                    if (!categoria) {
-                                        return <></>
+        <div className="list_transacoes" >
+            <ul className="list-values-2columns" id="list-Transacoes">
+                {
+                    transacoes
+                        .slice((pageAtual - 1) * limit, pageAtual * limit)
+                        .map(
+                            (transacao: ITransacao) => {
+                                const categoria: ICategoria | undefined = categorias.find(
+                                    (categoria: ICategoria) => {
+                                        return categoria.id === transacao.id_categoria
                                     }
+                                );
 
-                                    return (
-                                        <li key={"key" + transacao.id}>
-                                            <Transacao
-                                                transacao={transacao}
-                                                categoria={categoria}
-                                            />
-                                        </li>
-                                    )
+                                if (!categoria) {
+                                    return <></>
                                 }
-                            )
-                    }
-                </ul>
-            </div>
+
+                                return (
+                                    <li key={"key" + transacao.id}>
+                                        <Transacao
+                                            transacao={transacao}
+                                            categoria={categoria}
+                                        />
+                                    </li>
+                                )
+                            }
+                        )
+                }
+            </ul>
 
             {pagination && <div className="pagination">
                 <button onClick={() => {
@@ -69,6 +67,6 @@ export function ListTransacoes({ page = 1, limit = 2, pagination = true }: IList
                 }}>Próximo</button>
             </div>
             }
-        </>
+        </div>
     )
 }

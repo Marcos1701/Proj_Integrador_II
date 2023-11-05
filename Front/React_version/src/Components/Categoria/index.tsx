@@ -2,20 +2,22 @@ import axios from "axios";
 import { ITransacao } from "../Transacao";
 import { useEffect, useState } from "react";
 import { api_url } from "../../Contexts/AuthContext";
+import './Categoria.css'
 
 export interface ICategoria {
     id: string;
     id_usuario: string;
     nome: string;
     descricao: string;
+    gasto: number;
     icone?: string;
-    tipo: string;
+    orcamento?: IOrcamento;
 }
 
 export interface IOrcamento {
     id: string;
     id_categoria: string;
-    Limite: number;
+    limite: number;
 }
 
 export function Categoria({ categoria }: { categoria: ICategoria }) {
@@ -33,7 +35,6 @@ export function Categoria({ categoria }: { categoria: ICategoria }) {
 
 
     const [transacoes, setTransacoes] = useState<ITransacao[]>([])
-    const [Orcamento, setOrcamento] = useState<IOrcamento | null>()
 
     useEffect(() => {
         const getTransacoes = async () => {
@@ -43,36 +44,25 @@ export function Categoria({ categoria }: { categoria: ICategoria }) {
             });
             setTransacoes(transacoes);
         }
-        getTransacoes();
-
-        const getOrcamento = async () => {
-            const Orcamento = await axios.get<IOrcamento | null>(`${api_url}Orcamento?id_categoria=${categoria.id}`)
-                .then(res => res.data)
-                .catch(err => {
-                    console.log(err)
-                    return null
-                });
-            setOrcamento(Orcamento);
-        }
-        getOrcamento();
+        categoria.gasto === undefined && getTransacoes(); // Se o gasto já foi definido, não precisa buscar as transações
     }, [categoria.id])
 
-    const valorGasto: number = transacoes.reduce((acc: number, transacao: ITransacao) => {
-        if (transacao.tipo === 'Saida') {
-            return acc + transacao.valor
-        }
-        return acc - transacao.valor // Entrada
-    }, 0)
+    const valorGasto: number =
+        categoria.gasto !== undefined ? categoria.gasto :
+            transacoes.reduce((acc: number, transacao: ITransacao) => {
+                if (transacao.tipo === 'Saida') {
+                    return acc + transacao.valor
+                }
+                return acc - transacao.valor // Entrada
+            }, 0)
 
-    const valorOrcamento: number | undefined = Orcamento?.Limite
+    const valorOrcamento: number | undefined = categoria.orcamento ? categoria.orcamento.limite : undefined
 
     return (
         <div className="categoria" id={categoria.id}>
-            {categoria.icone &&
-                <div className="categoria-icon">
-                    <img src={categoria.icone} alt={categoria.nome} />
-                </div>
-            }
+            <div className="categoria-icon">
+                <img src={categoria.icone ? categoria.icone : "/assets/icons/Icon-barraquinha.svg"} alt={categoria.nome} />
+            </div>
 
             <div className="categoria-info">
                 <h3>{categoria.nome}</h3>
@@ -81,7 +71,7 @@ export function Categoria({ categoria }: { categoria: ICategoria }) {
             <div className="categoria-valores">
                 <p id="valorGasto">{valorGasto < 0 ? `R$ 0` : `R$ ${valorGasto}`
                 }</p>
-                {valorOrcamento !== undefined && <p id="valorOrcamento">{valorOrcamento}</p>}
+                {valorOrcamento != undefined && <p id="valorOrcamento">{valorOrcamento}</p>}
             </div>
         </div>
     )
