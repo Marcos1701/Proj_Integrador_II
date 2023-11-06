@@ -2,28 +2,15 @@ import { Saldo } from "./Components/Saldo";
 import { Button } from '../../../Button';
 import { AdicionarTransacaoForm } from "../AdicionarTransacaoForm";
 import { AdicionarCategoriaForm } from "../AdicionarCategoriaForm/intex";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { ICategoria } from "../../../Categoria";
-import { api_url, useAuth } from "../../../../Contexts/AuthContext";
+import { useAuth } from "../../../../Contexts/AuthContext";
 import './Secao.css'
+import { useContext } from 'react';
+import { CategoriasContext } from "../../../../Contexts/CategoriasContext";
 
 
 export function SecaoActions_Home() {
-
-    const { user } = useAuth();
-    const [categorias, setCategorias] = useState<ICategoria[]>([]);
-
-    useEffect(() => {
-        async function getCategorias() {
-            if (!user) return;
-            const categorias = await fetch(`${api_url}Categoria?id_usuario=${user.id}`).then(res => res.json()).catch(err => {
-                console.log(err)
-                return []
-            });
-            setCategorias(categorias);
-        }
-        getCategorias();
-    }, []);
 
     const [showAdicionarTransacaoForm, setShowAdicionarTransacaoForm] = useState<boolean>(false);
     const [showAdicionarCategoriaForm, setShowAdicionarCategoriaForm] = useState<boolean>(false);
@@ -49,7 +36,7 @@ export function SecaoActions_Home() {
             </div>
             {showAdicionarTransacaoForm &&
                 <div className="Background-form">
-                    <AdicionarTransacaoForm categorias={categorias} setExibirAdicionarTransacaoForm={setShowAdicionarTransacaoForm} />
+                    <AdicionarTransacaoForm setExibirAdicionarTransacaoForm={setShowAdicionarTransacaoForm} />
                 </div>
             }
 

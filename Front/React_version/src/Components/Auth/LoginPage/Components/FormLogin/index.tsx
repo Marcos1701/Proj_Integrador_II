@@ -1,7 +1,6 @@
 import { useRef, useState } from "react";
-import { ulid } from "ulidx";
 import { Navigate } from "react-router-dom";
-import { useAuth } from "../../../../../Contexts/AuthContext";
+import { singinData, useAuth } from "../../../../../Contexts/AuthContext";
 import './styles.css'
 
 export function FormLogin() {
@@ -25,10 +24,9 @@ export function FormLogin() {
             return
         }
 
-        const dados = {
-            id: ulid(),
+        const dados: singinData = {
             email: email.current.value,
-            password: senha.current.value,
+            senha: senha.current.value,
             lembrar: lembrar.current.checked
         }
 

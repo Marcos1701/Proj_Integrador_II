@@ -1,10 +1,9 @@
 import axios from "axios";
-import { ICategoria } from "../../../Categoria";
 import { useAuth, api_url } from "../../../../Contexts/AuthContext";
-import { useRef, useState } from "react";
+import { useContext, useRef, useState } from "react";
+import { CategoriasContext } from "../../../../Contexts/CategoriasContext";
 
 interface IAdicionarTransacaoFormProps {
-    categorias: ICategoria[];
     setExibirAdicionarTransacaoForm: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
@@ -33,8 +32,9 @@ export const MoneyValidation = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.target.value = valueAsMoney;
 }
 
-export function AdicionarTransacaoForm({ categorias, setExibirAdicionarTransacaoForm }: IAdicionarTransacaoFormProps) {
+export function AdicionarTransacaoForm({ setExibirAdicionarTransacaoForm }: IAdicionarTransacaoFormProps) {
 
+    const categorias = useContext(CategoriasContext);
     if (!categorias || categorias.length === 0) {
         confirm("Você precisa adicionar uma categoria antes de adicionar uma transação");
         setExibirAdicionarTransacaoForm(false);
@@ -76,14 +76,12 @@ export function AdicionarTransacaoForm({ categorias, setExibirAdicionarTransacao
                     descricao: descricao.current.value,
                 }
 
-        await axios.post(`${api_url}transacoes`, {
+        await axios.post(`${api_url}transacoes`, transacao, {
             method: 'Post',
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: `Bearer ${user.access_token}`
             },
-            body: JSON.stringify(transacao)
-
         }).then(res => res.data).catch(err => {
             console.log(err)
         });
