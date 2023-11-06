@@ -1,11 +1,12 @@
 import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { CreateUsuarioDto } from './dto/create-usuario.dto';
 import { UpdateUsuarioDto } from './dto/update-usuario.dto';
-import { EntityManager } from 'typeorm';
+import { EntityManager, IsNull, Not } from 'typeorm';
 import { Usuario } from './entities/usuario.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { JwtService } from '@nestjs/jwt';
 import { jwtConstants } from 'src/auth/auth.constants';
+import { jwtDecodeUser } from 'src/auth/jwt.strategy';
 
 @Injectable()
 export class UsuariosService {
@@ -21,23 +22,37 @@ export class UsuariosService {
       saldo: 0
     });
     await this.entityManager.save(usuario);
+    return usuario;
   }
 
-  findOneByEmail(email: string): Promise<Usuario | null> {
-    return this.entityManager.findOne(
+  async findOneByEmail(email: string): Promise<Usuario | null> {
+    if (!email) {
+      throw new Error('Email não fornecido');
+    }
+
+    const usuario = await this.entityManager.findOneBy<Usuario>(
       Usuario, {
-      where: { email }
+      email
+    }).catch((e) => {
+      console.error(e);
+      return null;
     });
+
+    return usuario;
   }
 
-  async update(updateUsuarioDto: UpdateUsuarioDto) {
+  async update(updateUsuarioDto: UpdateUsuarioDto): Promise<string> {
     if (!updateUsuarioDto.email && !updateUsuarioDto.senha && !updateUsuarioDto.nome) {
       throw new NotFoundException('Nenhum campo foi alterado');
     }
+
+    const { id } = await this.getUserFromtoken(updateUsuarioDto.access_token)
+
     const usuario = await this.entityManager.findOne(
       Usuario, {
-      where: { JWT: updateUsuarioDto.JWT }
+      where: { id }
     });
+
     if (!usuario) {
       throw new UnauthorizedException('Usuário não encontrado');
     }
@@ -53,9 +68,9 @@ export class UsuariosService {
       usuario.senha = updateUsuarioDto.senha;
     }
     const { access_token } = await this.gerarToken(usuario);
-    usuario.JWT = access_token;
 
     await this.entityManager.save(usuario);
+    return access_token;
   }
 
   private async gerarToken(payload: Usuario) {
@@ -77,5 +92,22 @@ export class UsuariosService {
     return this.entityManager.delete(
       Usuario, { JWT }
     );
+  }
+
+  private getUserFromtoken(token: string): Promise<Usuario> {
+    const data = this.jwtService.decode(token) as jwtDecodeUser
+
+    const usuario = this.entityManager.findOneBy(
+      Usuario,
+      {
+        email: data.email
+      })
+
+    if (!usuario) {
+      console.log('Usuário não encontrado');
+      throw new NotFoundException('Usuário não encontrado'); // 404
+    }
+
+    return usuario
   }
 }

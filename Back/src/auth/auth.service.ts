@@ -5,13 +5,25 @@ import { UsuariosService } from 'src/usuarios/usuarios.service';
 import { jwtConstants } from './auth.constants';
 import { CreateUsuarioDto } from 'src/usuarios/dto/create-usuario.dto';
 
+export interface SingInData {
+    email: string;
+    senha: string;
+}
+
+export interface SingUpData {
+    nome: string;
+    email: string;
+    senha: string;
+}
+
 @Injectable()
 export class AuthService {
     constructor(
         private readonly usersService: UsuariosService,
         private jwtService: JwtService,
     ) { }
-    async validarUsuario(email: string, senha: string): Promise<any> {
+
+    async validarUsuario({ email, senha }: SingInData): Promise<any> {
         const user = await this.usersService.findOneByEmail(email);
         if (!user) {
             throw new UnauthorizedException('Usuário ou Senha Inválidos');
@@ -22,22 +34,29 @@ export class AuthService {
         throw new UnauthorizedException('Usuário ou Senha Inválidos');
     }
 
-    async signup(user: CreateUsuarioDto): Promise<any> {
-        const userExists = await this.usersService.findOneByEmail(user.email);
+    async signup(data: SingUpData): Promise<Usuario> {
+        const userExists = await this.usersService.findOneByEmail(data.email);
         if (userExists) {
             throw new UnauthorizedException('Usuário já cadastrado');
         }
 
-        return await this.usersService.create(user);
+        const dataUser: CreateUsuarioDto = {
+            ...data,
+            access_token: (await this.gerarToken(data)).access_token
+        }
+
+        return await this.usersService.create(dataUser);
     }
 
-    private async gerarToken(payload: Usuario) {
+    private async gerarToken(payload: SingUpData) {
+        const payloadToken = {
+            email: payload.email,
+            senha: payload.senha
+        }
+
         return {
             access_token: this.jwtService.sign(
-                {
-                    email: payload.email,
-                    senha: payload.senha
-                },
+                payloadToken,
                 {
                     secret: jwtConstants.secret,
                     expiresIn: '50s',

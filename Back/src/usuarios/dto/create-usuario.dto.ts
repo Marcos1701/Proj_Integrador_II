@@ -38,5 +38,5 @@ export class CreateUsuarioDto {
       required: true
     },
   )
-  JWT: string;
+  access_token: string;
 }

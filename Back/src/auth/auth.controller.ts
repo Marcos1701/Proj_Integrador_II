@@ -1,8 +1,8 @@
 import { Body, Controller, Post, UseGuards } from '@nestjs/common';
 import { SingInData } from './auth.models';
-import { AuthService } from './auth.service';
-import { CreateUsuarioDto } from 'src/usuarios/dto/create-usuario.dto';
+import { AuthService, SingUpData } from './auth.service';
 import { ApiBody, ApiResponse } from '@nestjs/swagger';
+import { LocalAuthGuard } from './local-auth.guard';
 
 
 @Controller('auth')
@@ -17,7 +17,7 @@ export class AuthController {
         schema: {
             type: 'object',
             properties: {
-                asses_token: {
+                access_token: {
                     type: 'string',
                     example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IkFpaWlubnplZGFNYW5nYTEyM0BnbWFpbC5jb20iLCJpYXQiOjE2MzI1NjQ0NzIsImV4cCI6"
                 }
@@ -43,9 +43,11 @@ export class AuthController {
             }
         }
     })
+
+    @UseGuards(LocalAuthGuard)
     @Post('login')
-    async login(@Body() { email, senha }: SingInData) {
-        return this.authService.validarUsuario(email, senha);
+    async login(@Body() data: SingInData) {
+        return this.authService.validarUsuario(data);
     }
 
     @ApiResponse({
@@ -79,7 +81,7 @@ export class AuthController {
                                 },
                             },
                         },
-                        token: {
+                        access_token: {
                             type: 'string',
                             description: 'The token of the user.',
                             example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IkFpaWlubnplZGFNYW5nYTEyM0BnbWFpbC5jb20iLCJpYXQiOjE2MzI1NjQ0NzIsImV4cCI6"
@@ -91,7 +93,7 @@ export class AuthController {
     }) // retorna o usuário criado e o token
     @ApiResponse({
         status: 401,
-        description: 'Unauthorized',
+        description: 'Usuário já cadastrado',
     })
     @ApiBody({
         schema: {
@@ -113,7 +115,7 @@ export class AuthController {
         }
     })
     @Post('signup')
-    async signup(@Body() user: CreateUsuarioDto) {
+    async signup(@Body() user: SingUpData) {
         return this.authService.signup(user);
     }
 }

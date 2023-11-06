@@ -16,9 +16,10 @@ export class Categoria {
   nome: string;
 
   @Column({
-    length: 250
+    length: 250,
+    nullable: true
   })
-  descricao: string;
+  descricao?: string;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   dataCriacao: Date;
@@ -32,6 +33,13 @@ export class Categoria {
     }
   )
   orcamento?: number;
+
+  @Column({
+    type: 'float',
+    default: 0,
+    nullable: false
+  })
+  gasto: number;
 
   @ManyToOne(() => Usuario, (usuario) => usuario.categorias)
   usuario: Usuario;

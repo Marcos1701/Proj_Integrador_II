@@ -1,7 +1,8 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Header, Headers } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Header, Headers, Query } from '@nestjs/common';
 import { TransacoesService } from './transacoes.service';
 import { CreateTransacoeDto } from './dto/create-transacoe.dto';
 import { UpdateTransacoeDto } from './dto/update-transacoe.dto';
+import { TransacoesorderBy, ordenarTransacoes } from 'src/usuarios/entities/usuario.entity';
 
 @Controller('transacoes')
 export class TransacoesController {
@@ -13,8 +14,8 @@ export class TransacoesController {
   }
 
   @Get()
-  findAll(@Headers('Authorization') token: string) {
-    return this.transacoesService.findAll(token);
+  findAll(@Headers('Authorization') access_token: string, @Query('orderby') orderby?: TransacoesorderBy, @Query('order') order?: 'ASC' | 'DESC', @Query('search') search?: string, @Query('categoriaid') categoriaid?: string) {
+    return this.transacoesService.findAll(access_token, orderby, order, search, categoriaid);
   }
 
   @Get(':id')

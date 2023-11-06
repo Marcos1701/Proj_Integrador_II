@@ -5,5 +5,5 @@ export class UpdateUsuarioDto extends PartialType(CreateUsuarioDto) {
     nome?: string;
     email?: string;
     senha?: string;
-    JWT: string;
+    access_token: string;
 }

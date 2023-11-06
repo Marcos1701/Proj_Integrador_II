@@ -35,9 +35,10 @@ export class Transacao {
   titulo: string;
 
   @Column({
-    length: 250
+    length: 250,
+    nullable: true
   })
-  descricao: string;
+  descricao?: string;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   dataCriacao: Date;

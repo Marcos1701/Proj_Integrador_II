@@ -4,6 +4,6 @@ export class CreateTransacoeDto {
   tipo: 'entrada' | 'saida';
   valor: number;
   titulo: string;
-  descricao: string;
+  descricao?: string;
   categoriaid: string;
 }

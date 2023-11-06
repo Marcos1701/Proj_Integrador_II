@@ -7,11 +7,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
     TypeOrmModule.forRootAsync({
       useFactory: (configService: ConfigService) => ({
         type: 'postgres',
-        host: "db.tpjjacgapstyjpzkibag.supabase.co",
+        host: "localhost", //"db.tpjjacgapstyjpzkibag.supabase.co",
         port: 5432,
-        database: "postgres",
+        database: "finnapp", // "postgres",
         username: "postgres",
-        password: "ZUhINS5TMiPX7y9b",
+        password: "ifpi",  //"ZUhINS5TMiPX7y9b",
         autoLoadEntities: true,
         synchronize: true,
       }),
@@ -20,3 +20,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
   ],
 })
 export class DatabaseModule { }
+
+/* 
+docker run --name pg-server -e POSTGRES_PASSWORD=ifpi -e PGPASSWORD=ifpi -p 5432:5432 -d postgres
+*/
+

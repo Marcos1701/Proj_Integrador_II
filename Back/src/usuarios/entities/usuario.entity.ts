@@ -1,19 +1,26 @@
 import { Categoria } from 'src/categorias/entities/categoria.entity';
 import { Transacao } from 'src/transacoes/entities/transacao.entity';
-import { Column, Entity, Generated, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
-interface ordenarCategorias {
-  nome: 'ASC' | 'DESC';
-  dataCriacao: 'ASC' | 'DESC';
-  orcamento: 'ASC' | 'DESC';
+export enum CategoriasorderBy {
+  nome = "nome",
+  datacriacao = "datacriacao",
+  orcamento = "orcamento"
 }
 
-interface ordenarTransacoes {
-  titulo: 'ASC' | 'DESC';
-  valor: 'ASC' | 'DESC';
-  dataCriacao: 'ASC' | 'DESC';
-  tipo: 'entrada' | 'saida';
-  categoriaid: string;
+export enum TransacoesorderBy {
+  titulo = "titulo",
+  valor = "valor",
+  entrada = 'entrada',
+  saida = 'saida'
+}
+
+export interface ordenarTransacoes {
+  titulo?: 'ASC' | 'DESC';
+  valor?: 'ASC' | 'DESC';
+  dataCriacao?: 'ASC' | 'DESC';
+  tipo?: 'entrada' | 'saida';
+  categoriaid?: string;
 }
 
 @Entity()
@@ -39,9 +46,6 @@ export class Usuario {
   )
   saldo: number;
 
-  @Column()
-  JWT: string; // para gerar um JWT, basta adicionar o @IsJWT() do class-validator, da seguinte forma: @IsJWT()
-
   @Column(
     {
       unique: true,
@@ -66,14 +70,14 @@ export class Usuario {
     Object.assign(this, usuario);
   }
 
-  getTransacoes(order?: ordenarTransacoes): Transacao[] {
-    let TransacoesOrdenadas: Transacao[] = this.transacoes;
-    if (order) {
-      if (order.titulo) TransacoesOrdenadas = TransacoesOrdenadas.sort((a, b) => order.titulo === 'ASC' ? a.titulo.localeCompare(b.titulo) : b.titulo.localeCompare(a.titulo))
-      if (order.valor) TransacoesOrdenadas = TransacoesOrdenadas.sort((a, b) => order.valor === 'ASC' ? a.valor - b.valor : b.valor - a.valor)
-      if (order.dataCriacao) TransacoesOrdenadas = TransacoesOrdenadas.sort((a, b) => order.dataCriacao === 'ASC' ? a.dataCriacao.getTime() - b.dataCriacao.getTime() : b.dataCriacao.getTime() - a.dataCriacao.getTime())
-      if (order.tipo) TransacoesOrdenadas = TransacoesOrdenadas.sort((a, b) => order.tipo === 'entrada' ? 1 : -1)
-      if (order.categoriaid) TransacoesOrdenadas = TransacoesOrdenadas.filter(transacao => transacao.categoria.id === order.categoriaid)
+  getTransacoes(order: 'ASC' | 'DESC' = 'ASC', orderby?: TransacoesorderBy, search?: string, categoriaid?: string): Transacao[] {
+    let TransacoesOrdenadas: Transacao[] = this.transacoes.sort((a, b) => order === 'ASC' ? a.dataCriacao.getTime() - b.dataCriacao.getTime() : b.dataCriacao.getTime() - a.dataCriacao.getTime());
+    //"nome", "datacriacao", "orcamento"
+    if (orderby) {
+      if (orderby == TransacoesorderBy.titulo) { TransacoesOrdenadas = TransacoesOrdenadas.sort((a, b) => order === 'ASC' ? a.titulo.localeCompare(b.titulo) : b.titulo.localeCompare(a.titulo)) }
+      if (orderby == TransacoesorderBy.valor) { TransacoesOrdenadas = TransacoesOrdenadas.sort((a, b) => order === 'ASC' ? a.valor - b.valor : b.valor - a.valor) }
+      if (orderby == TransacoesorderBy.entrada || orderby == TransacoesorderBy.saida) { TransacoesOrdenadas = TransacoesOrdenadas.sort((a, b) => orderby === 'entrada' ? 1 : -1) }
+      if (categoriaid) { TransacoesOrdenadas = TransacoesOrdenadas.filter(transacao => transacao.categoria.id === categoriaid) }
 
     }
     return TransacoesOrdenadas;
@@ -83,13 +87,19 @@ export class Usuario {
     return this.transacoes.find(transacao => transacao.id === id);
   }
 
-  getCategorias(order?: ordenarCategorias): Categoria[] {
-    let CategoriasOrdenadas: Categoria[] = this.categorias;
-    if (order) {
-      if (order.nome) CategoriasOrdenadas = CategoriasOrdenadas.sort((a, b) => order.nome === 'ASC' ? a.nome.localeCompare(b.nome) : b.nome.localeCompare(a.nome))
-      if (order.dataCriacao) CategoriasOrdenadas = CategoriasOrdenadas.sort((a, b) => order.dataCriacao === 'ASC' ? a.dataCriacao.getTime() - b.dataCriacao.getTime() : b.dataCriacao.getTime() - a.dataCriacao.getTime())
-      if (order.orcamento) CategoriasOrdenadas = CategoriasOrdenadas.sort((a, b) => order.orcamento === 'ASC' ? a.orcamento - b.orcamento : b.orcamento - a.orcamento)
+  getCategorias(order: 'ASC' | 'DESC' = 'ASC', orderby?: CategoriasorderBy, search?: string): Categoria[] {
+    let CategoriasOrdenadas: Categoria[] = this.categorias.sort((a, b) => order === 'ASC' ? a.dataCriacao.getTime() - b.dataCriacao.getTime() : b.dataCriacao.getTime() - a.dataCriacao.getTime())
+
+    if (orderby) {
+      if (orderby == CategoriasorderBy.nome) { CategoriasOrdenadas = CategoriasOrdenadas.sort((a, b) => order === 'ASC' ? a.nome.localeCompare(b.nome) : b.nome.localeCompare(a.nome)) }
+      if (orderby == CategoriasorderBy.datacriacao) { CategoriasOrdenadas = CategoriasOrdenadas.sort((a, b) => order === 'ASC' ? a.dataCriacao.getTime() - b.dataCriacao.getTime() : b.dataCriacao.getTime() - a.dataCriacao.getTime()) }
+      if (orderby == CategoriasorderBy.orcamento) { CategoriasOrdenadas = CategoriasOrdenadas.sort((a, b) => order === 'ASC' ? a.orcamento - b.orcamento : b.orcamento - a.orcamento) }
     }
+
+    if (search) {
+      CategoriasOrdenadas = CategoriasOrdenadas.filter(categoria => categoria.nome.toLowerCase().includes(search.toLowerCase()))
+    }
+
     return CategoriasOrdenadas;
   }
 
