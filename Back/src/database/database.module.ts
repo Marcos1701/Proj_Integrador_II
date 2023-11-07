@@ -1,17 +1,19 @@
 import { Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import * as dotenv from 'dotenv';
+dotenv.config({ path: '.env.local' });
 
 @Module({
   imports: [
     TypeOrmModule.forRootAsync({
       useFactory: (configService: ConfigService) => ({
         type: 'postgres',
-        host: "localhost", //"db.tpjjacgapstyjpzkibag.supabase.co",
+        host: process.env.DBHOST_DEV,
         port: 5432,
-        database: "finnapp", // "postgres",
+        database: process.env.DB_DATABASE_DEV,
         username: "postgres",
-        password: "ifpi",  //"ZUhINS5TMiPX7y9b",
+        password: process.env.DB_PASSWORD_DEV,
         autoLoadEntities: true,
         synchronize: true,
       }),

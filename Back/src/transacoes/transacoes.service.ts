@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, UseGuards } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException, UseGuards } from '@nestjs/common';
 import { CreateTransacoeDto } from './dto/create-transacoe.dto';
 import { UpdateTransacoeDto } from './dto/update-transacoe.dto';
 import { DeleteResult, EntityManager, UpdateResult } from 'typeorm';
@@ -18,7 +18,35 @@ export class TransacoesService {
 
   async create(createTransacoeDto: CreateTransacoeDto) {
 
-    const usuario = await this.getUserFromtoken(createTransacoeDto.usuariotoken);
+    if (!createTransacoeDto.access_token) {
+      throw new BadRequestException('Token não informado'); // 404
+    }
+
+    if (!createTransacoeDto.categoriaid) {
+      throw new BadRequestException('Categoria não informada'); // 404
+    }
+
+    if (!createTransacoeDto.titulo) {
+      throw new BadRequestException('Título não informado'); // 400
+    }
+
+    if (!createTransacoeDto.valor || createTransacoeDto.valor <= 0) {
+      throw new BadRequestException('Valor inválido ou não informado'); // 400
+    }
+
+    if (!createTransacoeDto.tipo || (createTransacoeDto.tipo !== 'entrada' && createTransacoeDto.tipo !== 'saida')) {
+      throw new BadRequestException('Tipo inválido ou não informado'); // 400
+    }
+
+    if (createTransacoeDto.titulo.length > 100) {
+      throw new BadRequestException('Título muito longo'); // 400
+    }
+
+    if (createTransacoeDto.descricao && createTransacoeDto.descricao.length > 250) {
+      throw new BadRequestException('Descrição muito longa'); // 400
+    }
+
+    const usuario = await this.getUserFromtoken(createTransacoeDto.access_token);
     const categoria = await this.entityManager.findOne(
       Categoria,
       {
@@ -55,6 +83,9 @@ export class TransacoesService {
 
 
   async findOne(id: string, usuariotoken: string) {
+    if (!id || id === '') {
+      throw new BadRequestException('id da transação não informado'); // 404
+    }
     const usuario = await this.getUserFromtoken(usuariotoken);
     return this.entityManager.findOne(
       Transacao, {
@@ -86,7 +117,23 @@ export class TransacoesService {
 
 
   async update(id: string, updateTransacoeDto: UpdateTransacoeDto) {
-    const usuario = await this.getUserFromtoken(updateTransacoeDto.usuariotoken);
+    if (!id || id === '') {
+      throw new BadRequestException('id da transação não informado'); // 404
+    }
+
+    if ((!updateTransacoeDto.titulo && !updateTransacoeDto.descricao && !updateTransacoeDto.valor && !updateTransacoeDto.categoriaid)
+      || (updateTransacoeDto.titulo === '' && updateTransacoeDto.descricao === '' && updateTransacoeDto.valor === 0 && updateTransacoeDto.categoriaid === '')) {
+      throw new BadRequestException('Nenhum dado para atualizar'); // 400
+    }
+
+    if (updateTransacoeDto.titulo && updateTransacoeDto.titulo.length > 100) {
+      throw new BadRequestException('Título muito longo'); // 400
+    }
+
+    if (updateTransacoeDto.descricao && updateTransacoeDto.descricao.length > 250) {
+      throw new BadRequestException('Descrição muito longa'); // 400
+    }
+    const usuario = await this.getUserFromtoken(updateTransacoeDto.access_token);
 
     const transacao: Transacao = await this.entityManager.findOne(
       Transacao, {
@@ -150,6 +197,10 @@ export class TransacoesService {
 
 
   async remove(id: string, usuariotoken: string) {
+    if (!id || id === '') {
+      throw new BadRequestException('id da transação não informado'); // 404
+    }
+
     const usuario = await this.getUserFromtoken(usuariotoken);
     const result: DeleteResult = await this.entityManager.delete(
       Transacao, {

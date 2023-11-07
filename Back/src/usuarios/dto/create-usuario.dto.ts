@@ -1,4 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
+import { IsString, IsEmail, IsStrongPassword } from "class-validator";
 
 export class CreateUsuarioDto {
   @ApiProperty(
@@ -9,6 +10,12 @@ export class CreateUsuarioDto {
       default: "Fulano",
     },
   )
+  @IsString({
+    message: "Nome inválido",
+    context: {
+      length: 100
+    }
+  })
   nome: string;
 
   @ApiProperty(
@@ -19,6 +26,14 @@ export class CreateUsuarioDto {
       default: "AiiinnnzedaManga123@gmail.com",
     },
   )
+  @IsEmail({
+    allow_display_name: true,
+    allow_utf8_local_part: true,
+    require_tld: true,
+    require_display_name: true,
+  }, {
+    message: "Email inválido"
+  })
   email: string;
 
   @ApiProperty(
@@ -29,14 +44,10 @@ export class CreateUsuarioDto {
       default: "123456789",
     },
   )
+  @IsStrongPassword({
+    minLength: 1,
+  }, {
+    message: "Senha inválida"
+  })
   senha: string;
-
-  @ApiProperty(
-    {
-      type: String,
-      description: "Token do usuário",
-      required: true
-    },
-  )
-  access_token: string;
 }

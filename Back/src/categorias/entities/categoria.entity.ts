@@ -6,7 +6,6 @@ import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'ty
 export class Categoria {
   @PrimaryGeneratedColumn(
     'uuid', // tipo de dado do id
-    { name: 'id' }, // nome da coluna no banco de dados
   )
   id: string;
 

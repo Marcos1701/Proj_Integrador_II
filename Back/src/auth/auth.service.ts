@@ -16,6 +16,13 @@ export interface SingUpData {
     senha: string;
 }
 
+export interface SingUpResponse {
+    email: string;
+    nome: string;
+    saldo: number;
+    access_token: string;
+}
+
 @Injectable()
 export class AuthService {
     constructor(
@@ -34,18 +41,20 @@ export class AuthService {
         throw new UnauthorizedException('Usuário ou Senha Inválidos');
     }
 
-    async signup(data: SingUpData): Promise<Usuario> {
+    async signup(data: SingUpData): Promise<SingUpResponse> {
         const userExists = await this.usersService.findOneByEmail(data.email);
         if (userExists) {
             throw new UnauthorizedException('Usuário já cadastrado');
         }
 
-        const dataUser: CreateUsuarioDto = {
-            ...data,
-            access_token: (await this.gerarToken(data)).access_token
-        }
+        const usuario = await this.usersService.create(data);
+        const token = await this.gerarToken(usuario);
 
-        return await this.usersService.create(dataUser);
+        const { senha, ...user } = usuario;
+        return {
+            ...user,
+            ...token
+        };
     }
 
     private async gerarToken(payload: SingUpData) {

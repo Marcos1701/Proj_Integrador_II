@@ -2,7 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Headers, 
 import { CategoriasService } from './categorias.service';
 import { CreateCategoriaDto } from './dto/create-categoria.dto';
 import { UpdateCategoriaDto } from './dto/update-categoria.dto';
-import { CategoriasorderBy, orderByCategorias } from 'src/usuarios/entities/usuario.entity';
+import { CategoriasorderBy } from 'src/usuarios/entities/usuario.entity';
 
 
 
@@ -17,7 +17,7 @@ export class CategoriasController {
 
 
   @Get('')
-  async findAll(@Headers('Authorization') token: string, @Query('order') order?: 'ASC' | 'DESC', @Query('orderby') orderby?: orderByCategorias, @Query('search') search?: string) {
+  async findAll(@Headers('Authorization') token: string, @Query('order') order?: 'ASC' | 'DESC', @Query('orderby') orderby?: CategoriasorderBy, @Query('search') search?: string) {
     return this.categoriasService.findAll(
       token,
       orderby ? orderby : null,

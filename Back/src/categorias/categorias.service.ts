@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateCategoriaDto } from './dto/create-categoria.dto';
 import { UpdateCategoriaDto } from './dto/update-categoria.dto';
 import { EntityManager } from 'typeorm';
@@ -26,13 +26,29 @@ export class CategoriasService {
       throw new NotFoundException('Usuário não encontrado'); // 404
     }
 
+    if (!createCategoriaDto.nome) {
+      throw new BadRequestException('Nome da categoria não informado'); // 400
+    }
+
+    if (createCategoriaDto.nome.length > 100) {
+      throw new BadRequestException('Nome da categoria muito longo'); // 400
+    }
+
+    if (createCategoriaDto.descricao && createCategoriaDto.descricao.length > 250) {
+      throw new BadRequestException('Descrição da categoria muito longa'); // 400
+    }
+
     const categoria = new Categoria({ ...createCategoriaDto, usuario });
     await this.entityManager.save(categoria);
     return categoria;
   }
 
   async findOne(id: string, usertoken: string) {
+    if (!id || id === '') {
+      throw new BadRequestException('id da categoria não informado'); // 404
+    }
     const usuario = await this.getUserFromtoken(usertoken);
+
     return await this.categoriasRepository.findOneBy({
       id, usuario: {
         id: usuario.id
@@ -46,6 +62,23 @@ export class CategoriasService {
   }
 
   async update(id: string, updateCategoriaDto: UpdateCategoriaDto) {
+    if (!id || id === '') {
+      throw new NotFoundException('id da categoria não informado'); // 404
+    }
+
+    if ((!updateCategoriaDto.nome && !updateCategoriaDto.descricao && !updateCategoriaDto.orcamento)
+      || (updateCategoriaDto.nome === '' || updateCategoriaDto.descricao === '' || updateCategoriaDto.orcamento === 0)) {
+      throw new BadRequestException('Nenhum dado para atualizar'); // 400
+    }
+
+    if (updateCategoriaDto.nome && updateCategoriaDto.nome.length > 100) {
+      throw new BadRequestException('Nome da categoria muito longo'); // 400
+    }
+
+    if (updateCategoriaDto.descricao && updateCategoriaDto.descricao.length > 250) {
+      throw new BadRequestException('Descrição da categoria muito longa'); // 400
+    }
+
     const usuario = await this.getUserFromtoken(updateCategoriaDto.usertoken);
 
     const result = await this.categoriasRepository.update(
@@ -60,6 +93,9 @@ export class CategoriasService {
   }
 
   async remove(id: string) {
+    if (!id || id === '') {
+      throw new BadRequestException('id da categoria não informado'); // 404
+    }
     await this.categoriasRepository.delete(id);
   }
 

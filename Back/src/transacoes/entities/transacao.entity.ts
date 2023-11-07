@@ -12,7 +12,6 @@ import {
 export class Transacao {
   @PrimaryGeneratedColumn(
     'uuid', // tipo de dado do id
-    { name: 'id' }, // nome da coluna no banco de dados
   )
   id: string;
 
