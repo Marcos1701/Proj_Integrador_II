@@ -49,7 +49,9 @@ export class Categoria {
   @ManyToOne(() => Usuario, (usuario) => usuario.categorias)
   usuario: Usuario;
 
-  @OneToMany(() => Transacao, (transacao) => transacao.categoria)
+  @OneToMany(() => Transacao, (transacao) => transacao.categoria, {
+    eager: true // quando for buscar uma categoria, já traz as transações junto
+  })
   transacoes: Transacao[];
 
   constructor(categoria: Partial<Categoria>) {

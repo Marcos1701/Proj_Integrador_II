@@ -1,13 +1,6 @@
-import { IsEnum, IsJWT, IsNotEmpty, IsPositive, IsString, IsUUID } from "class-validator";
+import { IsEnum, IsJWT, IsNotEmpty, IsOptional, IsPositive, IsString, IsUUID } from "class-validator";
 
 export class CreateTransacoeDto {
-
-  @IsJWT(
-    {
-      message: "Token inválido"
-    }
-  )
-  access_token: string;
 
   @IsEnum(
     {
@@ -34,10 +27,11 @@ export class CreateTransacoeDto {
   )
   titulo: string;
 
-  @IsString(
+  @IsOptional(
     {
       message: "Descrição inválida",
       context: {
+        IsString: true,
         length: 250
       }
     }

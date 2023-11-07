@@ -61,7 +61,7 @@ export class CategoriasService {
     return usuario.getCategorias(order, orderby, search);
   }
 
-  async update(id: string, updateCategoriaDto: UpdateCategoriaDto) {
+  async update(id: string, updateCategoriaDto: UpdateCategoriaDto, access_token: string) {
     if (!id || id === '') {
       throw new NotFoundException('id da categoria não informado'); // 404
     }
@@ -79,7 +79,7 @@ export class CategoriasService {
       throw new BadRequestException('Descrição da categoria muito longa'); // 400
     }
 
-    const usuario = await this.getUserFromtoken(updateCategoriaDto.usertoken);
+    const usuario = await this.getUserFromtoken(access_token);
 
     const result = await this.categoriasRepository.update(
       { id, usuario: { id: usuario.id } },

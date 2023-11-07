@@ -9,8 +9,8 @@ export class TransacoesController {
   constructor(private readonly transacoesService: TransacoesService) { }
 
   @Post()
-  async create(@Body() createTransacoeDto: CreateTransacoeDto) {
-    return this.transacoesService.create(createTransacoeDto);
+  async create(@Headers('Authorization') access_token: string, @Body() createTransacoeDto: CreateTransacoeDto) {
+    return this.transacoesService.create(createTransacoeDto, access_token);
   }
 
   @Get()
@@ -24,8 +24,8 @@ export class TransacoesController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateTransacoeDto: UpdateTransacoeDto) {
-    return this.transacoesService.update(id, updateTransacoeDto);
+  update(@Param('id') id: string, @Body() updateTransacoeDto: UpdateTransacoeDto, @Headers('Authorization') access_token: string) {
+    return this.transacoesService.update(id, updateTransacoeDto, access_token);
   }
 
   @Delete(':id')

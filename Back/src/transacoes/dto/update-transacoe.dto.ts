@@ -4,13 +4,6 @@ import { IsAlphanumeric, IsEnum, IsJWT, IsPositive, IsString, IsUUID } from 'cla
 
 export class UpdateTransacoeDto extends PartialType(CreateTransacoeDto) {
 
-    @IsJWT(
-        {
-            message: "Token inválido"
-        }
-    )
-    access_token: string;
-
     @IsEnum(
         {
             E: 'entrada',

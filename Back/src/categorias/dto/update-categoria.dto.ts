@@ -1,40 +1,38 @@
 import { PartialType } from '@nestjs/mapped-types';
 import { CreateCategoriaDto } from './create-categoria.dto';
-import { IsJWT, IsPositive, IsString } from 'class-validator';
+import { IsJWT, IsOptional, IsPositive, IsString } from 'class-validator';
 
 export class UpdateCategoriaDto {
 
-  @IsString(
+  @IsOptional(
     {
-      message: "Titulo inválida",
+      message: "Nome Inválido",
       context: {
+        IsString: true,
         length: 100
       }
     }
   )
   nome?: string;
 
-  @IsString(
+  @IsOptional(
     {
       message: "Descrição inválida",
       context: {
+        IsString: true,
         length: 250
       }
     }
   )
   descricao?: string;
 
-  @IsPositive(
+  @IsOptional(
     {
-      message: "Valor inválido"
+      message: "Valor inválido",
+      context: {
+        IsPositive: true
+      }
     }
   )
   orcamento?: number;
-
-  @IsJWT(
-    {
-      message: "Token inválido"
-    }
-  )
-  usertoken: string;
 }
