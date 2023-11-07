@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsPositive, IsString } from "class-validator";
+import { IsNotEmpty, IsOptional, IsPositive, IsString } from "class-validator";
 
 export class CreateCategoriaDto {
 
@@ -9,7 +9,7 @@ export class CreateCategoriaDto {
   )
   @IsString(
     {
-      message: "Titulo inválida",
+      message: "Nome inválido",
       context: {
         length: 100
       }
@@ -17,28 +17,30 @@ export class CreateCategoriaDto {
   )
   nome: string;
 
-  @IsString(
-    {
-      message: "Descrição inválida",
-      context: {
-        length: 250
-      }
+  @IsOptional({
+    message: "descricao invélida",
+    context: {
+      IsString: true,
+      length: 251
     }
-  )
+  })
   descricao?: string;
 
-  @IsPositive(
-    {
-      message: "Valor inválido"
+  @IsOptional({
+    message: "Orçamento inválido",
+    context: {
+      IsPositive: true
     }
-  )
+  })
   orcamento?: number;
 
-  @IsString(
+  @IsOptional(
     {
       message: "Ícone inválido",
       context: {
-        length: 15
+        IsString: true,
+        length: 15,
+        default: "barraquinha"
       }
     }
   )

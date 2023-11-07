@@ -16,37 +16,9 @@ export class TransacoesService {
   ) { }
 
 
-  async create(createTransacoeDto: CreateTransacoeDto) {
+  async create(createTransacoeDto: CreateTransacoeDto, access_token: string) {
 
-    if (!createTransacoeDto.access_token) {
-      throw new BadRequestException('Token não informado'); // 404
-    }
-
-    if (!createTransacoeDto.categoriaid) {
-      throw new BadRequestException('Categoria não informada'); // 404
-    }
-
-    if (!createTransacoeDto.titulo) {
-      throw new BadRequestException('Título não informado'); // 400
-    }
-
-    if (!createTransacoeDto.valor || createTransacoeDto.valor <= 0) {
-      throw new BadRequestException('Valor inválido ou não informado'); // 400
-    }
-
-    if (!createTransacoeDto.tipo || (createTransacoeDto.tipo !== 'entrada' && createTransacoeDto.tipo !== 'saida')) {
-      throw new BadRequestException('Tipo inválido ou não informado'); // 400
-    }
-
-    if (createTransacoeDto.titulo.length > 100) {
-      throw new BadRequestException('Título muito longo'); // 400
-    }
-
-    if (createTransacoeDto.descricao && createTransacoeDto.descricao.length > 250) {
-      throw new BadRequestException('Descrição muito longa'); // 400
-    }
-
-    const usuario = await this.getUserFromtoken(createTransacoeDto.access_token);
+    const usuario = await this.getUserFromtoken(access_token);
     const categoria = await this.entityManager.findOne(
       Categoria,
       {
@@ -116,7 +88,7 @@ export class TransacoesService {
 
 
 
-  async update(id: string, updateTransacoeDto: UpdateTransacoeDto) {
+  async update(id: string, updateTransacoeDto: UpdateTransacoeDto, access_token: string) {
     if (!id || id === '') {
       throw new BadRequestException('id da transação não informado'); // 404
     }
@@ -133,7 +105,7 @@ export class TransacoesService {
     if (updateTransacoeDto.descricao && updateTransacoeDto.descricao.length > 250) {
       throw new BadRequestException('Descrição muito longa'); // 400
     }
-    const usuario = await this.getUserFromtoken(updateTransacoeDto.access_token);
+    const usuario = await this.getUserFromtoken(access_token);
 
     const transacao: Transacao = await this.entityManager.findOne(
       Transacao, {

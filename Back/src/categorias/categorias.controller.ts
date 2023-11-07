@@ -32,8 +32,8 @@ export class CategoriasController {
   }
 
   @Patch(':id')
-  async update(@Param('id') id: string, @Body() updateCategoriaDto: UpdateCategoriaDto) {
-    return this.categoriasService.update(id, updateCategoriaDto);
+  async update(@Param('id') id: string, @Body() updateCategoriaDto: UpdateCategoriaDto, @Headers('Authorization') token: string) {
+    return this.categoriasService.update(id, updateCategoriaDto, token);
   }
 
   @Delete(':id')

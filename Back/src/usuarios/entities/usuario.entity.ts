@@ -60,10 +60,14 @@ export class Usuario {
   )
   senha: string;
 
-  @OneToMany(() => Categoria, (categoria) => categoria.usuario)
+  @OneToMany(type => Categoria, categoria => categoria.usuario, {
+    eager: true // dessa forma, quando o usuario for buscado, as categorias também serão
+  })
   categorias: Categoria[];
 
-  @OneToMany(() => Transacao, (transacao) => transacao.usuario)
+  @OneToMany(type => Transacao, transacao => transacao.usuario, {
+    eager: true // dessa forma, quando o usuario for buscado, as transacoes também serão
+  })
   transacoes: Transacao[];
 
   constructor(usuario: Partial<Usuario>) {
@@ -93,6 +97,8 @@ export class Usuario {
   }
 
   getCategorias(order: 'ASC' | 'DESC' = 'ASC', orderby?: CategoriasorderBy, search?: string): Categoria[] {
+    console.log(this.categorias) // undefined, mesmo tendo categorias
+    // para resolver isso, basta adicionar eager: true na relação entre usuario e categoria
     if (!this.categorias) { return [] }
 
     let CategoriasOrdenadas: Categoria[] = this.categorias.sort((a, b) => order !== 'DESC' ? a.dataCriacao.getTime() - b.dataCriacao.getTime() : b.dataCriacao.getTime() - a.dataCriacao.getTime())
@@ -106,6 +112,7 @@ export class Usuario {
     if (search) {
       CategoriasOrdenadas = CategoriasOrdenadas.filter(categoria => categoria.nome.toLowerCase().includes(search.toLowerCase()))
     }
+    console.log(CategoriasOrdenadas)
 
     return CategoriasOrdenadas;
   }
