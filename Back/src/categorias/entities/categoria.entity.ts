@@ -6,7 +6,6 @@ import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'ty
 export class Categoria {
   @PrimaryGeneratedColumn(
     'uuid', // tipo de dado do id
-    { name: 'id' }, // nome da coluna no banco de dados
   )
   id: string;
 
@@ -16,9 +15,10 @@ export class Categoria {
   nome: string;
 
   @Column({
-    length: 250
+    length: 250,
+    nullable: true
   })
-  descricao: string;
+  descricao?: string;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   dataCriacao: Date;
@@ -32,6 +32,19 @@ export class Categoria {
     }
   )
   orcamento?: number;
+
+  @Column({
+    type: 'float',
+    default: 0,
+    nullable: false
+  })
+  gasto: number;
+
+  @Column({
+    length: 15,
+    nullable: true
+  })
+  icone?: string;
 
   @ManyToOne(() => Usuario, (usuario) => usuario.categorias)
   usuario: Usuario;

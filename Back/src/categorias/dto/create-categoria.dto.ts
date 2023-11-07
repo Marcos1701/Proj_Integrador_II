@@ -1,6 +1,46 @@
+import { IsNotEmpty, IsPositive, IsString } from "class-validator";
+
 export class CreateCategoriaDto {
+
+  @IsNotEmpty(
+    {
+      message: "Título não informado"
+    }
+  )
+  @IsString(
+    {
+      message: "Titulo inválida",
+      context: {
+        length: 100
+      }
+    }
+  )
   nome: string;
-  descricao: string;
+
+  @IsString(
+    {
+      message: "Descrição inválida",
+      context: {
+        length: 250
+      }
+    }
+  )
+  descricao?: string;
+
+  @IsPositive(
+    {
+      message: "Valor inválido"
+    }
+  )
   orcamento?: number;
-  usuarioId: string;
+
+  @IsString(
+    {
+      message: "Ícone inválido",
+      context: {
+        length: 15
+      }
+    }
+  )
+  icone?: string;
 }

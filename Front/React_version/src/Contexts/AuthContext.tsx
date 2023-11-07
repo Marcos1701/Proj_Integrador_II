@@ -7,13 +7,13 @@ export type User = {
     access_token: string;
 }
 
-type singinData = {
+export type singinData = {
     email: string;
     senha: string;
     lembrar?: boolean;
 }
 
-type singupData = {
+export type singupData = {
     nome: string;
     email: string;
     senha: string;
@@ -47,18 +47,11 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         ) : null
     )
 
-
     const signin = async (data: singinData): Promise<string | void> => {
 
         const response = await axios.post<User>(`${api_url}auth/login`, {
-            method: 'Post',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                email: data.email,
-                senha: data.senha
-            })
+            email: data.email,
+            senha: data.senha
         })
 
         if (response.status === 401) {
@@ -69,21 +62,14 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
             localStorage.setItem('access_token', JSON.stringify(response.data))
         }
         setUser(response.data);
-
     }
 
     const singup = async (user: singupData): Promise<string | void> => {
 
         const response = await axios.post<User>(`${api_url}auth/register`, {
-            method: 'Post',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                nome: user.nome,
-                email: user.email,
-                senha: user.senha
-            })
+            nome: user.nome,
+            email: user.email,
+            senha: user.senha
         })
 
         if (response.status === 401) {

@@ -12,7 +12,6 @@ import {
 export class Transacao {
   @PrimaryGeneratedColumn(
     'uuid', // tipo de dado do id
-    { name: 'id' }, // nome da coluna no banco de dados
   )
   id: string;
 
@@ -35,9 +34,10 @@ export class Transacao {
   titulo: string;
 
   @Column({
-    length: 250
+    length: 250,
+    nullable: true
   })
-  descricao: string;
+  descricao?: string;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   dataCriacao: Date;

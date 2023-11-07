@@ -57,6 +57,7 @@ export class UsuariosController {
       example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IkFpaWlubnplZGFNYW5nYTEyM0BnbWFpbC5jb20iLCJpYXQiOjE2MzI1NjQ0NzIsImV4cCI6'
     }
   })
+
   @Delete()
   remove(@Body() JWT: string) {
     return this.usuariosService.remove(JWT);
