@@ -24,6 +24,6 @@ dotenv.config({ path: '.env.local' });
 export class DatabaseModule { }
 
 /* 
-docker run --name pg-server -e POSTGRES_PASSWORD=ifpi -e PGPASSWORD=ifpi -p 5432:5432 -d postgres
+docker run --name pg-server -e POSTGRES_PASSWORD=ifpi -e PGPASSWORD=ifpi -e POSTGRES_DB=finnapp -p 5432:5432 -d postgres
 */
 
