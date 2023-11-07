@@ -40,6 +40,12 @@ export class Categoria {
   })
   gasto: number;
 
+  @Column({
+    length: 15,
+    nullable: true
+  })
+  icone?: string;
+
   @ManyToOne(() => Usuario, (usuario) => usuario.categorias)
   usuario: Usuario;
 

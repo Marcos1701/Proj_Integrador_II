@@ -44,7 +44,7 @@ export class AuthController {
         }
     })
 
-    @UseGuards(LocalAuthGuard)
+    // @UseGuards(LocalAuthGuard)
     @Post('login')
     async login(@Body() data: SingInData) {
         return this.authService.validarUsuario(data);

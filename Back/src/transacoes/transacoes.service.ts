@@ -111,7 +111,7 @@ export class TransacoesService {
       search ? search : null,
       categoriaid ? categoriaid : null
     )
-    return { transacoes };
+    return transacoes;
   }
 
 

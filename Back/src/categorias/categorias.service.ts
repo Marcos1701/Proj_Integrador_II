@@ -105,7 +105,7 @@ export class CategoriasService {
     const usuario = this.entityManager.findOneBy(
       Usuario,
       {
-        email: data.email
+        id: data.id
       })
 
     if (!usuario) {

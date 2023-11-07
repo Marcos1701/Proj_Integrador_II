@@ -33,4 +33,14 @@ export class CreateCategoriaDto {
     }
   )
   orcamento?: number;
+
+  @IsString(
+    {
+      message: "Ícone inválido",
+      context: {
+        length: 15
+      }
+    }
+  )
+  icone?: string;
 }

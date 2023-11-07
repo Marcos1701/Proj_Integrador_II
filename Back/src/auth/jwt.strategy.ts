@@ -5,8 +5,8 @@ import { jwtConstants } from './auth.constants';
 import { SingInData } from './auth.models';
 
 export interface jwtDecodeUser {
+    id: string
     email: string;
-    senha: string
 }
 
 @Injectable()

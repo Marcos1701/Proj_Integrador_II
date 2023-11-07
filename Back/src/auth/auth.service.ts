@@ -1,9 +1,8 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { Usuario } from 'src/usuarios/entities/usuario.entity';
 import { UsuariosService } from 'src/usuarios/usuarios.service';
 import { jwtConstants } from './auth.constants';
-import { CreateUsuarioDto } from 'src/usuarios/dto/create-usuario.dto';
+import { Usuario } from 'src/usuarios/entities/usuario.entity';
 
 export interface SingInData {
     email: string;
@@ -17,9 +16,7 @@ export interface SingUpData {
 }
 
 export interface SingUpResponse {
-    email: string;
     nome: string;
-    saldo: number;
     access_token: string;
 }
 
@@ -36,7 +33,12 @@ export class AuthService {
             throw new UnauthorizedException('Usuário ou Senha Inválidos');
         }
         if (user.senha === senha) {
-            return await this.gerarToken(user);
+            const token = await this.gerarToken(user);
+            const { senha, email, saldo, ...userResponse } = user;
+            return {
+                ...userResponse,
+                ...token
+            };
         }
         throw new UnauthorizedException('Usuário ou Senha Inválidos');
     }
@@ -50,17 +52,17 @@ export class AuthService {
         const usuario = await this.usersService.create(data);
         const token = await this.gerarToken(usuario);
 
-        const { senha, ...user } = usuario;
+        const { senha, email, saldo, ...user } = usuario;
         return {
             ...user,
             ...token
         };
     }
 
-    private async gerarToken(payload: SingUpData) {
+    private async gerarToken(usuario: Usuario) {
         const payloadToken = {
-            email: payload.email,
-            senha: payload.senha
+            id: usuario.id,
+            email: usuario.email,
         }
 
         return {
