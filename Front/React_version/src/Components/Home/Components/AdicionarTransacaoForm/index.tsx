@@ -61,16 +61,16 @@ export function AdicionarTransacaoForm({ setExibirAdicionarTransacaoForm }: IAdi
         const transacao =
             !descricao.current?.value || descricao.current?.value === '' ?
                 {
-                    id_categoria: categoria.current.value,
+                    categoriaid: categoria.current.value,
                     nome: nome.current.value,
-                    valor: valor.current.value.replace(/[^0-9]/g, ''),
+                    valor: Number(valor.current.value.replace(/[^0-9]/g, '')),
                     data: data.current.value,
                     tipo: tipo.current.value,
                 } :
                 {
-                    id_categoria: categoria.current.value,
+                    categoriaid: categoria.current.value,
                     nome: nome.current.value,
-                    valor: valor.current.value.replace(/[^0-9]/g, ''),
+                    valor: Number(valor.current.value.replace(/[^0-9]/g, '')),
                     data: data.current.value,
                     tipo: tipo.current.value,
                     descricao: descricao.current.value,
@@ -80,7 +80,7 @@ export function AdicionarTransacaoForm({ setExibirAdicionarTransacaoForm }: IAdi
             method: 'Post',
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${user.access_token}`
+                Authorization: user.access_token
             },
         }).then(res => res.data).catch(err => {
             console.log(err)
@@ -143,8 +143,8 @@ export function AdicionarTransacaoForm({ setExibirAdicionarTransacaoForm }: IAdi
                     <label htmlFor="tipo">Tipo</label>
                     <select ref={tipo} required>
                         <option value="" selected disabled>Selecione o tipo</option> {/* o value vazio é necessário para o required funcionar */}
-                        <option value="Entrada">Entrada</option>
-                        <option value="Saída">Saída</option>
+                        <option value="entrada">Entrada</option>
+                        <option value="saida">Saída</option>
                     </select>
                 </div>
 

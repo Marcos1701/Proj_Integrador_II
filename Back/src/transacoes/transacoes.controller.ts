@@ -8,12 +8,13 @@ import { TransacoesorderBy, ordenarTransacoes } from 'src/usuarios/entities/usua
 export class TransacoesController {
   constructor(private readonly transacoesService: TransacoesService) { }
 
-  @Post()
+  @Post('')
   async create(@Headers('Authorization') access_token: string, @Body() createTransacoeDto: CreateTransacoeDto) {
+    console.log(createTransacoeDto);
     return this.transacoesService.create(createTransacoeDto, access_token);
   }
 
-  @Get()
+  @Get('')
   findAll(@Headers('Authorization') access_token: string, @Query('orderby') orderby?: TransacoesorderBy, @Query('order') order?: 'ASC' | 'DESC', @Query('search') search?: string, @Query('categoriaid') categoriaid?: string) {
     return this.transacoesService.findAll(access_token, orderby, order, search, categoriaid);
   }

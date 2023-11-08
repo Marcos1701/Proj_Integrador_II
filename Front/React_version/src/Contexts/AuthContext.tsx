@@ -4,6 +4,7 @@ import React, { createContext, useContext, useMemo, useState } from "react";
 // import { ulid } from 'ulidx';
 
 export type User = {
+    nome: string;
     access_token: string;
 }
 
@@ -43,7 +44,7 @@ export const api_url: string = "http://localhost:3300/"
 // AuthProvider encapsula o AuthContextProvider e o AuthContext
 export const AuthProvider = ({ children }: AuthProviderProps) => {
     const [user, setUser] = useState<User | null>(
-        localStorage.getItem('access_token') ? JSON.parse(localStorage.getItem('user')!
+        localStorage.getItem('access_token') ? JSON.parse(localStorage.getItem('access_token')!
         ) : null
     )
 
@@ -61,12 +62,13 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         if (data.lembrar) {
             localStorage.setItem('access_token', JSON.stringify(response.data))
         }
+
         setUser(response.data);
     }
 
     const singup = async (user: singupData): Promise<string | void> => {
 
-        const response = await axios.post<User>(`${api_url}auth/register`, {
+        const response = await axios.post<User>(`${api_url}auth/signup`, {
             nome: user.nome,
             email: user.email,
             senha: user.senha
@@ -75,7 +77,9 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         if (response.status === 401) {
             return response.statusText;
         }
-
+        if (user.lembrar) {
+            localStorage.setItem('access_token', JSON.stringify(response.data))
+        }
         setUser(response.data);
     }
 
