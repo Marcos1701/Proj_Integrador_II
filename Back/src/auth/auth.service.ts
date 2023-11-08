@@ -69,8 +69,7 @@ export class AuthService {
             access_token: this.jwtService.sign(
                 payloadToken,
                 {
-                    secret: jwtConstants.secret,
-                    expiresIn: '50s',
+                    secret: jwtConstants.secret
                 },
             ),
         };

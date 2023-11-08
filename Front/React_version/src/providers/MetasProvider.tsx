@@ -14,12 +14,16 @@ export function MetasProvider({ children }: MetasProviderProps) {
     const { user } = useAuth();
 
     useEffect(() => {
-        async function loadTransacoes() {
+        async function loadMetas() {
             if (!user) return
-            const response = await axios.get(`${api_url}Meta?id_usuario=${user.id}`)
+            const response = await axios.get(`${api_url}Meta`, {
+                headers: {
+                    Authorization: `Bearer ${user.access_token}`
+                }
+            })
             setMetas(response.data)
         }
-        loadTransacoes()
+        loadMetas()
     }, [])
 
     return (

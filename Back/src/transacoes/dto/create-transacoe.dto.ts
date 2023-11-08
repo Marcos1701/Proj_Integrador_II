@@ -1,7 +1,14 @@
+import { ApiProperty } from "@nestjs/swagger";
 import { IsEnum, IsJWT, IsNotEmpty, IsOptional, IsPositive, IsString, IsUUID } from "class-validator";
 
 export class CreateTransacoeDto {
 
+  @ApiProperty({
+    description: "Tipo da transação",
+    type: String,
+    enum: ['entrada', 'saida'],
+    default: "entrada"
+  })
   @IsEnum(
     {
       E: 'entrada',
@@ -13,6 +20,11 @@ export class CreateTransacoeDto {
   )
   tipo: 'entrada' | 'saida';
 
+  @ApiProperty({
+    description: "Valor da transação",
+    type: Number,
+    default: 0
+  })
   @IsPositive(
     {
       message: "Valor inválido"
@@ -20,6 +32,13 @@ export class CreateTransacoeDto {
   )
   valor: number;
 
+  @ApiProperty({
+    description: "Titulo da transação",
+    type: String,
+    maxLength: 100,
+    minLength: 3,
+    default: "Titulo da transação"
+  })
   @IsNotEmpty(
     {
       message: "Título não informado"
@@ -27,6 +46,13 @@ export class CreateTransacoeDto {
   )
   titulo: string;
 
+  @ApiProperty({
+    description: "Descrição da transação",
+    type: String,
+    maxLength: 250,
+    minLength: 3,
+    default: "Descrição da transação"
+  })
   @IsOptional(
     {
       message: "Descrição inválida",
@@ -38,6 +64,11 @@ export class CreateTransacoeDto {
   )
   descricao?: string;
 
+  @ApiProperty({
+    description: "ID da categoria",
+    type: String,
+    default: "00000000-0000-0000-0000-000000000000"
+  })
   @IsUUID("all", {
     message: "ID da categoria inválido"
   })

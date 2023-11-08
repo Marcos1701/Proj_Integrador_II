@@ -56,7 +56,7 @@ export function Categoria({ categoria }: { categoria: ICategoria }) {
     return (
         <div className="categoria" id={categoria.id}>
             <div className="categoria-icon">
-                <img src={categoria.icone ? categoria.icone : "/assets/icons/Icon-barraquinha.svg"} alt={categoria.nome} />
+                <img src={categoria.icone ? `assets/icons/${categoria.icone}.svg` : "/assets/icons/barraquinha.svg"} alt={categoria.nome} />
             </div>
 
             <div className="categoria-info">
@@ -66,7 +66,7 @@ export function Categoria({ categoria }: { categoria: ICategoria }) {
             <div className="categoria-valores">
                 <p id="valorGasto">{valorGasto < 0 ? `R$ 0` : `R$ ${valorGasto}`
                 }</p>
-                {valorOrcamento != undefined && <p id="valorOrcamento">{valorOrcamento}</p>}
+                {valorOrcamento != undefined && <p id="valorOrcamento">R$ {valorOrcamento}</p>}
             </div>
         </div>
     )

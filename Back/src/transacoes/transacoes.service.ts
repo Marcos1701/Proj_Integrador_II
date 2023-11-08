@@ -66,6 +66,9 @@ export class TransacoesService {
         usuario: {
           id: usuario.id
         }
+      },
+      relations: { // retorna a categoria da transação
+        categoria: true
       }
     });
   }
@@ -98,13 +101,6 @@ export class TransacoesService {
       throw new BadRequestException('Nenhum dado para atualizar'); // 400
     }
 
-    if (updateTransacoeDto.titulo && updateTransacoeDto.titulo.length > 100) {
-      throw new BadRequestException('Título muito longo'); // 400
-    }
-
-    if (updateTransacoeDto.descricao && updateTransacoeDto.descricao.length > 250) {
-      throw new BadRequestException('Descrição muito longa'); // 400
-    }
     const usuario = await this.getUserFromtoken(access_token);
 
     const transacao: Transacao = await this.entityManager.findOne(
@@ -113,7 +109,10 @@ export class TransacoesService {
         id,
         usuario: {
           id: usuario.id
-        }
+        },
+      },
+      relations: {
+        categoria: true
       }
     });
 
@@ -144,7 +143,15 @@ export class TransacoesService {
           }
         });
       if (!categoriaNova) {
-        await this.entityManager.save(transacao);
+        await this.entityManager.update(
+          Transacao, {
+          id,
+          usuario: {
+            id: usuario.id
+          }
+        },
+          { ...transacao }
+        );
         throw new NotFoundException('Categoria não encontrada');
       }
 
@@ -194,7 +201,7 @@ export class TransacoesService {
     const usuario = this.entityManager.findOneBy(
       Usuario,
       {
-        email: data.email
+        id: data.id
       })
 
     if (!usuario) {

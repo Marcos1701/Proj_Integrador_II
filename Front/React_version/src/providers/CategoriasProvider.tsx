@@ -26,18 +26,18 @@ export function CategoriasProvider({ children }: CategoriasProviderProps) {
         async function loadCategorias() {
             if (!user) return
 
-            const orderQuery = orders ? `&order=${JSON.stringify(orders)}` : ''
+            const orderQuery = orders ? Object.entries(orders).map(([key, val]) => `&order[${key}]=${val}`).join('&') : ''
             const searchQuery = search ? `&search=${search}` : ''
 
-            const CategoriasResponse = await axios.get<ICategoria[]>(`${api_url}categorias${orderQuery}${searchQuery}`,
-                {
+            const CategoriasResponse = await axios.get<ICategoria[]>(`${api_url}categorias${orderQuery.length > 0 || searchQuery.length > 0 ? '?' : ''}${orderQuery}${searchQuery}`
+                , {
                     headers: {
-                        Authorization: `Bearer ${user.access_token}`
+                        getAuthorization: true,
+                        Authorization: user.access_token
                     }
-                }
-            )
+                })
 
-            if (CategoriasResponse.status == 404) {
+            if (CategoriasResponse.status == 404 || !CategoriasResponse.data) {
                 console.log('Categorias not found')
                 return
             }
@@ -46,7 +46,7 @@ export function CategoriasProvider({ children }: CategoriasProviderProps) {
         }
 
         loadCategorias()
-    }, [])
+    }, [user, orders, search])
 
     const value: CategoriasOrderContextData = {
         order: { order: orders, setOrder: setOrders },

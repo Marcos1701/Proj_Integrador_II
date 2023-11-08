@@ -97,11 +97,10 @@ export class Usuario {
   }
 
   getCategorias(order: 'ASC' | 'DESC' = 'ASC', orderby?: CategoriasorderBy, search?: string): Categoria[] {
-    console.log(this.categorias) // undefined, mesmo tendo categorias
-    // para resolver isso, basta adicionar eager: true na relação entre usuario e categoria
+
     if (!this.categorias) { return [] }
 
-    let CategoriasOrdenadas: Categoria[] = this.categorias.sort((a, b) => order !== 'DESC' ? a.dataCriacao.getTime() - b.dataCriacao.getTime() : b.dataCriacao.getTime() - a.dataCriacao.getTime())
+    let CategoriasOrdenadas: Categoria[] = this.categorias.sort((a, b) => order != 'DESC' ? a.dataCriacao.getTime() - b.dataCriacao.getTime() : b.dataCriacao.getTime() - a.dataCriacao.getTime())
 
     if (orderby) {
       if (orderby == CategoriasorderBy.nome) { CategoriasOrdenadas = CategoriasOrdenadas.sort((a, b) => order !== 'DESC' ? a.nome.localeCompare(b.nome) : b.nome.localeCompare(a.nome)) }
@@ -112,7 +111,6 @@ export class Usuario {
     if (search) {
       CategoriasOrdenadas = CategoriasOrdenadas.filter(categoria => categoria.nome.toLowerCase().includes(search.toLowerCase()))
     }
-    console.log(CategoriasOrdenadas)
 
     return CategoriasOrdenadas;
   }

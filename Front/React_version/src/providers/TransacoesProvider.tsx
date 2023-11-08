@@ -16,7 +16,16 @@ export function TransacoesProvider({ children }: TransacoesProviderProps) {
     useEffect(() => {
         async function loadTransacoes() {
             if (!user) return
-            const response = await axios.get<ITransacao[]>(`${api_url}Transacao?id_usuario=${user.id}`)
+            const response = await axios.get<ITransacao[]>(`${api_url}transacoes`, {
+                headers: {
+                    Authorization: user.access_token
+                }
+            })
+            if (response.status === 401 || !response.data) {
+                alert('Sessão expirada')
+                return
+            }
+            console.log(response.data)
             setTransacoes(response.data.sort((a, b) => {
                 const dateA = new Date(a.data)
                 const dateB = new Date(b.data)
