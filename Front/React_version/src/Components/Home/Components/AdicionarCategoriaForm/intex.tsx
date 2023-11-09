@@ -51,11 +51,11 @@ export function AdicionarCategoriaForm({ setExibirAdicionarCategoriaForm }: IAdi
             }
 
         const retorno = await axios.post<ICategoria>(`${api_url}categorias`, categoria, {
-            method: 'Post',
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: user.access_token
-            }
+            // method: 'Post',
+            // headers: {
+            //     'Content-Type': 'application/json',
+            //     Authorization: user.access_token
+            // }
         });
 
         if (retorno.status === 401) {

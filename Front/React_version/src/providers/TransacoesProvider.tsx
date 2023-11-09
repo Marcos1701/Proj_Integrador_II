@@ -18,7 +18,8 @@ export function TransacoesProvider({ children }: TransacoesProviderProps) {
             if (!user) return
             const response = await axios.get<ITransacao[]>(`${api_url}transacoes`, {
                 headers: {
-                    Authorization: user.access_token
+                    getAuthorization: true,
+                    Authorization: user.access_token,
                 }
             })
             if (response.status === 401 || !response.data) {

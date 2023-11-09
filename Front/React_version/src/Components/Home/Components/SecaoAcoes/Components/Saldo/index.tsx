@@ -2,22 +2,28 @@ import { ITransacao } from "../../../../../Transacao";
 import { useContext, useEffect, useState } from "react";
 import './Saldo.css'
 import { TransacoesContext } from "../../../../../../Contexts/TransacoesContext";
+import axios from "axios";
+import { api_url, useAuth } from "../../../../../../Contexts/AuthContext";
 
 
 export function Saldo() {
     const transacoes: ITransacao[] = useContext<ITransacao[]>(TransacoesContext);
     const [saldo, setSaldo] = useState<number>(0);
+    const { user } = useAuth();
+    if (!user) return <p>Usuário não encontrado</p>
 
     useEffect(() => {
-        const saldo: number = transacoes.reduce((acc: number, transacao: ITransacao) => {
-            if (transacao.tipo === 'Entrada') {
-                return acc + transacao.valor
-            }
-            return acc - transacao.valor // Saída
-        }, 0)
-        setSaldo(saldo)
+        const getSaldo = async () => {
+            const saldo: number = await (await axios.get<number>(`${api_url}usuarios/saldo`, {
+                headers: {
+                    getAuthorization: true,
+                    Authorization: user.access_token
+                }
+            })).data
+            setSaldo(saldo);
+        }
+        getSaldo()
     }, [transacoes])
-
 
     const realizarTratamentoSaldo = (saldo: number) => {
         //O tipo 'boolean' não pode ser comparável ao tipo 'number'

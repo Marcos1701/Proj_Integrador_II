@@ -1,7 +1,5 @@
-// import axios from "axios";
 import axios from "axios";
 import React, { createContext, useContext, useMemo, useState } from "react";
-// import { ulid } from 'ulidx';
 
 export type User = {
     nome: string;
@@ -64,6 +62,9 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         }
 
         setUser(response.data);
+        // axios.defaults.headers.common['Authorization'] = response.data.access_token;
+        // axios.defaults.headers.get.Authorization = true;
+        // axios.defaults.headers.common["Content-Type"] = "application/json";
     }
 
     const singup = async (user: singupData): Promise<string | void> => {
@@ -81,11 +82,16 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
             localStorage.setItem('access_token', JSON.stringify(response.data))
         }
         setUser(response.data);
+        // axios.defaults.headers.common['Authorization'] = response.data.access_token;
+        // axios.defaults.headers.get.Authorization = true;
+        // axios.defaults.headers.common["Content-Type"] = "application/json";
     }
 
     const signout = (): void => {
         setUser(null);
         localStorage.removeItem('access_token');
+        // axios.defaults.headers.common['Authorization'] = null;
+        // axios.defaults.headers.get.Authorization = false;
     }
 
     const value = useMemo(() => ({

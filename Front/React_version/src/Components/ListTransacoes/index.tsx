@@ -28,7 +28,7 @@ export function ListTransacoes({ page = 1, limit = 2, pagination = true }: IList
                             (transacao: ITransacao) => {
                                 const categoria: ICategoria | undefined = categorias.find(
                                     (categoria: ICategoria) => {
-                                        return categoria.id === transacao.id_categoria
+                                        return categoria.id === transacao.categoriaid
                                     }
                                 );
 

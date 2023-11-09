@@ -2,7 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Header, H
 import { TransacoesService } from './transacoes.service';
 import { CreateTransacoeDto } from './dto/create-transacoe.dto';
 import { UpdateTransacoeDto } from './dto/update-transacoe.dto';
-import { TransacoesorderBy, ordenarTransacoes } from 'src/usuarios/entities/usuario.entity';
+import { TransacoesorderBy } from 'src/usuarios/entities/usuario.entity';
 
 @Controller('transacoes')
 export class TransacoesController {
@@ -10,7 +10,6 @@ export class TransacoesController {
 
   @Post('')
   async create(@Headers('Authorization') access_token: string, @Body() createTransacoeDto: CreateTransacoeDto) {
-    console.log(createTransacoeDto);
     return this.transacoesService.create(createTransacoeDto, access_token);
   }
 

@@ -61,12 +61,14 @@ export class Usuario {
   senha: string;
 
   @OneToMany(type => Categoria, categoria => categoria.usuario, {
-    eager: true // dessa forma, quando o usuario for buscado, as categorias também serão
+    eager: true, // dessa forma, quando o usuario for buscado, as categorias também serão
+    cascade: true // dessa forma, quando o usuario for deletado, as categorias também serão
   })
   categorias: Categoria[];
 
   @OneToMany(type => Transacao, transacao => transacao.usuario, {
-    eager: true // dessa forma, quando o usuario for buscado, as transacoes também serão
+    eager: true, // dessa forma, quando o usuario for buscado, as transacoes também serão
+    cascade: true // dessa forma, quando o usuario for deletado, as transacoes também serão
   })
   transacoes: Transacao[];
 

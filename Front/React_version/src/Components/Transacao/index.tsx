@@ -1,10 +1,10 @@
 import { ICategoria } from "../Categoria";
 import './Transacao.css'
+import { Usuario } from '../../../../../Back/src/usuarios/entities/usuario.entity';
 
 export interface ITransacao {
     id: string;
-    id_categoria: string;
-    id_usuario: string;
+    categoriaid: string;
     nome: string;
     tipo: "Saida" | "Entrada";
     valor: number;

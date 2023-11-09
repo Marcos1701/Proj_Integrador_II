@@ -88,10 +88,15 @@ export class UsuariosService {
     };
   }
 
-  remove(JWT: string) {
+  remove(access_token: string) {
     return this.entityManager.delete(
-      Usuario, { JWT }
+      Usuario, { JWT: access_token }
     );
+  }
+
+  async getSaldo(access_token: string) {
+    const usuario = await this.getUserFromtoken(access_token)
+    return usuario.saldo
   }
 
   private getUserFromtoken(token: string): Promise<Usuario> {

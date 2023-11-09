@@ -79,7 +79,7 @@ export function AdicionarTransacaoForm({ setExibirAdicionarTransacaoForm }: IAdi
         await axios.post(`${api_url}transacoes`, transacao, {
             method: 'Post',
             headers: {
-                'Content-Type': 'application/json',
+                getAuthorization: true,
                 Authorization: user.access_token
             },
         }).then(res => res.data).catch(err => {

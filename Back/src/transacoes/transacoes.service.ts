@@ -26,7 +26,10 @@ export class TransacoesService {
           id: createTransacoeDto.categoriaid,
           usuario: {
             id: usuario.id
-          }
+          },
+        },
+        relations: {
+          usuario: true
         }
       });
 
@@ -195,14 +198,20 @@ export class TransacoesService {
     return result;
   }
 
-  private getUserFromtoken(token: string): Promise<Usuario> {
+  private async getUserFromtoken(token: string): Promise<Usuario> {
     const data = this.jwtService.decode(token) as jwtDecodeUser
 
-    const usuario = this.entityManager.findOneBy(
+    const usuario = await this.entityManager.findOne(
       Usuario,
       {
-        id: data.id
-      })
+        where: {
+          id: data.id
+        },
+        relations: {
+          categorias: true
+        }
+      }
+    )
 
     if (!usuario) {
       console.log('Usuário não encontrado');

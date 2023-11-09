@@ -58,7 +58,8 @@ export class CategoriasService {
 
   async findAll(usertoken: string, orderby?: CategoriasorderBy, order?: 'ASC' | 'DESC', search?: string) {
     const usuario: Usuario = await this.getUserFromtoken(usertoken);
-    return usuario.getCategorias(order, orderby, search);
+    const categorias = usuario.getCategorias(order, orderby, search);
+    return categorias;
   }
 
   async update(id: string, updateCategoriaDto: UpdateCategoriaDto, access_token: string) {
