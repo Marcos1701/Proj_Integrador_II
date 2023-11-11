@@ -26,10 +26,10 @@ export function TransacoesProvider({ children }: TransacoesProviderProps) {
                 alert('Sessão expirada')
                 return
             }
-            console.log(response.data)
+
             setTransacoes(response.data.sort((a, b) => {
-                const dateA = new Date(a.data)
-                const dateB = new Date(b.data)
+                const dateA = new Date(a.dataCriacao)
+                const dateB = new Date(b.dataCriacao)
                 return dateA > dateB ? -1 : dateA < dateB ? 1 : 0
             })
             ) // ordenar pela data

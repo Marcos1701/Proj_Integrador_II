@@ -1,6 +1,6 @@
 import { Categoria } from 'src/categorias/entities/categoria.entity';
 import { Transacao } from 'src/transacoes/entities/transacao.entity';
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 export enum CategoriasorderBy {
   nome = "nome",
@@ -22,6 +22,17 @@ export interface ordenarTransacoes {
   tipo?: 'entrada' | 'saida';
   categoriaid?: string;
 }
+
+export interface returnTransacao {
+  id: string;
+  tipo: 'entrada' | 'saida';
+  valor: number;
+  titulo: string;
+  descricao?: string;
+  dataCriacao: Date;
+  categoriaid: string;
+}
+
 
 @Entity()
 export class Usuario {
@@ -61,30 +72,36 @@ export class Usuario {
   senha: string;
 
   @OneToMany(type => Categoria, categoria => categoria.usuario, {
-    eager: true, // dessa forma, quando o usuario for buscado, as categorias também serão
     cascade: true // dessa forma, quando o usuario for deletado, as categorias também serão
   })
   categorias: Categoria[];
 
   @OneToMany(type => Transacao, transacao => transacao.usuario, {
-    eager: true, // dessa forma, quando o usuario for buscado, as transacoes também serão
-    cascade: true // dessa forma, quando o usuario for deletado, as transacoes também serão
+    cascade: true, // dessa forma, quando o usuario for deletado, as transacoes também serão
   })
   transacoes: Transacao[];
+
 
   constructor(usuario: Partial<Usuario>) {
     Object.assign(this, usuario);
   }
 
-  getTransacoes(order: 'ASC' | 'DESC' = 'ASC', orderby?: TransacoesorderBy, search?: string, categoriaid?: string): Transacao[] {
+  getTransacoes(order: 'ASC' | 'DESC' = 'ASC', orderby?: TransacoesorderBy, search?: string, categoriaid?: string): returnTransacao[] {
     if (!this.transacoes) { return [] }
-    let TransacoesOrdenadas: Transacao[] = this.transacoes.sort((a, b) => order !== 'DESC' ? a.dataCriacao.getTime() - b.dataCriacao.getTime() : b.dataCriacao.getTime() - a.dataCriacao.getTime());
+    let TransacoesOrdenadas: returnTransacao[] = this.transacoes.map(transacao => {
+      const { categoria, ...retorno } = transacao;
+
+      return {
+        ...retorno,
+        categoriaid: categoria.id
+      }
+    }).sort((a, b) => order != 'DESC' ? a.dataCriacao.getTime() - b.dataCriacao.getTime() : b.dataCriacao.getTime() - a.dataCriacao.getTime())
 
     if (orderby) {
       if (orderby == TransacoesorderBy.titulo) { TransacoesOrdenadas = TransacoesOrdenadas.sort((a, b) => order !== 'DESC' ? a.titulo.localeCompare(b.titulo) : b.titulo.localeCompare(a.titulo)) }
       if (orderby == TransacoesorderBy.valor) { TransacoesOrdenadas = TransacoesOrdenadas.sort((a, b) => order !== 'DESC' ? a.valor - b.valor : b.valor - a.valor) }
       if (orderby == TransacoesorderBy.entrada || orderby == TransacoesorderBy.saida) { TransacoesOrdenadas = TransacoesOrdenadas.filter(transacao => transacao.tipo === orderby) }
-      if (categoriaid) { TransacoesOrdenadas = TransacoesOrdenadas.filter(transacao => transacao.categoria.id === categoriaid) }
+      if (categoriaid) { TransacoesOrdenadas = TransacoesOrdenadas.filter(transacao => transacao.categoriaid === categoriaid) }
     }
 
     if (search) {

@@ -42,11 +42,13 @@ export class Transacao {
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   dataCriacao: Date;
 
-  @ManyToOne(() => Usuario)
+  @ManyToOne(() => Usuario, (usuario) => usuario.transacoes)
   @JoinColumn() // serve para indicar qual coluna vai ser a chave estrangeira
   usuario: Usuario; // usuario é o nome da coluna na tabela transacao
 
-  @ManyToOne(() => Categoria)
+  @ManyToOne(() => Categoria, (categoria) => categoria.transacoes, {
+    eager: true,
+  })
   @JoinColumn()
   categoria: Categoria;
 

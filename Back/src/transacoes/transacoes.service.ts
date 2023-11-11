@@ -69,15 +69,12 @@ export class TransacoesService {
         usuario: {
           id: usuario.id
         }
-      },
-      relations: { // retorna a categoria da transação
-        categoria: true
       }
     });
   }
 
   async findAll(usuariotoken: string, orderby?: TransacoesorderBy, order?: 'ASC' | 'DESC', search?: string, categoriaid?: string) {
-    const usuario = await this.getUserFromtoken(usuariotoken);
+    const usuario = await this.getUserFromtoken(usuariotoken, ['transacoes']);
 
     if (!usuario) {
       throw new NotFoundException('Usuário não encontrado');
@@ -198,7 +195,7 @@ export class TransacoesService {
     return result;
   }
 
-  private async getUserFromtoken(token: string): Promise<Usuario> {
+  private async getUserFromtoken(token: string, relations?: string[]): Promise<Usuario> {
     const data = this.jwtService.decode(token) as jwtDecodeUser
 
     const usuario = await this.entityManager.findOne(
@@ -208,7 +205,8 @@ export class TransacoesService {
           id: data.id
         },
         relations: {
-          categorias: true
+          categorias: relations && relations.includes('categorias') ? true : false,
+          transacoes: relations && relations.includes('transacoes') ? true : false
         }
       }
     )
