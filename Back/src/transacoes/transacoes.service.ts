@@ -53,6 +53,8 @@ export class TransacoesService {
       categoria.gasto += result.valor;
     }
 
+    this.entityManager.save(categoria);
+
     return result;
   }
 

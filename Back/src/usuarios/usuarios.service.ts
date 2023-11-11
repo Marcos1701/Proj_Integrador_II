@@ -99,6 +99,11 @@ export class UsuariosService {
     return usuario.saldo
   }
 
+  async me(access_token: string) {
+    const usuario = await this.getUserFromtoken(access_token)
+    return usuario
+  }
+
   private getUserFromtoken(token: string): Promise<Usuario> {
     const data = this.jwtService.decode(token) as jwtDecodeUser
 

@@ -61,4 +61,14 @@ export class Categoria {
   updateData(categoria: Partial<Categoria>) {
     Object.assign(this, categoria);
   }
+
+  atualizaGasto() {
+    this.gasto = this.transacoes.reduce((acc, curr) => {
+      if (curr.tipo === 'entrada') {
+        return acc + curr.valor;
+      } else {
+        return acc - curr.valor;
+      }
+    }, 0);
+  }
 }

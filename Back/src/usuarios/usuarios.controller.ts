@@ -2,6 +2,7 @@ import { Controller, Get, Body, Patch, Delete, UseGuards, Param, Headers } from 
 import { UsuariosService } from './usuarios.service';
 import { UpdateUsuarioDto } from './dto/update-usuario.dto';
 import { ApiBody, ApiResponse } from '@nestjs/swagger';
+import { Usuario } from './entities/usuario.entity';
 
 @Controller('usuarios')
 export class UsuariosController {
@@ -99,6 +100,25 @@ export class UsuariosController {
   @Get('perfil')
   perfil(@Body() { email }: { email: string }) {
     return this.usuariosService.findOneByEmail(email);
+  }
+
+  @ApiResponse({
+    status: 200,
+    description: 'O usuário foi encontrado com sucesso',
+    type: Usuario,
+    schema: {
+      example: {
+        id: 'xxxx-yyyy-zzzz-xxxx-yyyy-zzzz',
+        nome: 'Fulano',
+        email: 'zedamanga123@gmail.com',
+        senha: '123456789',
+        saldo: 0,
+      }
+    }
+  }) // retorna o usuario encontrado
+  @Get('me')
+  me(@Headers('Authorization') access_token: string) {
+    return this.usuariosService.me(access_token);
   }
 
   @Get('saldo')
