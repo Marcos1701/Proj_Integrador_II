@@ -6,6 +6,9 @@ import {
   Column,
   JoinColumn,
   ManyToOne,
+  AfterInsert,
+  AfterUpdate,
+  AfterRemove,
 } from 'typeorm';
 
 @Entity()
@@ -59,4 +62,12 @@ export class Transacao {
   updateData(transacao: Partial<Transacao>) {
     Object.assign(this, transacao);
   }
+
+  @AfterInsert()
+  @AfterUpdate()
+  @AfterRemove()
+  async atualizaGastoCategoria() {
+    await this.categoria.atualizaGasto();
+  }
+
 }
