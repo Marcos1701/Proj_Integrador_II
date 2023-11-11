@@ -22,10 +22,6 @@ export class CategoriasService {
   async create(createCategoriaDto: CreateCategoriaDto, token: string) {
     const usuario = await this.getUserFromtoken(token);
 
-    if (!usuario) {
-      throw new NotFoundException('Usuário não encontrado'); // 404
-    }
-
     if (!createCategoriaDto.nome) {
       throw new BadRequestException('Nome da categoria não informado'); // 400
     }
@@ -58,7 +54,8 @@ export class CategoriasService {
 
   async findAll(usertoken: string, orderby?: CategoriasorderBy, order?: 'ASC' | 'DESC', search?: string) {
     const usuario: Usuario = await this.getUserFromtoken(usertoken);
-    return usuario.getCategorias(order, orderby, search);
+    const categorias = usuario.getCategorias(order, orderby, search);
+    return categorias;
   }
 
   async update(id: string, updateCategoriaDto: UpdateCategoriaDto, access_token: string) {
@@ -102,10 +99,16 @@ export class CategoriasService {
   private getUserFromtoken(token: string): Promise<Usuario> {
     const data = this.jwtService.decode(token) as jwtDecodeUser
 
-    const usuario = this.entityManager.findOneBy(
+    const usuario = this.entityManager.findOne(
       Usuario,
       {
-        id: data.id
+        where: {
+          id: data.id
+        },
+        relations: {
+          categorias: true,
+          transacoes: true
+        }
       })
 
     if (!usuario) {

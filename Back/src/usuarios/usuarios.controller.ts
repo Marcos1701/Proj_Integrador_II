@@ -1,4 +1,4 @@
-import { Controller, Get, Body, Patch, Delete, UseGuards } from '@nestjs/common';
+import { Controller, Get, Body, Patch, Delete, UseGuards, Param, Headers } from '@nestjs/common';
 import { UsuariosService } from './usuarios.service';
 import { UpdateUsuarioDto } from './dto/update-usuario.dto';
 import { ApiBody, ApiResponse } from '@nestjs/swagger';
@@ -99,6 +99,11 @@ export class UsuariosController {
   @Get('perfil')
   perfil(@Body() { email }: { email: string }) {
     return this.usuariosService.findOneByEmail(email);
+  }
+
+  @Get('saldo')
+  getSaldo(@Headers('Authorization') access_token: string) {
+    return this.usuariosService.getSaldo(access_token);
   }
 
 }

@@ -50,7 +50,7 @@ export class Categoria {
   usuario: Usuario;
 
   @OneToMany(() => Transacao, (transacao) => transacao.categoria, {
-    eager: true // quando for buscar uma categoria, já traz as transações junto
+    cascade: true
   })
   transacoes: Transacao[];
 

@@ -4,6 +4,7 @@ import { ICategoria } from "../Categoria";
 import { ITransacao, Transacao } from "../Transacao"
 import { useContext, useState } from "react";
 import './ListTransacoes.css'
+import { ulid } from "ulidx";
 
 
 interface IListTransacoesProps {
@@ -19,7 +20,7 @@ export function ListTransacoes({ page = 1, limit = 2, pagination = true }: IList
     const [pageAtual, setPageAtual] = useState<number>(page);
 
     return (
-        <div className="list_transacoes" >
+        <div className="list_transacoes" key={"key" + ulid()}>
             <ul className="list-values-2columns" id="list-Transacoes">
                 {
                     transacoes
@@ -28,7 +29,7 @@ export function ListTransacoes({ page = 1, limit = 2, pagination = true }: IList
                             (transacao: ITransacao) => {
                                 const categoria: ICategoria | undefined = categorias.find(
                                     (categoria: ICategoria) => {
-                                        return categoria.id === transacao.id_categoria
+                                        return categoria.id === transacao.categoriaid
                                     }
                                 );
 
@@ -37,7 +38,7 @@ export function ListTransacoes({ page = 1, limit = 2, pagination = true }: IList
                                 }
 
                                 return (
-                                    <li key={"key" + transacao.id}>
+                                    <li>
                                         <Transacao
                                             transacao={transacao}
                                             categoria={categoria}
