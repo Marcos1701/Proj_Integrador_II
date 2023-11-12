@@ -15,8 +15,8 @@ export class CategoriasController {
     status: 201,
     description: 'Cria uma nova categoria',
     type: CreateCategoriaDto,
-    schema:{
-      example:{
+    schema: {
+      example: {
         "nome": "string",
         "descricao": "string"
       }
@@ -36,8 +36,8 @@ export class CategoriasController {
     status: 200,
     description: 'Retorna todas as categorias',
     type: CreateCategoriaDto,
-    schema:{
-      example:{
+    schema: {
+      example: {
         "nome": "string",
         "descricao": "string"
       }
@@ -78,8 +78,8 @@ export class CategoriasController {
     status: 200,
     description: 'Retorna uma categoria',
     type: CreateCategoriaDto,
-    schema:{
-      example:{
+    schema: {
+      example: {
         "nome": "string",
         "descricao": "string"
       }
@@ -90,16 +90,16 @@ export class CategoriasController {
     description: 'ID da categoria'
   })
   @Get(':id')
-  async findOne(@Param('id') id: string, @Headers('Authorization') token: string) {
-    return this.categoriasService.findOne(id, token);
+  async findOne(@Param('id') id: string, @Headers('Authorization') access_token: string) {
+    return this.categoriasService.findOne(id, access_token);
   }
 
   @ApiResponse({
     status: 200,
     description: 'Atualiza uma categoria',
     type: CreateCategoriaDto,
-    schema:{
-      example:{
+    schema: {
+      example: {
         "nome": "string",
         "descricao": "string"
       }
@@ -123,7 +123,7 @@ export class CategoriasController {
     description: 'ID da categoria'
   })
   @Delete(':id')
-  async remove(@Param('id') id: string) {
-    return this.categoriasService.remove(id);
+  async remove(@Param('id') id: string, @Headers('Authorization') access_token: string) {
+    return this.categoriasService.remove(id, access_token);
   }
 }

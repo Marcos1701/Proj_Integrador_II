@@ -29,7 +29,8 @@ export class TransacoesService {
           },
         },
         relations: {
-          usuario: true
+          usuario: true,
+          transacoes: true
         }
       });
 
@@ -37,23 +38,26 @@ export class TransacoesService {
       throw new NotFoundException('Categoria não encontrada');
     }
 
-    const result = await this.entityManager.save(
-      Transacao, {
-      ...createTransacoeDto,
-      categoria: categoria,
-      usuario: categoria.usuario
-    });
+    if (createTransacoeDto.tipo === 'saida' && categoria.gasto + createTransacoeDto.valor > categoria.orcamento) {
+      throw new BadRequestException('O valor da transação excede o orçamento da categoria');
+    }
+
+    const transacao = new Transacao({ ...createTransacoeDto, usuario, categoria: categoria });
+
+    const result = await this.entityManager.save<Transacao>(transacao);
 
     if (!result) {
       throw new NotFoundException('Transação não encontrada');
     }
     if (result.tipo === 'entrada') {
-      categoria.gasto -= result.valor;
+      categoria.gasto = categoria.gasto - result.valor <= 0 ? 0 : categoria.gasto - result.valor;
     } else {
       categoria.gasto += result.valor;
     }
+    usuario.saldo += result.tipo === 'entrada' ? result.valor : -result.valor;
 
     this.entityManager.save(categoria);
+    this.entityManager.save(usuario);
 
     return result;
   }
@@ -157,6 +161,19 @@ export class TransacoesService {
         throw new NotFoundException('Categoria não encontrada');
       }
 
+      if (updateTransacoeDto.tipo === 'saida' && categoriaNova.gasto + updateTransacoeDto.valor > categoriaNova.orcamento) {
+        await this.entityManager.update(
+          Transacao, {
+          id,
+          usuario: {
+            id: usuario.id
+          }
+        },
+          { ...transacao }
+        );
+        throw new BadRequestException('O valor da transação excede o orçamento da categoria');
+      }
+
       if (transacao.tipo === 'entrada') {
         categoriaAntiga.gasto -= transacao.valor;
       } else {
@@ -169,9 +186,14 @@ export class TransacoesService {
         categoriaNova.gasto -= updateTransacoeDto.valor;
       }
 
-      this.entityManager.save(categoriaAntiga);
-      this.entityManager.save(categoriaNova);
+      usuario.saldo = transacao.tipo === 'entrada' ? usuario.saldo - transacao.valor : usuario.saldo + transacao.valor;
+
+      await this.entityManager.save(categoriaAntiga);
+      await this.entityManager.save(categoriaNova);
+
     }
+    usuario.saldo = updateTransacoeDto.tipo === 'entrada' ? usuario.saldo + updateTransacoeDto.valor : usuario.saldo - updateTransacoeDto.valor;
+    await this.entityManager.save(usuario);
 
     return result;
   }
@@ -183,7 +205,18 @@ export class TransacoesService {
     }
 
     const usuario = await this.getUserFromtoken(usuariotoken);
-    const result: DeleteResult = await this.entityManager.delete(
+
+    const transacao: Transacao = await this.entityManager.findOne(
+      Transacao, {
+      where: {
+        id,
+        usuario: {
+          id: usuario.id
+        },
+      },
+    }
+    );
+    const result: DeleteResult = await this.entityManager.delete<Transacao>(
       Transacao, {
       id,
       usuario: {
@@ -194,6 +227,8 @@ export class TransacoesService {
     if (result.affected === 0) {
       throw new NotFoundException('Transação não encontrada');
     }
+    usuario.saldo = transacao.tipo === 'entrada' ? usuario.saldo - transacao.valor : usuario.saldo + transacao.valor;
+    await this.entityManager.save(usuario);
     return result;
   }
 

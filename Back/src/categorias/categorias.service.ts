@@ -53,8 +53,10 @@ export class CategoriasService {
   }
 
   async findAll(usertoken: string, orderby?: CategoriasorderBy, order?: 'ASC' | 'DESC', search?: string) {
+
     const usuario: Usuario = await this.getUserFromtoken(usertoken);
     const categorias = usuario.getCategorias(order, orderby, search);
+
     return categorias;
   }
 
@@ -89,11 +91,28 @@ export class CategoriasService {
     return result
   }
 
-  async remove(id: string) {
+  async remove(id: string, access_token: string) {
     if (!id || id === '') {
       throw new BadRequestException('id da categoria não informado'); // 404
     }
-    await this.categoriasRepository.delete(id);
+    const usuario = await this.getUserFromtoken(access_token);
+
+    const result = await this.entityManager.delete(
+      Categoria, {
+      id,
+      usuario: {
+        id: usuario.id
+      },
+      relations: {
+        usuario: true // para que atualize o saldo do usuario ao deletar a categoria (metodo @AfterRemove seja chamado)
+      }
+    });
+
+    if (result.affected === 0) {
+      throw new NotFoundException('Categoria não encontrada');
+    }
+
+    return result;
   }
 
   private getUserFromtoken(token: string): Promise<Usuario> {
