@@ -20,7 +20,7 @@ export function Meta({ meta }: { meta: IMeta }) {
                     meta.icon ? meta.icon : 'assets/icons/dollar-bill.svg'
                 } alt={
                     meta.icon_label ? meta.icon_label : 'Icone de uma nota de dólar'
-                } />
+                } className='icon' />
             </div>
 
             <div className="meta-info">

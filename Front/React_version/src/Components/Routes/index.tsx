@@ -4,6 +4,7 @@ import { Home } from "../Home";
 import { LoginPage } from "../Auth/LoginPage";
 import { RegisterPage } from "../Auth/RegisterPage";
 import { TransacoesPage } from "../TransacoesPage";
+import { CategoriasPage } from "../CategoriasPage";
 
 export function PatchRoutes() {
     return (
@@ -23,7 +24,7 @@ export function PatchRoutes() {
 
             <Route path="/Categorias" element={
                 <ProtectedRoute>
-                    <h1>Categorias</h1>
+                    <CategoriasPage />
                 </ProtectedRoute>
             } />
 

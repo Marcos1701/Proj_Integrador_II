@@ -23,7 +23,7 @@ export function Home() {
           <Link to="/Categorias" className="title-section" id="anchor-categorias-page"><h3>Categorias</h3></Link>
           <Link to="/Categorias" className="anchor-page" id="anchor-categorias">ver mais</Link>
         </div>
-        <ListCategorias />
+        <ListCategorias pagination={false} />
       </section>
 
       <section className="metas-home">
@@ -31,7 +31,7 @@ export function Home() {
           <Link to="/Metas" className="title-section" id="anchor-metas-page"><h3>Metas</h3></Link>
           <Link to="/Metas" className="anchor-page" id="anchor-metas">ver mais</Link>
         </div>
-        <ListMetas />
+        <ListMetas pagination={false} />
       </section>
     </main>
   )

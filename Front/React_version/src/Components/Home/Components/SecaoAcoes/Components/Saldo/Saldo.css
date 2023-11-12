@@ -61,8 +61,23 @@
 .saldo-info span::before {
     content: 'R$ ';
     font-size: 17.25px;
-    background: radial-gradient(167.28% 167.28% at 0% -12.5%, #FFF 0%, #E9E9E9 100%);
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+}
+
+.saldo-positivo {
+    color: #00FF00;
+
+    &::before {
+        background: #00FF00;
+    }
+}
+
+.saldo-negativo {
+    color: #FF0000;
+
+    &::before {
+        background: #FF0000;
+    }
 }

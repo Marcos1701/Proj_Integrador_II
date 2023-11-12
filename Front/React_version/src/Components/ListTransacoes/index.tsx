@@ -11,17 +11,19 @@ interface IListTransacoesProps {
     page?: number; // pagina atual
     limit?: number; // limite de transacoes por pagina
     pagination?: boolean; // se deve exibir a paginação
+    classname?: string;
 }
 
-export function ListTransacoes({ page = 1, limit = 2, pagination = true }: IListTransacoesProps) {
+export function ListTransacoes({ page = 1, limit = 2, pagination = true, classname = "list_transacoes" }: IListTransacoesProps) {
 
     const { transacoes }: TransacoesContextData = useContext(TransacoesContext)
     const categorias: ICategoria[] = useContext(CategoriasContext)
     const [pageAtual, setPageAtual] = useState<number>(page);
 
     return (
-        <div className="list_transacoes">
+        <div className={classname}>
             <ul className="list-values-2columns" id="listTransacoes">
+                {transacoes.length === 0 && <li className="empty">Nenhuma transação cadastrada</li>}
                 {
                     transacoes
                         .slice((pageAtual - 1) * limit, pageAtual * limit)

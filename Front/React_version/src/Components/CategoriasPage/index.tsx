@@ -1,11 +1,11 @@
 import { useState } from "react";
-import { ListTransacoes } from "../ListTransacoes";
 import { Navigate } from "react-router-dom";
+import { ListCategorias } from "../ListCategorias";
 
-export function TransacoesPage() {
-    // caso clicar no botão de voltar, redirecionar para a página inicial
+
+export function CategoriasPage() {
+
     const [voltar, setVoltar] = useState<boolean>(false);
-
     return (
         <main className="page">
             {voltar && <Navigate to={'/'} />}
@@ -24,12 +24,9 @@ export function TransacoesPage() {
                     </svg>
                 </button>
 
-                <h2 className="title">Transações</h2>
+                <h2 className="title">Categorias</h2>
             </div>
-
-            <ListTransacoes page={1} limit={6} classname="list_on_page"/>
-
+            <ListCategorias page={1} limit={6} classname="list_on_page" />
         </main>
     )
-
 }

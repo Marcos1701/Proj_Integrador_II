@@ -20,7 +20,7 @@ export function Categoria({ categoria }: { categoria: ICategoria }) {
     return (
         <div className="categoria" id={categoria.id}>
             <div className="categoria-icon">
-                <img src={categoria.icone ? `assets/icons/${categoria.icone}.svg` : "/assets/icons/barraquinha.svg"} alt={categoria.nome} />
+                <img src={categoria.icone ? `assets/icons/${categoria.icone}.svg` : "/assets/icons/barraquinha.svg"} alt={categoria.nome} className='icon' />
             </div>
 
             <div className="categoria-info">

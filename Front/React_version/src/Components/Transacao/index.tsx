@@ -36,7 +36,7 @@ export function Transacao({ transacao, categoria }: ITransacaoProps) {
                     categoria.icone ?
                         `/assets/icons/${categoria.icone}.svg` :
                         "/assets/icons/barraquinha.svg"
-                } alt={categoria.nome} />
+                } alt={categoria.nome} className='icon'/>
             </div>
             <div className="transacao-info">
                 <div className="line" id="line1">

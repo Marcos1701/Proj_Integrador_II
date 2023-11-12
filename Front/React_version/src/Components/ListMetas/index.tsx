@@ -15,7 +15,7 @@ interface ListMetasProps {
 
 export function ListMetas(
     {
-        pagination = false,
+        pagination = true,
         orderSelect = false,
         searchInput = false,
         limit = 2,
@@ -38,6 +38,7 @@ export function ListMetas(
                     </div>
                 )} */}
                 <ul className="list-values-2columns">
+                    {metas.length === 0 && <li className="empty">Nenhuma meta cadastrada</li>}
                     {
                         metas
                             .slice(page * limit - limit, page * limit)

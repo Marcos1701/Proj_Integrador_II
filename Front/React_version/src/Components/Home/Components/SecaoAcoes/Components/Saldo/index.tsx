@@ -63,7 +63,7 @@ export function Saldo() {
 
             <div className="saldo-info">
                 <p>Saldo</p>
-                <span>{realizarTratamentoValor(saldo)}</span>
+                <span className={saldo < 0 ? "saldo-negativo" : "saldo-positivo"}>{realizarTratamentoValor(saldo)}</span>
             </div>
         </div>
 
