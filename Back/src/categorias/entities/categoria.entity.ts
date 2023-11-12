@@ -1,6 +1,6 @@
 import { Transacao } from 'src/transacoes/entities/transacao.entity';
 import { Usuario } from 'src/usuarios/entities/usuario.entity';
-import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { AfterRemove, Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Categoria {
@@ -26,8 +26,7 @@ export class Categoria {
   @Column(
     {
       type: 'decimal',
-      precision: 10,
-      scale: 2,
+      precision: 10, // 10 digitos
       nullable: true
     }
   )
@@ -50,7 +49,7 @@ export class Categoria {
   usuario: Usuario;
 
   @OneToMany(() => Transacao, (transacao) => transacao.categoria, {
-    cascade: true
+    onDelete: 'CASCADE'
   })
   transacoes: Transacao[];
 
@@ -66,9 +65,14 @@ export class Categoria {
     this.gasto = this.transacoes.reduce((acc, curr) => {
       if (curr.tipo === 'entrada') {
         return acc + curr.valor;
-      } else {
-        return acc - curr.valor;
       }
+      return acc - curr.valor;
     }, 0);
+  }
+
+  @AfterRemove()
+  async atualizaSaldo() {
+    const usuario = this.usuario;
+    usuario.saldo = usuario.saldo - this.gasto;
   }
 }

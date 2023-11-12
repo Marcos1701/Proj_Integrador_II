@@ -53,6 +53,7 @@ export class Usuario {
     {
       type: 'float',
       default: 0,
+      nullable: false
     }
   )
   saldo: number;
@@ -88,6 +89,7 @@ export class Usuario {
 
   getTransacoes(order: 'ASC' | 'DESC' = 'ASC', orderby?: TransacoesorderBy, search?: string, categoriaid?: string): returnTransacao[] {
     if (!this.transacoes) { return [] }
+    
     let TransacoesOrdenadas: returnTransacao[] = this.transacoes.map(transacao => {
       const { categoria, ...retorno } = transacao;
 
@@ -95,7 +97,7 @@ export class Usuario {
         ...retorno,
         categoriaid: categoria.id
       }
-    }).sort((a, b) => order != 'DESC' ? a.dataCriacao.getTime() - b.dataCriacao.getTime() : b.dataCriacao.getTime() - a.dataCriacao.getTime())
+    })//.sort((a, b) => order != 'DESC' ? a.dataCriacao.getTime() - b.dataCriacao.getTime() : b.dataCriacao.getTime() - a.dataCriacao.getTime())
 
     if (orderby) {
       if (orderby == TransacoesorderBy.titulo) { TransacoesOrdenadas = TransacoesOrdenadas.sort((a, b) => order !== 'DESC' ? a.titulo.localeCompare(b.titulo) : b.titulo.localeCompare(a.titulo)) }

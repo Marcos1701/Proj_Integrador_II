@@ -45,12 +45,15 @@ export class Transacao {
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   dataCriacao: Date;
 
-  @ManyToOne(() => Usuario, (usuario) => usuario.transacoes)
+  @ManyToOne(() => Usuario, (usuario) => usuario.transacoes, {
+    nullable: false,
+  })
   @JoinColumn() // serve para indicar qual coluna vai ser a chave estrangeira
   usuario: Usuario; // usuario é o nome da coluna na tabela transacao
 
   @ManyToOne(() => Categoria, (categoria) => categoria.transacoes, {
     eager: true,
+    nullable: false,
   })
   @JoinColumn()
   categoria: Categoria;
@@ -67,7 +70,7 @@ export class Transacao {
   @AfterUpdate()
   @AfterRemove()
   async atualizaGastoCategoria() {
-    await this.categoria.atualizaGasto();
+    this.categoria.atualizaGasto();
   }
 
 }
