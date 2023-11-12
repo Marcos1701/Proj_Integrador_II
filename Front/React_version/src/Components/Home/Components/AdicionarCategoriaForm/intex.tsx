@@ -1,10 +1,11 @@
-import { useRef, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import { useAuth, api_url } from "../../../../Contexts/AuthContext";
 import axios from "axios";
 import './AdicionarCategoria.css'
 import { MoneyValidation } from "../AdicionarTransacaoForm";
 import { ICategoria } from "../../../Categoria";
-import IconSelect from "./Components/IconSelect";
+import { IconSelect } from "./Components/IconSelect";
+import { CategoriasOrderContext } from "../../../../Contexts/CategoriasContext";
 
 
 interface IAdicionarCategoriaFormProps {
@@ -23,6 +24,7 @@ export function AdicionarCategoriaForm({ setExibirAdicionarCategoriaForm }: IAdi
 
     const [icone, setIcone] = useState<string>("barraquinha");
 
+    const { setUpdated } = useContext(CategoriasOrderContext)
     const [showOrcamento, setShowOrcamento] = useState<boolean>(false);
 
 
@@ -33,6 +35,7 @@ export function AdicionarCategoriaForm({ setExibirAdicionarCategoriaForm }: IAdi
             alert('Preencha todos os campos')
             return
         }
+
 
         const descricaovalue = descricao.current?.value ? descricao.current?.value : 'Sem descrição'
         const orcamentoValue = OrcamentoCheckbox.current?.checked && orcamento.current?.value ? orcamento.current.value.replace(/[^0-9]/g, '') : '0'
@@ -51,11 +54,10 @@ export function AdicionarCategoriaForm({ setExibirAdicionarCategoriaForm }: IAdi
             }
 
         const retorno = await axios.post<ICategoria>(`${api_url}categorias`, categoria, {
-            // method: 'Post',
-            // headers: {
-            //     'Content-Type': 'application/json',
-            //     Authorization: user.access_token
-            // }
+            headers: {
+                getAuthorization: true,
+                Authorization: user.access_token
+            }
         });
 
         if (retorno.status === 401) {
@@ -63,6 +65,12 @@ export function AdicionarCategoriaForm({ setExibirAdicionarCategoriaForm }: IAdi
             return
         }
 
+        if (retorno.status !== 201) {
+            alert('Erro ao adicionar categoria')
+            return
+        }
+
+        setUpdated(true); // atualizar categorias
         setExibirAdicionarCategoriaForm(false);
     }
 
@@ -74,25 +82,21 @@ export function AdicionarCategoriaForm({ setExibirAdicionarCategoriaForm }: IAdi
                 <input type="text" placeholder="Nome da Categoria" className="input-nome" ref={nome} required />
             </div>
 
-            <div className="label-element-div">
-                <label className="label-icone" htmlFor="input-icone">Ícone</label>
-                <IconSelect />
-
-            </div>
+            <IconSelect setIcone={setIcone} />
 
             <div className="checkbox-div" >
-                <label className="label-orcamento" htmlFor="input-orcamento">Possui orçamento?</label>
-                <input id="input-orcamento" type="checkbox" ref={OrcamentoCheckbox} onClick={() => setShowOrcamento(!showOrcamento)} />
+                <label className="label-orcamento" htmlFor="checkbox-orcamento">Definir orçamento?</label>
+                <input id="checkbox-orcamento" type="checkbox" ref={OrcamentoCheckbox} onClick={() => setShowOrcamento(!showOrcamento)} />
             </div>
             {showOrcamento &&
-                <div className="input-valor">
-                    <label className="label-valor" htmlFor="input-valor">Valor do orçamento</label>
+                <div className="input-valor" id="orcamento-div">
+                    <label className="label-valor" htmlFor="input-orcamento">Valor do orçamento</label>
                     <input type="text" placeholder="R$ 0" ref={orcamento} className="input-orcamento" onChange={MoneyValidation} />
                 </div>
             }
 
             <div className="label-element-div">
-                <label htmlFor="descricao">Descrição</label>
+                <label htmlFor="input-descricao">Descrição</label>
                 <textarea placeholder="Descrição" ref={descricao} className="input-descricao" />
             </div>
 

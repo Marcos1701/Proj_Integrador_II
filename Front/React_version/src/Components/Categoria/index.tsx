@@ -1,7 +1,4 @@
-import axios from "axios";
-import { ITransacao } from "../Transacao";
-import { useEffect, useState } from "react";
-import { api_url } from "../../Contexts/AuthContext";
+import { realizarTratamentoValor } from '../Home/Components/SecaoAcoes/Components/Saldo';
 import './Categoria.css'
 
 export interface ICategoria {
@@ -17,56 +14,23 @@ export interface ICategoria {
 
 export function Categoria({ categoria }: { categoria: ICategoria }) {
 
-    // const { valorGasto, valorOrcamento }: { valorGasto: number, valorOrcamento?: number }
-    //     = await fetch(`${api_url}Categoria/${categoria.id}/valores`,
-    //         {
-    //             method: 'POST',
-    //             headers: {
-    //                 'Content-Type': 'application/json'
-    //             },
-    //             body: JSON.stringify({ id_usuario: user!.id })
-    //         }
-    //     ).then(res => res.json())
-
-
-    const [transacoes, setTransacoes] = useState<ITransacao[]>([])
-
-    useEffect(() => {
-        const getTransacoes = async () => {
-            const transacoes = await axios.get<ITransacao[]>(`${api_url}Transacao?id_categoria=${categoria.id}`).then(res => res.data).catch(err => {
-                console.log(err)
-                return []
-            });
-            setTransacoes(transacoes);
-        }
-        categoria.gasto === undefined && getTransacoes(); // Se o gasto já foi definido, não precisa buscar as transações
-    }, [categoria.id])
-
-    const valorGasto: number =
-        categoria.gasto !== undefined ? categoria.gasto :
-            transacoes.reduce((acc: number, transacao: ITransacao) => {
-                if (transacao.tipo === 'Saida') {
-                    return acc + transacao.valor
-                }
-                return acc - transacao.valor // Entrada
-            }, 0)
-
+    const valorGasto: number = categoria.gasto ? categoria.gasto : 0
     const valorOrcamento: number | undefined = categoria.orcamento ? categoria.orcamento : undefined
 
     return (
         <div className="categoria" id={categoria.id}>
             <div className="categoria-icon">
-                <img src={categoria.icone ? `assets/icons/${categoria.icone}.svg` : "/assets/icons/barraquinha.svg"} alt={categoria.nome} />
+                <img src={categoria.icone ? `assets/icons/${categoria.icone}.svg` : "/assets/icons/barraquinha.svg"} alt={categoria.nome} className='icon' />
             </div>
 
             <div className="categoria-info">
                 <h3>{categoria.nome}</h3>
-            </div>
 
-            <div className="categoria-valores">
-                <p id="valorGasto">{valorGasto < 0 ? `R$ 0` : `R$ ${valorGasto}`
-                }</p>
-                {valorOrcamento != undefined && <p id="valorOrcamento">R$ {valorOrcamento}</p>}
+                <div className="categoria-valores">
+                    <p id="valorGasto">{valorGasto < 0 ? `R$ 0` : `R$ ${realizarTratamentoValor(valorGasto)}`
+                    }</p>
+                    {valorOrcamento != undefined && <p id="valorOrcamento">R$ {realizarTratamentoValor(valorOrcamento)}</p>}
+                </div>
             </div>
         </div>
     )

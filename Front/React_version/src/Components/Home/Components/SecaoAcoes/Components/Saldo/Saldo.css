@@ -1,9 +1,9 @@
 .saldo-home {
     /* width minimo 190px e max fit-content*/
-    min-width: 190px;
+    min-width: 180px;
 
     max-width: fit-content;
-    height: 66.943px;
+    height: 60px;
     filter: drop-shadow(0px 8.310344696044922px 21.36945915222168px rgba(134, 136, 239, 0.37));
     background: #373737;
     border-radius: 15px;
@@ -12,15 +12,15 @@
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    gap: 1.5em;
+    gap: 1em;
     flex-direction: row;
     padding-left: 1em;
     padding-right: 1.5em;
 }
 
 .Saldo-icon {
-    width: 37.99px;
-    height: 37.99px;
+    width: 34.99px;
+    height: 34.99px;
     background: #E9E9E9;
     border-radius: 5px;
     display: flex;
@@ -54,6 +54,30 @@
 
 .saldo-info span {
     padding-left: .2em;
-    font-size: 18.25px;
+    font-size: 17.5px;
     margin: 0;
+}
+
+.saldo-info span::before {
+    content: 'R$ ';
+    font-size: 17.25px;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.saldo-positivo {
+    color: #00FF00;
+
+    &::before {
+        background: #00FF00;
+    }
+}
+
+.saldo-negativo {
+    color: #FF0000;
+
+    &::before {
+        background: #FF0000;
+    }
 }

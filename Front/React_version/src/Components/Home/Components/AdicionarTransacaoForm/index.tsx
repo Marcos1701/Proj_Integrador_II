@@ -2,6 +2,7 @@ import axios from "axios";
 import { useAuth, api_url } from "../../../../Contexts/AuthContext";
 import { useContext, useRef, useState } from "react";
 import { CategoriasContext } from "../../../../Contexts/CategoriasContext";
+import { TransacoesContext, TransacoesContextData } from "../../../../Contexts/TransacoesContext";
 
 interface IAdicionarTransacaoFormProps {
     setExibirAdicionarTransacaoForm: React.Dispatch<React.SetStateAction<boolean>>;
@@ -16,7 +17,7 @@ export const MoneyValidation = (event: React.ChangeEvent<HTMLInputElement>) => {
 
     // remover tudo o que não for número
     const valueAsNumber = Number(value.replace(/[^0-9]/g, ''));
-    if (isNaN(valueAsNumber) || valueAsNumber < 0 || valueAsNumber > 100000000000) {
+    if (isNaN(valueAsNumber) || valueAsNumber < 0 || valueAsNumber >= 10000000000) {
         event.target.value = event.target.value.slice(0, -1);
         return;
     }
@@ -25,7 +26,6 @@ export const MoneyValidation = (event: React.ChangeEvent<HTMLInputElement>) => {
     const valueAsMoney = valueAsNumber.toLocaleString('pt-br', {
         style: 'currency',
         currency: 'BRL',
-        minimumFractionDigits: 0,
         maximumFractionDigits: 0
     });
 
@@ -39,7 +39,7 @@ export function AdicionarTransacaoForm({ setExibirAdicionarTransacaoForm }: IAdi
         confirm("Você precisa adicionar uma categoria antes de adicionar uma transação");
         setExibirAdicionarTransacaoForm(false);
     }
-    const nome = useRef<HTMLInputElement>(null);
+    const titulo = useRef<HTMLInputElement>(null);
     const valor = useRef<HTMLInputElement>(null);
     const data = useRef<HTMLInputElement>(null);
     const tipo = useRef<HTMLSelectElement>(null);
@@ -50,11 +50,12 @@ export function AdicionarTransacaoForm({ setExibirAdicionarTransacaoForm }: IAdi
     if (!user) return <p>Usuário não encontrado</p>
 
     const [msgSucesso, setMsgSucesso] = useState<boolean>(false);
+    const { setUpdated }: TransacoesContextData = useContext(TransacoesContext)
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
-        if (!nome.current?.value || !valor.current?.value || !data.current?.value || !tipo.current?.value || !categoria.current?.value) {
+        if (!titulo.current?.value || !valor.current?.value || !data.current?.value || !tipo.current?.value || !categoria.current?.value) {
             return
         }
 
@@ -62,14 +63,14 @@ export function AdicionarTransacaoForm({ setExibirAdicionarTransacaoForm }: IAdi
             !descricao.current?.value || descricao.current?.value === '' ?
                 {
                     categoriaid: categoria.current.value,
-                    nome: nome.current.value,
+                    titulo: titulo.current.value,
                     valor: Number(valor.current.value.replace(/[^0-9]/g, '')),
                     data: data.current.value,
                     tipo: tipo.current.value,
                 } :
                 {
                     categoriaid: categoria.current.value,
-                    nome: nome.current.value,
+                    titulo: titulo.current.value,
                     valor: Number(valor.current.value.replace(/[^0-9]/g, '')),
                     data: data.current.value,
                     tipo: tipo.current.value,
@@ -77,17 +78,17 @@ export function AdicionarTransacaoForm({ setExibirAdicionarTransacaoForm }: IAdi
                 }
 
         await axios.post(`${api_url}transacoes`, transacao, {
-            method: 'Post',
             headers: {
                 getAuthorization: true,
                 Authorization: user.access_token
             },
         }).then(res => res.data).catch(err => {
             console.log(err)
+            return;
         });
 
         // limpar os campos
-        nome.current.value = '';
+        titulo.current.value = '';
         valor.current.value = '';
         data.current.value = '';
         tipo.current.value = '';
@@ -96,6 +97,7 @@ export function AdicionarTransacaoForm({ setExibirAdicionarTransacaoForm }: IAdi
             descricao.current.value = '';
         }
 
+        setUpdated(true);
         setMsgSucesso(true);
         setTimeout(() => {
             setMsgSucesso(false);
@@ -111,8 +113,8 @@ export function AdicionarTransacaoForm({ setExibirAdicionarTransacaoForm }: IAdi
             {msgSucesso && <p>Transação adicionada com sucesso!</p>}
 
             <div className="input-div">
-                <label htmlFor="nome">Nome</label>
-                <input type="text" placeholder="Nome da Transação" ref={nome} className="input-nome" required />
+                <label htmlFor="titulo">Titulo</label>
+                <input type="text" placeholder="Titulo da Transação" ref={titulo} className="input-nome" required />
             </div>
 
             <div className="valor-data-div">

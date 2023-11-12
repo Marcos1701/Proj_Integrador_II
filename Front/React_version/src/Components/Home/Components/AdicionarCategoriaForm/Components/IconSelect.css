@@ -1,0 +1,27 @@
+#select-div {
+    margin-right: 7.3em;
+}
+
+div.icon-select {
+    display: flex;
+    align-self: flex-start;
+    align-items: center;
+    justify-content: center;
+    border: 1.4px solid var(--accent, #2844BD);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: border-color 0.2s ease-in-out;
+    margin: 0;
+    padding: 0;
+    background: var(--buttons-secondary, #CCCFE0);
+    color: var(--text, #13201E);
+
+    & select {
+        background: transparent;
+        border: none;
+    }
+}
+
+div.icon-select:hover {
+    border-color: var(--accent-hover, #2844BD);
+}

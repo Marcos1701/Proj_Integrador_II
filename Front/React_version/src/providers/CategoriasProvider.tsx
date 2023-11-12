@@ -19,8 +19,10 @@ export function CategoriasProvider({ children }: CategoriasProviderProps) {
     const [categorias, setCategorias] = useState<ICategoria[]>([])
     const [orders, setOrders] = useState<ordenarCategorias>({})
     const [search, setSearch] = useState<string>('')
+    const [updated, setUpdated] = useState<boolean>(false)
 
     const { user } = useAuth();
+
 
     useEffect(() => {
         async function loadCategorias() {
@@ -43,14 +45,17 @@ export function CategoriasProvider({ children }: CategoriasProviderProps) {
             }
 
             setCategorias(CategoriasResponse.data)
+            setUpdated(false)
         }
 
         loadCategorias()
-    }, [user, orders, search])
+
+    }, [user, orders, search, updated])
 
     const value: CategoriasOrderContextData = {
         order: { order: orders, setOrder: setOrders },
-        search: { search, setSearch }
+        search: { search, setSearch },
+        setUpdated: setUpdated
     }
     return (
         <CategoriasContext.Provider value={categorias}>

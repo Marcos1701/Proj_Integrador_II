@@ -2,8 +2,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 58.798px;
-    height: 58.798px;
+    width: 40px;
+    height: 40px;
     flex-shrink: 0;
     border-radius: 14.246px;
     background: var(--buttons-secondary, #CCCFE0);

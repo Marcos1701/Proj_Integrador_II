@@ -1,22 +1,24 @@
 .categoria {
-    min-width: 20em;
+    min-width: 22em;
     height: 5.5em;
     padding: 1em 2em;
     border-radius: 14.246px;
     background: #D2E2E0;
     box-shadow: #13201E -3px 1px 10px;
-    -webkit-backdrop-filter: blur(70.32758712768555px);
+
     backdrop-filter: blur(70.32758712768555px);
+
     display: flex;
     align-items: center;
-    justify-content: space-around;
-    gap: 1.3em;
+    justify-content: flex-start;
+    gap: 1.5em;
 }
 
 .categoria-info {
     display: flex;
-    flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
+    justify-content: center;
+    gap: 32px;
 }
 
 .categoria-valores {
@@ -25,20 +27,19 @@
     align-items: flex-start;
     justify-content: space-between;
     width: fit-content;
-    padding: 0 1em;
+    padding: 0 .5em;
 
     & * {
-        margin: 0;
         white-space: nowrap;
     }
 }
 
 #valorGasto,
 #valorOrcamento {
+    width: 58px;
+    height: 100%;
     font-family: Eina03-SemiBold;
-    font-size: 18px;
-    font-style: normal;
-    font-weight: 400;
+    font-size: 19px;
     line-height: 32.8px;
     text-align: left;
     margin: 0;
@@ -50,18 +51,14 @@
 
 #valorGasto {
     color: var(--value-discount, #E54444);
-}
-
-#valorGasto {
-    min-width: 56px;
-    height: 100%;
     flex-shrink: 0;
 }
 
 .categoria h3 {
     font-family: Eina03-SemiBold;
-    font-size: 18px;
+    font-size: 16px;
     line-height: 29.52px;
+    /* max-width: 9em; */
     width: 8em;
     overflow: hidden;
     text-overflow: ellipsis;
