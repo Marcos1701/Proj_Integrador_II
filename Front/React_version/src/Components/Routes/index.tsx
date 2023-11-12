@@ -5,6 +5,7 @@ import { LoginPage } from "../Auth/LoginPage";
 import { RegisterPage } from "../Auth/RegisterPage";
 import { TransacoesPage } from "../TransacoesPage";
 import { CategoriasPage } from "../CategoriasPage";
+import { DetailCategoriaPage } from "../DetailCategoriaPage";
 
 export function PatchRoutes() {
     return (
@@ -22,11 +23,18 @@ export function PatchRoutes() {
                 </ProtectedRoute>
             } />
 
-            <Route path="/Categorias" element={
-                <ProtectedRoute>
-                    <CategoriasPage />
-                </ProtectedRoute>
-            } />
+            <Route path="/Categorias">
+                <Route index path="/" element={
+                    <ProtectedRoute>
+                        <CategoriasPage />
+                    </ProtectedRoute>
+                } />
+                {/* <Route path=":id" element={
+                    <ProtectedRoute>
+                        <DetailCategoriaPage return="/" />
+                    </ProtectedRoute>
+                } /> */}
+            </Route>
 
             <Route path="*" element={<Navigate to="/" />} />
         </Routes>

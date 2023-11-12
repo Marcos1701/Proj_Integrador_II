@@ -8,9 +8,9 @@ interface OptionType {
 }
 
 const options: OptionType[] = [
+    { value: 'barraquinha', label: 'Barraquinha', icon: '/assets/icons/barraquinha.svg' },
     { value: 'Airplane', label: 'Avião', icon: '/assets/icons/Airplane.svg' },
     { value: 'barcode_scanner', icon: '/assets/icons/barcode_scanner.svg', label: 'Codigo de barras' },
-    { value: 'barraquinha', label: 'Barraquinha', icon: '/assets/icons/barraquinha.svg' },
     { value: 'car-vehicle', label: 'Carro', icon: '/assets/icons/car-vehicle.svg' },
     { value: 'credit_card', label: 'Cartão de crédito', icon: '/assets/icons/credit_card.svg' },
     { value: 'dollar-bill', label: 'Dinheiro', icon: '/assets/icons/dollar-bill.svg' },
@@ -23,6 +23,7 @@ export const IconSelect = (
     const [value, setValue] = useState<OptionType>(options[0]);
 
     const handleChange = (value: OptionType) => {
+        console.log(value);
         setValue(value);
         setIcone(value.value);
     };
@@ -34,7 +35,7 @@ export const IconSelect = (
                 <img src={value.icon} alt={value.value} />
                 <select value={value.value} onChange={(e) => handleChange(options.find(option => option.value === e.target.value) as OptionType)}>
                     {options.map((option) => (
-                        <option key={option.value} value={option.value}>
+                        <option key={option.value} value={option.value} >
                             {option.label}
                         </option>
                     ))}

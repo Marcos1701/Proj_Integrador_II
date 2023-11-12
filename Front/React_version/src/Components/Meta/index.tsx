@@ -1,9 +1,10 @@
+import { tratarData } from '../Transacao';
 import './Meta.css'
 export interface IMeta {
     id: string;
     valor_Desejado: number;
     valor_Atual: number;
-    dataFinal: string;
+    dataFinal: Date;
     progresso: number;
     titulo?: string;
     icon?: string;
@@ -26,7 +27,7 @@ export function Meta({ meta }: { meta: IMeta }) {
             <div className="meta-info">
                 <div className="meta-dados">
                     <h3 className='meta-title'>{meta.titulo}</h3>
-                    <span className='meta-dataFinal'>{meta.dataFinal}</span>
+                    <span className='meta-dataFinal'>{tratarData(meta.dataFinal.toISOString())}</span>
                 </div>
                 <div className="meta-valores">
                     <span className='meta-valor_Atual'>{meta.valor_Atual}</span>

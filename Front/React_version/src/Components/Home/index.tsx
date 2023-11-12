@@ -1,12 +1,12 @@
 import { ListTransacoes } from "../ListTransacoes";
 import { ListCategorias } from "../ListCategorias";
-// import { ListMetas } from "../ListMetas";
 import { SecaoActions_Home } from "./Components/SecaoAcoes";
 import './Home.css'
 import { Link } from "react-router-dom";
 import { ListMetas } from "../ListMetas";
 
 export function Home() {
+
   return (
     <main className="Home">
       <SecaoActions_Home />

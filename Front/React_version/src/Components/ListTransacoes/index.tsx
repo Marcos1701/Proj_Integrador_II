@@ -4,7 +4,6 @@ import { ICategoria } from "../Categoria";
 import { ITransacao, Transacao } from "../Transacao"
 import { useContext, useState } from "react";
 import './ListTransacoes.css'
-import { ulid } from "ulidx";
 
 
 interface IListTransacoesProps {
@@ -14,7 +13,7 @@ interface IListTransacoesProps {
     classname?: string;
 }
 
-export function ListTransacoes({ page = 1, limit = 2, pagination = true, classname = "list_transacoes" }: IListTransacoesProps) {
+export function ListTransacoes({ page = 1, limit = 4, pagination = true, classname = "list_transacoes" }: IListTransacoesProps) {
 
     const { transacoes }: TransacoesContextData = useContext(TransacoesContext)
     const categorias: ICategoria[] = useContext(CategoriasContext)

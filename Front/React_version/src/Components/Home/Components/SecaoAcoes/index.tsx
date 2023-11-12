@@ -32,13 +32,13 @@ export function SecaoActions_Home() {
                 </ul>
             </div>
             {showAdicionarTransacaoForm &&
-                <div className="Background-form">
+                <div className="Background-blur">
                     <AdicionarTransacaoForm setExibirAdicionarTransacaoForm={setShowAdicionarTransacaoForm} />
                 </div>
             }
 
             {showAdicionarCategoriaForm &&
-                <div className="Background-form">
+                <div className="Background-blur">
                     <AdicionarCategoriaForm setExibirAdicionarCategoriaForm={setShowAdicionarCategoriaForm} />
                 </div>
             }
