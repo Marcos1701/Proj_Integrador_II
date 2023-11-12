@@ -1,20 +1,47 @@
-import { ITransacao } from "../../../../../Transacao";
 import { useContext, useEffect, useState } from "react";
 import './Saldo.css'
-import { TransacoesContext } from "../../../../../../Contexts/TransacoesContext";
+import { TransacoesContext, TransacoesContextData } from "../../../../../../Contexts/TransacoesContext";
 import axios from "axios";
 import { api_url, useAuth } from "../../../../../../Contexts/AuthContext";
 
+export const realizarTratamentoValor = (valor: number) => {
+
+    if (valor < 10000) {
+        return `${valor.toLocaleString('pt-br', {
+            maximumFractionDigits: 0
+        })}`.replace(',', '.')
+    }
+
+    if (valor <= 1000000) {
+        return `${valor.toLocaleString('pt-br', {
+            maximumFractionDigits: 0
+        })} mil`.replace(',', '.')
+    }
+
+
+    if (valor < 1000000000) {
+        return `${(valor / 1000000).toLocaleString('pt-br', {
+            maximumFractionDigits: 0
+        })} mi`.replace(',', '.')
+    }
+
+    if (valor < 1000000000000) {
+        return `${(valor / 1000000000).toLocaleString('pt-br', {
+            maximumFractionDigits: 0
+        })} bi`.replace(',', '.')
+    }
+
+}
 
 export function Saldo() {
-    const transacoes: ITransacao[] = useContext<ITransacao[]>(TransacoesContext);
+    const { transacoes }: TransacoesContextData = useContext<TransacoesContextData>(TransacoesContext);
     const [saldo, setSaldo] = useState<number>(0);
     const { user } = useAuth();
     if (!user) return <p>Usuário não encontrado</p>
 
     useEffect(() => {
         const getSaldo = async () => {
-            const saldo: number = await (await axios.get<number>(`${api_url}usuarios/saldo`, {
+            const saldo: number = (await axios.get<number>(`${api_url}usuarios/saldo`, {
                 headers: {
                     getAuthorization: true,
                     Authorization: user.access_token
@@ -24,39 +51,6 @@ export function Saldo() {
         }
         getSaldo()
     }, [transacoes])
-
-    const realizarTratamentoSaldo = (saldo: number) => {
-        //O tipo 'boolean' não pode ser comparável ao tipo 'number'
-        // para resolver isso, é necessário fazer um switch case
-        if (saldo < 1000000) {
-            return saldo.toLocaleString('pt-br', {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2
-            })
-        }
-
-        if (saldo < 1000000000) {
-            return `${(saldo / 1000000).toLocaleString('pt-br', {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2
-            })} mi`.replace(',', '.')
-        }
-
-        if (saldo < 1000000000000) {
-            return `${(saldo / 1000000000).toLocaleString('pt-br', {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2
-            })} bi`.replace(',', '.')
-        }
-
-        if (saldo < 1000000000000000) {
-            return `${(saldo / 1000000000000).toLocaleString('pt-br', {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2
-            })} tri`.replace(',', '.')
-        }
-
-    }
 
     // o saldo é a soma de todas as transações
 
@@ -69,7 +63,7 @@ export function Saldo() {
 
             <div className="saldo-info">
                 <p>Saldo</p>
-                <span>R$ {realizarTratamentoSaldo(saldo)}</span>
+                <span>{realizarTratamentoValor(saldo)}</span>
             </div>
         </div>
 

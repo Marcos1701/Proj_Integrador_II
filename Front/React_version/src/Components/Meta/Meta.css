@@ -1,80 +1,66 @@
-.transacao {
-    min-width: 23em;
+.meta {
+    min-width: 22em;
     height: 5.5em;
     padding: 1em 2em;
     border-radius: 14.246px;
     background: #D2E2E0;
     box-shadow: #13201E -3px 1px 10px;
 
-    -webkit-backdrop-filter: blur(70.32758712768555px);
     backdrop-filter: blur(70.32758712768555px);
 
     display: flex;
     align-items: center;
-    justify-content: space-around;
-    gap: 10px;
+    justify-content: flex-start;
+    gap: 1.5em;
 }
 
-.transacao-info {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-}
-
-.line {
+.meta-info {
     display: flex;
     align-items: center;
+    justify-content: center;
+    gap: 1.5em;
+}
+
+.meta-dados,
+.meta-valores {
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
     justify-content: space-between;
     width: fit-content;
 }
 
-#line1 {
-    gap: 2.5em;
-}
-
-#data-transacao {
-    /* não quebrar quando o texto for muito grande 
-    */
+.meta-dataFinal {
     white-space: nowrap;
 }
 
-#line2 {
-    gap: 2.5em;
-}
-
-#nome-transacao {
+.meta-title {
     font-family: Eina03-SemiBold;
     font-size: 18px;
     line-height: 29.52px;
-}
-
-#nome-transacao,
-#nome-categoria {
-    width: 100px;
+    width: 120px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
     text-align: left;
 }
 
-#nome-categoria,
-#data-transacao,
-#nome-transacao {
+.meta-titulo,
+.meta-dataFinal {
     color: var(--text, #13201E);
     font-style: normal;
     font-weight: 400;
 }
 
-#nome-categoria,
-#data-transacao {
+.meta-dataFinal {
     font-family: Eina03-Regular;
     font-size: 11.872px;
     line-height: 19.47px;
     opacity: 0.4;
 }
 
-.valor-transacao-saida,
-.valor-transacao-entrada {
+.meta-valor_Atual,
+.meta-valor_Desejado {
     min-width: 56px;
     height: 100%;
     flex-shrink: 0;
@@ -87,12 +73,17 @@
     text-align: left;
     margin: 0;
 
+
+    &::before {
+        content: 'R$ ';
+    }
 }
 
-.valor-transacao-entrada {
-    color: var(--collors-green, rgba(0, 166, 15, 0.90));
+.meta-valor_Desejado {
+    color: var(--accent, #2844BD);
 }
 
-.valor-transacao-saida {
-    color: var(--value-discount, #E54444);
+.meta-valor_Atual {
+    color: var(--green, #00B049);
+    flex-shrink: 0;
 }

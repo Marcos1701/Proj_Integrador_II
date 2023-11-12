@@ -71,14 +71,23 @@ button:focus-visible {
 
 ul.list-values-2columns {
   list-style: none;
-  padding: 0;
-  margin: 0;
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1.5em;
-  align-items: flex-start;
+  padding: .5em;
+  margin: 0 1em;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 1em;
+  min-width: 43em;
+
+  min-height: 6em;
+  max-height: 45vh;
 }
 
+img {
+  width: 2em;
+  height: 2em;
+}
 
 /* @media (prefers-color-scheme: light) {
   :root {

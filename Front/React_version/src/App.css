@@ -4,7 +4,6 @@
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
-
 }
 
 /* Define a exibição, direção, justificação e alinhamento dos itens para #root, main e form.add-element-form */
@@ -17,8 +16,19 @@ form.add-element-form {
   align-items: center;
 }
 
+main {
+  margin-bottom: 3em;
+  height: fit-content;
+}
+
 form.add-element-form {
   height: fit-content;
+  max-height: 80vh;
+  border-radius: 64.108px;
+  background: var(--background, #d0d9d8ef);
+  backdrop-filter: blur(3px);
+
+  box-shadow: 16px 38px 17px 0px rgba(0, 0, 0, 0.25);
 }
 
 /* Define a exibição e alinhamento dos itens para footer e algumas divs dentro de form.add-element-form */
@@ -26,6 +36,14 @@ footer,
 form.add-element-form :is(.valor-data-div, .select-group, .button-div, .checkbox-div) {
   display: flex;
   align-items: center;
+}
+
+footer {
+  justify-content: space-between;
+  width: 100%;
+  padding: 0 1em;
+  justify-self: flex-end;
+  margin-top: auto;
 }
 
 /* Define o raio da borda para input e select dentro de form.add-element-form */
@@ -48,6 +66,7 @@ form.add-element-form select {
 
 form.add-element-form select {
   width: fit-content;
+  max-width: 16em;
   height: 2em;
   padding: 0 1em;
 
@@ -62,12 +81,17 @@ form.add-element-form select {
     font-weight: 400;
     line-height: 21.32px;
     color: #13201E;
+    max-width: 16em;
     opacity: 0.9;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
 
   &::-ms-expand {
     /* -ms-expand = pseudo-elemento para o select */
     display: none;
+
   }
 
   &img {
@@ -75,7 +99,7 @@ form.add-element-form select {
     width: 1em;
     height: 1em;
     margin-left: 0.5em;
-  
+
   }
 }
 
@@ -91,8 +115,7 @@ form.add-element-form * {
 }
 
 form.add-element-form label {
-  align-self: flex-start;
-  font-size: 12px;
+  font-size: 12.3px;
   margin: 0;
   margin-bottom: 0.2em;
 }
@@ -121,10 +144,7 @@ form.add-element-form .input-div .input-valor {
 }
 
 form.add-element-form :is(.input-div .input-nome, textarea) {
-  width: 25em;
-  height: 2.4em;
-  padding-left: 1em;
-  padding-right: 1em;
+  padding: 0.8em 1em;
   border-radius: 12px;
   background: var(--buttons-secondary, #CCCFE0);
   color: var(--text, #13201E);
@@ -136,6 +156,11 @@ form.add-element-form :is(.input-div .input-nome, textarea) {
   margin: 0;
 }
 
+form.add-element-form .input-div .input-nome {
+  width: 25em;
+  height: 2.4em;
+}
+
 form.add-element-form .input-div .input-data {
   width: 10em;
   height: 2em;
@@ -145,7 +170,7 @@ form.add-element-form .input-div .input-data {
 
 form.add-element-form textarea {
   align-self: flex-start;
-  width: 35em;
+  width: 25em;
   height: 5em;
   padding: 0.8em 1em;
   resize: none;
@@ -202,12 +227,11 @@ form.add-element-form .valor-data-div .input-data {
 form.add-element-form .checkbox-div {
   margin-top: 1em;
   justify-content: center;
-  align-self: flex-start;
-  margin-left: 5.5em;
+  flex-direction: row-reverse;
+  margin-right: 12.5em;
 
-  &label {
+  & label {
     margin: 0;
-    margin-right: 0.5em;
-    font-size: 2.5em;
+    font-size: .8em;
   }
 }

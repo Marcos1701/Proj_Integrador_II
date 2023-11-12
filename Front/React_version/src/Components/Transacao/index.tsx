@@ -1,4 +1,5 @@
 import { ICategoria } from "../Categoria";
+import { realizarTratamentoValor } from "../Home/Components/SecaoAcoes/Components/Saldo";
 import './Transacao.css'
 
 export interface ITransacao {
@@ -40,7 +41,7 @@ export function Transacao({ transacao, categoria }: ITransacaoProps) {
             <div className="transacao-info">
                 <div className="line" id="line1">
                     <p id="nome-transacao">{transacao.titulo}</p>
-                    <p id="valor-transacao" className={transacao.tipo}>R$ {transacao.valor}</p>
+                    <p className={"valor-transacao-" + transacao.tipo}>R$ {realizarTratamentoValor(transacao.valor)}</p>
                 </div>
 
                 <div className="line" id="line2">

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import { ITransacao } from "../Components/Transacao"
 import axios from "axios"
 import { useAuth, api_url } from "../Contexts/AuthContext"
-import { TransacoesContext } from "../Contexts/TransacoesContext"
+import { TransacoesContext, TransacoesContextData } from "../Contexts/TransacoesContext"
 
 
 interface TransacoesProviderProps {
@@ -11,6 +11,7 @@ interface TransacoesProviderProps {
 
 export function TransacoesProvider({ children }: TransacoesProviderProps) {
     const [transacoes, setTransacoes] = useState<ITransacao[]>([])
+    const [updated, setUpdated] = useState<boolean>(false)
     const { user } = useAuth();
 
     useEffect(() => {
@@ -33,12 +34,18 @@ export function TransacoesProvider({ children }: TransacoesProviderProps) {
                 return dateA > dateB ? -1 : dateA < dateB ? 1 : 0
             })
             ) // ordenar pela data
+            setUpdated(false)
         }
         loadTransacoes()
-    }, [])
+    }, [updated, user])
+
+    const value: TransacoesContextData = {
+        transacoes,
+        setUpdated
+    }
 
     return (
-        <TransacoesContext.Provider value={transacoes}>
+        <TransacoesContext.Provider value={value}>
             {children}
         </TransacoesContext.Provider>
     )

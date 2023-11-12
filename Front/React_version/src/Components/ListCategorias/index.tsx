@@ -3,6 +3,7 @@ import { useContext, useState } from "react";
 import { CategoriasContext } from "../../Contexts/CategoriasContext";
 import { Orderdiv } from "./Components/Orderdiv";
 import { Searchdiv } from "./Components/Searchdiv";
+import "./ListCategorias.css";
 
 
 interface ListCategoriasProps {
@@ -68,7 +69,6 @@ export function ListCategorias(
             </div>
         </>
     )
-
 }
 
 // o codigo acima possui um erro, ele esta na linha 121, pois o botão de proximo esta aparecendo mesmo quando não tem mais paginas,

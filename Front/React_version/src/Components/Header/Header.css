@@ -1,16 +1,11 @@
 header {
-    position: fixed;
-    top: 20px;
-    left: 0;
-    right: 0;
-    height: 3rem;
-    margin: 0 auto;
+    height: 4vh;
 
     display: grid;
     grid-template-columns: 1fr 1fr;
     align-items: center;
     justify-content: center;
-    margin-bottom: 1em;
+
     width: 85vw;
     max-width: 1280px;
 }
@@ -25,7 +20,7 @@ header ul {
     justify-content: center;
     align-items: center;
     width: 100%;
-    height: 58.798px;
+    height: 40px;
     gap: 1.5rem;
 }
 
@@ -37,7 +32,7 @@ header a {
     background: var(--accent, #2844BD);
     color: var(--text, #fff);
     border: 1px solid #ccc;
-    padding: 0.6rem 2.2rem;
+    padding: 0.5rem 2rem;
     text-decoration: none;
     border-radius: 0.5rem;
 }
