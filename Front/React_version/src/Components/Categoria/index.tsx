@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { realizarTratamentoValor } from '../Home/Components/SecaoAcoes/Components/Saldo';
 import './Categoria.css'
+import { Navigate } from 'react-router-dom';
 
 export interface ICategoria {
     id: string;
@@ -18,26 +19,11 @@ export function Categoria({ categoria }: { categoria: ICategoria }) {
     const valorGasto: number = categoria.gasto ? categoria.gasto : 0
     const valorOrcamento: number | undefined = categoria.orcamento ? categoria.orcamento : undefined
 
-    const [showDetails, setShowDetails] = useState(false)
-
-    const handleShowDetails = () => {
-        setShowDetails(!showDetails)
-    }
-
-    const handleHideDetails = () => {
-        setShowDetails(false)
-    }
+    const [accessDetails, setAccessDetails] = useState(false)
 
     return (
-        <a className="categoria" id={categoria.id} onClick={handleShowDetails}>
-
-            {showDetails && <div className="Background-blur" onMouseDown={handleHideDetails}>
-                <div className="categoria-details">
-                    sla
-                </div>
-            </div>
-            }
-
+        <a className="categoria" id={categoria.id} onClick={() => setAccessDetails(true)}>
+            {accessDetails && <Navigate to={`/categorias/${categoria.id}`} />}
             <div className="categoria-icon">
                 <img src={categoria.icone ? `assets/icons/${categoria.icone}.svg` : "/assets/icons/barraquinha.svg"} alt={categoria.nome} className='icon' />
             </div>

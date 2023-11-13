@@ -6,9 +6,9 @@ export interface IMeta {
     valor_Atual: number;
     dataFinal: Date;
     progresso: number;
-    titulo?: string;
-    icon?: string;
-    icon_label?: string;
+    titulo: string;
+    descricao?: string;
+    icon: string;
 }
 
 export function Meta({ meta }: { meta: IMeta }) {
@@ -19,9 +19,7 @@ export function Meta({ meta }: { meta: IMeta }) {
             <div className="meta-icon">
                 <img src={
                     meta.icon ? meta.icon : 'assets/icons/dollar-bill.svg'
-                } alt={
-                    meta.icon_label ? meta.icon_label : 'Icone de uma nota de dólar'
-                } className='icon' />
+                } alt={meta.icon ? meta.icon : 'dollar-bill'} className='icon' />
             </div>
 
             <div className="meta-info">

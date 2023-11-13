@@ -12,6 +12,8 @@
     align-items: center;
     justify-content: flex-start;
     gap: 1.5em;
+
+    cursor: pointer;
 }
 
 .categoria-info {

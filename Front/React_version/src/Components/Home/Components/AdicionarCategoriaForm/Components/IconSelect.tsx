@@ -18,15 +18,19 @@ const options: OptionType[] = [
 ];
 
 export const IconSelect = (
-    { setIcone }: { setIcone: React.Dispatch<React.SetStateAction<string>> }
+    { setIcone, valueDefault = 'barraquinha' }: { setIcone: React.Dispatch<React.SetStateAction<string>>, valueDefault?: string }
 ) => {
-    const [value, setValue] = useState<OptionType>(options[0]);
+    const defaultValue = options.find((option) => {
+        return option.value === valueDefault
+    })
+    const [value, setValue] = useState<OptionType>(defaultValue ? defaultValue : options[0]);
 
     const handleChange = (value: OptionType) => {
         console.log(value);
         setValue(value);
         setIcone(value.value);
     };
+
 
     return (
         <div className="label-element-div" id='select-div'>

@@ -6,9 +6,10 @@
   text-align: center;
 }
 
-/* Define a exibição, direção, justificação e alinhamento dos itens para #root, main e form.add-element-form */
+/* Define a exibição, direção, justificação e alinhamento dos itens para #root, main e form.element-details,form.add-element-form */
 #root,
 main,
+form.element-details,
 form.add-element-form {
   display: flex;
   flex-direction: column;
@@ -21,6 +22,7 @@ main {
   height: fit-content;
 }
 
+form.element-details,
 form.add-element-form {
   height: fit-content;
   max-height: 80vh;
@@ -31,8 +33,9 @@ form.add-element-form {
   box-shadow: 16px 38px 17px 0px rgba(0, 0, 0, 0.25);
 }
 
-/* Define a exibição e alinhamento dos itens para footer e algumas divs dentro de form.add-element-form */
+/* Define a exibição e alinhamento dos itens para footer e algumas divs dentro de form.element-details,form.add-element-form */
 footer,
+form.element-details :is(.valor-data-div, .select-group, .button-div, .checkbox-div),
 form.add-element-form :is(.valor-data-div, .select-group, .button-div, .checkbox-div) {
   display: flex;
   align-items: center;
@@ -46,8 +49,9 @@ footer {
   margin-top: auto;
 }
 
-/* Define o raio da borda para input e select dentro de form.add-element-form */
+/* Define o raio da borda para input e select dentro de form.element-details,form.add-element-form */
 input,
+form.element-details select,
 form.add-element-form select {
   border-radius: 12px;
   background-color: #CCCFE0;
@@ -64,6 +68,7 @@ form.add-element-form select {
   }
 }
 
+form.element-details select,
 form.add-element-form select {
   width: fit-content;
   max-width: 16em;
@@ -104,22 +109,26 @@ form.add-element-form select {
 }
 
 
-/* Define o tamanho, margens e preenchimento para form.add-element-form */
+/* Define o tamanho, margens e preenchimento para form.element-details,form.add-element-form */
 input:focus,
+form.element-details select:focus,
 form.add-element-form select:focus {
   outline: none;
 }
 
+form.element-details *,
 form.add-element-form * {
   margin: .5em;
 }
 
+form.element-details label,
 form.add-element-form label {
   font-size: 12.3px;
   margin: 0;
   margin-bottom: 0.2em;
 }
 
+form.element-details :is(.label-element-div, .input-div),
 form.add-element-form :is(.label-element-div, .input-div) {
   display: flex;
   flex-direction: column;
@@ -128,14 +137,17 @@ form.add-element-form :is(.label-element-div, .input-div) {
   border-radius: 4px;
 }
 
+form.element-details .input-div input,
 form.add-element-form .input-div input {
   border: 1.4px solid var(--accent, #2844BD);
 }
 
+form.element-details .input-div input:focus,
 form.add-element-form .input-div input:focus {
   border: 1.4px solid var(--accent-hover, #2844BD);
 }
 
+form.element-details .input-div .input-valor,
 form.add-element-form .input-div .input-valor {
   min-width: 10em;
   height: 2em;
@@ -143,6 +155,7 @@ form.add-element-form .input-div .input-valor {
   margin: 0;
 }
 
+form.element-details :is(.input-div .input-nome, textarea),
 form.add-element-form :is(.input-div .input-nome, textarea) {
   padding: 0.8em 1em;
   border-radius: 12px;
@@ -156,11 +169,13 @@ form.add-element-form :is(.input-div .input-nome, textarea) {
   margin: 0;
 }
 
+form.element-details .input-div .input-nome,
 form.add-element-form .input-div .input-nome {
   width: 25em;
   height: 2.4em;
 }
 
+form.element-details .input-div .input-data,
 form.add-element-form .input-div .input-data {
   width: 10em;
   height: 2em;
@@ -168,6 +183,7 @@ form.add-element-form .input-div .input-data {
   margin: 0;
 }
 
+form.element-details textarea,
 form.add-element-form textarea {
   align-self: flex-start;
   width: 25em;
@@ -181,6 +197,7 @@ form.add-element-form textarea {
   }
 }
 
+form.element-details :is(.cancel-form-button, .submit-form-button),
 form.add-element-form :is(.cancel-form-button, .submit-form-button) {
   width: 145px;
   height: 33px;
@@ -197,14 +214,31 @@ form.add-element-form :is(.cancel-form-button, .submit-form-button) {
   line-height: 21.32px;
 }
 
+form.element-details .submit-form-button,
 form.add-element-form .submit-form-button {
   width: 200px;
   border: 0.8px solid var(--text, #13201E);
   background: var(--accent, #2844BD);
   color: var(--buttons-primary-text, #FFFFFF);
   font-family: Eina03-SemiBold;
+
+  &:hover {
+    background: var(--accent-hover, #4d6aea);
+  }
+
+  &:disabled {
+    background: var(--accent-disabled, #a3b4f5);
+    border: 0.8px solid var(--accent-disabled, #a3b4f5);
+    color: var(--accent-disabled-text, #FFFFFF);
+
+    &:hover {
+      background: var(--accent-disabled, #a3b4f5);
+
+    }
+  }
 }
 
+form.element-details h2,
 form.add-element-form h2 {
   font-family: Eina03-SemiBold;
   font-size: 1.5em;
@@ -215,6 +249,7 @@ form.add-element-form h2 {
   margin-bottom: 1.5em;
 }
 
+form.element-details .valor-data-div .input-data,
 form.add-element-form .valor-data-div .input-data {
   &::-webkit-calendar-picker-indicator {
     /* -webkit-calendar-picker-indicator = pseudo-elemento para o input */

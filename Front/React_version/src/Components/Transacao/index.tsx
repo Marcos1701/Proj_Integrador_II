@@ -1,6 +1,8 @@
+import { useState } from "react";
 import { ICategoria } from "../Categoria";
 import { realizarTratamentoValor } from "../Home/Components/SecaoAcoes/Components/Saldo";
 import './Transacao.css'
+import { Navigate } from "react-router-dom";
 
 export interface ITransacao {
     id: string;
@@ -8,7 +10,7 @@ export interface ITransacao {
     valor: number;
     titulo: string;
     descricao?: string;
-    dataCriacao: Date;
+    data: Date;
     categoriaid: string;
 }
 
@@ -28,9 +30,13 @@ export const tratarData = (data: string) => { // tratar para o estilo => 22 Sete
 }
 export function Transacao({ transacao, categoria }: ITransacaoProps) {
 
+    const [showDetails, setShowDetails] = useState(false)
 
     return (
-        <div className="transacao" id={transacao.id}>
+        <a className="transacao" id={transacao.id} onClick={() => setShowDetails(true)}>
+            {showDetails &&
+                <Navigate to={`/transacoes/${transacao.id}`} />
+            }
             <div className="transacao-icon">
                 <img src={
                     categoria.icone ?
@@ -42,6 +48,6 @@ export function Transacao({ transacao, categoria }: ITransacaoProps) {
                 <p className="nome-transacao">{transacao.titulo}</p>
                 <p className={"valor-transacao-" + transacao.tipo}>R$ {realizarTratamentoValor(transacao.valor)}</p>
             </div>
-        </div>
+        </a>
     )
 }

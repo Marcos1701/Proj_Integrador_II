@@ -17,6 +17,14 @@
     & * {
         text-shadow: 0px 4px 4px rgba(232, 232, 232, 0.505);
     }
+
+    cursor: pointer;
+
+    &:hover {
+        background: #E1F0EE;
+        box-shadow: #13201E -4px 2px 10px;
+        transition: 0.3s;
+    }
 }
 
 .transacao-info {
@@ -55,7 +63,7 @@
 
     /* para colocar uma sombra em baixo */
     text-shadow: 0px 4px 4px rgba(176, 173, 173, 0.518);
-    
+
 }
 
 .nome-transacao,

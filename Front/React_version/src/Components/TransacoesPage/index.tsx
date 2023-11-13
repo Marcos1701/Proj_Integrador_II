@@ -13,7 +13,7 @@ export function TransacoesPage() {
                 <button onClick={() => { setVoltar(!voltar) }}
                     className="back-button">
                     <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none">
-                        <g clip-path="url(#clip0_206_145)">
+                        <g clipPath="url(#clip0_206_145)">
                             <path d="M15.41 16.59L10.83 12L15.41 7.41L14 6L8 12L14 18L15.41 16.59Z" fill="black" />
                         </g>
                         <defs>
@@ -27,7 +27,7 @@ export function TransacoesPage() {
                 <h2 className="title">Transações</h2>
             </div>
 
-            <ListTransacoes page={1} limit={6} classname="list_on_page"/>
+            <ListTransacoes page={1} limit={6} classname="list_on_page" />
 
         </main>
     )

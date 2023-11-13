@@ -65,14 +65,14 @@ export function AdicionarTransacaoForm({ setExibirAdicionarTransacaoForm }: IAdi
                     categoriaid: categoria.current.value,
                     titulo: titulo.current.value,
                     valor: Number(valor.current.value.replace(/[^0-9]/g, '')),
-                    data: data.current.value,
+                    data: new Date(data.current.value),
                     tipo: tipo.current.value,
                 } :
                 {
                     categoriaid: categoria.current.value,
                     titulo: titulo.current.value,
                     valor: Number(valor.current.value.replace(/[^0-9]/g, '')),
-                    data: data.current.value,
+                    data: new Date(data.current.value),
                     tipo: tipo.current.value,
                     descricao: descricao.current.value,
                 }

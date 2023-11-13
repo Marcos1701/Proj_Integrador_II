@@ -29,8 +29,8 @@ export function TransacoesProvider({ children }: TransacoesProviderProps) {
             }
 
             setTransacoes(response.data.sort((a, b) => {
-                const dateA = new Date(a.dataCriacao)
-                const dateB = new Date(b.dataCriacao)
+                const dateA = new Date(a.data)
+                const dateB = new Date(b.data)
                 return dateA > dateB ? -1 : dateA < dateB ? 1 : 0
             })
             ) // ordenar pela data

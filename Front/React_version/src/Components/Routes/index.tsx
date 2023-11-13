@@ -1,11 +1,13 @@
-import { Navigate, Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import { ProtectedRoute } from "../ProtectedRoute";
 import { Home } from "../Home";
 import { LoginPage } from "../Auth/LoginPage";
 import { RegisterPage } from "../Auth/RegisterPage";
 import { TransacoesPage } from "../TransacoesPage";
 import { CategoriasPage } from "../CategoriasPage";
-import { DetailCategoriaPage } from "../DetailCategoriaPage";
+import { DetailCategoriaPage } from "../DetailsPage/Categoria";
+import { NotFoundPage } from "../NotFoundPage";
+import { DetailsTransacaoPage } from "../DetailsPage/Transacao";
 
 export function PatchRoutes() {
     return (
@@ -17,26 +19,33 @@ export function PatchRoutes() {
             } />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
-            <Route path="/Transacoes" element={
-                <ProtectedRoute>
-                    <TransacoesPage />
-                </ProtectedRoute>
-            } />
-
-            <Route path="/Categorias">
-                <Route index path="/" element={
+            <Route path="/transacoes">
+                <Route index element={
+                    <ProtectedRoute>
+                        <TransacoesPage />
+                    </ProtectedRoute>
+                } />
+                <Route path=":id" element={
+                    <ProtectedRoute>
+                        <DetailsTransacaoPage return="/" />
+                    </ProtectedRoute>
+                } />
+            </Route>
+            <Route path="/categorias">
+                <Route index element={
                     <ProtectedRoute>
                         <CategoriasPage />
                     </ProtectedRoute>
                 } />
-                {/* <Route path=":id" element={
+                <Route path=":id" element={
                     <ProtectedRoute>
                         <DetailCategoriaPage return="/" />
                     </ProtectedRoute>
-                } /> */}
+                } />
             </Route>
-
-            <Route path="*" element={<Navigate to="/" />} />
+            <Route path="*" element={
+                <NotFoundPage />
+            } />
         </Routes>
     )
 }
