@@ -3,8 +3,8 @@ import { BrowserRouter } from 'react-router-dom';
 import { TransacoesProvider } from './providers/TransacoesProvider';
 import { CategoriasProvider } from './providers/CategoriasProvider';
 import { MetasProvider } from './providers/MetasProvider';
-import { Header } from './Components/Header';
-import { Footer } from './Components/Footer';
+import { Header } from './Components/LayoutBase/Header';
+import { Footer } from './Components/LayoutBase/Footer';
 import { PatchRoutes } from './Components/Routes';
 
 

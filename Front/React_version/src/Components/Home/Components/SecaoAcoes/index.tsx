@@ -1,6 +1,6 @@
 import { Saldo } from "./Components/Saldo";
-import { AdicionarTransacaoForm } from "../AdicionarTransacaoForm";
-import { AdicionarCategoriaForm } from "../AdicionarCategoriaForm/intex";
+import { AdicionarTransacaoForm } from "../Form/AdicionarTransacaoForm";
+import { AdicionarCategoriaForm } from "../Form/AdicionarCategoriaForm/intex";
 import { useContext, useState } from "react";
 import './Secao.css'
 import { CategoriasContext } from "../../../../Contexts/CategoriasContext";

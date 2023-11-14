@@ -75,6 +75,9 @@ ul.list-values-2columns {
   margin: 0 1em;
   display: flex;
   flex-wrap: wrap;
+  /* 
+  para limitar a quantidade de itens por linha, basta definir o width do item
+  */
   align-items: center;
   justify-content: flex-start;
   gap: 1em;

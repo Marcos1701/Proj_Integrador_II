@@ -3,11 +3,13 @@ import { ProtectedRoute } from "../ProtectedRoute";
 import { Home } from "../Home";
 import { LoginPage } from "../Auth/LoginPage";
 import { RegisterPage } from "../Auth/RegisterPage";
-import { TransacoesPage } from "../TransacoesPage";
-import { CategoriasPage } from "../CategoriasPage";
-import { DetailCategoriaPage } from "../DetailsPage/Categoria";
-import { NotFoundPage } from "../NotFoundPage";
-import { DetailsTransacaoPage } from "../DetailsPage/Transacao";
+import { TransacoesPage } from "../Pages/TransacoesPage";
+import { CategoriasPage } from "../Pages/CategoriasPage";
+import { DetailCategoriaPage } from "../Pages/DetailsPage/Categoria";
+import { NotFoundPage } from "../Pages/NotFoundPage";
+import { DetailsTransacaoPage } from "../Pages/DetailsPage/Transacao";
+import { DetailsMetaPage } from "../Pages/DetailsPage/Meta";
+import { MetasPage } from "../Pages/MetasPage";
 
 export function PatchRoutes() {
     return (
@@ -40,6 +42,18 @@ export function PatchRoutes() {
                 <Route path=":id" element={
                     <ProtectedRoute>
                         <DetailCategoriaPage return="/" />
+                    </ProtectedRoute>
+                } />
+            </Route>
+            <Route path="/metas">
+                <Route index element={
+                    <ProtectedRoute>
+                        <MetasPage />
+                    </ProtectedRoute>
+                } />
+                <Route path=":id" element={
+                    <ProtectedRoute>
+                        <DetailsMetaPage return="/" />
                     </ProtectedRoute>
                 } />
             </Route>

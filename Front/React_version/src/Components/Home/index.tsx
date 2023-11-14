@@ -1,9 +1,9 @@
-import { ListTransacoes } from "../ListTransacoes";
-import { ListCategorias } from "../ListCategorias";
+import { ListTransacoes } from "../List/ListTransacoes";
+import { ListCategorias } from "../List/ListCategorias";
 import { SecaoActions_Home } from "./Components/SecaoAcoes";
 import './Home.css'
 import { Link } from "react-router-dom";
-import { ListMetas } from "../ListMetas";
+import { ListMetas } from "../List/ListMetas";
 
 export function Home() {
 
