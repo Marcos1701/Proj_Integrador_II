@@ -1,0 +1,45 @@
+.transacao-box {
+    height: 2em;
+    width: fit-content;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    align-items: center;
+    justify-content: center;
+}
+
+.transacao-box .navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 30px;
+    width: 540px;
+    margin: 0;
+}
+
+.transacao-box :is(.text-wrapper, .div, .text-wrapper-2) {
+    color: #3f3f3f;
+    font-family: "Eina03-Regular";
+    font-size: 14px;
+    font-weight: 400;
+    letter-spacing: 0;
+    line-height: normal;
+    width: 100px;
+    text-align: left;
+}
+
+.transacao-box :is(.div, .text-wrapper-2) {
+    color: #858383;
+    text-align: left;
+
+}
+
+.transacao-box .text-wrapper-3 {
+    color: #3f3f3f;
+    font-family: Eina03-Bold;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0;
+    line-height: normal;
+    text-align: right;
+}
