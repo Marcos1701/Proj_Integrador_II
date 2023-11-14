@@ -40,7 +40,7 @@ body {
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
-  background: var(--background, #E2EEEC);
+  background: var(--background, #e2ebe9);
 }
 
 h1 {
@@ -74,12 +74,9 @@ ul.list-values-2columns {
   padding: .5em;
   margin: 0 1em;
   display: flex;
-  flex-wrap: wrap;
-  /* 
-  para limitar a quantidade de itens por linha, basta definir o width do item
-  */
+
   align-items: center;
-  justify-content: flex-start;
+  justify-content: center;
   gap: 1em;
   min-width: 43em;
 
@@ -141,22 +138,22 @@ ul.list-values-2columns {
 
 
   & svg {
-      width: 3em;
-      height: 3em;
-      fill: var(--text, #13201E);
+    width: 3em;
+    height: 3em;
+    fill: var(--text, #13201E);
 
-      &:hover {
-          filter: invert(20%) sepia(79%) saturate(4652%) hue-rotate(231deg) brightness(78%) contrast(85%);
-      }
+    &:hover {
+      filter: invert(20%) sepia(79%) saturate(4652%) hue-rotate(231deg) brightness(78%) contrast(85%);
+    }
   }
 
   &:hover {
-      background: none;
-      border: none;
+    background: none;
+    border: none;
   }
 
   &:is(:focus, :focus-visible) {
-      outline: none;
+    outline: none;
   }
 }
 

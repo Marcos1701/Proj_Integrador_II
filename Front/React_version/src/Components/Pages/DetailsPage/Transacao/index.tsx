@@ -6,7 +6,7 @@ import { MoneyValidation } from "../../../Home/Components/Form/AdicionarTransaca
 import '../Details.css'
 import { TransacoesContext } from "../../../../Contexts/TransacoesContext";
 import { CategoriasContext } from "../../../../Contexts/CategoriasContext";
-import { ITransacao } from "../../../List/ListTransacoes/Components/Transacao";
+import { ITransacao } from "../../../List/ListTransacoesCard/Components/Transacao";
 
 
 interface IProps {

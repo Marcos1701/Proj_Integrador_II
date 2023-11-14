@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ListTransacoes } from "../../List/ListTransacoes";
+import { ListTransacoesCard } from "../../List/ListTransacoesCard";
 import { Navigate } from "react-router-dom";
 
 export function TransacoesPage() {
@@ -27,7 +27,7 @@ export function TransacoesPage() {
                 <h2 className="title">Transações</h2>
             </div>
 
-            <ListTransacoes page={1} limit={6} classname="list_on_page" />
+            <ListTransacoesCard page={1} limit={8} classname="list_on_page" />
 
         </main>
     )

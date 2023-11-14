@@ -8,8 +8,8 @@ export function Header() {
     const { user } = useAuth()
     return (
         <header>
-            <div className="logo_div">
-                <img src="/Icons/icone.png" alt="Logo" className="logo_app" />
+            <div className="header_content">
+
                 {user ? (
                     <p>Olá, {user.nome}</p>
                 ) : (

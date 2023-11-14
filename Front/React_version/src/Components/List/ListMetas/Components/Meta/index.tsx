@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { tratarData } from '../../../ListTransacoes/Components/Transacao';
+import { tratarData } from '../../../ListTransacoesCard/Components/Transacao';
 import './Meta.css'
 import { Navigate } from 'react-router-dom';
 export interface IMeta {

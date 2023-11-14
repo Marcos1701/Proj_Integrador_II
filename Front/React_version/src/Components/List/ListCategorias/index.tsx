@@ -22,7 +22,7 @@ export function ListCategorias(
         searchInput = false,
         limit = 2,
         page = 1,
-        classname = "lista-categorias"
+        classname = "div_categorias"
     }: ListCategoriasProps
 ) {
 
@@ -41,7 +41,7 @@ export function ListCategorias(
                     </div>
                 )}
 
-                <ul className="list-values-2columns">
+                <ul className="list-values-2columns" id="lista_categorias">
                     {categorias.length === 0 && <li className="empty">Nenhuma categoria cadastrada</li>}
                     {
                         categorias.slice(page * limit - limit, page * limit)
