@@ -1,3 +1,4 @@
+import { Transform } from 'class-transformer';
 import { Categoria } from 'src/categorias/entities/categoria.entity';
 import { Transacao } from 'src/transacoes/entities/transacao.entity';
 import { Column, Entity, JoinColumn, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
@@ -18,7 +19,7 @@ export enum TransacoesorderBy {
 export interface ordenarTransacoes {
   titulo?: 'ASC' | 'DESC';
   valor?: 'ASC' | 'DESC';
-  dataCriacao?: 'ASC' | 'DESC';
+  data?: 'ASC' | 'DESC';
   tipo?: 'entrada' | 'saida';
   categoriaid?: string;
 }
@@ -29,7 +30,7 @@ export interface returnTransacao {
   valor: number;
   titulo: string;
   descricao?: string;
-  dataCriacao: Date;
+  data: Date;
   categoriaid: string;
 }
 
@@ -56,6 +57,7 @@ export class Usuario {
       nullable: false
     }
   )
+  @Transform(value => Number(value))
   saldo: number;
 
   @Column(
@@ -89,7 +91,7 @@ export class Usuario {
 
   getTransacoes(order: 'ASC' | 'DESC' = 'ASC', orderby?: TransacoesorderBy, search?: string, categoriaid?: string): returnTransacao[] {
     if (!this.transacoes) { return [] }
-    
+
     let TransacoesOrdenadas: returnTransacao[] = this.transacoes.map(transacao => {
       const { categoria, ...retorno } = transacao;
 
@@ -143,5 +145,27 @@ export class Usuario {
   updateData(usuario: Partial<Usuario>) {
     Object.assign(this, usuario);
   }
+
+
+  atualizarSaldo() {
+    const transacoes = this.transacoes.map(transacao => {
+      const { categoria, ...retorno } = transacao;
+
+      retorno.valor = Number(retorno.valor);
+      return {
+        ...retorno,
+        categoriaid: categoria.id
+      }
+    })
+
+    this.saldo = transacoes.reduce((acc, curr) => {
+      if (curr.tipo === 'entrada') {
+        return acc + curr.valor;
+      } else {
+        return acc - curr.valor;
+      }
+    }, 0);
+  }
+
 
 }

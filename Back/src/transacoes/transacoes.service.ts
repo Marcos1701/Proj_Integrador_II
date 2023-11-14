@@ -18,7 +18,7 @@ export class TransacoesService {
 
   async create(createTransacoeDto: CreateTransacoeDto, access_token: string) {
 
-    const usuario = await this.getUserFromtoken(access_token);
+    const usuario = await this.getUserFromtoken(access_token, ['transacoes']);
     const categoria = await this.entityManager.findOne(
       Categoria,
       {
@@ -34,11 +34,15 @@ export class TransacoesService {
         }
       });
 
+
     if (!categoria) {
       throw new NotFoundException('Categoria não encontrada');
     }
 
-    if (createTransacoeDto.tipo === 'saida' && categoria.gasto + createTransacoeDto.valor > categoria.orcamento) {
+    if (categoria.orcamento &&
+      createTransacoeDto.tipo === 'saida' &&
+      categoria.gasto + createTransacoeDto.valor > categoria.orcamento
+    ) {
       throw new BadRequestException('O valor da transação excede o orçamento da categoria');
     }
 
@@ -49,13 +53,8 @@ export class TransacoesService {
     if (!result) {
       throw new NotFoundException('Transação não encontrada');
     }
-    if (result.tipo === 'entrada') {
-      categoria.gasto = categoria.gasto - result.valor <= 0 ? 0 : categoria.gasto - result.valor;
-    } else {
-      categoria.gasto += result.valor;
-    }
-    usuario.saldo += result.tipo === 'entrada' ? result.valor : -result.valor;
-
+    categoria.atualizaGasto();
+    usuario.atualizarSaldo();
     this.entityManager.save(categoria);
     this.entityManager.save(usuario);
 
@@ -107,7 +106,11 @@ export class TransacoesService {
       throw new BadRequestException('Nenhum dado para atualizar'); // 400
     }
 
-    const usuario = await this.getUserFromtoken(access_token);
+    if (updateTransacoeDto.valor && isNaN(updateTransacoeDto.valor)) {
+      throw new BadRequestException('Valor inválido'); // 400
+    }
+
+    const usuario = await this.getUserFromtoken(access_token, ['transacoes']);
 
     const transacao: Transacao = await this.entityManager.findOne(
       Transacao, {
@@ -161,7 +164,11 @@ export class TransacoesService {
         throw new NotFoundException('Categoria não encontrada');
       }
 
-      if (updateTransacoeDto.tipo === 'saida' && categoriaNova.gasto + updateTransacoeDto.valor > categoriaNova.orcamento) {
+      if (
+        categoriaNova.orcamento &&
+        updateTransacoeDto.tipo === 'saida'
+        && categoriaNova.gasto + updateTransacoeDto.valor > categoriaNova.orcamento
+      ) {
         await this.entityManager.update(
           Transacao, {
           id,
@@ -216,6 +223,7 @@ export class TransacoesService {
       },
     }
     );
+
     const result: DeleteResult = await this.entityManager.delete<Transacao>(
       Transacao, {
       id,
@@ -246,7 +254,9 @@ export class TransacoesService {
           transacoes: relations && relations.includes('transacoes') ? true : false
         }
       }
-    )
+    );
+
+
 
     if (!usuario) {
       console.log('Usuário não encontrado');

@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsEnum, IsJWT, IsNotEmpty, IsOptional, IsPositive, IsString, IsUUID } from "class-validator";
+import { IsDate, IsDateString, IsEnum, IsJWT, IsNotEmpty, IsOptional, IsPositive, IsString, IsUUID } from "class-validator";
 
 export class CreateTransacoeDto {
 
@@ -63,6 +63,24 @@ export class CreateTransacoeDto {
     }
   )
   descricao?: string;
+
+  @ApiProperty({
+    description: "Data da transação",
+    type: Date,
+    default: new Date()
+  })
+  @IsDateString(
+    {
+      strict: true, // aceita apenas datas válidas
+
+    }, {
+    message: "Data inválida",
+    context: {
+      IsDateString: true
+    }
+  }
+  )
+  data: Date;
 
   @ApiProperty({
     description: "ID da categoria",
