@@ -9,20 +9,20 @@ header {
     width: 85vw;
     max-width: 1280px;
 
-    & .logo_div{
+    & .logo_div {
         display: flex;
         align-items: center;
         justify-content: flex-start;
         gap: 1em;
     }
-    & .logo_app{
+
+    & .logo_app {
         width: 3em;
         height: 3em;
         padding: 0;
         margin: 0;
         border-radius: 100%;
         border: #2844BD 1px solid;
-        
     }
 }
 
