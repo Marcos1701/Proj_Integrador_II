@@ -24,7 +24,7 @@ export function ListTransacoes(
         <div className={classname}>
             <div className="anchors_to_transacoesPage">
                 <h2 className="title">Últimas transações</h2>
-                <Link to={`/transacoes`}>Ver todas</Link>
+                <Link to={`/transacoes`} key={"linkToTransacoes"}>Ver todas</Link>
             </div>
             <div className="legend-transacoes">
                 <div className="legend-item">Titulo</div>
@@ -33,7 +33,7 @@ export function ListTransacoes(
                 <div className="legend-item">Valor</div>
             </div>
             <ul className="listValues">
-                {transacoes.length === 0 && <li className="empty" key='EmptyTransacoes'>Nenhuma transação cadastrada</li>}
+                {transacoes.length === 0 && <li className="empty">Nenhuma transação cadastrada</li>}
                 {
                     transacoes
                         .slice(0, 3)

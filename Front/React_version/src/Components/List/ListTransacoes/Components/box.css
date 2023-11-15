@@ -16,9 +16,21 @@
         box-shadow: 0px 2px 4px #00000029, 0px 2px 6px #0000000a, 0px 16px 24px #0000000f;
         border-radius: 10px;
 
-        & div {
-            color: var(--accent, #2844BD);
+        /* para celecionar elementos, com exceção de um elemento filho,
+        é necessário usar o seletor :not(), da seguinte forma:
+        :not(elemento-filho) 
+        */
 
+        & div:not(.valorTransacao-saida) {
+            color: var(--accent, #2844BD);
+        }
+
+        & div.valorTransacao-entrada {
+            color: var(--greenHover, #018c0d);
+        }
+
+        & div.valorTransacao-saida {
+            color: var(--redHover, #e83e3e);
         }
     }
 }
@@ -70,14 +82,21 @@
 
 }
 
-.transacao-box .text-wrapper-3 {
-    color: var(--text, #13201E);
+.navbar :is(.valorTransacao-entrada, .valorTransacao-saida) {
     font-family: Eina03-Bold;
     font-size: 14px;
     font-weight: 700;
     letter-spacing: 0;
     line-height: normal;
     text-align: right;
+}
+
+.navbar .valorTransacao-entrada {
+    color: var(--green, #00a60e);
+}
+
+.navbar .valorTransacao-saida {
+    color: var(--red, #E54444);
 }
 
 svg#vector {
