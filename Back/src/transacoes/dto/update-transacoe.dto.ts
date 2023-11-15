@@ -73,6 +73,22 @@ export class UpdateTransacoeDto extends PartialType(CreateTransacoeDto) {
     descricao?: string;
 
     @ApiProperty({
+        description: "Data da transação",
+        type: Date,
+        default: new Date()
+    })
+    @IsOptional(
+        {
+            message: "Data inválida",
+            context: {
+                IsDate: true
+            }
+        }
+    )
+    data?: Date;
+
+
+    @ApiProperty({
         description: "ID da categoria",
         type: String,
         default: "00000000-0000-0000-0000-000000000000"

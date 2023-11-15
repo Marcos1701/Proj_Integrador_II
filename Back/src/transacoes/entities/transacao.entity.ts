@@ -1,3 +1,5 @@
+import { InjectEntityManager } from '@nestjs/typeorm';
+import { Transform } from 'class-transformer';
 import { Categoria } from 'src/categorias/entities/categoria.entity';
 import { Usuario } from 'src/usuarios/entities/usuario.entity';
 import {
@@ -9,6 +11,10 @@ import {
   AfterInsert,
   AfterUpdate,
   AfterRemove,
+  InsertEvent,
+  UpdateEvent,
+  RemoveEvent,
+  EntityManager,
 } from 'typeorm';
 
 @Entity()
@@ -43,7 +49,7 @@ export class Transacao {
   descricao?: string;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-  dataCriacao: Date;
+  data: Date;
 
   @ManyToOne(() => Usuario, (usuario) => usuario.transacoes, {
     nullable: false,
@@ -66,11 +72,13 @@ export class Transacao {
     Object.assign(this, transacao);
   }
 
-  @AfterInsert()
-  @AfterUpdate()
-  @AfterRemove()
-  async atualizaGastoCategoria() {
-    this.categoria.atualizaGasto();
-  }
+  // @AfterInsert()
+  // @AfterUpdate()
+  // @AfterRemove()
+  // async atualizaGastoCategoria() {
+  //   this.categoria.atualizaGasto();
+  //   await this.entityMananger.save<Categoria>(this.categoria);
+  // }
+
 
 }

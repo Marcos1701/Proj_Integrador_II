@@ -80,14 +80,24 @@ export class CategoriasService {
 
     const usuario = await this.getUserFromtoken(access_token);
 
-    const result = await this.categoriasRepository.update(
-      { id, usuario: { id: usuario.id } },
-      updateCategoriaDto
+    const result = await this.entityManager.update<Categoria>(
+      Categoria, {
+      id,
+      usuario: {
+        id: usuario.id
+      }
+    }, {
+      ...updateCategoriaDto
+    }
     );
 
     if (result.affected === 0) {
       throw new NotFoundException('Categoria não encontrada');
     }
+    usuario.atualizarSaldo();
+
+    await this.entityManager.save(usuario);
+
     return result
   }
 
@@ -95,24 +105,37 @@ export class CategoriasService {
     if (!id || id === '') {
       throw new BadRequestException('id da categoria não informado'); // 404
     }
-    const usuario = await this.getUserFromtoken(access_token);
+    const usuarioPertencente = await this.getUserFromtoken(access_token);
 
-    const result = await this.entityManager.delete(
+    const categoria = await this.entityManager.findOne(
       Categoria, {
-      id,
-      usuario: {
-        id: usuario.id
+      where: {
+        id,
+        usuario: {
+          id: usuarioPertencente.id
+        }
       },
       relations: {
-        usuario: true // para que atualize o saldo do usuario ao deletar a categoria (metodo @AfterRemove seja chamado)
+        usuario: true
       }
     });
 
-    if (result.affected === 0) {
+    if (!categoria) {
       throw new NotFoundException('Categoria não encontrada');
     }
 
-    return result;
+    const result = await this.entityManager.remove(
+      Categoria, categoria, {
+      data: {
+        usuario: {
+          id: usuarioPertencente.id
+        }
+      }
+    }
+    ); // deleta a categoria e todas as transacoes relacionadas a ela
+
+    const { usuario, ...retorno } = result;
+    return retorno
   }
 
   private getUserFromtoken(token: string): Promise<Usuario> {

@@ -109,7 +109,7 @@ export class CategoriasController {
     name: 'id',
     description: 'ID da categoria'
   })
-  @Patch(':id')
+  @Patch(':id') // Atualiza uma categoria
   async update(@Param('id') id: string, @Body() updateCategoriaDto: UpdateCategoriaDto, @Headers('Authorization') token: string) {
     return this.categoriasService.update(id, updateCategoriaDto, token);
   }

@@ -1,0 +1,68 @@
+.element-details :is(.categoria-info, .Transacao-info) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.categoria-info {
+    gap: .5rem;
+}
+
+p.created-at {
+    font-size: 13.5px;
+
+    & span {
+        color: var(--accent, #2844BD);
+    }
+
+}
+
+.select-orcamento-group,
+#orcamento-div {
+    display: flex;
+}
+
+.select-orcamento-group {
+    gap: .7em;
+}
+
+#select-div {
+    margin: 0;
+}
+
+#input-orcamento {
+    width: 12em;
+}
+
+#orcamento-div {
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+
+
+    & * {
+        margin-left: 0;
+    }
+}
+
+.submit-form-button:disabled {
+    cursor: not-allowed;
+}
+
+
+.Transacao-info {
+    gap: 0;
+}
+
+#transacao-detail {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+
+    & #titulo {
+        width: 25em;
+    }
+}

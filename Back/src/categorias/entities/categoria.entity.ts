@@ -1,11 +1,16 @@
+import { InjectEntityManager } from '@nestjs/typeorm';
 import { Transacao } from 'src/transacoes/entities/transacao.entity';
 import { Usuario } from 'src/usuarios/entities/usuario.entity';
-import { AfterRemove, Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { AfterRemove, AfterSoftRemove, BeforeUpdate, Column, Entity, EntityManager, ManyToOne, OneToMany, PrimaryGeneratedColumn, RemoveEvent, UpdateEvent } from 'typeorm';
 
 @Entity()
 export class Categoria {
   @PrimaryGeneratedColumn(
     'uuid', // tipo de dado do id
+    {
+      name: 'id_categoria', // nome da coluna no banco de dados
+      comment: 'Identificador da tabela categoria' // comentário da coluna no banco de dados
+    }
   )
   id: string;
 
@@ -49,9 +54,12 @@ export class Categoria {
   usuario: Usuario;
 
   @OneToMany(() => Transacao, (transacao) => transacao.categoria, {
-    onDelete: 'CASCADE'
+    cascade: true
   })
   transacoes: Transacao[];
+
+  @InjectEntityManager()
+  private entityMananger: EntityManager;
 
   constructor(categoria: Partial<Categoria>) {
     Object.assign(this, categoria);
@@ -70,9 +78,17 @@ export class Categoria {
     }, 0);
   }
 
-  @AfterRemove()
-  async atualizaSaldo() {
-    const usuario = this.usuario;
-    usuario.saldo = usuario.saldo - this.gasto;
-  }
+
+  // @BeforeUpdate()
+  // async validaOrcamento(
+  //   event: UpdateEvent<Categoria>
+  // ) {
+  //   if (!event.updatedColumns.find(column => column.propertyName === 'orcamento')) {
+  //     return;
+  //   }
+
+  //   if (event.entity.orcamento && event.entity.gasto > event.entity.orcamento) {
+  //     throw new Error('O orçamento não pode ser menor que o gasto');
+  //   }
+  // }
 }
