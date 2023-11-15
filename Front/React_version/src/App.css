@@ -4,6 +4,7 @@
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
+  min-height: 100vh;
 }
 
 /* Define a exibição, direção, justificação e alinhamento dos itens para #root, main e form.element-details,form.add-element-form */

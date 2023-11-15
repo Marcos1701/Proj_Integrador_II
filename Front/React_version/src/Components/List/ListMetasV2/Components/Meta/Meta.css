@@ -1,4 +1,4 @@
-.transacao-box {
+.meta-box {
     height: 2em;
     width: fit-content;
     display: flex;
@@ -15,15 +15,16 @@
 
         box-shadow: 0px 2px 4px #00000029, 0px 2px 6px #0000000a, 0px 16px 24px #0000000f;
         border-radius: 10px;
+    }
 
-        & div {
-            color: var(--accent, #2844BD);
-
-        }
+    & * {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
     }
 }
 
-.transacao-box .navbar {
+.meta-box .navbar {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -32,45 +33,31 @@
     margin: 0;
 }
 
-.transacao-box :is(.title-icon, .div, .text-wrapper-2) {
+.meta-box :is(.text-wrapper, .text-wrapper-2) {
     color: var(--text, #222423);
     font-family: "Eina03-Regular";
     font-size: 14px;
     font-weight: 400;
     letter-spacing: 0;
     line-height: normal;
-    width: 100px;
     text-align: left;
 }
 
-.transacao-box :is(.title-icon, .title-icon .icon-div) {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
+.meta-box .text-wrapper {
+    width: 150px;
 }
 
-
-.transacao-box .title-icon .icon-div {
-    background-color: var(--text-secondary, #cbcfce);
-    border-radius: 6px;
-    width: 25px;
-    height: 25px;
-    margin-right: 5px;
-    justify-content: center;
-
-    & .icon-Categoria {
-        width: 18px;
-        height: 18px;
-    }
+.meta-box .text-wrapper-2 {
+    width: 85px;
 }
 
-.transacao-box :is(.div, .text-wrapper-2) {
+.meta-box .text-wrapper-2 {
     color: var(--text-secondary, #2b3836);
     text-align: left;
 
 }
 
-.transacao-box .text-wrapper-3 {
+.meta-box :is(.text-wrapper-3, .text-wrapper-4) {
     color: var(--text, #13201E);
     font-family: Eina03-Bold;
     font-size: 14px;
@@ -78,6 +65,8 @@
     letter-spacing: 0;
     line-height: normal;
     text-align: right;
+    width: 100px;
+    text-align: left;
 }
 
 svg#vector {

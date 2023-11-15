@@ -1,10 +1,11 @@
 import { CategoriasContext } from "../../../Contexts/CategoriasContext";
 import { TransacoesContext, TransacoesContextData } from "../../../Contexts/TransacoesContext";
 import { ICategoria } from "../ListCategorias/Components/Categoria";
-import { ITransacao, Transacao } from "../ListTransacoesCard/Components/Transacao";
-import { useContext, useState } from "react";
+import { ITransacao } from "../ListTransacoesCard/Components/Transacao";
+import { useContext } from "react";
 import './ListTransacoes.css'
 import { Box } from "./Components/box";
+import { Link } from "react-router-dom";
 
 
 interface IListTransacoesProps {
@@ -21,15 +22,18 @@ export function ListTransacoes(
 
     return (
         <div className={classname}>
-            <h2>Últimas transações</h2>
+            <div className="anchors_to_transacoesPage">
+                <h2 className="title">Últimas transações</h2>
+                <Link to={`/transacoes`}>Ver todas</Link>
+            </div>
+            <div className="legend-transacoes">
+                <div className="legend-item">Titulo</div>
+                <div className="legend-item">Categoria</div>
+                <div className="legend-item">Data</div>
+                <div className="legend-item">Valor</div>
+            </div>
             <ul className="listValues">
-                <div className="legend">
-                    <div className="legend-item">Titulo</div>
-                    <div className="legend-item">Categoria</div>
-                    <div className="legend-item">Data</div>
-                    <div className="legend-item">Valor</div>
-                </div>
-                {transacoes.length === 0 && <li className="empty">Nenhuma transação cadastrada</li>}
+                {transacoes.length === 0 && <li className="empty" key='EmptyTransacoes'>Nenhuma transação cadastrada</li>}
                 {
                     transacoes
                         .slice(0, 3)

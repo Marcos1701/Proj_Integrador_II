@@ -1,8 +1,9 @@
-import React from "react";
+import { useState } from "react";
 import "./box.css";
 import { ITransacao, tratarData } from "../../ListTransacoesCard/Components/Transacao";
 import { ICategoria } from "../../ListCategorias/Components/Categoria";
 import { realizarTratamentoValor } from "../../../Home/Components/SecaoAcoes/Components/Saldo";
+import { Navigate } from "react-router-dom";
 
 export interface ITransacaoboxProps {
     transacao: ITransacao;
@@ -16,10 +17,17 @@ export const Box = (
         categoria
     }: ITransacaoboxProps
 ): JSX.Element => {
+
+    const [showDetails, setShowDetails] = useState(false);
+
     return (
-        <div className="transacao-box" id={transacao.id}>
+        <a className="transacao-box" id={transacao.id} onClick={() => setShowDetails(!showDetails)}>
+            {showDetails && (<Navigate to={`/transacoes/${transacao.id}`} />)}
             <div className="navbar">
-                <div className="text-wrapper">{transacao.titulo}</div>
+                <div className="title-icon">
+                    <div className="icon-div"><img className="icon-Categoria" src={`assets/icons/${categoria.icone ? categoria.icone : 'barraquinha'}.svg`} alt="Icone da categoria" /></div>
+                    {transacao.titulo}
+                </div>
                 <div className="div">{categoria.nome}</div>
                 <div className="text-wrapper-2">{tratarData(transacao.data.toString(), 'simplificado')}</div>
                 <div className="text-wrapper-3">R$ {realizarTratamentoValor(transacao.valor)}</div>
@@ -28,6 +36,6 @@ export const Box = (
                 <path d="M0.496094 0.805695H544.239" stroke="#2844BD" strokeWidth="0.5" />
             </svg>
 
-        </div>
+        </a>
     );
 };

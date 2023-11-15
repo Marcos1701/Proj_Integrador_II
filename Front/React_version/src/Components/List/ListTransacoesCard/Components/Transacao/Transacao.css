@@ -112,7 +112,7 @@
 }
 
 .valor-transacao-entrada {
-    color: var(--collors-green, rgba(0, 166, 15, 0.90));
+    color: var(--collors-green, #00a60e5e);
 }
 
 .valor-transacao-saida {
