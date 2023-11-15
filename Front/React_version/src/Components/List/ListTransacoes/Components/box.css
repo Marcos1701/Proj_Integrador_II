@@ -1,10 +1,27 @@
+.item {
+    display: flex;
+    height: 2em;
+    min-width: 550px;
+    gap: 0;
+    align-items: center;
+    justify-content: flex-start;
+
+    &:hover {
+        & .ButtonDelete {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    }
+}
+
 .transacao-box {
     height: 2em;
     width: fit-content;
     display: flex;
     flex-direction: column;
     gap: 0;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
 
     cursor: pointer;
@@ -102,4 +119,40 @@
 svg#vector {
     margin: 0;
     padding: 0;
+    width: 100%;
+}
+
+.item .ButtonDelete {
+
+    display: none;
+
+    background-color: transparent;
+    margin: 0;
+    padding: 0;
+    cursor: pointer;
+    width: 30px;
+    height: 30px;
+    border-radius: 10px;
+
+    animation: move 0.5s ease-in-out forwards;
+}
+
+@keyframes move {
+    0% {
+        z-index: -1;
+        opacity: 0;
+        margin: 0;
+    }
+
+    100% {
+        z-index: 1;
+        opacity: 1;
+        margin: 0 0 0 18px;
+    }
+
+}
+
+.item .ButtonDelete:hover {
+    transform: scale(1.1);
+    transition: 0.2s;
 }

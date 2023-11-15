@@ -32,17 +32,17 @@ export class CategoriasSubscriber implements EntitySubscriberInterface<Categoria
         }
 
         if (this.categoria.gasto > event.entity.orcamento) {
-            console.log(`O valor do orçamento é menor que o gasto da categoria ${this.categoria.nome} do usuário ${this.categoria.usuario.nome}`)
+
             event.queryRunner.rollbackTransaction();
             throw new BadRequestException('O valor do orçamento é menor que o gasto da categoria');
         }
-        console.log(`Atualizando categoria ${this.categoria.nome} do usuário ${this.categoria.usuario.nome}`)
+
         // tudo certo
         return;
     }
 
     async beforeRemove(event: RemoveEvent<Categoria>) {
-        console.log(`Removendo categoria ${event.entity.nome} do usuário ${event.entity.usuario.nome}`)
+
         const categoria = await this.mananger.findOne(Categoria, {
             where: { id: event.entity.id },
             relations: { usuario: true, transacoes: true }

@@ -8,6 +8,15 @@ import { TransacoesorderBy, Usuario, ordenarTransacoes } from 'src/usuarios/enti
 import { JwtService } from '@nestjs/jwt';
 import { jwtDecodeUser } from 'src/auth/jwt.strategy';
 
+interface UpdateData {
+  titulo?: string;
+  descricao?: string;
+  tipo?: 'entrada' | 'saida';
+  data?: Date;
+  valor?: number;
+  categoria?: Categoria;
+}
+
 @Injectable()
 export class TransacoesService {
   constructor(
@@ -46,17 +55,15 @@ export class TransacoesService {
       throw new BadRequestException('O valor da transação excede o orçamento da categoria');
     }
 
-    const transacao = new Transacao({ ...createTransacoeDto, usuario, categoria: categoria });
-
-    const result = await this.entityManager.save<Transacao>(transacao);
+    const result = await this.entityManager.insert<Transacao>(Transacao, {
+      ...createTransacoeDto,
+      usuario,
+      categoria
+    });
 
     if (!result) {
       throw new NotFoundException('Transação não encontrada');
     }
-    categoria.atualizaGasto();
-    usuario.atualizarSaldo();
-    this.entityManager.save(categoria);
-    this.entityManager.save(usuario);
 
     return result;
   }
@@ -125,6 +132,29 @@ export class TransacoesService {
       }
     });
 
+    const data: UpdateData = {};
+
+    if (updateTransacoeDto.titulo) data.titulo = updateTransacoeDto.titulo;
+    if (updateTransacoeDto.descricao) data.descricao = updateTransacoeDto.descricao;
+    if (updateTransacoeDto.valor) data.valor = updateTransacoeDto.valor;
+    if (updateTransacoeDto.tipo) data.tipo = updateTransacoeDto.tipo;
+    if (updateTransacoeDto.data) data.data = updateTransacoeDto.data;
+    if (updateTransacoeDto.categoriaid) {
+      const categoria = await this.entityManager.findOne(
+        Categoria,
+        {
+          where: {
+            id: updateTransacoeDto.categoriaid,
+            usuario: {
+              id: usuario.id
+            }
+          }
+        });
+      if (!categoria) {
+        throw new NotFoundException('Categoria não encontrada');
+      }
+      data.categoria = categoria;
+    }
     const result: UpdateResult = await this.entityManager.update(
       Transacao, {
       id,
@@ -132,7 +162,7 @@ export class TransacoesService {
         id: usuario.id
       }
     },
-      { ...updateTransacoeDto }
+      { ...data }
     );
 
     if (result.affected === 0) {
@@ -221,22 +251,21 @@ export class TransacoesService {
           id: usuario.id
         },
       },
+      relations: {
+        usuario: true,
+        categoria: true
+      }
     }
     );
 
-    const result: DeleteResult = await this.entityManager.delete<Transacao>(
-      Transacao, {
-      id,
-      usuario: {
-        id: usuario.id
-      }
-    });
+    const result: Transacao = await this.entityManager.remove<Transacao>(
+      transacao
+    );
 
-    if (result.affected === 0) {
+    if (!result) {
       throw new NotFoundException('Transação não encontrada');
     }
-    usuario.saldo = transacao.tipo === 'entrada' ? usuario.saldo - transacao.valor : usuario.saldo + transacao.valor;
-    await this.entityManager.save(usuario);
+
     return result;
   }
 

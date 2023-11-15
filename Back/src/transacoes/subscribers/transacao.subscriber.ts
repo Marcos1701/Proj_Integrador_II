@@ -2,6 +2,7 @@ import { EntityManager, EntitySubscriberInterface, EventSubscriber, InsertEvent,
 import { BadRequestException, Injectable } from "@nestjs/common";
 import { Transacao } from "../entities/transacao.entity";
 import { Categoria } from "src/categorias/entities/categoria.entity";
+import { Usuario } from "src/usuarios/entities/usuario.entity";
 
 
 @EventSubscriber()
@@ -18,12 +19,17 @@ export class TransacaoSubscriber implements EntitySubscriberInterface<Transacao>
 
     afterLoad(entity: Transacao, event?: LoadEvent<Transacao>): void | Promise<any> {
         this.transacao = entity;
+        this.transacao.valor = Number(this.transacao.valor);
     }
 
-    async beforeInsert(event: InsertEvent<Transacao>) {
+    async afterInsert(event: InsertEvent<Transacao>) {
 
-        const categoria = await this.mananger.findOne(Categoria, { where: { id: event.entity.categoria.id } });
+        const categoria = await this.mananger.findOne(Categoria, {
+            where: { id: event.entity.categoria.id },
+            relations: { usuario: true }
+        });
         if (!categoria) {
+            event.queryRunner.rollbackTransaction();
             throw new BadRequestException('Categoria não encontrada');
         }
 
@@ -31,98 +37,147 @@ export class TransacaoSubscriber implements EntitySubscriberInterface<Transacao>
             categoria.orcamento && categoria.orcamento < event.entity.valor
             && event.entity.tipo === 'saida'
         ) {
+            event.queryRunner.rollbackTransaction();
             throw new BadRequestException('O valor da transação excede o orçamento da categoria');
         }
 
+        event.entity.valor = Number(event.entity.valor);
+
         if (event.entity.tipo === 'saida') {
             categoria.gasto += event.entity.valor;
+            categoria.usuario.saldo -= event.entity.valor;
         } else {
-            categoria.gasto -= event.entity.valor;
+            categoria.gasto = categoria.gasto - event.entity.valor < 0 ? 0 : categoria.gasto - event.entity.valor;
+            categoria.usuario.saldo += event.entity.valor;
         }
 
-        categoria.usuario.atualizarSaldo();
-        await this.mananger.save(categoria.usuario);
-        await this.mananger.save(categoria);
+        await this.mananger.save<Categoria>(categoria);
+        await this.mananger.save<Usuario>(categoria.usuario);
+
+        return; // tudo certo
     }
 
     async beforeUpdate(event: UpdateEvent<Transacao>) {
+        // está sendo chamado depois do afterInsert
+        // para corrigir isso, basta adicionar o where: { id: event.entity.id } na query
+        try {
+            if (event.entity === undefined || !event.entity?.valor || !event.entity?.tipo) {
+                return;
+            }
 
-        if (!event.entity.valor || !event.entity.tipo) {
+            const categoria = await this.mananger.findOne(Categoria, {
+                where: {
+                    id: this.transacao.categoria.id
+                }
+            });
+
+            if (!categoria) {
+                throw new BadRequestException('Categoria não encontrada');
+            }
+
+            if (!event.entity.categoria) {
+                if (event.entity.tipo == this.transacao.tipo) {
+                    if (event.entity.tipo === 'saida') {
+                        categoria.gasto -= this.transacao.valor;
+                        categoria.gasto += event.entity.valor;
+                    } else {
+                        categoria.gasto += this.transacao.valor;
+                        categoria.gasto -= event.entity.valor;
+                    }
+                } else {
+                    if (event.entity.tipo === 'saida') {
+                        categoria.gasto += this.transacao.valor + event.entity.valor;
+                    } else {
+                        categoria.gasto -= this.transacao.valor + event.entity.valor;
+                    }
+                }
+            } else {
+                const Novacategoria = await this.mananger.findOne(Categoria, { where: { id: event.entity.categoria.id } });
+
+                if (!Novacategoria) {
+                    throw new BadRequestException('Categoria não encontrada');
+                }
+
+                if (event.entity.tipo == this.transacao.tipo) {
+                    if (event.entity.tipo === 'saida') {
+                        categoria.gasto -= this.transacao.valor;
+                        Novacategoria.gasto += event.entity.valor;
+                    } else {
+                        categoria.gasto += this.transacao.valor;
+                        Novacategoria.gasto -= event.entity.valor;
+                    }
+                } else {
+                    if (event.entity.tipo === 'saida') {
+                        categoria.gasto += this.transacao.valor;
+                        Novacategoria.gasto += event.entity.valor;
+                    } else {
+                        categoria.gasto -= this.transacao.valor;
+                        Novacategoria.gasto -= event.entity.valor;
+                    }
+                }
+
+                if (categoria.orcamento && categoria.gasto > categoria.orcamento) {
+                    throw new BadRequestException('O valor da transação excede o orçamento da categoria');
+                }
+
+                if (Novacategoria.orcamento && Novacategoria.gasto > Novacategoria.orcamento) {
+                    throw new BadRequestException('O valor da transação excede o orçamento da categoria');
+                }
+                await Novacategoria.save()
+            }
+
+            categoria.usuario.saldo = this.transacao.tipo === 'entrada' ? categoria.usuario.saldo + this.transacao.valor : categoria.usuario.saldo - this.transacao.valor;
+
+            await categoria.usuario.save();
+            await categoria.save();
+        } catch (err) {
+            console.error(err)
+        }
+    }
+
+    async afterRemove(event: RemoveEvent<Transacao>): Promise<any> {
+        if (!event.entity.usuario || !event.entity.categoria) {
             return;
         }
-
         const categoria = await this.mananger.findOne(Categoria, {
             where: {
-                id: this.transacao.categoria.id
+                id: event.entity.categoria.id
+            },
+            relations: {
+                transacoes: true
             }
         });
 
         if (!categoria) {
+            event.queryRunner.rollbackTransaction();
             throw new BadRequestException('Categoria não encontrada');
         }
 
-        if (!event.entity.categoria) {
-            if (event.entity.tipo == this.transacao.tipo) {
-                if (event.entity.tipo === 'saida') {
-                    categoria.gasto -= this.transacao.valor;
-                    categoria.gasto += event.entity.valor;
-                } else {
-                    categoria.gasto += this.transacao.valor;
-                    categoria.gasto -= event.entity.valor;
-                }
-            } else {
-                if (event.entity.tipo === 'saida') {
-                    categoria.gasto += this.transacao.valor + event.entity.valor;
-                } else {
-                    categoria.gasto -= this.transacao.valor + event.entity.valor;
-                }
+        const usuario = await this.mananger.findOne(Usuario, {
+            where: {
+                id: event.entity.usuario.id
+            },
+            relations: {
+                transacoes: true
             }
-        } else {
-            const Novacategoria = await this.mananger.findOne(Categoria, { where: { id: event.entity.categoria.id } });
+        });
 
-            if (!Novacategoria) {
-                throw new BadRequestException('Categoria não encontrada');
-            }
-
-            if (event.entity.tipo == this.transacao.tipo) {
-                if (event.entity.tipo === 'saida') {
-                    categoria.gasto -= this.transacao.valor;
-                    Novacategoria.gasto += event.entity.valor;
-                } else {
-                    categoria.gasto += this.transacao.valor;
-                    Novacategoria.gasto -= event.entity.valor;
-                }
-            } else {
-                if (event.entity.tipo === 'saida') {
-                    categoria.gasto += this.transacao.valor;
-                    Novacategoria.gasto += event.entity.valor;
-                } else {
-                    categoria.gasto -= this.transacao.valor;
-                    Novacategoria.gasto -= event.entity.valor;
-                }
-            }
-
-            if (categoria.orcamento && categoria.gasto > categoria.orcamento) {
-                throw new BadRequestException('O valor da transação excede o orçamento da categoria');
-            }
-
-            if (Novacategoria.orcamento && Novacategoria.gasto > Novacategoria.orcamento) {
-                throw new BadRequestException('O valor da transação excede o orçamento da categoria');
-            }
-            await this.mananger.save(Novacategoria);
+        if (!usuario) {
+            event.queryRunner.rollbackTransaction();
+            throw new BadRequestException('Usuario não encontrado');
         }
 
-        categoria.usuario.atualizarSaldo();
-        await this.mananger.save(categoria.usuario);
-        await this.mananger.save(categoria);
-    }
-
-    async afterRemove(event: RemoveEvent<Transacao>) {
-        if (!this.transacao.usuario || !this.transacao.categoria) {
-            return;
+        if (event.entity.tipo === 'saida') {
+            categoria.gasto -= event.entity.valor;
+            usuario.saldo += event.entity.valor;
         }
-        this.transacao.categoria.atualizaGasto();
-        this.transacao.usuario.atualizarSaldo();
-    }
+        else {
+            categoria.gasto += event.entity.valor;
+            usuario.saldo -= event.entity.valor;
+        }
 
+
+        await this.mananger.save<Categoria>(categoria);
+        await this.mananger.save<Usuario>(usuario);
+    }
 }

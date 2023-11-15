@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react"
-import { ITransacao } from "../Components/Transacao"
+
 import axios from "axios"
 import { useAuth, api_url } from "../Contexts/AuthContext"
 import { TransacoesContext, TransacoesContextData } from "../Contexts/TransacoesContext"
+import { ITransacao } from "../Components/List/ListTransacoesCard/Components/Transacao"
 
 
 interface TransacoesProviderProps {
@@ -41,7 +42,8 @@ export function TransacoesProvider({ children }: TransacoesProviderProps) {
 
     const value: TransacoesContextData = {
         transacoes,
-        setUpdated
+        setUpdated,
+        updated
     }
 
     return (

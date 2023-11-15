@@ -34,8 +34,9 @@ export const realizarTratamentoValor = (valor: number) => {
 }
 
 export function Saldo() {
-    const { transacoes }: TransacoesContextData = useContext<TransacoesContextData>(TransacoesContext);
+    const { updated }: TransacoesContextData = useContext<TransacoesContextData>(TransacoesContext);
     const [saldo, setSaldo] = useState<number>(0);
+
     const { user } = useAuth();
     if (!user) return <p>Usuário não encontrado</p>
 
@@ -50,7 +51,7 @@ export function Saldo() {
             setSaldo(saldo);
         }
         getSaldo()
-    }, [transacoes])
+    }, [updated])
 
     // o saldo é a soma de todas as transações
 

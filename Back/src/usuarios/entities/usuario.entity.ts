@@ -1,7 +1,8 @@
+import { InjectEntityManager } from '@nestjs/typeorm';
 import { Transform } from 'class-transformer';
 import { Categoria } from 'src/categorias/entities/categoria.entity';
 import { Transacao } from 'src/transacoes/entities/transacao.entity';
-import { Column, Entity, JoinColumn, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, EntityManager, JoinColumn, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 export enum CategoriasorderBy {
   nome = "nome",
@@ -80,10 +81,12 @@ export class Usuario {
   categorias: Categoria[];
 
   @OneToMany(type => Transacao, transacao => transacao.usuario, {
-    cascade: true, // dessa forma, quando o usuario for deletado, as transacoes também serão
+    cascade: true // dessa forma, quando o usuario for deletado, as transacoes também serão
   })
   transacoes: Transacao[];
 
+  @InjectEntityManager()
+  private readonly entityManager: EntityManager
 
   constructor(usuario: Partial<Usuario>) {
     Object.assign(this, usuario);
@@ -161,11 +164,13 @@ export class Usuario {
     this.saldo = transacoes.reduce((acc, curr) => {
       if (curr.tipo === 'entrada') {
         return acc + curr.valor;
-      } else {
-        return acc - curr.valor;
       }
+      return acc - curr.valor;
     }, 0);
   }
 
+  async save() {
+    return await this.entityManager.save<Usuario>(this);
+  }
 
 }

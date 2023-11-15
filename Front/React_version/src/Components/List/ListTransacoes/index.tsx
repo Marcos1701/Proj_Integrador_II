@@ -33,7 +33,7 @@ export function ListTransacoes(
                 <div className="legend-item">Valor</div>
             </div>
             <ul className="listValues">
-                {transacoes.length === 0 && <li className="empty">Nenhuma transação cadastrada</li>}
+                {transacoes.length === 0 && <li className="empty" key={"empty"}>Nenhuma transação cadastrada</li>}
                 {
                     transacoes
                         .slice(0, 3)
@@ -46,12 +46,13 @@ export function ListTransacoes(
                                 );
 
                                 if (!categoria) {
-                                    return <></>
+                                    return <li key={transacao.id + 'noCategory'}></li>
                                 }
 
                                 return (
-                                    <li key={transacao.id}>
+                                    <li className="listItem" key={transacao.id}>
                                         <Box
+                                            key={transacao.id + "box"}
                                             transacao={transacao}
                                             categoria={categoria}
                                         />
@@ -65,3 +66,13 @@ export function ListTransacoes(
         </div>
     )
 }
+/*
+Warning: Each child in a list should have a unique "key" prop.
+
+Check the render method of `ListTransacoes`. See https://reactjs.org/link/warning-keys for more information.
+    at ListTransacoes (http://localhost:5173/src/Components/List/ListTransacoes/index.tsx?t=1700081298331:25:3)
+
+esse warning é porque o react precisa de uma key para cada elemento da lista, para poder identificar cada elemento
+para resolver isso, basta colocar uma key nos elementos da lista, como no exemplo abaixo:
+
+*/

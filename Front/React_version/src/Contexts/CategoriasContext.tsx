@@ -1,6 +1,6 @@
 import { createContext } from "react";
-import { ICategoria } from "../Components/Categoria";
 import { ordenarCategorias } from "../providers/CategoriasProvider";
+import { ICategoria } from "../Components/List/ListCategorias/Components/Categoria";
 
 interface orderData {
     order: ordenarCategorias

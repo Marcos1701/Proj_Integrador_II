@@ -3,6 +3,7 @@ import { useAuth, api_url } from "../../../../../Contexts/AuthContext";
 import { useContext, useRef, useState } from "react";
 import { CategoriasContext } from "../../../../../Contexts/CategoriasContext";
 import { TransacoesContext, TransacoesContextData } from "../../../../../Contexts/TransacoesContext";
+import "../Form.css"
 
 interface IAdicionarTransacaoFormProps {
     setExibirAdicionarTransacaoForm: React.Dispatch<React.SetStateAction<boolean>>;
@@ -39,6 +40,7 @@ export function AdicionarTransacaoForm({ setExibirAdicionarTransacaoForm }: IAdi
         confirm("Você precisa adicionar uma categoria antes de adicionar uma transação");
         setExibirAdicionarTransacaoForm(false);
     }
+
     const titulo = useRef<HTMLInputElement>(null);
     const valor = useRef<HTMLInputElement>(null);
     const data = useRef<HTMLInputElement>(null);
@@ -49,7 +51,9 @@ export function AdicionarTransacaoForm({ setExibirAdicionarTransacaoForm }: IAdi
     const { user } = useAuth();
     if (!user) return <p>Usuário não encontrado</p>
 
-    const [msgSucesso, setMsgSucesso] = useState<boolean>(false);
+    const [msgSucesso, setMsgSucesso] = useState<boolean>(true);
+    const [msgErro, setMsgErro] = useState<boolean>(true);
+    const [msgErroText, setMsgErroText] = useState<string>('')
     const { setUpdated }: TransacoesContextData = useContext(TransacoesContext)
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -84,13 +88,15 @@ export function AdicionarTransacaoForm({ setExibirAdicionarTransacaoForm }: IAdi
             },
         }).then(res => res.data).catch(err => {
             console.log(err)
+            setMsgErro(true);
+            setMsgErroText(err.response.data.message);
             return;
         });
 
         // limpar os campos
         titulo.current.value = '';
-        valor.current.value = '';
-        data.current.value = '';
+        valor.current.value = 'R$ 0';
+        data.current.value = new Date().toISOString().split('T')[0];
         tipo.current.value = '';
         categoria.current.value = '';
         if (descricao.current) {
@@ -101,6 +107,7 @@ export function AdicionarTransacaoForm({ setExibirAdicionarTransacaoForm }: IAdi
         setMsgSucesso(true);
         setTimeout(() => {
             setMsgSucesso(false);
+            setExibirAdicionarTransacaoForm(false);
         }, 3000);
     }
 
@@ -110,7 +117,8 @@ export function AdicionarTransacaoForm({ setExibirAdicionarTransacaoForm }: IAdi
         <form className="add-element-form" onSubmit={handleSubmit}>
             <h2>Adicionar Transação</h2>
 
-            {msgSucesso && <p>Transação adicionada com sucesso!</p>}
+            {msgSucesso && <p className="successmsg">Transação adicionada com sucesso!</p>}
+            {msgErro && <p className="errormsg">{msgErroText}</p>}
 
             <div className="input-div">
                 <label htmlFor="titulo">Titulo</label>
@@ -143,8 +151,8 @@ export function AdicionarTransacaoForm({ setExibirAdicionarTransacaoForm }: IAdi
 
                 <div className="label-element-div">
                     <label htmlFor="tipo">Tipo</label>
-                    <select ref={tipo} required>
-                        <option value="" selected disabled>Selecione o tipo</option> {/* o value vazio é necessário para o required funcionar */}
+                    <select ref={tipo} required defaultValue=''>
+                        <option value="" disabled>Selecione o tipo</option> {/* o value vazio é necessário para o required funcionar */}
                         <option value="entrada">Entrada</option>
                         <option value="saida">Saída</option>
                     </select>
@@ -152,12 +160,12 @@ export function AdicionarTransacaoForm({ setExibirAdicionarTransacaoForm }: IAdi
 
                 <div className="label-element-div">
                     <label htmlFor="categoria">Categoria</label>
-                    <select ref={categoria} required>
-                        <option value="" selected disabled>Selecione uma categoria</option>
+                    <select ref={categoria} required defaultValue=''>
+                        <option value="" disabled>Selecione uma categoria</option>
                         {
                             // categorias.length > 0 ?
                             categorias.map(categoria => (
-                                <option value={categoria.id}>{categoria.nome}</option>
+                                <option key={categoria.id} value={categoria.id}>{categoria.nome}</option>
                             ))
                             // : <option value="Sem categoria">Sem categoria</option>
                         }

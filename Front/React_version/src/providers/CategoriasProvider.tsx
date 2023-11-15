@@ -2,7 +2,8 @@ import { useEffect, useState } from "react"
 import axios from "axios"
 import { useAuth, api_url } from "../Contexts/AuthContext"
 import { CategoriasContext, CategoriasOrderContext, CategoriasOrderContextData } from "../Contexts/CategoriasContext"
-import { ICategoria } from "../Components/Categoria"
+import { ICategoria } from "../Components/List/ListCategorias/Components/Categoria"
+
 
 
 interface CategoriasProviderProps {

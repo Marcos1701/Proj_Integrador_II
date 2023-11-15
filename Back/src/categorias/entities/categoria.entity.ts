@@ -59,10 +59,10 @@ export class Categoria {
   transacoes: Transacao[];
 
   @InjectEntityManager()
-  private entityMananger: EntityManager;
+  private readonly entityManager: EntityManager
 
   constructor(categoria: Partial<Categoria>) {
-    Object.assign(this, categoria);
+    Object.assign(this, categoria)
   }
 
   updateData(categoria: Partial<Categoria>) {
@@ -70,12 +70,27 @@ export class Categoria {
   }
 
   atualizaGasto() {
-    this.gasto = this.transacoes.reduce((acc, curr) => {
+    const transacoes = this.transacoes.map(transacao => {
+      const { categoria, ...retorno } = transacao;
+
+      retorno.valor = Number(retorno.valor);
+      return {
+        ...retorno,
+        categoriaid: categoria.id
+      }
+    });
+
+
+    this.gasto = transacoes.reduce((acc, curr) => {
       if (curr.tipo === 'entrada') {
         return acc + curr.valor;
       }
       return acc - curr.valor;
     }, 0);
+  }
+
+  async save() {
+    return await this.entityManager.save<Categoria>(this);
   }
 
 
