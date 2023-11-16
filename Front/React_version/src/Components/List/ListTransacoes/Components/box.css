@@ -70,6 +70,10 @@
     line-height: normal;
     width: 100px;
     text-align: left;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-wrap: nowrap;
 }
 
 .transacao-box :is(.title-icon, .title-icon .icon-div) {
@@ -96,7 +100,6 @@
 .transacao-box :is(.div, .text-wrapper-2) {
     color: var(--text-secondary, #2b3836);
     text-align: left;
-
 }
 
 .navbar :is(.valorTransacao-entrada, .valorTransacao-saida) {
@@ -105,7 +108,11 @@
     font-weight: 700;
     letter-spacing: 0;
     line-height: normal;
-    text-align: right;
+    text-align: left;
+    min-width: 75px;
+    margin: 0;
+    padding: 0;
+
 }
 
 .navbar .valorTransacao-entrada {

@@ -26,7 +26,7 @@ export function CategoriasPage() {
 
                 <h2 className="title">Categorias</h2>
             </div>
-            <ListCategorias page={1} limit={6} classname="list_on_page" />
+            <ListCategorias page={1} limit={6} classname="list_on_page" orderSelect={true} searchInput={true} />
         </main>
     )
 }

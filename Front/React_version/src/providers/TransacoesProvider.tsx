@@ -4,21 +4,38 @@ import axios from "axios"
 import { useAuth, api_url } from "../Contexts/AuthContext"
 import { TransacoesContext, TransacoesContextData } from "../Contexts/TransacoesContext"
 import { ITransacao } from "../Components/List/ListTransacoesCard/Components/Transacao"
+import { OrderElements } from "./CategoriasProvider"
 
 
 interface TransacoesProviderProps {
     children: React.ReactNode
 }
 
+export enum ordenarTransacoes {
+    titulo = "titulo",
+    valor = "valor",
+    entrada = 'entrada',
+    saida = 'saida',
+    data = "data"
+}
+
 export function TransacoesProvider({ children }: TransacoesProviderProps) {
     const [transacoes, setTransacoes] = useState<ITransacao[]>([])
     const [updated, setUpdated] = useState<boolean>(false)
+    const [ordenarPor, setOrdenarPor] = useState<ordenarTransacoes>(ordenarTransacoes.data)
+    const [ordem, setOrdem] = useState<OrderElements>(OrderElements.ASC)
+    const [search, setSearch] = useState<string>('')
     const { user } = useAuth();
 
     useEffect(() => {
         async function loadTransacoes() {
             if (!user) return
             const response = await axios.get<ITransacao[]>(`${api_url}transacoes`, {
+                params: {
+                    orderby: ordenarPor === ordenarTransacoes.data ? '' : ordenarPor,
+                    order: ordem === OrderElements.ASC ? '' : ordem,
+                    search: search
+                },
                 headers: {
                     getAuthorization: true,
                     Authorization: user.access_token,
@@ -38,12 +55,18 @@ export function TransacoesProvider({ children }: TransacoesProviderProps) {
             setUpdated(false)
         }
         loadTransacoes()
-    }, [updated, user])
+    }, [updated, user, ordem, ordenarPor])
 
     const value: TransacoesContextData = {
         transacoes,
         setUpdated,
-        updated
+        updated,
+        ordem,
+        setOrdem,
+        ordenarPor,
+        setOrdenarPor,
+        search,
+        setSearch
     }
 
     return (

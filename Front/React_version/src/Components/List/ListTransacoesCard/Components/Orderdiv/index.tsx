@@ -1,13 +1,11 @@
 import { useContext, useEffect, useRef } from "react";
-import { CategoriasOrderContext, CategoriasOrderContextData } from "../../../../../Contexts/CategoriasContext";
 import { ordenarCategorias, OrderElements } from "../../../../../providers/CategoriasProvider";
+import { TransacoesContext, TransacoesContextData } from "../../../../../Contexts/TransacoesContext";
+import { ordenarTransacoes } from "../../../../../providers/TransacoesProvider";
 
 export const Orderdiv = () => {
 
-    const { order, orderby } = useContext<CategoriasOrderContextData>(CategoriasOrderContext);
-
-    const { ordem, setOrdem } = order;
-    const { ordenarPor, setOrdenarPor } = orderby;
+    const { ordem, setOrdem, ordenarPor, setOrdenarPor } = useContext<TransacoesContextData>(TransacoesContext);
 
 
     const SelectOrdem = useRef<HTMLSelectElement>(null);
@@ -28,7 +26,7 @@ export const Orderdiv = () => {
 
     const handleOrderby = () => {
         if (SelectOrdenarPor.current && SelectOrdenarPor.current.value !== ordenarPor) {
-            setOrdenarPor(SelectOrdenarPor.current.value as ordenarCategorias);
+            setOrdenarPor(SelectOrdenarPor.current.value as ordenarTransacoes);
         }
     }
 
@@ -37,11 +35,12 @@ export const Orderdiv = () => {
 
         <select name="filter" id="filter" ref={SelectOrdenarPor} defaultValue='datacriacao' onChange={() => { handleOrderby(); }}>
             <option value='' disabled>Ordenar por</option>
-            <option value="datacriacao">Data de Criação</option>
-            <option value="nome">Nome</option>
+            <option value="data">Data da Transação</option>
+            <option value="titulo">Titulo</option>
             <option value="descricao">Descrição</option>
-            <option value="orcamento">Orçamento</option>
-            <option value="gasto">Gasto</option>
+            <option value="valor">Valor</option>
+            <option value="entrada">Entrada</option>
+            <option value="saida">Saída</option>
         </select>
         <select name="order" id="order" ref={SelectOrdem} defaultValue='ASC' onChange={() => { handleOrder(); }}>
             <option value='' disabled>Ordem</option>

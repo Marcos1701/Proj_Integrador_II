@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Headers, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Headers, Query, BadRequestException } from '@nestjs/common';
 import { CategoriasService } from './categorias.service';
 import { CreateCategoriaDto } from './dto/create-categoria.dto';
 import { UpdateCategoriaDto } from './dto/update-categoria.dto';
@@ -62,6 +62,9 @@ export class CategoriasController {
   })
   @Get('')
   async findAll(@Headers('Authorization') token: string, @Query('order') order?: 'ASC' | 'DESC', @Query('orderby') orderby?: CategoriasorderBy, @Query('search') search?: string) {
+    if (orderby && !['nome', 'descricao', 'orcamento', 'gasto'].includes(orderby)) throw new BadRequestException('O parametro orderby deve ser nome, descricao, orcamento ou gasto');
+    if (order && !['ASC', 'DESC'].includes(order)) throw new BadRequestException('O parametro order deve ser ASC ou DESC');
+
     const ordem = order ? order : 'ASC';
     const ordenarpor = orderby ? orderby : null;
     const pesquisarpor = search ? search : null;

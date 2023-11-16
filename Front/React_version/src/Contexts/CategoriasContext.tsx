@@ -1,10 +1,15 @@
 import { createContext } from "react";
-import { ordenarCategorias } from "../providers/CategoriasProvider";
+import { ordenarCategorias, OrderElements } from "../providers/CategoriasProvider";
 import { ICategoria } from "../Components/List/ListCategorias/Components/Categoria";
 
 interface orderData {
-    order: ordenarCategorias
-    setOrder: (order: ordenarCategorias) => void
+    ordem: OrderElements
+    setOrdem: (order: OrderElements) => void
+}
+
+interface orderbyData {
+    ordenarPor: ordenarCategorias
+    setOrdenarPor: (orderby: ordenarCategorias) => void
 }
 
 interface searchData {
@@ -13,6 +18,7 @@ interface searchData {
 }
 
 export interface CategoriasOrderContextData {
+    orderby: orderbyData
     order: orderData
     search: searchData
     setUpdated: (updated: boolean) => void

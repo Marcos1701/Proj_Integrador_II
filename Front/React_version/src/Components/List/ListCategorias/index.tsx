@@ -1,9 +1,9 @@
 import { Categoria, ICategoria } from "./Components/Categoria";
 import { useContext, useState } from "react";
 import { CategoriasContext } from "../../../Contexts/CategoriasContext";
-import { Orderdiv } from "./Components/Orderdiv";
-import { Searchdiv } from "./Components/Searchdiv";
 import "./ListCategorias.css";
+import { Searchdiv } from "./Components/Searchdiv";
+import { Orderdiv } from "./Components/Orderdiv";
 
 
 interface ListCategoriasProps {
@@ -34,7 +34,7 @@ export function ListCategorias(
         <>
             <div className={classname}>
 
-                {searchInput || orderSelect && (
+                {(searchInput || orderSelect) && (
                     <div className="search-filter">
                         {searchInput && <Searchdiv />}
                         {orderSelect && <Orderdiv />}

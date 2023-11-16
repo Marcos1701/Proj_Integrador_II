@@ -7,14 +7,16 @@ import { Column, Entity, EntityManager, JoinColumn, OneToMany, PrimaryGeneratedC
 export enum CategoriasorderBy {
   nome = "nome",
   datacriacao = "datacriacao",
-  orcamento = "orcamento"
+  orcamento = "orcamento",
+  gasto = "gasto"
 }
 
 export enum TransacoesorderBy {
   titulo = "titulo",
   valor = "valor",
   entrada = 'entrada',
-  saida = 'saida'
+  saida = 'saida',
+  data = "data"
 }
 
 export interface ordenarTransacoes {
@@ -108,8 +110,9 @@ export class Usuario {
       if (orderby == TransacoesorderBy.titulo) { TransacoesOrdenadas = TransacoesOrdenadas.sort((a, b) => order !== 'DESC' ? a.titulo.localeCompare(b.titulo) : b.titulo.localeCompare(a.titulo)) }
       if (orderby == TransacoesorderBy.valor) { TransacoesOrdenadas = TransacoesOrdenadas.sort((a, b) => order !== 'DESC' ? a.valor - b.valor : b.valor - a.valor) }
       if (orderby == TransacoesorderBy.entrada || orderby == TransacoesorderBy.saida) { TransacoesOrdenadas = TransacoesOrdenadas.filter(transacao => transacao.tipo === orderby) }
-      if (categoriaid) { TransacoesOrdenadas = TransacoesOrdenadas.filter(transacao => transacao.categoriaid === categoriaid) }
     }
+
+    if (categoriaid) { TransacoesOrdenadas = TransacoesOrdenadas.filter(transacao => transacao.categoriaid === categoriaid) }
 
     if (search) {
       TransacoesOrdenadas = TransacoesOrdenadas.filter(transacao => transacao.titulo.toLowerCase().includes(search.toLowerCase()))
@@ -132,6 +135,7 @@ export class Usuario {
       if (orderby == CategoriasorderBy.nome) { CategoriasOrdenadas = CategoriasOrdenadas.sort((a, b) => order !== 'DESC' ? a.nome.localeCompare(b.nome) : b.nome.localeCompare(a.nome)) }
       if (orderby == CategoriasorderBy.datacriacao) { CategoriasOrdenadas = CategoriasOrdenadas.sort((a, b) => order !== 'DESC' ? a.dataCriacao.getTime() - b.dataCriacao.getTime() : b.dataCriacao.getTime() - a.dataCriacao.getTime()) }
       if (orderby == CategoriasorderBy.orcamento) { CategoriasOrdenadas = CategoriasOrdenadas.sort((a, b) => order !== 'DESC' ? a.orcamento - b.orcamento : b.orcamento - a.orcamento) }
+      if (orderby == CategoriasorderBy.gasto) { CategoriasOrdenadas = CategoriasOrdenadas.sort((a, b) => order !== 'DESC' ? a.gasto - b.gasto : b.gasto - a.gasto) }
     }
 
     if (search) {

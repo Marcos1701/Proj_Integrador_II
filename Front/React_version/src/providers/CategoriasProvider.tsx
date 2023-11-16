@@ -5,20 +5,26 @@ import { CategoriasContext, CategoriasOrderContext, CategoriasOrderContextData }
 import { ICategoria } from "../Components/List/ListCategorias/Components/Categoria"
 
 
-
 interface CategoriasProviderProps {
     children: React.ReactNode
 }
 
-export interface ordenarCategorias {
-    nome?: 'ASC' | 'DESC';
-    dataCriacao?: 'ASC' | 'DESC';
-    orcamento?: 'ASC' | 'DESC';
+export enum ordenarCategorias {
+    nome = "nome",
+    datacriacao = "datacriacao",
+    orcamento = "orcamento",
+    gasto = "gasto"
+}
+
+export enum OrderElements {
+    ASC = "ASC",
+    DESC = "DESC"
 }
 
 export function CategoriasProvider({ children }: CategoriasProviderProps) {
     const [categorias, setCategorias] = useState<ICategoria[]>([])
-    const [orders, setOrders] = useState<ordenarCategorias>({})
+    const [orderby, setOrderby] = useState<ordenarCategorias>(ordenarCategorias.datacriacao)
+    const [order, setOrder] = useState<OrderElements>(OrderElements.ASC)
     const [search, setSearch] = useState<string>('')
     const [updated, setUpdated] = useState<boolean>(false)
 
@@ -29,11 +35,13 @@ export function CategoriasProvider({ children }: CategoriasProviderProps) {
         async function loadCategorias() {
             if (!user) return
 
-            const orderQuery = orders ? Object.entries(orders).map(([key, val]) => `&order[${key}]=${val}`).join('&') : ''
-            const searchQuery = search ? `&search=${search}` : ''
-
-            const CategoriasResponse = await axios.get<ICategoria[]>(`${api_url}categorias${orderQuery.length > 0 || searchQuery.length > 0 ? '?' : ''}${orderQuery}${searchQuery}`
+            const CategoriasResponse = await axios.get<ICategoria[]>(`${api_url}categorias`
                 , {
+                    params: {
+                        orderby: orderby == ordenarCategorias.datacriacao ? '' : orderby,
+                        order: order == OrderElements.ASC ? '' : order,
+                        search: search
+                    },
                     headers: {
                         getAuthorization: true,
                         Authorization: user.access_token
@@ -51,10 +59,11 @@ export function CategoriasProvider({ children }: CategoriasProviderProps) {
 
         loadCategorias()
 
-    }, [user, orders, search, updated])
+    }, [user, orderby, order, search, updated])
 
     const value: CategoriasOrderContextData = {
-        order: { order: orders, setOrder: setOrders },
+        order: { ordem: order, setOrdem: setOrder },
+        orderby: { ordenarPor: orderby, setOrdenarPor: setOrderby },
         search: { search, setSearch },
         setUpdated: setUpdated
     }

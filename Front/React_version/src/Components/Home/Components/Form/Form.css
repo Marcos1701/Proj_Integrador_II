@@ -1,0 +1,28 @@
+.successmsg {
+    color: green;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 10px;
+    margin-bottom: 10px;
+
+    animation: blinker 1s linear infinite;
+}
+
+.errormsg {
+    color: red;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+
+    animation: blinker 2s linear infinite;
+
+    width: 80%;
+    height: 40px;
+}
+
+@keyframes blinker {
+    50% {
+        opacity: 0;
+    }
+}
