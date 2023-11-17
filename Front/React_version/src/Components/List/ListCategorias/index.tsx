@@ -35,9 +35,9 @@ export function ListCategorias(
             <div className={classname}>
 
                 {(searchInput || orderSelect) && (
-                    <div className="search-filter">
-                        {searchInput && <Searchdiv />}
+                    <div className="search-order">
                         {orderSelect && <Orderdiv />}
+                        {searchInput && <Searchdiv />}
                     </div>
                 )}
 
@@ -59,7 +59,7 @@ export function ListCategorias(
                                 }
                             }}
                             id="previous"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                <g clip-path="url(#clip0_206_145)">
+                                <g clipPath="url(#clip0_206_145)">
                                     <path d="M15.41 16.59L10.83 12L15.41 7.41L14 6L8 12L14 18L15.41 16.59Z" fill="black" />
                                 </g>
                                 <defs>
@@ -78,7 +78,7 @@ export function ListCategorias(
                                 setPageAtual(pageAtual + 1);
                             }
                         }}><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                <g clip-path="url(#clip0_206_57)">
+                                <g clipPath="url(#clip0_206_57)">
                                     <path d="M8.59 16.59L13.17 12L8.59 7.41L10 6L16 12L10 18L8.59 16.59Z" fill="black" />
                                 </g>
                                 <defs>

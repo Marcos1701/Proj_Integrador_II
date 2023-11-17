@@ -67,7 +67,8 @@ footer {
 /* Define o raio da borda para input e select dentro de form.element-details,form.add-element-form */
 input,
 form.element-details select,
-form.add-element-form select {
+form.add-element-form select,
+.search-order select {
   border-radius: 12px;
   background-color: #CCCFE0;
   font-family: Eina03-Regular;
@@ -84,7 +85,8 @@ form.add-element-form select {
 }
 
 form.element-details select,
-form.add-element-form select {
+form.add-element-form select,
+.search-order select {
   width: fit-content;
   max-width: 16em;
   height: 2em;
@@ -127,7 +129,8 @@ form.add-element-form select {
 /* Define o tamanho, margens e preenchimento para form.element-details,form.add-element-form */
 input:focus,
 form.element-details select:focus,
-form.add-element-form select:focus {
+form.add-element-form select:focus,
+.search-order select:focus {
   outline: none;
 }
 

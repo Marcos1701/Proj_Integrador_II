@@ -1,27 +1,21 @@
 import { useContext, useEffect, useRef } from "react";
-import { ordenarCategorias, OrderElements } from "../../../../../providers/CategoriasProvider";
-import { TransacoesContext, TransacoesContextData } from "../../../../../Contexts/TransacoesContext";
-import { ordenarTransacoes } from "../../../../../providers/TransacoesProvider";
+import { OrderElements } from "../../../../../providers/CategoriasProvider";
+import { TransacoesContext, TransacoesContextData, ordenarTransacoes } from "../../../../../Contexts/TransacoesContext";
 
 export const Orderdiv = () => {
 
     const { ordem, setOrdem, ordenarPor, setOrdenarPor } = useContext<TransacoesContextData>(TransacoesContext);
 
-
-    const SelectOrdem = useRef<HTMLSelectElement>(null);
     const SelectOrdenarPor = useRef<HTMLSelectElement>(null);
 
     useEffect(() => {
-        if (SelectOrdenarPor.current && SelectOrdem.current) {
+        if (SelectOrdenarPor.current) {
             SelectOrdenarPor.current.value = ordenarPor;
-            SelectOrdem.current.value = ordem;
         }
     }, [ordenarPor, ordem])
 
     const handleOrder = () => {
-        if (SelectOrdem.current && SelectOrdem.current.value !== ordem) {
-            setOrdem(SelectOrdem.current.value as OrderElements);
-        }
+        setOrdem(ordem === OrderElements.ASC ? OrderElements.DESC : OrderElements.ASC);
     }
 
     const handleOrderby = () => {
@@ -31,9 +25,11 @@ export const Orderdiv = () => {
     }
 
 
-    return (<div className="filter">
+    return (<div className="order-element">
 
-        <select name="filter" id="filter" ref={SelectOrdenarPor} defaultValue='datacriacao' onChange={() => { handleOrderby(); }}>
+        <label htmlFor="orderby" className="order-label">Ordenar por</label>
+
+        <select name="orderby" id="orderby" ref={SelectOrdenarPor} defaultValue='datacriacao' onChange={() => { handleOrderby(); }}>
             <option value='' disabled>Ordenar por</option>
             <option value="data">Data da Transação</option>
             <option value="titulo">Titulo</option>
@@ -42,11 +38,11 @@ export const Orderdiv = () => {
             <option value="entrada">Entrada</option>
             <option value="saida">Saída</option>
         </select>
-        <select name="order" id="order" ref={SelectOrdem} defaultValue='ASC' onChange={() => { handleOrder(); }}>
-            <option value='' disabled>Ordem</option>
-            <option value="ASC" selected>Crescente</option>
-            <option value="DESC">Decrescente</option>
-        </select>
+        <a className="order-button" onClick={() => {
+            handleOrder();
+        }}>
+            <img className="order-icon" src={`assets/ActionsIcons/sort${ordem === OrderElements.ASC ? '-ascending' : '-descending'}.svg`} alt="Icone de ordenação" title={ordem === OrderElements.ASC ? 'crescente' : 'decrescente'} />
+        </a>
     </div>
     )
 }

@@ -2,21 +2,13 @@ import { useEffect, useState } from "react"
 
 import axios from "axios"
 import { useAuth, api_url } from "../Contexts/AuthContext"
-import { TransacoesContext, TransacoesContextData } from "../Contexts/TransacoesContext"
+import { TransacoesContext, TransacoesContextData, ordenarTransacoes } from "../Contexts/TransacoesContext"
 import { ITransacao } from "../Components/List/ListTransacoesCard/Components/Transacao"
 import { OrderElements } from "./CategoriasProvider"
 
 
 interface TransacoesProviderProps {
     children: React.ReactNode
-}
-
-export enum ordenarTransacoes {
-    titulo = "titulo",
-    valor = "valor",
-    entrada = 'entrada',
-    saida = 'saida',
-    data = "data"
 }
 
 export function TransacoesProvider({ children }: TransacoesProviderProps) {

@@ -1,8 +1,14 @@
 import { createContext } from "react";
 import { ITransacao } from "../Components/List/ListTransacoesCard/Components/Transacao";
 import { OrderElements } from "../providers/CategoriasProvider";
-import { ordenarTransacoes } from "../providers/TransacoesProvider";
 
+export enum ordenarTransacoes {
+    titulo = "titulo",
+    valor = "valor",
+    entrada = 'entrada',
+    saida = 'saida',
+    data = "data"
+}
 
 export interface TransacoesContextData {
     transacoes: ITransacao[]
