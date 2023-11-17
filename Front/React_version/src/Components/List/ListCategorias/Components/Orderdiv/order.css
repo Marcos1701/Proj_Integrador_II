@@ -1,0 +1,23 @@
+.order-element,
+.order-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: .6em;
+}
+
+.order-button {
+    cursor: pointer;
+
+    &:hover {
+        transform: scale(1.1);
+        transition: 0.2s;
+    }
+}
+
+.order-label{
+    color: var(--text-secondary, #455755);
+    font-family: Eina03-Regular;
+    font-size: 14px;
+    font-weight: 400;
+}
