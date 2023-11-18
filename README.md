@@ -21,7 +21,7 @@
 ## :pushpin: - **Ferramentas de Gerenciamento de Projeto utilizadas:**
 
   - <a href="https://www.notion.so/e65c7907ef2a483581872dbf16c1074c?v=41dd9e9825c247e8a0fe487dc81a7c2c&pvs=4">**Notion**</a>
-  - <a href="https://trello.com/b/rRJM6sxG">**Trello**</a>
+  - <a href="https://trello.com/b/tPSxKrmP">**Trello**</a>
 
 ## :anchor: - <a href="./Documentos_relacionados/Principais_funcionalidades_com_detalhamento_basico.md">**Inseption (Mapas de Navegação, flat backlog e rabisco frame)**</a>
 

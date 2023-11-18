@@ -7,6 +7,7 @@ import { ConfigModule } from '@nestjs/config';
 import { UsuariosModule } from './usuarios/usuarios.module';
 import { TransacoesModule } from './transacoes/transacoes.module';
 import { AuthModule } from './auth/auth.module';
+import { MetaModule } from './meta/meta.module';
 
 @Module({
   imports: [
@@ -15,7 +16,8 @@ import { AuthModule } from './auth/auth.module';
     DatabaseModule,
     TransacoesModule,
     AuthModule,
-    UsuariosModule
+    UsuariosModule,
+    MetaModule
   ],
   controllers: [AppController],
   providers: [AppService],
