@@ -11,6 +11,9 @@ export interface IMeta {
     titulo: string;
     descricao?: string;
     icon: string;
+    dataCriacao: Date;
+    concluida: boolean;
+    ativo: boolean;
 }
 
 export function Meta({ meta }: { meta: IMeta }) {
