@@ -1,6 +1,8 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { InjectEntityManager } from '@nestjs/typeorm';
 import { Transform } from 'class-transformer';
 import { Categoria } from 'src/categorias/entities/categoria.entity';
+import { Meta } from 'src/meta/entities/meta.entity';
 import { Transacao } from 'src/transacoes/entities/transacao.entity';
 import { Column, Entity, EntityManager, JoinColumn, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
@@ -37,14 +39,23 @@ export interface returnTransacao {
   categoriaid: string;
 }
 
+export enum Metasorderby {
+  titulo = "titulo",
+  valor = "valor",
+  dataLimite = "dataLimite",
+  dataCriacao = "dataCriacao",
+  progresso = "progresso"
+}
 
 @Entity()
 export class Usuario {
+
   @PrimaryGeneratedColumn(
     'uuid', // tipo de dado do id
     { name: 'id' }, // nome da coluna no banco de dados
   )
   id: string;
+
 
   @Column(
     {
@@ -62,6 +73,7 @@ export class Usuario {
   )
   @Transform(value => Number(value))
   saldo: number;
+
 
   @Column(
     {
@@ -86,6 +98,11 @@ export class Usuario {
     cascade: true // dessa forma, quando o usuario for deletado, as transacoes também serão
   })
   transacoes: Transacao[];
+
+  @OneToMany(type => Meta, meta => meta.usuario, {
+    cascade: true // dessa forma, quando o usuario for deletado, as metas também serão
+  })
+  metas: Meta[];
 
   @InjectEntityManager()
   private readonly entityManager: EntityManager
@@ -147,6 +164,36 @@ export class Usuario {
 
   getCategoria(id: string): Categoria | undefined {
     return this.categorias.find(categoria => categoria.id === id);
+  }
+
+  getMeta(id: string): Meta | undefined {
+    return this.metas.find(meta => meta.id === id);
+  }
+
+  getMetas(order: 'ASC' | 'DESC' = 'ASC', orderby?: Metasorderby, search?: string): Meta[] {
+    const metas = this.metas;
+    if (!metas) { return [] }
+
+    metas.sort((a, b) => order != 'DESC' ? a.dataCriacao.getTime() - b.dataCriacao.getTime() : b.dataCriacao.getTime() - a.dataCriacao.getTime())
+
+    metas.map(meta => {
+      meta.atualizarProgresso();
+      return meta;
+    }) // atualiza o progresso de cada meta
+
+    if (orderby) {
+      metas.sort((a, b) => {
+        if (a[orderby] < b[orderby]) return -1;
+        if (a[orderby] > b[orderby]) return 1;
+        return 0;
+      })
+    }
+
+    if (search) {
+      return metas.filter(meta => meta.titulo.toLowerCase().includes(search.toLowerCase()))
+    }
+
+    return metas;
   }
 
   updateData(usuario: Partial<Usuario>) {

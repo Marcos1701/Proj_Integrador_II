@@ -8,13 +8,6 @@ import {
   Column,
   JoinColumn,
   ManyToOne,
-  AfterInsert,
-  AfterUpdate,
-  AfterRemove,
-  InsertEvent,
-  UpdateEvent,
-  RemoveEvent,
-  EntityManager,
 } from 'typeorm';
 
 @Entity()

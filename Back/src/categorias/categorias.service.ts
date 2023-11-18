@@ -8,6 +8,8 @@ import { Repository } from 'typeorm/repository/Repository';
 import { Usuario, CategoriasorderBy } from 'src/usuarios/entities/usuario.entity';
 import { JwtService } from '@nestjs/jwt';
 import { jwtDecodeUser } from 'src/auth/jwt.strategy';
+// nest g service categorias
+// para criar tudo  de uma vez
 
 @Injectable()
 export class CategoriasService {
