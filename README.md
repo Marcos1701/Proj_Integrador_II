@@ -2,18 +2,21 @@
 
 ## **:dizzy: - Nome do Projeto:**
        FinnApp
+
+## **:iphone: Logo do app**
+<img src="./Front/React_version/public/Icons/icone.png" width="100" height="100" />
        
 ## **:dart: - Área de Atuação**
       Finanças Pessoais
 
 ## **:speech_balloon: - Descrição do projeto:**
-       Trata-se de uma aplicação que permite aos usuários monitorar suas despesas, criar orçamentos e definir metas financeiras.
-       Ela pode fornecer gráficos para ajudar os usuários a tomar decisões informadas.
+      O FinnApp é um aplicativo que tem como objetivo auxiliar o usuário a ter um maior controle sobre suas finanças pessoais, 
+      através de um sistema de gerenciamento de gastos e receitas, que permite ao usuário ter uma visão mais clara de como 
+      anda suas finanças, além de permitir que o usuário crie metas de gastos e receitas, para que ele possa ter um maior 
+      controle sobre suas finanças e possa alcançar seus objetivos financeiros.
 
 ## **:busts_in_silhouette: - Membros da equipe:**
 - <a href="https://github.com/Marcos1701">*Marcos Eduardo*</a>
-- <a href="https://github.com/MrMorgam">*Gabriel Morais*</a>
-- <a href="https://github.com/erick7amorim">*Erick Amorim*</a>
 
 ## :pushpin: - **Ferramentas de Gerenciamento de Projeto utilizadas:**
 
