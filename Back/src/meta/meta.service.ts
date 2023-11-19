@@ -5,6 +5,7 @@ import { EntityManager } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
 import { Metasorderby, Usuario } from 'src/usuarios/entities/usuario.entity';
 import { jwtDecodeUser } from 'src/auth/jwt.strategy';
+import { Meta } from './entities/meta.entity';
 
 @Injectable()
 export class MetaService {
@@ -42,9 +43,9 @@ export class MetaService {
     const meta = usuario.metas.find(meta => meta.id === id)
 
     if (!meta) {
-      console.log('Meta não encontrada');
       throw new NotFoundException('Meta não encontrada'); // 404
     }
+    meta.atualizarProgresso();
     return meta
   }
 
@@ -54,17 +55,26 @@ export class MetaService {
     const meta = usuario.metas.find(meta => meta.id === id)
 
     if (!meta) {
-      console.log('Meta não encontrada');
       throw new NotFoundException('Meta não encontrada'); // 404
     }
 
-    if (meta.titulo === updateMetaDto.titulo && meta.descricao === updateMetaDto.descricao && meta.valor === updateMetaDto.valor && meta.dataLimite === updateMetaDto.dataLimite && meta.icon === updateMetaDto.icon) {
-      console.log('Nenhuma alteração foi feita');
+    if (Object.keys(updateMetaDto).filter(key => updateMetaDto[key] == meta[key]).length === Object.keys(updateMetaDto).length) {
       throw new BadRequestException('Nenhuma alteração foi feita'); // 400
     }
 
-    return this.entityManager.merge('Meta', meta, updateMetaDto) // merge => faz um merge entre o objeto e o updateMetaDto
+    const result = await this.entityManager.update(
+      Meta,
+      {
+        id
+      },
+      updateMetaDto
+    )
 
+    if (!result || result.affected === 0) {
+      throw new BadRequestException('Nenhuma alteração foi feita'); // 400
+    }
+
+    return result
   }
 
   async remove(access_token: string, id: string) {
@@ -73,11 +83,44 @@ export class MetaService {
     const meta = usuario.metas.find(meta => meta.id === id)
 
     if (!meta) {
-      console.log('Meta não encontrada');
       throw new NotFoundException('Meta não encontrada'); // 404
     }
 
     return this.entityManager.remove(meta)
+  }
+
+  async AdicionarValor(access_token: string, id: string, valor: number) {
+    const usuario: Usuario = await this.getUserFromtoken(access_token)
+
+    const meta = usuario.metas.find(meta => meta.id === id)
+
+    if (!meta) {
+      throw new NotFoundException('Meta não encontrada'); // 404
+    }
+
+    if (valor <= meta.valorAtual) {
+      throw new BadRequestException('O valor a ser adicionado deve ser maior que o valor atual'); // 400
+    }
+    if (valor > meta.valor) {
+      throw new BadRequestException('O valor a ser adicionado deve ser menor que o valor da meta'); // 400
+    }
+
+    const result = await this.entityManager.update(
+      Meta,
+      {
+        id
+      },
+      {
+        valorAtual: valor
+      }
+    )
+
+    if (!result || result.affected === 0) {
+      throw new BadRequestException('Nenhuma alteração foi feita'); // 400
+    }
+    meta.valorAtual = valor
+    meta.atualizarProgresso();
+    return meta
   }
 
   private getUserFromtoken(token: string): Promise<Usuario> {
@@ -95,7 +138,6 @@ export class MetaService {
       })
 
     if (!usuario) {
-      console.log('Usuário não encontrado');
       throw new NotFoundException('Usuário não encontrado'); // 404
     }
 

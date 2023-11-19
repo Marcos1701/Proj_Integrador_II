@@ -35,7 +35,7 @@ export class Meta {
         precision: 10,
         scale: 2
     }) // 10 digitos no total, sendo 2 depois da virgula
-    valorAtual: number;
+    valorAtual: number = 0; // inicializa com 0
 
     // progresso %
     progresso: number = 0;
@@ -56,20 +56,20 @@ export class Meta {
         type: 'text',
         default: "dollar-bill"
     })
-    icon: string;
+    icon: string = "dollar-bill";
 
     @Column({
         type: 'boolean',
         default: false
     })
-    concluida: boolean;
+    concluida: boolean = false;
 
 
     @Column({
         type: 'boolean',
         default: true
     })
-    ativo: boolean;
+    ativo: boolean = true;
 
     @ManyToOne(() => Usuario, (usuario) => usuario.metas, {
         nullable: false

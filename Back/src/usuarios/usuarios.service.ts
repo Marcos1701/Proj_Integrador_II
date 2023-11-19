@@ -56,6 +56,11 @@ export class UsuariosService {
     if (!usuario) {
       throw new UnauthorizedException('Usuário não encontrado');
     }
+
+    if(Object.keys(updateUsuarioDto).filter(key => updateUsuarioDto[key] == usuario[key]).length === Object.keys(updateUsuarioDto).length){
+      throw new NotFoundException('Nenhum campo foi alterado');
+    }
+
     if (updateUsuarioDto.email) {
       usuario.email = updateUsuarioDto.email;
     }
@@ -67,6 +72,7 @@ export class UsuariosService {
     if (updateUsuarioDto.senha) {
       usuario.senha = updateUsuarioDto.senha;
     }
+
     const { access_token } = await this.gerarToken(usuario);
 
     await this.entityManager.save(usuario);
