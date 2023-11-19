@@ -8,6 +8,7 @@ import { CategoriasContext } from "../../../../Contexts/CategoriasContext";
 
 export function SecaoActions_Home() {
 
+    const [showOptions, setShowOptions] = useState<boolean>(false);
     const [showAdicionarTransacaoForm, setShowAdicionarTransacaoForm] = useState<boolean>(false);
     const [showAdicionarCategoriaForm, setShowAdicionarCategoriaForm] = useState<boolean>(false);
 
@@ -17,17 +18,20 @@ export function SecaoActions_Home() {
             <Saldo />
 
             <div className="buttons_Action_div">
-                <ul className="buttons_Action">
+                <button type="button" className="button_Action" onClick={() => setShowOptions(!showOptions)} title="Adicionar">
+                    <img src="assets/ActionsIcons/plus.svg" alt="Adicionar" />
+                </button>
+                <ul className={"options_Action" + (showOptions ? "-active" : "")}>
                     <li key="adicionarTransacao">
-                        <button {...categorias.length === 0 && { title: "Adicione uma categoria", disabled: true }} onClick={() => setShowAdicionarTransacaoForm(!showAdicionarTransacaoForm)}>Adicionar Transação</button>
+                        <button type="button" {...categorias.length === 0 && { title: "Adicione uma categoria", disabled: true }} onClick={() => setShowAdicionarTransacaoForm(!showAdicionarTransacaoForm)}>Adicionar Transação</button>
                     </li>
 
                     <li key="adicionarCategoria">
-                        <button onClick={() => setShowAdicionarCategoriaForm(!showAdicionarCategoriaForm)}>Adicionar Categoria</button>
+                        <button type="button" onClick={() => setShowAdicionarCategoriaForm(!showAdicionarCategoriaForm)}>Adicionar Categoria</button>
                     </li>
 
                     <li key="adicionarMeta">
-                        <button onClick={() => { }}>Adicionar Meta</button> {/* Ainda não implementado */}
+                        <button type="button" onClick={() => { }}>Adicionar Meta</button>
                     </li>
                 </ul>
             </div>

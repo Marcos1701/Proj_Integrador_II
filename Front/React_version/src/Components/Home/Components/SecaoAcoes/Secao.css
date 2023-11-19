@@ -1,25 +1,83 @@
 .Secao_acoes {
     display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: flex-start;
+    justify-content: space-between;
+    align-items: center;
 
-    width: 70%;
+    width: 65%;
     gap: 1em;
 }
 
 .buttons_Action_div {
     width: fit-content;
-    margin: 0 auto;
 }
 
-ul.buttons_Action {
+.button_Action {
+    width: fit-content;
+    height: fit-content;
+    background: var(--buttons-secondary, #CCCFE0);
+    border-radius: 24.246px;
+    padding: .7em .9em;
+    border: 0.5px solid var(--accent, #256D85);
+
+    box-shadow: #13201E -3px 1px 10px;
+
+    & img {
+        width: 1.5em;
+        height: 1.5em;
+        margin: 0;
+        padding: 0;
+    }
+
+    &:hover {
+        background: var(--buttons-secondary-hover, #E5E5E5);
+
+        animation: pulse 1s infinite;
+
+        & img {
+            animation: pulse 1s infinite;
+        }
+    }
+}
+
+ul.options_Action {
+    display: none;
+}
+
+@keyframes slideIn {
+    0% {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0px);
+    }
+}
+
+ul.options_Action-active {
     display: flex;
     list-style: none;
-    justify-content: space-between;
+    justify-content: flex-start;
     align-items: center;
-    gap: 1em;
+    flex-direction: column;
+
+    /*
+    animação para que os itens apareçam de cima para baixo
+    */
+    animation: slideIn 1s ease-in-out;
+
+    margin-top: 1em;
+    position: absolute;
+    right: 7%;
+    gap: .8em;
+
+    & li button {
+        margin: 0;
+    }
 }
+
+
 
 ul li button {
     width: 170px;
@@ -28,7 +86,6 @@ ul li button {
     border-radius: 14.246px;
     border: 0.5px solid var(--accent, #2844BD);
     background: var(--buttons-secondary, #CCCFE0);
-    box-shadow: 0px 4.74877px 10px 0px rgba(0, 0, 0, 0.08);
 
     color: var(--text, #13201E);
     text-align: center;

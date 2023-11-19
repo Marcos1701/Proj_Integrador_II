@@ -1,14 +1,19 @@
 header {
-    height: 4vh;
+    height: 10vh;
 
     display: grid;
     grid-template-columns: 1fr 1fr;
     align-items: center;
     justify-content: center;
+    margin: 0;
+    padding: 0;
 
-    width: 85vw;
+    width: 98.7vw;
     max-width: 1280px;
-    margin-bottom: 2em;
+    background: var(--background, #b1c3ca);
+    backdrop-filter: blur(3px);
+
+    z-index: 2;
 
     & .header_content {
         display: flex;
@@ -18,7 +23,7 @@ header {
 
 
         & p {
-            margin-left: 4em;
+            margin-left: 3.5em;
         }
     }
 }
@@ -42,15 +47,15 @@ header ul li {
 }
 
 header a {
-    background: var(--accent, #2844BD);
+    background: var(--accent, #256D85);
     color: var(--text, #fff);
-    border: 1px solid #ccc;
+    border: 1px solid var(--accent, #256D85);
     padding: 0.5rem 2rem;
     text-decoration: none;
     border-radius: 0.5rem;
 }
 
 header a:hover {
-    background: var(--accent-hover, #646cff);
+    background: var(--accent-hover, #47B5FF);
     color: var(--text-hover, #fff);
 }

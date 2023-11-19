@@ -1,8 +1,7 @@
 /* Define o tamanho máximo, margens e preenchimento do elemento raiz */
 #root {
   max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
+  padding: 0.2em 0;
   text-align: center;
   min-height: 100vh;
 }
@@ -21,6 +20,11 @@ form.add-element-form {
 main {
   margin-bottom: 3em;
   height: fit-content;
+
+  background: var(--background, #bed2daf0);
+  backdrop-filter: blur(3px);
+  padding: 1em 0;
+  border-radius: 64.108px;
 }
 
 form.element-details,
@@ -28,7 +32,7 @@ form.add-element-form {
   height: fit-content;
   max-height: 80vh;
   border-radius: 64.108px;
-  background: var(--background, #d0d9d8ef);
+  background: var(--background, #DFF6FF);
   backdrop-filter: blur(3px);
 
   box-shadow: 16px 38px 17px 0px rgba(0, 0, 0, 0.25);
@@ -70,13 +74,13 @@ form.element-details select,
 form.add-element-form select,
 .search-order select {
   border-radius: 12px;
-  background-color: #CCCFE0;
+  background-color: #c7e1ec;
   font-family: Eina03-Regular;
   font-size: 13px;
   font-style: normal;
   font-weight: 400;
   line-height: 21.32px;
-  color: #13201E;
+  color: #06283D;
   opacity: 0.9;
 
   &hover {
@@ -94,7 +98,7 @@ form.add-element-form select,
 
   border-radius: 6px;
   font-family: Eina03-Regular;
-  border: 1px solid var(--accent, #2844BD);
+  border: 1px solid var(--accent, #47B5FF);
 
   & option {
     font-family: Eina03-Regular;
@@ -102,7 +106,7 @@ form.add-element-form select,
     font-style: normal;
     font-weight: 400;
     line-height: 21.32px;
-    color: #13201E;
+    color: #06283D;
     max-width: 16em;
     opacity: 0.9;
     overflow: hidden;
@@ -113,7 +117,6 @@ form.add-element-form select,
   &::-ms-expand {
     /* -ms-expand = pseudo-elemento para o select */
     display: none;
-
   }
 
   &img {
@@ -157,12 +160,12 @@ form.add-element-form :is(.label-element-div, .input-div) {
 
 form.element-details .input-div input,
 form.add-element-form .input-div input {
-  border: 1.4px solid var(--accent, #2844BD);
+  border: 1.4px solid var(--accent, #47B5FF);
 }
 
 form.element-details .input-div input:focus,
 form.add-element-form .input-div input:focus {
-  border: 1.4px solid var(--accent-hover, #2844BD);
+  border: 1.4px solid var(--accent-hover, #256D85);
 }
 
 form.element-details .input-div .input-valor,
@@ -177,8 +180,8 @@ form.element-details :is(.input-div .input-nome, textarea),
 form.add-element-form :is(.input-div .input-nome, textarea) {
   padding: 0.8em 1em;
   border-radius: 12px;
-  background: var(--buttons-secondary, #CCCFE0);
-  color: var(--text, #13201E);
+  background: var(--buttons-secondary, #c7e1ec);
+  color: var(--text, #06283D);
   font-family: Eina03-Regular;
   font-size: 13px;
   font-style: normal;
@@ -221,37 +224,43 @@ form.add-element-form :is(.cancel-form-button, .submit-form-button) {
   height: 33px;
   flex-shrink: 0;
   border-radius: 14.246px;
-  border: 0.5px solid var(--accent, #2844BD);
-  background: var(--buttons-secondary, #CCCFE0);
+  border: 0.5px solid var(--accent, #47B5FF);
+  background: var(--buttons-secondary, #ced5d8);
   box-shadow: 0px 4.74877px 10px 0px rgba(0, 0, 0, 0.08);
   padding: 0;
-  color: var(--text, #13201E);
+  color: var(--text, #06283D);
   font-family: Eina03-Bold;
   font-size: 15px;
   font-weight: 500;
   line-height: 21.32px;
+
+  &:hover {
+    background: var(--buttons-secondary-hover, #ced5d8b6);
+    color: var(--text-hover, #06283D);
+  }
 }
 
 form.element-details .submit-form-button,
 form.add-element-form .submit-form-button {
   width: 200px;
-  border: 0.8px solid var(--text, #13201E);
-  background: var(--accent, #2844BD);
-  color: var(--buttons-primary-text, #FFFFFF);
+  border: 0.8px solid var(--text, #06283D);
+  background: var(--accent, #47B5FF);
+  color: var(--buttons-primary-text, #DFF6FF);
   font-family: Eina03-SemiBold;
 
   &:hover {
-    background: var(--accent-hover, #4d6aea);
+    background: var(--accent-hover, #47b5ffdd);
+    color: var(--buttons-primary-text-hover, #DFF6FF);
   }
 
   &:disabled {
     background: var(--accent-disabled, #a3b4f5);
     border: 0.8px solid var(--accent-disabled, #a3b4f5);
-    color: var(--accent-disabled-text, #FFFFFF);
+    color: var(--buttons-primary-text-disabled, #DFF6FF);
 
     &:hover {
       background: var(--accent-disabled, #a3b4f5);
-
+      color: var(--buttons-primary-text-disabled, #DFF6FF);
     }
   }
 }
@@ -263,7 +272,7 @@ form.add-element-form h2 {
   font-style: normal;
   font-weight: 400;
   line-height: 0px;
-  color: var(--accent, #2844BD);
+  color: var(--accent, #06283d);
   margin-bottom: 1.5em;
 }
 
