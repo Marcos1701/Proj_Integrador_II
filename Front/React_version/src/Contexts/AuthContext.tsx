@@ -38,6 +38,7 @@ interface AuthProviderProps {
 
 export const api_url: string = "http://localhost:3300/"
 //"https://legendary-space-spoon-gvjqgjx7gx92vv5g-3300.app.github.dev/"
+//https://finnapp.onrender.com/ => link da api no render
 
 // AuthProvider encapsula o AuthContextProvider e o AuthContext
 export const AuthProvider = ({ children }: AuthProviderProps) => {

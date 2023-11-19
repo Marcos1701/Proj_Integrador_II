@@ -43,6 +43,10 @@ export class UsuariosController {
       }
     }
   }) // retorna o usuario alterado
+  @ApiResponse({
+    status: 404,
+    description: 'Nenhum campo foi alterado'
+  })
 
   @Patch() // retorna o status code 200
   update(@Body() updateUsuarioDto: UpdateUsuarioDto) {

@@ -2,7 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, Headers, Unauthorize
 import { MetaService } from './meta.service';
 import { CreateMetaDto } from './dto/create-meta.dto';
 import { UpdateMetaDto } from './dto/update-meta.dto';
-import { ApiBody, ApiHeader, ApiResponse } from '@nestjs/swagger';
+import { ApiBody, ApiHeader, ApiQuery, ApiResponse } from '@nestjs/swagger';
 import { Meta } from './entities/meta.entity';
 import { MarcoMeta } from './marco_meta/entities/marco_meta.entity';
 import { Metasorderby } from 'src/usuarios/entities/usuario.entity';
@@ -85,6 +85,23 @@ export class MetaController {
         ]
       }]
     }
+  })
+  @ApiQuery({
+    name: 'orderby',
+    enum: Metasorderby,
+    required: false,
+    description: 'parametro de ordenação'
+  })
+  @ApiQuery({
+    name: 'order',
+    enum: ['ASC', 'DESC'],
+    required: false,
+    description: 'sentido de ordenação'
+  })
+  @ApiQuery({
+    name: 'search',
+    required: false,
+    description: 'termo de busca'
   })
   @ApiResponse({
     status: 404,
@@ -243,5 +260,13 @@ export class MetaController {
       throw new UnauthorizedException('Token não encontrado');
     }
     return this.metaService.remove(access_token, id);
+  }
+
+  @Post(':id/AdicionarValor')
+  AdicionarValor(@Headers('Authorization') access_token: string, @Param('id') id: string, @Body() body: { valor: number }) {
+    if (!access_token) {
+      throw new UnauthorizedException('Token não encontrado');
+    }
+    return this.metaService.AdicionarValor(access_token, id, body.valor);
   }
 }

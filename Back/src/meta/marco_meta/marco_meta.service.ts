@@ -23,6 +23,10 @@ export class MarcoMetaService {
       throw new NotFoundException('Meta não encontrada'); // 404
     }
 
+    if (createMarcoMetaDto.valor > meta.valorAtual) {
+      throw new NotFoundException('Valor do marco não pode ser maior que o valor atual da meta'); // 404
+    }
+
     const marco = this.entityManager.create(
       'MarcoMeta',
       {
@@ -84,6 +88,10 @@ export class MarcoMetaService {
     if (!marco) {
       console.log('Marco não encontrado');
       throw new NotFoundException('Marco não encontrado'); // 404
+    }
+
+    if (Object.keys(updateMarcoMetaDto).filter(key => updateMarcoMetaDto[key] == marco[key]).length === Object.keys(updateMarcoMetaDto).length) {
+      throw new NotFoundException('Nenhuma alteração foi feita'); // 404
     }
 
     const updatedMarco = this.entityManager.merge(

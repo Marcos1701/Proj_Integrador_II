@@ -108,8 +108,7 @@ export class TransacoesService {
       throw new BadRequestException('id da transação não informado'); // 404
     }
 
-    if ((!updateTransacoeDto.titulo && !updateTransacoeDto.descricao && !updateTransacoeDto.valor && !updateTransacoeDto.categoriaid)
-      || (updateTransacoeDto.titulo === '' && updateTransacoeDto.descricao === '' && updateTransacoeDto.valor === 0 && updateTransacoeDto.categoriaid === '')) {
+    if (Object.keys(updateTransacoeDto).filter(key => updateTransacoeDto[key] == transacao[key]).length === Object.keys(updateTransacoeDto).length) {
       throw new BadRequestException('Nenhum dado para atualizar'); // 400
     }
 
