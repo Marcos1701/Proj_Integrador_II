@@ -3,7 +3,7 @@ import { CategoriasService } from './categorias.service';
 import { CreateCategoriaDto } from './dto/create-categoria.dto';
 import { UpdateCategoriaDto } from './dto/update-categoria.dto';
 import { CategoriasorderBy } from 'src/usuarios/entities/usuario.entity';
-import { ApiBody, ApiParam, ApiQuery, ApiResponse } from '@nestjs/swagger';
+import { ApiBody, ApiHeader, ApiHeaders, ApiParam, ApiQuery, ApiResponse } from '@nestjs/swagger';
 
 
 
@@ -11,6 +11,11 @@ import { ApiBody, ApiParam, ApiQuery, ApiResponse } from '@nestjs/swagger';
 export class CategoriasController {
   constructor(private readonly categoriasService: CategoriasService) { }
 
+  @ApiHeader({
+    name: 'Authorization',
+    description: 'Bearer token',
+    example: 'Bearer token'
+  })
   @ApiResponse({
     status: 201,
     description: 'Cria uma nova categoria',
@@ -32,6 +37,11 @@ export class CategoriasController {
   }
 
 
+  @ApiHeader({
+    name: 'Authorization',
+    description: 'Bearer token',
+    example: 'Bearer token'
+  })
   @ApiResponse({
     status: 200,
     description: 'Retorna todas as categorias',
@@ -77,6 +87,11 @@ export class CategoriasController {
     );
   }
 
+  @ApiHeader({
+    name: 'Authorization',
+    description: 'Bearer token',
+    example: 'Bearer token'
+  })
   @ApiResponse({
     status: 200,
     description: 'Retorna uma categoria',
@@ -97,6 +112,11 @@ export class CategoriasController {
     return this.categoriasService.findOne(id, access_token);
   }
 
+  @ApiHeader({
+    name: 'Authorization',
+    description: 'Bearer token',
+    example: 'Bearer token'
+  })
   @ApiResponse({
     status: 200,
     description: 'Atualiza uma categoria',
@@ -117,6 +137,11 @@ export class CategoriasController {
     return this.categoriasService.update(id, updateCategoriaDto, token);
   }
 
+  @ApiHeader({
+    name: 'Authorization',
+    description: 'Bearer token',
+    example: 'Bearer token'
+  })
   @ApiResponse({
     status: 204,
     description: 'Remove uma categoria',

@@ -83,6 +83,10 @@ export class SubMetaService {
       throw new NotFoundException('SubMeta não encontrada'); // 404
     }
 
+    if (Object.keys(updateSubMetaDto).filter(key => updateSubMetaDto[key] == subMeta[key]).length === Object.keys(updateSubMetaDto).length) {
+      throw new NotFoundException('Nenhuma alteração foi feita'); // 400
+    }
+
     const updatedSubMeta = this.entityManager.merge<SubMeta>(
       SubMeta,
       subMeta,

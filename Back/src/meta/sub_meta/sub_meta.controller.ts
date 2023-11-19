@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Headers, UnauthorizedException, Query, BadRequestException } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Headers, UnauthorizedException, Query, BadRequestException, HttpCode } from '@nestjs/common';
 import { SubMetaService } from './sub_meta.service';
 import { CreateSubMetaDto } from './dto/create-sub_meta.dto';
 import { UpdateSubMetaDto } from './dto/update-sub_meta.dto';
@@ -163,6 +163,7 @@ export class SubMetaController {
     status: 404,
     description: 'SubMeta não encontrada',
   })
+  @HttpCode(204)
   @Delete(':id_sub_meta')
   remove(@Headers('Authorization') access_token: string, @Param('id') id: string, @Param('id_sub_meta') id_sub_meta: string) {
     if (!access_token) {
