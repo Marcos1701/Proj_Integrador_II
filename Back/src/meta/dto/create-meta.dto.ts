@@ -26,7 +26,8 @@ export class CreateMetaDto {
         type: String,
         maxLength: 250,
         minLength: 3,
-        default: "Descrição da meta"
+        default: "Descrição da meta",
+        required: false
     })
     @IsOptional({
         message: "Descrição inválida",
@@ -79,7 +80,7 @@ export class CreateMetaDto {
             IsNotEmpty: true
         }
     })
-    icon: string;
+    icone: string;
 
     constructor(createMetaDto: Partial<CreateMetaDto>) {
         Object.assign(this, createMetaDto);

@@ -40,4 +40,13 @@ export class UpdateMetaDto extends PartialType(CreateMetaDto) {
     })
     dataLimite?: Date;
 
+    @IsOptional({
+        message: "icone inválido",
+        context: {
+            IsString: true,
+            maxLength: 100,
+            minLength: 3
+        }
+    })
+    icone?: string;
 }
