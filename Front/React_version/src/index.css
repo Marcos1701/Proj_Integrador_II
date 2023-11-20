@@ -39,7 +39,8 @@ body {
   padding: 0;
   display: flex;
   place-items: center;
-  min-width: 98vw;
+  place-content: center;
+  min-width: 99vw;
   min-height: 100vh;
   background: var(--background, #ece9e9);
 }
@@ -122,7 +123,7 @@ ul.list-values-2columns {
 .page-header h2.title {
   grid-area: title;
 
-  color: var(--accent, #47B5FF);
+  color: #06283D;
   font-family: Eina03-SemiBold;
   font-size: 27px;
   font-style: normal;
@@ -156,10 +157,6 @@ ul.list-values-2columns {
   &:is(:focus, :focus-visible) {
     outline: none;
   }
-}
-
-.page {
-  margin: 2.5em 0;
 }
 
 /* @media (prefers-color-scheme: light) {

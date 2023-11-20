@@ -1,14 +1,21 @@
 import { useState } from "react";
 import { Navigate } from "react-router-dom";
 import { ListCategorias } from "../../List/ListCategorias";
+import { ICategoria } from "../../List/ListCategorias/Components/Categoria";
+import { DetailCategoriaPage } from "../DetailsPage/Categoria/v2";
 
 
 export function CategoriasPage() {
 
     const [voltar, setVoltar] = useState<boolean>(false);
+    const [showDetails, setShowDetails] = useState<boolean>(false);
+    const [categoria, setCategoria] = useState<ICategoria>();
+
+
     return (
         <main className="page">
             {voltar && <Navigate to={'/'} />}
+            {showDetails && categoria && <DetailCategoriaPage categoria={categoria} setShowDetails={setShowDetails} />}
             <div className="page-header">
                 <button onClick={() => { setVoltar(!voltar) }}
                     className="back-button">
@@ -24,9 +31,9 @@ export function CategoriasPage() {
                     </svg>
                 </button>
 
-                <h2 className="title">Categorias</h2>
+                <h2 className="title">Categorias disponíveis</h2>
             </div>
-            <ListCategorias page={1} limit={6} classname="list_on_page" orderSelect={true} searchInput={true} />
+            <ListCategorias page={1} limit={8} classname="list_on_page" orderSelect={true} searchInput={true} setShowDetails={setShowDetails} setCategoria={setCategoria} />
         </main>
     )
 }

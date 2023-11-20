@@ -4,6 +4,7 @@ import { AdicionarCategoriaForm } from "../Form/AdicionarCategoriaForm/intex";
 import { useContext, useState } from "react";
 import './Secao.css'
 import { CategoriasContext } from "../../../../Contexts/CategoriasContext";
+import { AdicionarMetaForm } from "../Form/AdicionarMetaForm";
 
 
 export function SecaoActions_Home() {
@@ -11,6 +12,7 @@ export function SecaoActions_Home() {
     const [showOptions, setShowOptions] = useState<boolean>(false);
     const [showAdicionarTransacaoForm, setShowAdicionarTransacaoForm] = useState<boolean>(false);
     const [showAdicionarCategoriaForm, setShowAdicionarCategoriaForm] = useState<boolean>(false);
+    const [showAdicionarMetaForm, setShowAdicionarMetaForm] = useState<boolean>(false);
 
     const categorias = useContext(CategoriasContext)
     return (
@@ -31,7 +33,7 @@ export function SecaoActions_Home() {
                     </li>
 
                     <li key="adicionarMeta">
-                        <button type="button" onClick={() => { }}>Adicionar Meta</button>
+                        <button type="button" onClick={() => setShowAdicionarMetaForm(true)}>Adicionar Meta</button>
                     </li>
                 </ul>
             </div>
@@ -44,6 +46,12 @@ export function SecaoActions_Home() {
             {showAdicionarCategoriaForm &&
                 <div className="Background-blur">
                     <AdicionarCategoriaForm setExibirAdicionarCategoriaForm={setShowAdicionarCategoriaForm} />
+                </div>
+            }
+
+            {showAdicionarMetaForm &&
+                <div className="Background-blur">
+                    <AdicionarMetaForm setExibirAdicionarMetaForm={setShowAdicionarMetaForm} />
                 </div>
             }
         </div>

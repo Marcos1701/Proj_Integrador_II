@@ -1,18 +1,21 @@
 .menu-actived {
-    position: fixed;
-    top: 1em;
-    right: 3em;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    width: 7.4em;
-    gap: 0;
-    padding: 0;
+    padding-top: 1em;
     margin: 0;
     z-index: 1;
 }
 
+.menu-actived-div {
+    position: fixed;
+    top: 4em;
+    display: flex;
+    flex-direction: column;
+    gap: .2em;
+    margin-left: 3em;
+}
 
 @keyframes pulse {
     0% {
@@ -37,6 +40,7 @@
     font-weight: 500;
     font-family: inherit;
     cursor: pointer;
+    width: 100%;
 
     &:hover {
         background: var(--accent-hover, #47B5FF);

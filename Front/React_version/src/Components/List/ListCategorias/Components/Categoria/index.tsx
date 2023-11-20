@@ -1,7 +1,6 @@
 import { useContext, useState } from 'react';
 import { realizarTratamentoValor } from '../../../../Home/Components/SecaoAcoes/Components/Saldo';
 import './Categoria.css'
-import { Navigate } from 'react-router-dom';
 import { api_url, useAuth } from '../../../../../Contexts/AuthContext';
 import { CategoriasOrderContext } from '../../../../../Contexts/CategoriasContext';
 import axios from 'axios';
@@ -17,8 +16,14 @@ export interface ICategoria {
     icone?: string;
 }
 
+export interface ICategoriaProps {
+    categoria: ICategoria;
+    setShowDetails?: React.Dispatch<React.SetStateAction<boolean>>;
+    setCategoria?: React.Dispatch<React.SetStateAction<ICategoria | undefined>>;
+}
 
-export function Categoria({ categoria }: { categoria: ICategoria }) {
+
+export function Categoria({ categoria, setShowDetails, setCategoria }: ICategoriaProps) {
 
     const { user } = useAuth()
 
@@ -39,15 +44,16 @@ export function Categoria({ categoria }: { categoria: ICategoria }) {
         })
         console.log(response)
     }
-    const [showDetails, setShowDetails] = useState(false)
 
     const valorGasto: number = categoria.gasto ? categoria.gasto : 0
     const valorOrcamento: number | undefined = categoria.orcamento ? categoria.orcamento : undefined
 
 
     return (
-        <a className="categoria-box" id={categoria.id} onClick={() => setShowDetails(true)}>
-            {showDetails && <Navigate to={`/categorias/${categoria.id}`} />}
+        <a className="categoria-box" id={categoria.id} onClick={() => {
+            setCategoria && setCategoria(categoria)
+            setShowDetails && setShowDetails(true)
+        }}>
             <div className="item">
 
                 <div className='navbar'>

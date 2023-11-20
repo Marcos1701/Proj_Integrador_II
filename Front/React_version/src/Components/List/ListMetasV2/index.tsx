@@ -1,5 +1,5 @@
 import { useContext } from "react"
-import { MetasContext } from "../../../Contexts/MetasContext"
+import { IMetaContext, MetasContext } from "../../../Contexts/MetasContext"
 import { Link } from "react-router-dom";
 import { MetaBox } from "./Components/Meta";
 import './ListaMetas.css'
@@ -14,7 +14,7 @@ export function ListaMetas(
     }: IListaMetasProps
 ): JSX.Element {
 
-    const metas = useContext(MetasContext);
+    const { metas }: IMetaContext = useContext(MetasContext);
 
     return (
         <div className="lista-metas">
