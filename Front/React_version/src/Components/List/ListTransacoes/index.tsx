@@ -23,7 +23,13 @@ export function ListTransacoes(
     return (
         <div className={classname}>
             <div className="anchors_to_transacoesPage">
-                <h2 className="title">Últimas transações</h2>
+                <h2 className="title">
+                    {
+                        classname === "ListTransacoesSimple" ?
+                            "Últimas transações" :
+                            "Transações"
+                    }
+                </h2>
                 <Link to={`/transacoes`} key={"linkToTransacoes"}>Ver todas</Link>
             </div>
             <div className="legend-transacoes">
@@ -66,13 +72,3 @@ export function ListTransacoes(
         </div>
     )
 }
-/*
-Warning: Each child in a list should have a unique "key" prop.
-
-Check the render method of `ListTransacoes`. See https://reactjs.org/link/warning-keys for more information.
-    at ListTransacoes (http://localhost:5173/src/Components/List/ListTransacoes/index.tsx?t=1700081298331:25:3)
-
-esse warning é porque o react precisa de uma key para cada elemento da lista, para poder identificar cada elemento
-para resolver isso, basta colocar uma key nos elementos da lista, como no exemplo abaixo:
-
-*/

@@ -4,7 +4,7 @@ import { CategoriasContext } from "../../../Contexts/CategoriasContext";
 import "./ListCategorias.css";
 import { Searchdiv } from "./Components/Searchdiv";
 import { Orderdiv } from "./Components/Orderdiv";
-
+import { Link } from "react-router-dom";
 
 interface ListCategoriasProps {
     pagination?: boolean
@@ -13,6 +13,8 @@ interface ListCategoriasProps {
     limit?: number
     page?: number
     classname?: string
+    setShowDetails?: React.Dispatch<React.SetStateAction<boolean>>
+    setCategoria?: React.Dispatch<React.SetStateAction<ICategoria | undefined>>
 }
 
 export function ListCategorias(
@@ -22,7 +24,9 @@ export function ListCategorias(
         searchInput = false,
         limit = 2,
         page = 1,
-        classname = "div_categorias"
+        classname = "div_categorias",
+        setShowDetails,
+        setCategoria
     }: ListCategoriasProps
 ) {
 
@@ -41,12 +45,24 @@ export function ListCategorias(
                     </div>
                 )}
 
-                <ul className="list-values-2columns" id="lista_categorias">
+                {classname !== "list_on_page" &&
+                    <div className="anchors_to_transacoesPage">
+                        <h2 className="title">Categorias Disponíveis</h2>
+                        <Link to={`/categorias`} key={"linkToCategorias"}>Ver todas</Link>
+                    </div>
+                }
+                <div className="legend-transacoes">
+                    <div className="legend-item">Nome</div>
+                    <div className="legend-item">Data de Criação</div>
+                    <div className="legend-item">Gastos</div>
+                    <div className="legend-item">Orçamento</div>
+                </div>
+                <ul className="listValues" id="listCategorias">
                     {categorias.length === 0 && <li className="empty">Nenhuma categoria cadastrada</li>}
                     {
                         categorias.slice(page * limit - limit, page * limit)
                             .map(
-                                (categoria: ICategoria) => <li key={categoria.id}><Categoria categoria={categoria} key={categoria.id} /> </li>
+                                (categoria: ICategoria) => <li key={categoria.id} className="listItem"><Categoria categoria={categoria} key={categoria.id} setShowDetails={setShowDetails} setCategoria={setCategoria} /> </li>
                             )
                     }
                 </ul>
@@ -93,5 +109,3 @@ export function ListCategorias(
         </>
     )
 }
-
-// o codigo acima possui um erro, ele esta na linha 121, pois o botão de proximo esta aparecendo mesmo quando não tem mais paginas,

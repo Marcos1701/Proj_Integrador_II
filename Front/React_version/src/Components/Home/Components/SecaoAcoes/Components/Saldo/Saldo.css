@@ -5,9 +5,9 @@
     max-width: fit-content;
     height: 60px;
     filter: drop-shadow(0px 8.310344696044922px 21.36945915222168px rgba(134, 136, 239, 0.37));
-    background: #373737;
+    background: #256d85b1;
     border-radius: 15px;
-    color: #E9E9E9;
+    color: #fff;
 
     display: flex;
     align-items: center;
@@ -21,7 +21,7 @@
 .Saldo-icon {
     width: 34.99px;
     height: 34.99px;
-    background: #E9E9E9;
+    background: #DFF6FF;
     border-radius: 5px;
     display: flex;
     align-items: center;
@@ -40,13 +40,13 @@
     align-self: start;
     text-align: center;
     font-family: Eina03-SemiBold;
-    font-size: 14.25px;
+    font-size: 14.65px;
     font-style: normal;
-    font-weight: 400;
+    font-weight: 500;
     line-height: 23.37px;
     margin: 0;
 
-    background: radial-gradient(167.28% 167.28% at 0% -12.5%, #FFF 0%, #E9E9E9 100%);
+    background: radial-gradient(167.28% 167.28% at 0% -12.5%, #FFF 0%, #DFF6FF 100%);
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -67,17 +67,18 @@
 }
 
 .saldo-positivo {
-    color: #00FF00;
+    color: #17FB99;
 
     &::before {
-        background: #00FF00;
+        background: #17FB99;
     }
 }
 
 .saldo-negativo {
-    color: #FF0000;
+    color: #9A1840;
+    
 
     &::before {
-        background: #FF0000;
+        background: #9A1840;
     }
 }

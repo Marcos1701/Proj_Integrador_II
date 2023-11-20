@@ -56,7 +56,7 @@ export class Meta {
         type: 'text',
         default: "dollar-bill"
     })
-    icon: string = "dollar-bill";
+    icone: string = "dollar-bill";
 
     @Column({
         type: 'boolean',

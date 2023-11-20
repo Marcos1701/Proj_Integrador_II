@@ -62,7 +62,7 @@ export const Box = (
                 <button className="ButtonDelete" onClick={HandleDelete}><img className='icon' src="assets/ActionsIcons/delete.svg" alt="Deletar" /></button>
             </div>
             <svg id="vector" width="530" height="2" viewBox="0 0 545 2" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M0.496094 0.805695H544.239" stroke="#2844BD" strokeWidth="0.5" />
+                <path d="M0.496094 0.805695H544.239" stroke="#47B5FF" strokeWidth="0.5" />
             </svg>
 
         </div>

@@ -46,7 +46,7 @@ export function DetailsMetaPage(
     const ValidateValues = () => {
 
         if ((!tituloRef.current || !descricaoRef.current || !ValorDesejadoRef.current || !data.current)
-            || (tituloRef.current.value === meta.titulo && descricaoRef.current.value === meta.descricao && ValorDesejadoRef.current.value.split(' ')[1] === "0" && data.current.value === meta.dataFinal.toString().split('T')[0])
+            || (tituloRef.current.value === meta.titulo && descricaoRef.current.value === meta.descricao && ValorDesejadoRef.current.value.split(' ')[1] === "0" && data.current.value === meta.dataLimite.toString().split('T')[0])
         ) {
             return false
         }
@@ -82,8 +82,8 @@ export function DetailsMetaPage(
 
         if (nome !== meta.titulo && nome.length > 0) values.nome = nome;
         if (descricao !== meta.descricao && descricao.length > 0) values.descricao = descricao;
-        if (valorDesejado !== meta.valor_Desejado && valorDesejado > 0) values.valorDesejado = valorDesejado;
-        if (dataFinal !== meta.dataFinal.toString().split('T')[0] && isDate(dataFinal, { format: 'YYYY-MM-DD', delimiters: ['-'] })) values.dataFinal = dataFinal;
+        if (valorDesejado !== meta.valor && valorDesejado > 0) values.valorDesejado = valorDesejado;
+        if (dataFinal !== meta.dataLimite.toString().split('T')[0] && isDate(dataFinal, { format: 'YYYY-MM-DD', delimiters: ['-'] })) values.dataFinal = dataFinal;
 
         if (icone !== meta.icon) {
             values = {
@@ -159,7 +159,7 @@ export function DetailsMetaPage(
                                 <input type="text" name="Valor"
                                     ref={ValorDesejadoRef}
                                     id="input-Valor"
-                                    defaultValue={`R$ ${meta.valor_Desejado}`}
+                                    defaultValue={`R$ ${meta.valor}`}
                                     onChange={(e) => {
                                         MoneyValidation(e)
                                         setAbleToSubmit(ValidateValues())
@@ -174,8 +174,8 @@ export function DetailsMetaPage(
                                 required // para aceitar apenas datas posteriores ou iguais à data atual
                                 min={new Date().toISOString().split('T')[0]}
                                 // initial value
-                                defaultValue={meta.dataFinal.toString().split('T')[0]}
-                                disabled={meta.dataFinal < new Date()}
+                                defaultValue={meta.dataLimite.toString().split('T')[0]}
+                                disabled={meta.dataLimite < new Date()}
                                 onChange={e => {
                                     if (e.target.value === '') return;
                                     setAbleToSubmit(ValidateValues())

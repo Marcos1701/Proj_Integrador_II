@@ -1,10 +1,16 @@
 .ListTransacoesSimple,
+.div_categorias,
 .legend-transacoes,
 .listValues,
 .anchors_to_transacoesPage {
     display: flex;
     align-items: flex-start;
     justify-content: center;
+}
+
+.listValues {
+    height: 48%;
+    justify-content: flex-start !important;
 }
 
 .anchors_to_transacoesPage {
@@ -30,7 +36,7 @@
     }
 }
 
-.ListTransacoesSimple h2 {
+:is(.ListTransacoesSimple, .div_categorias) h2 {
     color: var(--text, #13201E);
     font-family: Eina03-SemiBold;
     font-size: 20.1px;
@@ -45,7 +51,8 @@
     text-shadow: 0px 2px 4px #00000029;
 }
 
-.ListTransacoesSimple {
+.ListTransacoesSimple,
+.div_categorias {
     flex-direction: column;
     gap: 1em;
 
