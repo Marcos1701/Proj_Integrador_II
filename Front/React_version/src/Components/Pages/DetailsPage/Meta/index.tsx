@@ -26,7 +26,8 @@ export function DetailsMetaPage(
 
     if (!id) return <Navigate to="/Categorias" />
 
-    const meta: IMeta = useContext(MetasContext).find((meta) => meta.id === id);
+    const { metas } = useContext(MetasContext)
+    const meta = metas.find(meta => meta.id === id)
 
     if (!meta) return <Navigate to="/404" />
 
