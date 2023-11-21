@@ -38,7 +38,7 @@ export const MetaBox = (
             }
             return response
         })
-        // console.log(response)
+        console.log(response)
     }
 
     return (
