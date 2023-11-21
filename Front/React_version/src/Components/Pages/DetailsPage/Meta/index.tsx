@@ -25,6 +25,7 @@ export function DetailsMetaPage(
         setMeta
     }: IProps
 ) {
+
     if (!meta) return <Navigate to="/404" />
 
     const tituloRef = useRef<HTMLInputElement>(null)
@@ -121,7 +122,7 @@ export function DetailsMetaPage(
             }
             return response
         })
-        console.log(response)
+        if (response.status !== 204) alert('Erro ao deletar meta');
     }
 
 
