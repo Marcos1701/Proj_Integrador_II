@@ -82,7 +82,7 @@ form.add-element-form select,
   color: #06283D;
   opacity: 0.9;
 
-  &hover {
+  &:hover {
     cursor: pointer;
   }
 }
@@ -118,7 +118,7 @@ form.add-element-form select,
     display: none;
   }
 
-  &img {
+  & img {
     /* ícone do select */
     width: 1em;
     height: 1em;
