@@ -24,7 +24,7 @@ export enum OrderElements {
 export function CategoriasProvider({ children }: CategoriasProviderProps) {
     const [categorias, setCategorias] = useState<ICategoria[]>([])
     const [orderby, setOrderby] = useState<ordenarCategorias>(ordenarCategorias.datacriacao)
-    const [order, setOrder] = useState<OrderElements>(OrderElements.ASC)
+    const [order, setOrder] = useState<OrderElements>(OrderElements.DESC)
     const [search, setSearch] = useState<string>('')
     const [updated, setUpdated] = useState<boolean>(false)
 

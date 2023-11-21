@@ -104,10 +104,11 @@ export function AdicionarMetaForm({ setExibirAdicionarMetaForm }: IAdicionarMeta
                 <input type="text" placeholder="R$ 0" ref={valor} className="input-valor" onChange={MoneyValidation} required />
             </div>
 
-            <div className="input-data" id="data-div">
+            <div className="input-div" id="data-div">
                 <label className="label-data" htmlFor="input-data">Data limite</label>
                 <input type="date" ref={dataLimite} className="input-data"
                     min={new Date().toISOString().split('T')[0]}
+                    defaultValue={new Date().toISOString().split('T')[0]}
                     required />
             </div>
 

@@ -4,6 +4,7 @@ import { OrderElements } from "../providers/CategoriasProvider";
 
 export enum ordenarTransacoes {
     titulo = "titulo",
+    descricao = "descricao",
     valor = "valor",
     entrada = 'entrada',
     saida = 'saida',

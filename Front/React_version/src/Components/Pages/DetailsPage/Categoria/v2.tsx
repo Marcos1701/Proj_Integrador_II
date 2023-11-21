@@ -12,9 +12,10 @@ import { tratarData } from "../../../List/ListTransacoesCard/Components/Transaca
 export interface IProps {
     categoria: ICategoria,
     setShowDetails: React.Dispatch<React.SetStateAction<boolean>>
+    setCategoria?: React.Dispatch<React.SetStateAction<ICategoria | undefined>>
 }
 
-export function DetailCategoriaPage({ categoria, setShowDetails }: IProps) {
+export function DetailCategoriaPage({ categoria, setShowDetails, setCategoria }: IProps) {
 
     const { user } = useAuth()
     if (!user) return <Navigate to="/login" />
@@ -53,24 +54,30 @@ export function DetailCategoriaPage({ categoria, setShowDetails }: IProps) {
 
         const nome = nomeRef.current.value
         const descricao = descricaoRef.current.value === '' ? 'Sem descrição' : descricaoRef.current.value
-        const orcamento = parseFloat(orcamentoRef.current.value.split(' ')[1])
+        const orcamento = parseFloat(orcamentoRef.current.value.replace(/[^0-9]/g, ''))
 
         if (nome === '') return setError('Nome não pode ser vazio')
 
         let data: {
             nome: string;
-            descricao: string;
-            orcamento?: number;
+            descricao?: string;
+            orcamento?: number | null;
             icone?: string;
 
         } = orcamento === 0 ? {
             nome,
-            descricao
+            orcamento: null
         } : {
                 nome,
-                descricao,
                 orcamento: Number(orcamento)
             }
+
+        if (descricao !== categoria.descricao) {
+            data = {
+                ...data,
+                descricao
+            }
+        }
 
         if (icone !== categoria.icone) {
             data = {
@@ -90,10 +97,11 @@ export function DetailCategoriaPage({ categoria, setShowDetails }: IProps) {
             setError(response.statusText)
             return;
         }
-        console.log(response.data)
+
         setError('')
         setSuccess('Categoria atualizada com sucesso')
         setUpdated(true);
+        setCategoria && setCategoria(undefined)
         setShowDetails(false);
     }
 
@@ -112,12 +120,18 @@ export function DetailCategoriaPage({ categoria, setShowDetails }: IProps) {
         setError('')
         setSuccess('Categoria deletada com sucesso')
         setUpdated(true);
+        setCategoria && setCategoria(undefined)
         setShowDetails(false);
     }
 
     return (
-        <div className="Background-blur">
-            <div className="details-div">
+        <div className="Background-blur" id="background-form" >
+            <div className="details-div" onMouseLeave={(e) => {
+                if (e.target === e.currentTarget) {
+                    setCategoria && setCategoria(undefined)
+                    setShowDetails(false)
+                }
+            }}>
                 <div className="header-details">
                     <button type="button" className="close-button" onClick={() => setShowDetails(false)}>
                         <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24">
@@ -135,6 +149,7 @@ export function DetailCategoriaPage({ categoria, setShowDetails }: IProps) {
                 </div>
                 {error && <p className="error">{error}</p>}
                 {success && <p className="success">{success}</p>}
+
                 <form onSubmit={handleUpdate} className="element-details">
                     <div className="input-div">
                         <label htmlFor="input-nome">Nome:</label>
@@ -177,6 +192,7 @@ export function DetailCategoriaPage({ categoria, setShowDetails }: IProps) {
                         <button type="button" className="delete-value-form" onClick={handleDelete}>Deletar</button>
                     </div>
                 </form>
+
             </div>
         </div>
     )

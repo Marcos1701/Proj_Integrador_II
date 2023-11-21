@@ -275,8 +275,8 @@ form.add-element-form h2 {
   margin-bottom: 1.5em;
 }
 
-form.element-details .valor-data-div .input-data,
-form.add-element-form .valor-data-div .input-data {
+form.element-details .input-div .input-data,
+form.add-element-form .input-div .input-data {
   &::-webkit-calendar-picker-indicator {
     /* -webkit-calendar-picker-indicator = pseudo-elemento para o input */
     filter: invert(1);
@@ -294,5 +294,64 @@ form.add-element-form .checkbox-div {
   & label {
     margin: 0;
     font-size: .8em;
+  }
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+}
+
+.pagination-button,
+.pagination-button-active,
+.pagination-button-disabled {
+  display: flex;
+  width: 30px;
+  height: 30px;
+  justify-content: center;
+  align-items: center;
+
+  border-radius: 4px;
+  border: 1px solid #BEBEBE;
+  background: #FFF;
+  cursor: pointer;
+
+  transition: all 0.2s ease-in-out;
+
+  &:hover {
+    background: #F2F2F2;
+  }
+
+  &:active {
+    background: #E9E1FF;
+  }
+
+  &:focus {
+    outline: none;
+  }
+
+  &>* {
+    pointer-events: none;
+  }
+}
+
+.pagination-button-active {
+  border: 1px solid #7949FF;
+  background: #E9E1FF;
+
+  &:hover {
+    background: #E9E1FF;
+  }
+}
+
+.pagination-button-disabled {
+  border: 1px solid #BEBEBE;
+  background: #FFF;
+  opacity: 0.3;
+
+  &:hover {
+    background: #FFF;
   }
 }

@@ -7,11 +7,11 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { JwtService } from '@nestjs/jwt';
 import { jwtConstants } from 'src/auth/auth.constants';
 import { jwtDecodeUser } from 'src/auth/jwt.strategy';
+import { Transacao } from 'src/transacoes/entities/transacao.entity';
 
 @Injectable()
 export class UsuariosService {
   constructor(
-    @InjectRepository(Usuario)
     private readonly entityManager: EntityManager,
     private jwtService: JwtService
   ) { }
@@ -57,7 +57,7 @@ export class UsuariosService {
       throw new UnauthorizedException('Usuário não encontrado');
     }
 
-    if(Object.keys(updateUsuarioDto).filter(key => updateUsuarioDto[key] == usuario[key]).length === Object.keys(updateUsuarioDto).length){
+    if (Object.keys(updateUsuarioDto).filter(key => updateUsuarioDto[key] == usuario[key]).length === Object.keys(updateUsuarioDto).length) {
       throw new NotFoundException('Nenhum campo foi alterado');
     }
 
@@ -102,6 +102,9 @@ export class UsuariosService {
 
   async getSaldo(access_token: string) {
     const usuario = await this.getUserFromtoken(access_token)
+    const saldo = usuario.saldo
+    usuario.atualizarSaldo()
+    saldo !== usuario.saldo && await this.entityManager.save(usuario)
     return usuario.saldo
   }
 
@@ -113,11 +116,19 @@ export class UsuariosService {
   private getUserFromtoken(token: string): Promise<Usuario> {
     const data = this.jwtService.decode(token) as jwtDecodeUser
 
-    const usuario = this.entityManager.findOneBy(
+    if (!data || !data.id) {
+      throw new Error('Invalid token');
+    }
+
+    const { id } = data;
+
+    const usuario = this.entityManager.findOne<Usuario>(
       Usuario,
       {
-        email: data.email
-      })
+        where: { id },
+        relations: ['transacoes', 'transacoes.categoria']
+      }
+    )
 
     if (!usuario) {
       console.log('Usuário não encontrado');

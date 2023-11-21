@@ -1,23 +1,26 @@
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import "./box.css";
-import { ITransacao, tratarData } from "../../ListTransacoesCard/Components/Transacao";
-import { ICategoria } from "../../ListCategorias/Components/Categoria";
-import { realizarTratamentoValor } from "../../../Home/Components/SecaoAcoes/Components/Saldo";
-import { Navigate } from "react-router-dom";
+import { ITransacao, tratarData } from "../../../ListTransacoesCard/Components/Transacao";
+import { ICategoria } from "../../../ListCategorias/Components/Categoria";
+import { realizarTratamentoValor } from "../../../../Home/Components/SecaoAcoes/Components/Saldo";
 import axios from "axios";
-import { api_url, useAuth } from "../../../../Contexts/AuthContext";
-import { TransacoesContext } from "../../../../Contexts/TransacoesContext";
+import { api_url, useAuth } from "../../../../../Contexts/AuthContext";
+import { TransacoesContext } from "../../../../../Contexts/TransacoesContext";
 
 export interface ITransacaoboxProps {
     transacao: ITransacao;
     categoria: ICategoria;
+    setShowDetails?: React.Dispatch<React.SetStateAction<boolean>>;
+    setTransacao?: React.Dispatch<React.SetStateAction<ITransacao | undefined>>;
 }
 
 
 export const Box = (
     {
         transacao,
-        categoria
+        categoria,
+        setShowDetails,
+        setTransacao
     }: ITransacaoboxProps
 ): JSX.Element => {
 
@@ -41,13 +44,13 @@ export const Box = (
         console.log(response)
     }
 
-    const [showDetails, setShowDetails] = useState(false);
-
     return (
         <div className="transacao-box" id={transacao.id}>
-            {showDetails && (<Navigate to={`/transacoes/${transacao.id}`} />)}
             <div className="item">
-                <a className="navbar" onClick={() => setShowDetails(!showDetails)}>
+                <a className="navbar" onClick={() => {
+                    setTransacao && setTransacao(transacao)
+                    setShowDetails && setShowDetails(true)
+                }}>
                     <div className="title-icon">
                         <div className="icon-div"><img className="icon-Categoria" src={`assets/icons/${categoria.icone ? categoria.icone : 'barraquinha'}.svg`} alt="Icone da categoria" /></div>
                         {transacao.titulo}

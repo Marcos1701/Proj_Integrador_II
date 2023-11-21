@@ -1,7 +1,8 @@
 import { PartialType } from '@nestjs/mapped-types';
 import { CreateCategoriaDto } from './create-categoria.dto';
-import { IsJWT, IsOptional, IsPositive, IsString } from 'class-validator';
+import { IsJWT, IsOptional, IsPositive, IsString, ValidateIf } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
+import { IsNull } from 'typeorm';
 
 export class UpdateCategoriaDto {
 
@@ -51,8 +52,9 @@ export class UpdateCategoriaDto {
       message: "Valor inválido",
       context: {
         IsPositive: true
-      }
+      },
     }
   )
-  orcamento?: number;
+  @ValidateIf((object, value) => value !== null)
+  orcamento?: number | null;
 }
