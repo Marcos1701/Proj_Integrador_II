@@ -1,11 +1,24 @@
 import { useContext } from "react";
 import "./Meta.css";
-import { IMeta } from "../../../ListMetas/Components/Meta";
 import { tratarData } from "../../../ListTransacoesCard/Components/Transacao";
 import { realizarTratamentoValor } from "../../../../Home/Components/SecaoAcoes/Components/Saldo";
 import { api_url, useAuth } from "../../../../../Contexts/AuthContext";
 import { MetasContext } from "../../../../../Contexts/MetasContext";
 import axios from "axios";
+
+export interface IMeta {
+    id: string;
+    valor: number;
+    valorAtual: number;
+    dataLimite: Date;
+    progresso: number;
+    titulo: string;
+    descricao?: string;
+    icon: string;
+    dataCriacao: Date;
+    concluida: boolean;
+    ativo: boolean;
+}
 
 interface IMetaBoxProps {
     meta: IMeta
@@ -38,7 +51,7 @@ export const MetaBox = (
             }
             return response
         })
-        console.log(response)
+        if (response.status !== 204) alert('Erro ao deletar meta');
     }
 
     return (

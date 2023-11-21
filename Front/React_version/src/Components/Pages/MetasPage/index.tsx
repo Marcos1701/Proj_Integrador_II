@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Navigate } from "react-router-dom";
 import { ListaMetas } from "../../List/ListMetasV2";
-import { IMeta } from "../../List/ListMetas/Components/Meta";
+import { IMeta } from "../../List/ListMetasV2/Components/Meta";
 import { DetailsMetaPage } from "../DetailsPage/Meta";
 
 

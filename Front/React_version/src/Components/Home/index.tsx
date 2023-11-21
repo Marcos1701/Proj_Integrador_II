@@ -8,7 +8,7 @@ import { ICategoria } from "../List/ListCategorias/Components/Categoria";
 import { DetailCategoriaPage } from "../Pages/DetailsPage/Categoria/v2";
 import { ITransacao } from "../List/ListTransacoesCard/Components/Transacao";
 import { DetailsTransacaoPage } from "../Pages/DetailsPage/Transacao";
-import { IMeta } from "../List/ListMetas/Components/Meta";
+import { IMeta } from "../List/ListMetasV2/Components/Meta";
 import { DetailsMetaPage } from "../Pages/DetailsPage/Meta";
 
 export function Home() {

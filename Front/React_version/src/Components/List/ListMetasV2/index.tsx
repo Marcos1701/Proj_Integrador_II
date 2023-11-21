@@ -3,7 +3,7 @@ import { IMetaContext, MetasContext } from "../../../Contexts/MetasContext"
 import { Link } from "react-router-dom";
 import { MetaBox } from "./Components/Meta";
 import './ListaMetas.css'
-import { IMeta } from "../ListMetas/Components/Meta";
+import { IMeta } from "./Components/Meta";
 import { Orderdiv } from "./Components/Orderdiv";
 import { Searchdiv } from "./Components/Searchdiv";
 import { MagicMotion } from "react-magic-motion";
