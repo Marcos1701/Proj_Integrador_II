@@ -1,12 +1,15 @@
 import { useState } from "react";
 import { Navigate } from "react-router-dom";
-import { ListMetas } from "../../List/ListMetas";
+import { ListaMetas } from "../../List/ListMetasV2";
+import { IMeta } from "../../List/ListMetas/Components/Meta";
+import { DetailsMetaPage } from "../DetailsPage/Meta";
 
 
 export function MetasPage() {
 
+    const [showDetails, setShowDetails] = useState<boolean>(false);
     const [voltar, setVoltar] = useState<boolean>(false);
-
+    const [meta, setMeta] = useState<IMeta | undefined>();
     return (
         <main className="page">
             {voltar && <Navigate to={'/'} />}
@@ -28,7 +31,8 @@ export function MetasPage() {
                 <h2 className="title">Metas</h2>
             </div>
 
-            <ListMetas page={1} limit={6} classname="list_on_page" />
+            {showDetails && meta !== undefined && <DetailsMetaPage setShowDetails={setShowDetails} meta={meta} setMeta={setMeta} />}
+            <ListaMetas page={1} limit={6} classname="list_on_page" setShowDetails={setShowDetails} setMeta={setMeta} />
         </main>
     )
 }
