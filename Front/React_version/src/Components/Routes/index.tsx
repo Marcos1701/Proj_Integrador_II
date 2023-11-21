@@ -5,10 +5,7 @@ import { LoginPage } from "../Auth/LoginPage";
 import { RegisterPage } from "../Auth/RegisterPage";
 import { TransacoesPage } from "../Pages/TransacoesPage";
 import { CategoriasPage } from "../Pages/CategoriasPage";
-import { DetailCategoriaPage } from "../Pages/DetailsPage/Categoria";
 import { NotFoundPage } from "../Pages/NotFoundPage";
-import { DetailsTransacaoPage } from "../Pages/DetailsPage/Transacao";
-import { DetailsMetaPage } from "../Pages/DetailsPage/Meta";
 import { MetasPage } from "../Pages/MetasPage";
 
 export function PatchRoutes() {
@@ -31,18 +28,11 @@ export function PatchRoutes() {
                     <CategoriasPage />
                 </ProtectedRoute>
             } />
-            <Route path="/metas">
-                <Route index element={
-                    <ProtectedRoute>
-                        <MetasPage />
-                    </ProtectedRoute>
-                } />
-                <Route path=":id" element={
-                    <ProtectedRoute>
-                        <DetailsMetaPage return="/" />
-                    </ProtectedRoute>
-                } />
-            </Route>
+            <Route path="/metas" element={
+                <ProtectedRoute>
+                    <MetasPage />
+                </ProtectedRoute>
+            } />
             <Route path="*" element={
                 <NotFoundPage />
             } />
