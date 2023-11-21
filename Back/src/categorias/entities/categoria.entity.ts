@@ -1,7 +1,7 @@
 import { InjectEntityManager } from '@nestjs/typeorm';
 import { Transacao } from 'src/transacoes/entities/transacao.entity';
 import { Usuario } from 'src/usuarios/entities/usuario.entity';
-import { AfterRemove, AfterSoftRemove, BeforeUpdate, Column, Entity, EntityManager, ManyToOne, OneToMany, PrimaryGeneratedColumn, RemoveEvent, UpdateEvent } from 'typeorm';
+import { Column, Entity, EntityManager, ManyToOne, OneToMany, PrimaryGeneratedColumn, RemoveEvent, UpdateEvent } from 'typeorm';
 
 @Entity()
 export class Categoria {
@@ -50,12 +50,13 @@ export class Categoria {
   })
   icone?: string;
 
-  @ManyToOne(() => Usuario, (usuario) => usuario.categorias)
+  @ManyToOne(() => Usuario, (usuario) => usuario.categorias, {
+    cascade: true,
+    onDelete: 'CASCADE'
+  })
   usuario: Usuario;
 
-  @OneToMany(() => Transacao, (transacao) => transacao.categoria, {
-    cascade: true
-  })
+  @OneToMany(() => Transacao, (transacao) => transacao.categoria)
   transacoes: Transacao[];
 
   @InjectEntityManager()

@@ -46,6 +46,8 @@ export class Transacao {
 
   @ManyToOne(() => Usuario, (usuario) => usuario.transacoes, {
     nullable: false,
+    cascade: true,
+    onDelete: 'CASCADE'
   })
   @JoinColumn() // serve para indicar qual coluna vai ser a chave estrangeira
   usuario: Usuario; // usuario é o nome da coluna na tabela transacao
@@ -53,6 +55,8 @@ export class Transacao {
   @ManyToOne(() => Categoria, (categoria) => categoria.transacoes, {
     eager: true,
     nullable: false,
+    cascade: true,
+    onDelete: 'CASCADE'
   })
   @JoinColumn()
   categoria: Categoria;

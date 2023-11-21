@@ -33,6 +33,9 @@ export class CategoriasController {
   })
   @Post('')
   async create(@Headers('Authorization') token: string, @Body() createCategoriaDto: CreateCategoriaDto) {
+    if (!token) {
+      throw new BadRequestException('Token não informado');
+    }
     return this.categoriasService.create(createCategoriaDto, token);
   }
 
@@ -72,6 +75,9 @@ export class CategoriasController {
   })
   @Get('')
   async findAll(@Headers('Authorization') token: string, @Query('order') order?: 'ASC' | 'DESC', @Query('orderby') orderby?: CategoriasorderBy, @Query('search') search?: string) {
+    if (!token) {
+      throw new BadRequestException('Token não informado');
+    }
     if (orderby && !['nome', 'descricao', 'orcamento', 'gasto'].includes(orderby)) throw new BadRequestException('O parametro orderby deve ser nome, descricao, orcamento ou gasto');
     if (order && !['ASC', 'DESC'].includes(order)) throw new BadRequestException('O parametro order deve ser ASC ou DESC');
 
@@ -109,6 +115,9 @@ export class CategoriasController {
   })
   @Get(':id')
   async findOne(@Param('id') id: string, @Headers('Authorization') access_token: string) {
+    if (!access_token) {
+      throw new BadRequestException('Token não informado');
+    }
     return this.categoriasService.findOne(id, access_token);
   }
 
@@ -134,6 +143,9 @@ export class CategoriasController {
   })
   @Patch(':id') // Atualiza uma categoria
   async update(@Param('id') id: string, @Body() updateCategoriaDto: UpdateCategoriaDto, @Headers('Authorization') token: string) {
+    if (!token) {
+      throw new BadRequestException('Token não informado');
+    }
     return this.categoriasService.update(id, updateCategoriaDto, token);
   }
 
@@ -152,6 +164,9 @@ export class CategoriasController {
   })
   @Delete(':id')
   async remove(@Param('id') id: string, @Headers('Authorization') access_token: string) {
+    if (!access_token) {
+      throw new BadRequestException('Token não informado');
+    }
     return this.categoriasService.remove(id, access_token);
   }
 }

@@ -89,19 +89,13 @@ export class Usuario {
   )
   senha: string;
 
-  @OneToMany(type => Categoria, categoria => categoria.usuario, {
-    cascade: true // dessa forma, quando o usuario for deletado, as categorias também serão
-  })
+  @OneToMany(type => Categoria, categoria => categoria.usuario)
   categorias: Categoria[];
 
-  @OneToMany(type => Transacao, transacao => transacao.usuario, {
-    cascade: true // dessa forma, quando o usuario for deletado, as transacoes também serão
-  })
+  @OneToMany(type => Transacao, transacao => transacao.usuario)
   transacoes: Transacao[];
 
-  @OneToMany(type => Meta, meta => meta.usuario, {
-    cascade: true // dessa forma, quando o usuario for deletado, as metas também serão
-  })
+  @OneToMany(type => Meta, meta => meta.usuario)
   metas: Meta[];
 
   @InjectEntityManager()

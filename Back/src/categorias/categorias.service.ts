@@ -82,15 +82,29 @@ export class CategoriasService {
 
     const usuario = await this.getUserFromtoken(access_token);
 
-    const result = await this.entityManager.update<Categoria>(
+    const categoria = await this.entityManager.findOne(
       Categoria, {
-      id,
-      usuario: {
-        id: usuario.id
+      where: {
+        id,
+        usuario: {
+          id: usuario.id
+        }
+      },
+      relations: {
+        usuario: true
       }
-    }, {
-      ...updateCategoriaDto
+    });
+
+    if (!categoria) {
+      throw new NotFoundException('Categoria não encontrada');
     }
+
+    if (updateCategoriaDto.orcamento && updateCategoriaDto.orcamento < categoria.gasto) {
+      throw new BadRequestException('O orçamento não pode ser menor que o gasto');
+    }
+
+    const result = await this.entityManager.update(
+      Categoria, { id }, { ...updateCategoriaDto }
     );
 
     if (result.affected === 0) {
