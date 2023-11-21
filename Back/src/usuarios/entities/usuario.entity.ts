@@ -15,6 +15,7 @@ export enum CategoriasorderBy {
 
 export enum TransacoesorderBy {
   titulo = "titulo",
+  descricao = "descricao",
   valor = "valor",
   entrada = 'entrada',
   saida = 'saida',
@@ -115,17 +116,24 @@ export class Usuario {
         ...retorno,
         categoriaid: categoria.id
       }
-    })//.sort((a, b) => order != 'DESC' ? a.dataCriacao.getTime() - b.dataCriacao.getTime() : b.dataCriacao.getTime() - a.dataCriacao.getTime())
+    })
 
     if (orderby) {
+      if (orderby == TransacoesorderBy.data) { TransacoesOrdenadas = TransacoesOrdenadas.sort((a, b) => order !== 'DESC' ? a.data.getTime() - b.data.getTime() : b.data.getTime() - a.data.getTime()) }
       if (orderby == TransacoesorderBy.titulo) { TransacoesOrdenadas = TransacoesOrdenadas.sort((a, b) => order !== 'DESC' ? a.titulo.localeCompare(b.titulo) : b.titulo.localeCompare(a.titulo)) }
+      if (orderby == TransacoesorderBy.descricao) { TransacoesOrdenadas = TransacoesOrdenadas.sort((a, b) => order !== 'DESC' ? a.descricao.localeCompare(b.descricao) : b.descricao.localeCompare(a.descricao)) }
       if (orderby == TransacoesorderBy.valor) { TransacoesOrdenadas = TransacoesOrdenadas.sort((a, b) => order !== 'DESC' ? a.valor - b.valor : b.valor - a.valor) }
-      if (orderby == TransacoesorderBy.entrada || orderby == TransacoesorderBy.saida) { TransacoesOrdenadas = TransacoesOrdenadas.filter(transacao => transacao.tipo === orderby) }
+      if (orderby == TransacoesorderBy.entrada || orderby == TransacoesorderBy.saida) {
+        TransacoesOrdenadas = TransacoesOrdenadas.filter(transacao => transacao.tipo === orderby)
+        TransacoesOrdenadas = TransacoesOrdenadas.sort((a, b) => order !== 'DESC' ? a.valor - b.valor : b.valor - a.valor)
+      }
     }
 
     if (categoriaid) { TransacoesOrdenadas = TransacoesOrdenadas.filter(transacao => transacao.categoriaid === categoriaid) }
 
     if (search) {
+      search = search.trim();
+      if (search === '') return TransacoesOrdenadas;
       TransacoesOrdenadas = TransacoesOrdenadas.filter(transacao => transacao.titulo.toLowerCase().includes(search.toLowerCase()))
     }
 
@@ -164,7 +172,7 @@ export class Usuario {
     return this.metas.find(meta => meta.id === id);
   }
 
-  getMetas(order: 'ASC' | 'DESC' = 'ASC', orderby?: Metasorderby, search?: string): Meta[] {
+  getMetas(order: 'ASC' | 'DESC' = 'DESC', orderby?: Metasorderby, search?: string): Meta[] {
     const metas = this.metas;
     if (!metas) { return [] }
 

@@ -108,10 +108,6 @@ export class TransacoesService {
       throw new BadRequestException('id da transação não informado'); // 404
     }
 
-    if (Object.keys(updateTransacoeDto).filter(key => updateTransacoeDto[key] == transacao[key]).length === Object.keys(updateTransacoeDto).length) {
-      throw new BadRequestException('Nenhum dado para atualizar'); // 400
-    }
-
     if (updateTransacoeDto.valor && isNaN(updateTransacoeDto.valor)) {
       throw new BadRequestException('Valor inválido'); // 400
     }
@@ -130,6 +126,10 @@ export class TransacoesService {
         categoria: true
       }
     });
+
+    if (Object.keys(updateTransacoeDto).filter(key => updateTransacoeDto[key] == transacao[key]).length === Object.keys(updateTransacoeDto).length) {
+      throw new BadRequestException('Nenhum dado para atualizar'); // 400
+    }
 
     const data: UpdateData = {};
 
@@ -211,24 +211,28 @@ export class TransacoesService {
       }
 
       if (transacao.tipo === 'entrada') {
-        categoriaAntiga.gasto -= transacao.valor;
-      } else {
         categoriaAntiga.gasto += transacao.valor;
+        usuario.saldo -= transacao.valor;
+      } else {
+        categoriaAntiga.gasto -= transacao.valor;
+        usuario.saldo += transacao.valor;
       }
 
       if (updateTransacoeDto.tipo === 'entrada') {
-        categoriaNova.gasto += updateTransacoeDto.valor;
-      } else {
         categoriaNova.gasto -= updateTransacoeDto.valor;
+        usuario.saldo += updateTransacoeDto.valor;
+      } else {
+        categoriaNova.gasto += updateTransacoeDto.valor;
+        usuario.saldo -= updateTransacoeDto.valor;
       }
-
-      usuario.saldo = transacao.tipo === 'entrada' ? usuario.saldo - transacao.valor : usuario.saldo + transacao.valor;
 
       await this.entityManager.save(categoriaAntiga);
       await this.entityManager.save(categoriaNova);
 
+    } else if (updateTransacoeDto.valor && updateTransacoeDto.valor !== transacao.valor) {
+      usuario.saldo = updateTransacoeDto.tipo === 'entrada' ? usuario.saldo + updateTransacoeDto.valor : usuario.saldo - updateTransacoeDto.valor;
     }
-    usuario.saldo = updateTransacoeDto.tipo === 'entrada' ? usuario.saldo + updateTransacoeDto.valor : usuario.saldo - updateTransacoeDto.valor;
+
     await this.entityManager.save(usuario);
 
     return result;

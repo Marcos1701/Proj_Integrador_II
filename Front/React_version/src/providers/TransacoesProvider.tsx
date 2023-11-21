@@ -15,7 +15,7 @@ export function TransacoesProvider({ children }: TransacoesProviderProps) {
     const [transacoes, setTransacoes] = useState<ITransacao[]>([])
     const [updated, setUpdated] = useState<boolean>(false)
     const [ordenarPor, setOrdenarPor] = useState<ordenarTransacoes>(ordenarTransacoes.data)
-    const [ordem, setOrdem] = useState<OrderElements>(OrderElements.ASC)
+    const [ordem, setOrdem] = useState<OrderElements>(OrderElements.DESC)
     const [search, setSearch] = useState<string>('')
     const { user } = useAuth();
 
@@ -24,8 +24,8 @@ export function TransacoesProvider({ children }: TransacoesProviderProps) {
             if (!user) return
             const response = await axios.get<ITransacao[]>(`${api_url}transacoes`, {
                 params: {
-                    orderby: ordenarPor === ordenarTransacoes.data ? '' : ordenarPor,
-                    order: ordem === OrderElements.ASC ? '' : ordem,
+                    orderby: ordenarPor,
+                    order: ordem,
                     search: search
                 },
                 headers: {
@@ -37,17 +37,11 @@ export function TransacoesProvider({ children }: TransacoesProviderProps) {
                 alert('Sessão expirada')
                 return
             }
-
-            setTransacoes(response.data.sort((a, b) => {
-                const dateA = new Date(a.data)
-                const dateB = new Date(b.data)
-                return dateA > dateB ? -1 : dateA < dateB ? 1 : 0
-            })
-            ) // ordenar pela data
+            setTransacoes(response.data)
             setUpdated(false)
         }
         loadTransacoes()
-    }, [updated, user, ordem, ordenarPor])
+    }, [updated, user, ordem, ordenarPor, search])
 
     const value: TransacoesContextData = {
         transacoes,

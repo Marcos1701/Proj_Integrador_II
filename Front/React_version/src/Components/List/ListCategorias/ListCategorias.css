@@ -19,3 +19,7 @@
 .list_on_page .listValues {
     height: 35vh;
 }
+
+#title-list-categoria {
+    gap: 40%;
+}

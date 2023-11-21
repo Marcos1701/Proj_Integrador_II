@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useAuth, api_url } from "../../../../../Contexts/AuthContext";
 import { useContext, useRef, useState } from "react";
-import { CategoriasContext } from "../../../../../Contexts/CategoriasContext";
+import { CategoriasContext, CategoriasOrderContext, CategoriasOrderContextData } from "../../../../../Contexts/CategoriasContext";
 import { TransacoesContext, TransacoesContextData } from "../../../../../Contexts/TransacoesContext";
 import "../Form.css"
 
@@ -51,10 +51,11 @@ export function AdicionarTransacaoForm({ setExibirAdicionarTransacaoForm }: IAdi
     const { user } = useAuth();
     if (!user) return <p>Usuário não encontrado</p>
 
-    const [msgSucesso, setMsgSucesso] = useState<boolean>(true);
-    const [msgErro, setMsgErro] = useState<boolean>(true);
+    const [msgSucesso, setMsgSucesso] = useState<boolean>(false);
+    const [msgErro, setMsgErro] = useState<boolean>(false);
     const [msgErroText, setMsgErroText] = useState<string>('')
     const { setUpdated }: TransacoesContextData = useContext(TransacoesContext)
+    const { setUpdated: setUpdatedCat }: CategoriasOrderContextData = useContext(CategoriasOrderContext)
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -104,6 +105,7 @@ export function AdicionarTransacaoForm({ setExibirAdicionarTransacaoForm }: IAdi
         }
 
         setUpdated(true);
+        setUpdatedCat(true);
         setMsgSucesso(true);
         setTimeout(() => {
             setMsgSucesso(false);

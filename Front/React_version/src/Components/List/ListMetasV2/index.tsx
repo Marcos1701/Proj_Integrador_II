@@ -10,13 +10,14 @@ interface IListaMetasProps {
 
 export function ListaMetas(
     {
-        limit = 2,
+        limit = 3,
     }: IListaMetasProps
 ): JSX.Element {
 
     const { metas }: IMetaContext = useContext(MetasContext);
 
     return (
+        // <MagicMotion>
         <div className="lista-metas">
             <div className="anchors_to_metasPage">
                 <h2 className="title">Metas Recentes</h2>
@@ -38,6 +39,8 @@ export function ListaMetas(
                         )
                 }
             </ul>
+
         </div>
+        ///* </MagicMotion> */
     )
 }
