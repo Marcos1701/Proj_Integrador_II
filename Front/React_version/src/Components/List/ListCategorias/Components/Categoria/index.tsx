@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext } from 'react';
 import { realizarTratamentoValor } from '../../../../Home/Components/SecaoAcoes/Components/Saldo';
 import './Categoria.css'
 import { api_url, useAuth } from '../../../../../Contexts/AuthContext';

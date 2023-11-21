@@ -3,7 +3,7 @@
 import { useContext, useRef, useState } from "react";
 import axios from "axios";
 import { api_url, useAuth } from "../../../../Contexts/AuthContext";
-import { Navigate, useParams } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { MoneyValidation } from "../../../Home/Components/Form/AdicionarTransacaoForm";
 import '../Details.css'
 import { IconSelect } from "../../../Home/Components/Form/AdicionarCategoriaForm/Components/IconSelect";
@@ -13,20 +13,18 @@ import { IMeta } from "../../../List/ListMetas/Components/Meta";
 
 
 interface IProps {
-    return: string;
+    meta: IMeta
+    setShowDetails: React.Dispatch<React.SetStateAction<boolean>>
+    setMeta: React.Dispatch<React.SetStateAction<IMeta | undefined>>
 }
 
 export function DetailsMetaPage(
     {
-        return: returnPage
+        meta,
+        setShowDetails,
+        setMeta
     }: IProps
 ) {
-
-    const { id } = useParams();
-
-    if (!id) return <Navigate to="/Categorias" />
-
-    const meta: IMeta = useContext(MetasContext).find((meta) => meta.id === id);
 
     if (!meta) return <Navigate to="/404" />
 
@@ -38,11 +36,11 @@ export function DetailsMetaPage(
 
     const [error, setError] = useState('')
     const [success, setSuccess] = useState('')
-    const [redirect, setRedirect] = useState(false)
 
     const { user } = useAuth()
     if (!user) return <Navigate to="/login" />
 
+    const { setUpdated } = useContext(MetasContext)
     const ValidateValues = () => {
 
         if ((!tituloRef.current || !descricaoRef.current || !ValorDesejadoRef.current || !data.current)
@@ -105,94 +103,130 @@ export function DetailsMetaPage(
         }
         setError('')
         setSuccess('Categoria atualizada com sucesso')
-        // setUpdated(true);
+        setUpdated(true);
 
         setTimeout(() => {
-            setRedirect(true)
+            setShowDetails && setShowDetails(false)
+            setMeta && setMeta(undefined)
         }, 1000)
     }
 
+    const HandleDelete = async () => {
+        const response = await axios.delete(`${api_url}meta/${meta.id}`, {
+            headers: {
+                Authorization: user.access_token
+            }
+        }).then((response) => {
+            if (response.status === 204) {
+                setUpdated(true)
+            }
+            return response
+        })
+        console.log(response)
+    }
 
 
     return (
-        <main className="page">
-            {redirect && <Navigate to={returnPage} />}
-            <form className="element-details" onSubmit={handleUpdate}>
-                <h2>Detalhes da categoria</h2>
+        <div className="Background-blur" id="background-form" >
+            <div className="details-div" id="detais-div-meta" onMouseLeave={(e) => {
+                if (e.target === e.currentTarget) {
+                    setMeta(undefined)
+                    setShowDetails(false)
+                }
+            }}>
+                <div className="header-details">
+                    <button type="button" className="close-button" onClick={() => setShowDetails(false)}>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24">
+                            <g clipPath="url(#clip0_206_145)">
+                                <path d="M15.41 16.59L10.83 12L15.41 7.41L14 6L8 12L14 18L15.41 16.59Z" fill="black" />
+                            </g>
+                            <defs>
+                                <clipPath id="clip0_206_145">
+                                    <rect width="24" height="24" fill="white" />
+                                </clipPath>
+                            </defs>
+                        </svg>
+                    </button>
+                    <h2>Detalhes da Meta</h2>
+                </div>
                 {error && <p className="error">{error}</p>}
                 {success && <p className="success">{success}</p>}
 
-                <div className="values-group">
-                    <div className="categoria-info">
-                        <div className="input-div">
-                            <label htmlFor="Titulo">Titulo</label>
-                            <input type="text" name="Titulo" id="Titulo"
-                                ref={tituloRef}
-                                placeholder="Titulo da Meta"
-                                className="input-nome"
-                                defaultValue={meta.titulo}
-                                onChange={e => {
-                                    if (e.target.value === '') e.target.value = meta.titulo;
-                                    if (e.target.value.length > 100) return;
+                <form className="element-details" onSubmit={handleUpdate}>
 
-                                    setAbleToSubmit(ValidateValues())
-                                }} />
-                        </div>
+                    <div className="values-group">
+                        <div className="meta-info" id="details-meta">
+                            <div className="input-div">
+                                <label htmlFor="Titulo">Titulo</label>
+                                <input type="text" name="Titulo" id="Titulo"
+                                    ref={tituloRef}
+                                    placeholder="Titulo da Meta"
+                                    className="input-nome"
+                                    defaultValue={meta.titulo}
+                                    onChange={e => {
+                                        if (e.target.value === '') e.target.value = meta.titulo;
+                                        if (e.target.value.length > 100) return;
 
-                        <div className="label-element-div">
-                            <label htmlFor="descricao">Descrição</label>
-                            <textarea name="descricao" id="descricao"
-                                ref={descricaoRef}
-                                placeholder="Descrição da Meta"
-                                defaultValue={meta.descricao}
-                                className="input-descricao"
-                                onChange={e => {
-                                    if (e.target.value.length > 250) return;
-                                    setAbleToSubmit(ValidateValues())
-                                }} />
-                        </div>
+                                        setAbleToSubmit(ValidateValues())
+                                    }} />
+                            </div>
 
-                        <div className="select-orcamento-group">
+                            <div className="select-orcamento-group">
+                                <div className="input-valor" id="Valor-div">
+                                    <label htmlFor="Valor" className="label-valor">Valor Desejado</label>
+                                    <input type="text" name="Valor"
+                                        ref={ValorDesejadoRef}
+                                        id="input-Valor"
+                                        defaultValue={`R$ ${meta.valor}`}
+                                        onChange={(e) => {
+                                            MoneyValidation(e)
+                                            setAbleToSubmit(ValidateValues())
+                                        }} />
+                                </div>
+
+                                <div className="input-div">
+                                    <label htmlFor="data">Data Limite</label>
+                                    <input type="date" placeholder="Data" ref={data} className="input-data" name="data"
+                                        required // para aceitar apenas datas posteriores ou iguais à data atual
+                                        min={new Date().toISOString().split('T')[0]}
+                                        // initial value
+                                        defaultValue={meta.dataLimite.toString().split('T')[0]}
+                                        disabled={meta.dataLimite < new Date()}
+                                        onChange={e => {
+                                            if (e.target.value === '') return;
+                                            setAbleToSubmit(ValidateValues())
+                                        }}
+                                    />
+                                </div>
+                            </div>
                             <IconSelect setIcone={setIcone} valueDefault={icone} />
-                            <div className="input-valor" id="Valor-div">
-                                <label htmlFor="Valor" className="label-valor">Valor Desejado</label>
-                                <input type="text" name="Valor"
-                                    ref={ValorDesejadoRef}
-                                    id="input-Valor"
-                                    defaultValue={`R$ ${meta.valor}`}
-                                    onChange={(e) => {
-                                        MoneyValidation(e)
+
+
+                            <div className="label-element-div">
+                                <label htmlFor="descricao">Descrição</label>
+                                <textarea name="descricao" id="descricao"
+                                    ref={descricaoRef}
+                                    placeholder="Descrição da Meta"
+                                    defaultValue={meta.descricao}
+                                    className="input-descricao"
+                                    onChange={e => {
+                                        if (e.target.value.length > 250) return;
                                         setAbleToSubmit(ValidateValues())
                                     }} />
                             </div>
 
                         </div>
 
-                        <div className="input-div">
-                            <label htmlFor="data">Data Limite</label>
-                            <input type="date" placeholder="Data" ref={data} className="input-data" name="data"
-                                required // para aceitar apenas datas posteriores ou iguais à data atual
-                                min={new Date().toISOString().split('T')[0]}
-                                // initial value
-                                defaultValue={meta.dataLimite.toString().split('T')[0]}
-                                disabled={meta.dataLimite < new Date()}
-                                onChange={e => {
-                                    if (e.target.value === '') return;
-                                    setAbleToSubmit(ValidateValues())
-                                }}
-                            />
+                        <div className="button-div">
+                            <button className="submit-form-button" type="submit" disabled={ableToSubmit}>Salvar</button>
+                            <button type="button" className="delete-value-form" onClick={HandleDelete}>Deletar</button>
                         </div>
+
                     </div>
 
-                    <div className="button-div">
-                        <button className="cancel-form-button" onClick={() => setRedirect(true)}>Cancelar</button>
-                        <button className="submit-form-button" type="submit" disabled={!ableToSubmit}>Salvar</button>
-                    </div>
+                </form>
+            </div>
 
-                </div>
-
-            </form>
-
-        </main>
+        </div>
     )
 }
