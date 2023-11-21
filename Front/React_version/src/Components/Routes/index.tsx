@@ -21,30 +21,16 @@ export function PatchRoutes() {
             } />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
-            <Route path="/transacoes">
-                <Route index element={
-                    <ProtectedRoute>
-                        <TransacoesPage />
-                    </ProtectedRoute>
-                } />
-                <Route path=":id" element={
-                    <ProtectedRoute>
-                        <DetailsTransacaoPage return="/" />
-                    </ProtectedRoute>
-                } />
-            </Route>
-            <Route path="/categorias">
-                <Route index element={
-                    <ProtectedRoute>
-                        <CategoriasPage />
-                    </ProtectedRoute>
-                } />
-                <Route path=":id" element={
-                    <ProtectedRoute>
-                        <DetailCategoriaPage return="/" />
-                    </ProtectedRoute>
-                } />
-            </Route>
+            <Route path="/transacoes" element={
+                <ProtectedRoute>
+                    <TransacoesPage />
+                </ProtectedRoute>
+            } />
+            <Route path="/categorias" element={
+                <ProtectedRoute>
+                    <CategoriasPage />
+                </ProtectedRoute>
+            } />
             <Route path="/metas">
                 <Route index element={
                     <ProtectedRoute>
