@@ -1,4 +1,4 @@
-.element-details :is(.categoria-info, .Transacao-info) {
+.element-details :is(.categoria-info, .Transacao-info, .meta-info) {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -16,6 +16,14 @@ p.created-at {
         color: var(--accent, #2844BD);
     }
 
+}
+
+#detais-div-meta{
+    min-height: 60vh;
+}
+
+#details-meta{
+    gap: .6em;
 }
 
 .select-orcamento-group,

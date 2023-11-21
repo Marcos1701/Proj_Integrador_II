@@ -176,19 +176,18 @@ export class Usuario {
     const metas = this.metas;
     if (!metas) { return [] }
 
-    metas.sort((a, b) => order != 'DESC' ? a.dataCriacao.getTime() - b.dataCriacao.getTime() : b.dataCriacao.getTime() - a.dataCriacao.getTime())
-
     metas.map(meta => {
       meta.atualizarProgresso();
       return meta;
     }) // atualiza o progresso de cada meta
 
     if (orderby) {
-      metas.sort((a, b) => {
-        if (a[orderby] < b[orderby]) return -1;
-        if (a[orderby] > b[orderby]) return 1;
-        return 0;
-      })
+      if (orderby == Metasorderby.dataCriacao) { metas.sort((a, b) => order !== 'DESC' ? a.dataCriacao.getTime() - b.dataCriacao.getTime() : b.dataCriacao.getTime() - a.dataCriacao.getTime()) }
+      if (orderby == Metasorderby.dataLimite) { metas.sort((a, b) => order !== 'DESC' ? a.dataLimite.getTime() - b.dataLimite.getTime() : b.dataLimite.getTime() - a.dataLimite.getTime()) }
+      if (orderby == Metasorderby.progresso) { metas.sort((a, b) => order !== 'DESC' ? a.progresso - b.progresso : b.progresso - a.progresso) }
+      if (orderby == Metasorderby.titulo) { metas.sort((a, b) => order !== 'DESC' ? a.titulo.localeCompare(b.titulo) : b.titulo.localeCompare(a.titulo)) }
+      if (orderby == Metasorderby.valor) { metas.sort((a, b) => order !== 'DESC' ? a.valor - b.valor : b.valor - a.valor) }
+
     }
 
     if (search) {

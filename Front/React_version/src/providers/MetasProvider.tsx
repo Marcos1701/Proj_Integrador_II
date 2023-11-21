@@ -2,7 +2,8 @@ import { useEffect, useState } from "react"
 import axios from "axios"
 import { useAuth, api_url } from "../Contexts/AuthContext"
 import { IMeta } from "../Components/List/ListMetas/Components/Meta"
-import { IMetaContext, MetasContext } from "../Contexts/MetasContext"
+import { IMetaContext, MetasContext, ordenarMetas } from "../Contexts/MetasContext"
+import { OrderElements } from "./CategoriasProvider"
 
 
 interface MetasProviderProps {
@@ -12,14 +13,22 @@ interface MetasProviderProps {
 export function MetasProvider({ children }: MetasProviderProps) {
     const [metas, setMetas] = useState<IMeta[]>([])
 
+    const [updated, setUpdated] = useState(false)
+    const [ordenarPor, setOrdenarPor] = useState<ordenarMetas>(ordenarMetas.dataCriacao)
+    const [ordem, setOrdem] = useState<OrderElements>(OrderElements.DESC)
+    const [search, setSearch] = useState<string>('')
     const { user } = useAuth();
 
-    const [updated, setUpdated] = useState(false)
 
     useEffect(() => {
         async function loadMetas() {
             if (!user) return
             const response = await axios.get(`${api_url}meta`, {
+                params: {
+                    orderby: ordenarPor,
+                    order: ordem,
+                    search: search
+                },
                 headers: {
                     Authorization: user.access_token
                 }
@@ -37,16 +46,23 @@ export function MetasProvider({ children }: MetasProviderProps) {
                 meta.dataLimite = new Date(meta.dataLimite)
             })
             setMetas(response.data)
+            setUpdated(false)
         }
         loadMetas()
         setUpdated(false)
-    }, [updated, user])
+    }, [updated, user, ordem, ordenarPor, search])
 
 
     const value: IMetaContext = {
         metas,
         updated,
-        setUpdated
+        setUpdated,
+        ordem,
+        setOrdem,
+        ordenarPor,
+        setOrdenarPor,
+        search,
+        setSearch
     }
 
     return (
