@@ -9,7 +9,7 @@ import '../Details.css'
 import { IconSelect } from "../../../Home/Components/Form/AdicionarCategoriaForm/Components/IconSelect";
 import { MetasContext } from "../../../../Contexts/MetasContext";
 import isDate from 'validator/lib/isDate';
-import { IMeta } from "../../../List/ListMetas/Components/Meta";
+import { IMeta } from "../../../List/ListMetasV2/Components/Meta";
 
 
 interface IProps {
@@ -25,6 +25,7 @@ export function DetailsMetaPage(
         setMeta
     }: IProps
 ) {
+
     if (!meta) return <Navigate to="/404" />
 
     const tituloRef = useRef<HTMLInputElement>(null)
@@ -121,7 +122,7 @@ export function DetailsMetaPage(
             }
             return response
         })
-        console.log(response)
+        if (response.status !== 204) alert('Erro ao deletar meta');
     }
 
 

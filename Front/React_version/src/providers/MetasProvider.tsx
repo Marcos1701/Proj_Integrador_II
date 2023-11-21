@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import axios from "axios"
 import { useAuth, api_url } from "../Contexts/AuthContext"
-import { IMeta } from "../Components/List/ListMetas/Components/Meta"
+import { IMeta } from "../Components/List/ListMetasV2/Components/Meta" 
 import { IMetaContext, MetasContext, ordenarMetas } from "../Contexts/MetasContext"
 import { OrderElements } from "./CategoriasProvider"
 

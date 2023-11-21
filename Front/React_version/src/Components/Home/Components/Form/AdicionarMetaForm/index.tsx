@@ -2,7 +2,7 @@ import { useContext, useRef, useState } from "react";
 import { useAuth, api_url } from "../../../../../Contexts/AuthContext";
 import axios from "axios";
 import { MoneyValidation } from "../AdicionarTransacaoForm";
-import { IMeta } from "../../../../List/ListMetas/Components/Meta";
+import { IMeta } from "../../../../List/ListMetasV2/Components/Meta";
 import { MetasContext } from "../../../../../Contexts/MetasContext";
 import { IconSelect } from "../AdicionarCategoriaForm/Components/IconSelect";
 
