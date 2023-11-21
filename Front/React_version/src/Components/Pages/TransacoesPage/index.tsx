@@ -1,14 +1,20 @@
 import { useState } from "react";
-import { ListTransacoesCard } from "../../List/ListTransacoesCard";
 import { Navigate } from "react-router-dom";
+import { ITransacao } from "../../List/ListTransacoesCard/Components/Transacao";
+import { DetailsTransacaoPage } from "../DetailsPage/Transacao";
+import { ListTransacoes } from "../../List/ListTransacoes";
+import './page.css'
 
 export function TransacoesPage() {
     // caso clicar no botão de voltar, redirecionar para a página inicial
     const [voltar, setVoltar] = useState<boolean>(false);
+    const [showDetails, setShowDetails] = useState<boolean>(false);
+    const [transacao, setTransacao] = useState<ITransacao | undefined>();
 
     return (
         <main className="page">
             {voltar && <Navigate to={'/'} />}
+            {showDetails && transacao !== undefined && <DetailsTransacaoPage transacao={transacao} setShowDetails={setShowDetails} setTransacao={setTransacao} />}
             <div className="page-header">
                 <button onClick={() => { setVoltar(!voltar) }}
                     className="back-button">
@@ -27,7 +33,7 @@ export function TransacoesPage() {
                 <h2 className="title">Transações</h2>
             </div>
 
-            <ListTransacoesCard page={1} limit={8} classname="list_on_page" />
+            <ListTransacoes page={1} limit={6} classname="list_on_page" setShowDetails={setShowDetails} setTransacao={setTransacao} />
 
         </main>
     )

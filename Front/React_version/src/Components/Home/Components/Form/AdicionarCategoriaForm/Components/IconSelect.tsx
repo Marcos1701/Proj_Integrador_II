@@ -36,7 +36,6 @@ export const IconSelect = (
     const [value, setValue] = useState<OptionType>(defaultValue ? defaultValue : options[0]);
 
     const handleChange = (value: OptionType) => {
-        console.log(value);
         setValue(value);
         setIcone(value.value);
     };

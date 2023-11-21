@@ -1,7 +1,7 @@
 import { useContext, useState } from "react";
 import { IMeta, Meta } from "./Components/Meta";
 import { useAuth } from "../../../Contexts/AuthContext";
-import { MetasContext } from "../../../Contexts/MetasContext";
+import { IMetaContext, MetasContext } from "../../../Contexts/MetasContext";
 import './ListMetas.css'
 
 interface ListMetasProps {
@@ -26,7 +26,7 @@ export function ListMetas(
 ) {
     const { user } = useAuth();
     if (!user) return <p>Erro ao carregar metas</p>
-    const metas: IMeta[] = useContext(MetasContext);
+    const { metas }: IMetaContext = useContext(MetasContext);
     const [pageAtual, setPageAtual] = useState<number>(page);
 
     return (

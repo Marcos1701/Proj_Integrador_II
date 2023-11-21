@@ -1,0 +1,68 @@
+form.element-details {
+    background: transparent;
+    box-shadow: none;
+}
+
+.details-div {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    width: 65%;
+    margin: 0 5em;
+    padding: 0 1em 0.2em .3em;
+    position: absolute;
+    top: 0;
+
+    background: var(--background, #DFF6FF);
+    backdrop-filter: blur(3px);
+    border-radius: 64.108px;
+    box-shadow: 16px 38px 17px 0px rgba(0, 0, 0, 0.25);
+
+    height: fit-content;
+    max-height: 80vh;
+
+    & .close-button {
+        /* background: transparent; */
+        width: fit-content;
+        height: fit-content;
+        background: transparent;
+        border: none;
+        justify-self: flex-start;
+        padding: 0;
+        margin: 0;
+    }
+}
+
+.header-details {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    width: 70%;
+    margin-top: 2em;
+    padding: 0;
+    gap: 25%;
+}
+
+.delete-value-form {
+    /* input */
+    width: 100%;
+    height: 100%;
+    font-size: 1em;
+    font-weight: 800;
+    color: #47B5FF;
+    text-decoration: inherit;
+    background: transparent;
+    border: none;
+    outline: none;
+
+    &:hover {
+        cursor: pointer;
+        background: #47B5FF;
+        color: #DFF6FF;
+    }
+}
+
+.Background-blur {
+    max-height: 80vh;
+}

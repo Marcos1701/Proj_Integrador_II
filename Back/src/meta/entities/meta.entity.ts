@@ -56,7 +56,7 @@ export class Meta {
         type: 'text',
         default: "dollar-bill"
     })
-    icon: string = "dollar-bill";
+    icone: string = "dollar-bill";
 
     @Column({
         type: 'boolean',
@@ -72,20 +72,20 @@ export class Meta {
     ativo: boolean = true;
 
     @ManyToOne(() => Usuario, (usuario) => usuario.metas, {
-        nullable: false
+        nullable: false,
+        cascade: true,
+        onDelete: 'CASCADE'
     })
     @JoinColumn()
     usuario: Usuario;
 
 
     @OneToMany(type => SubMeta, (subMeta) => subMeta.meta, {
-        cascade: true,
         eager: true
     })
     subMetas: SubMeta[];
 
     @OneToMany(type => MarcoMeta, (marcoMeta) => marcoMeta.meta, {
-        cascade: true,
         eager: true
     })
     marcos: MarcoMeta[];

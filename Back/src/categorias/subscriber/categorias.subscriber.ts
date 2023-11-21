@@ -27,18 +27,12 @@ export class CategoriasSubscriber implements EntitySubscriberInterface<Categoria
 
     async afterUpdate(event: UpdateEvent<Categoria>) {
 
-        if (!event.entity.orcamento) {
-            return;
-        }
-
-        if (this.categoria.gasto > event.entity.orcamento) {
-
-            event.queryRunner.rollbackTransaction();
+        if (event.entity.orcamento && this.categoria.gasto > event.entity.orcamento) {
+            await event.queryRunner.rollbackTransaction();
             throw new BadRequestException('O valor do orçamento é menor que o gasto da categoria');
         }
-
         // tudo certo
-        return;
+        return event.entity;
     }
 
     async beforeRemove(event: RemoveEvent<Categoria>) {

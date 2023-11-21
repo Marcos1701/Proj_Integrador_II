@@ -1,33 +1,34 @@
 import { ListCategorias } from "../List/ListCategorias";
 import { SecaoActions_Home } from "./Components/SecaoAcoes";
 import './Home.css'
-import { Link } from "react-router-dom";
 import { ListTransacoes } from "../List/ListTransacoes";
 import { ListaMetas } from "../List/ListMetasV2";
+import { useState } from "react";
+import { ICategoria } from "../List/ListCategorias/Components/Categoria";
+import { DetailCategoriaPage } from "../Pages/DetailsPage/Categoria/v2";
+import { ITransacao } from "../List/ListTransacoesCard/Components/Transacao";
+import { DetailsTransacaoPage } from "../Pages/DetailsPage/Transacao";
 
 export function Home() {
+  const [showDetails, setShowDetails] = useState<boolean>(false);
+  const [categoria, setCategoria] = useState<ICategoria>();
+  const [transacao, setTransacao] = useState<ITransacao | undefined>();
 
   return (
     <main className="Home">
       <SecaoActions_Home />
+
+      {showDetails && transacao !== undefined && <DetailsTransacaoPage transacao={transacao} setShowDetails={setShowDetails} setTransacao={setTransacao} />}
       <section className="trasacoes-home">
-        <ListTransacoes />
+        <ListTransacoes pagination={false} setShowDetails={setShowDetails} setTransacao={setTransacao} searchInput={false} orderSelect={false} />
       </section>
 
+      {showDetails && categoria !== undefined && <DetailCategoriaPage categoria={categoria} setShowDetails={setShowDetails} setCategoria={setCategoria} />}
       <section className="categorias-home">
-        <div className="achors-page">
-          <Link to="/Categorias" className="title-section" id="anchor-categorias-page"><h3>Categorias</h3></Link>
-          <Link to="/Categorias" className="anchor-page" id="anchor-categorias">ver mais</Link>
-        </div>
-        <ListCategorias pagination={false} />
+        <ListCategorias pagination={false} setShowDetails={setShowDetails} setCategoria={setCategoria} />
       </section>
 
       <section className="metas-home">
-        {/* <div className="achors-page">
-          <Link to="/Metas" className="title-section" id="anchor-metas-page"><h3>Metas</h3></Link>
-          <Link to="/Metas" className="anchor-page" id="anchor-metas">ver mais</Link>
-        </div>
-        <ListMetas pagination={false} /> */}
         <ListaMetas />
       </section>
     </main>

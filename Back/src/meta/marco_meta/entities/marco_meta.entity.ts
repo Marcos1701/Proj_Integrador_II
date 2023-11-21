@@ -29,6 +29,8 @@ export class MarcoMeta {
 
     @ManyToOne(() => Meta, (meta) => meta.marcos, {
         nullable: false,
+        cascade: true,
+        onDelete: 'CASCADE'
     })
     @JoinColumn()
     meta: Meta;

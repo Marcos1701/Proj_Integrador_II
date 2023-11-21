@@ -1,7 +1,7 @@
 .item {
     display: flex;
     height: 2em;
-    min-width: 540px;
+    min-width: 530px;
     gap: 0;
     align-items: center;
     justify-content: flex-start;
@@ -15,7 +15,8 @@
     }
 }
 
-.transacao-box {
+.transacao-box,
+.categoria-box {
     height: 2em;
     width: fit-content;
     display: flex;
@@ -40,20 +41,20 @@
         */
 
         & div:not(.valorTransacao-saida) {
-            color: var(--accent, #2844BD);
+            color: var(--accent, #256D85);
         }
 
         & div.valorTransacao-entrada {
-            color: var(--greenHover, #018c0d);
+            color: var(--greenHover, #0fa061);
         }
 
         & div.valorTransacao-saida {
-            color: var(--redHover, #e83e3e);
+            color: var(--redHover, #c61d50);
         }
     }
 }
 
-.transacao-box .navbar {
+:is(.transacao-box, .categoria-box) .navbar {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -62,8 +63,8 @@
     margin: 0;
 }
 
-.transacao-box :is(.title-icon, .div, .text-wrapper-2) {
-    color: var(--text, #222423);
+:is(.transacao-box, .categoria-box) :is(.title-icon, .div, .text-wrapper-2) {
+    color: var(--text, #2b3836);
     font-family: "Eina03-Regular";
     font-size: 14px;
     font-weight: 400;
@@ -77,15 +78,15 @@
     text-wrap: nowrap;
 }
 
-.transacao-box :is(.title-icon, .title-icon .icon-div) {
+:is(.transacao-box, .categoria-box) :is(.title-icon, .title-icon .icon-div) {
     display: flex;
     align-items: center;
     justify-content: flex-start;
 }
 
 
-.transacao-box .title-icon .icon-div {
-    background-color: var(--text-secondary, #cbcfce);
+:is(.transacao-box, .categoria-box) .title-icon .icon-div {
+    background-color: var(--text-secondary, #DFF6FF);
     border-radius: 6px;
     width: 25px;
     height: 25px;
@@ -98,12 +99,12 @@
     }
 }
 
-.transacao-box :is(.div, .text-wrapper-2) {
+:is(.transacao-box, .categoria-box) :is(.div, .text-wrapper-2) {
     color: var(--text-secondary, #2b3836);
     text-align: left;
 }
 
-.navbar :is(.valorTransacao-entrada, .valorTransacao-saida) {
+.navbar :is(.valorTransacao-entrada, .valorTransacao-saida, .gastoCategoria, .orcamento-true, .orcamento-false) {
     font-family: Eina03-Bold;
     font-size: 14px;
     font-weight: 700;
@@ -116,12 +117,16 @@
 
 }
 
+.navbar .orcamento-true {
+    color: var(--accent, #256D85);
+}
+
 .navbar .valorTransacao-entrada {
-    color: var(--green, #00a60e);
+    color: var(--green, #17be75);
 }
 
 .navbar .valorTransacao-saida {
-    color: var(--red, #E54444);
+    color: var(--red, #9A1840);
 }
 
 svg#vector {
@@ -131,7 +136,6 @@ svg#vector {
 }
 
 .item .ButtonDelete {
-
     display: none;
 
     background-color: transparent;
@@ -155,7 +159,7 @@ svg#vector {
     100% {
         z-index: 1;
         opacity: 1;
-        margin: 0 0 0 18px;
+        margin: 0 0 0 10px;
     }
 
 }

@@ -4,7 +4,8 @@ import { CategoriasContext } from "../../../Contexts/CategoriasContext";
 import "./ListCategorias.css";
 import { Searchdiv } from "./Components/Searchdiv";
 import { Orderdiv } from "./Components/Orderdiv";
-
+import { Link } from "react-router-dom";
+import { MagicMotion } from "react-magic-motion";
 
 interface ListCategoriasProps {
     pagination?: boolean
@@ -13,6 +14,8 @@ interface ListCategoriasProps {
     limit?: number
     page?: number
     classname?: string
+    setShowDetails?: React.Dispatch<React.SetStateAction<boolean>>
+    setCategoria?: React.Dispatch<React.SetStateAction<ICategoria | undefined>>
 }
 
 export function ListCategorias(
@@ -20,9 +23,11 @@ export function ListCategorias(
         pagination = true,
         orderSelect = false,
         searchInput = false,
-        limit = 2,
+        limit = 3,
         page = 1,
-        classname = "div_categorias"
+        classname = "div_categorias",
+        setShowDetails,
+        setCategoria
     }: ListCategoriasProps
 ) {
 
@@ -41,15 +46,29 @@ export function ListCategorias(
                     </div>
                 )}
 
-                <ul className="list-values-2columns" id="lista_categorias">
-                    {categorias.length === 0 && <li className="empty">Nenhuma categoria cadastrada</li>}
-                    {
-                        categorias.slice(page * limit - limit, page * limit)
-                            .map(
-                                (categoria: ICategoria) => <li key={categoria.id}><Categoria categoria={categoria} key={categoria.id} /> </li>
-                            )
-                    }
-                </ul>
+                {classname !== "list_on_page" &&
+                    <div className="anchors_to_categoriasPage" id="title-list-categoria">
+                        <h2 className="title">Categorias Disponíveis</h2>
+                        <Link to={`/categorias`} key={"linkToCategorias"}>Ver todas</Link>
+                    </div>
+                }
+                <div className="legend-categorias">
+                    <div className="legend-item">Nome</div>
+                    <div className="legend-item">Data de Criação</div>
+                    <div className="legend-item">Gastos</div>
+                    <div className="legend-item">Orçamento</div>
+                </div>
+                <MagicMotion>
+                    <ul className="listValues" id="listCategorias">
+                        {categorias.length === 0 && <li className="empty">Nenhuma categoria cadastrada</li>}
+                        {
+                            categorias.slice(pageAtual * limit - limit, pageAtual * limit)
+                                .map(
+                                    (categoria: ICategoria) => <li key={categoria.id} className="listItem"><Categoria categoria={categoria} key={categoria.id} setShowDetails={setShowDetails} setCategoria={setCategoria} /> </li>
+                                )
+                        }
+                    </ul>
+                </MagicMotion>
                 {
                     pagination && <div className="pagination">
                         <a className={
@@ -69,10 +88,10 @@ export function ListCategorias(
                                 </defs>
                             </svg></a>
                         <a className="pagination-button-active">{pageAtual}</a>
-                        {pageAtual < Math.ceil(categorias.length / limit) && <a className="pagination-button">{pageAtual + 1}</a>}
-                        {pageAtual + 1 < Math.ceil(categorias.length / limit) && <a className="pagination-button">{pageAtual + 2}</a>}
+                        {pageAtual < Math.ceil(categorias.length / limit) && <a className="pagination-button" onClick={() => setPageAtual(pageAtual + 1)}>{pageAtual + 1}</a>}
+                        {pageAtual + 1 < Math.ceil(categorias.length / limit) && <a className="pagination-button" onClick={() => setPageAtual(pageAtual + 2)}>{pageAtual + 2}</a>}
                         <a className="pagination-button">...</a>
-                        {pageAtual < Math.ceil(categorias.length / limit) && <a className="pagination-button">{Math.ceil(categorias.length / limit)}</a>}
+                        {pageAtual < Math.ceil(categorias.length / limit) && <a className="pagination-button" onClick={() => setPageAtual(Math.ceil(categorias.length / limit))}>{Math.ceil(categorias.length / limit)}</a>}
                         <a className="pagination-button" onClick={() => {
                             if (pageAtual < Math.ceil(categorias.length / limit)) {
                                 setPageAtual(pageAtual + 1);
@@ -93,5 +112,3 @@ export function ListCategorias(
         </>
     )
 }
-
-// o codigo acima possui um erro, ele esta na linha 121, pois o botão de proximo esta aparecendo mesmo quando não tem mais paginas,

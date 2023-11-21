@@ -20,7 +20,7 @@ export const MetaBox = (
     return (
         <a className="meta-box" id={meta.id} onClick={() => setShowDetails(!showDetails)}
             style={{ // cor do background de acordo com a porcentagem de conclusão da meta
-                background: meta.progresso > 0 ? `linear-gradient(90deg, #00a60e4f ${meta.progresso}%, #d3d8d7 ${100 - meta.progresso}%)` : 'transparent'
+                background: meta.progresso > 0 ? meta.progresso > 0 && meta.progresso < 100 ? `linear-gradient(90deg, #0fa06162 ${meta.progresso}%, transparent ${meta.progresso}%)` : '#2844BD' : "transparent"
             }}
             title={meta.progresso + '% concluído'}
         >
@@ -28,9 +28,9 @@ export const MetaBox = (
 
             <div className="navbar">
                 <div className="text-wrapper">{meta.titulo}</div>
-                <div className="text-wrapper-2">{tratarData(meta.dataFinal.toISOString(), 'simplificado')}</div>
-                <div className="text-wrapper-3">R$ {realizarTratamentoValor(meta.valor_Desejado)}</div>
-                <div className="text-wrapper-4">R$ {realizarTratamentoValor(meta.valor_Atual)}</div>
+                <div className="text-wrapper-2">{tratarData(meta.dataLimite.toISOString(), 'simplificado')}</div>
+                <div className="text-wrapper-3">R$ {realizarTratamentoValor(meta.valor)}</div>
+                <div className="text-wrapper-4">R$ {realizarTratamentoValor(meta.valorAtual)}</div>
             </div>
             <svg id="vector" width="550" height="2" viewBox="0 0 545 2" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M0.496094 0.805695H544.239" stroke="#2844BD" strokeWidth="0.5" />
