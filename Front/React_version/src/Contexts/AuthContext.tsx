@@ -36,7 +36,8 @@ interface AuthProviderProps {
     children: React.ReactNode
 }
 
-export const api_url: string = "http://localhost:3300/"
+export const api_url: string = "https://finnapp.onrender.com/";
+//"http://localhost:3300/"
 //"https://legendary-space-spoon-gvjqgjx7gx92vv5g-3300.app.github.dev/"
 //https://finnapp.onrender.com/ => link da api no render
 

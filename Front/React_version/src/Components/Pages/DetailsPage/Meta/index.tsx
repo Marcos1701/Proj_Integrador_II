@@ -25,7 +25,7 @@ export function DetailsMetaPage(
         setMeta
     }: IProps
 ) {
-
+  
     if (!meta) return <Navigate to="/404" />
 
     const tituloRef = useRef<HTMLInputElement>(null)
