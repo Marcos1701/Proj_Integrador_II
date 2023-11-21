@@ -104,6 +104,7 @@ export function DetailsTransacaoPage(
         setError('')
         setSuccess('Transação atualizada com sucesso')
         setUpdated(true);
+        setTransacao(undefined)
 
         setShowDetails(false)
     }
