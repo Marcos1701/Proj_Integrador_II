@@ -41,16 +41,16 @@
         :not(elemento-filho) 
         */
 
-        & div:not(.valorTransacao-saida) {
-            color: var(--accent, #256D85);
+        & div:not(.valorTransacao-saida, .tipoTransacao-saida, .tipoTransacao-entrada) {
+            color: var(--accent, #6359E9);
         }
 
         & div.valorTransacao-entrada {
-            color: var(--greenHover, #0fa061);
+            color: var(--greenHover, #02c162);
         }
 
         & div.valorTransacao-saida {
-            color: var(--redHover, #c61d50);
+            color: var(--redHover, #e41414);
         }
     }
 }
@@ -58,17 +58,17 @@
 :is(.transacao-box, .meta-box, .categoria-box) .navbar {
     display: flex;
     align-items: center;
-    justify-content: space-between;
     height: 30px;
-    width: 540px;
+    min-width: 100%;
     margin: 0;
+    padding: 0;
+    gap: 12%;
 }
 
 :is(.transacao-box, .meta-box, .categoria-box) :is(.title-icon, .div, .text-wrapper-2) {
-    color: var(--text, #2b3836);
-    font-family: "Eina03-Regular";
+    color: var(--text, #FFF);
+    font-family: "Eina01-Regular";
     font-size: 14px;
-    font-weight: 400;
     letter-spacing: 0;
     line-height: normal;
     width: 100px;
@@ -101,7 +101,7 @@
 }
 
 :is(.transacao-box, .meta-box, .categoria-box) :is(.div, .text-wrapper-2) {
-    color: var(--text-secondary, #2b3836);
+    color: var(--text, #FFF);
     text-align: left;
 }
 
@@ -123,11 +123,27 @@
 }
 
 .navbar .valorTransacao-entrada {
-    color: var(--green, #17be75);
+    color: var(--green, #02B15A);
 }
 
 .navbar .valorTransacao-saida {
-    color: var(--red, #9A1840);
+    color: var(--red, #E41414);
+}
+
+.navbar :is(.tipoTransacao-entrada, .tipoTransacao-saida) {
+    padding: .3em .8em;
+    border-radius: 8.669px;
+    font-size: 12.403px;
+}
+
+.navbar .tipoTransacao-entrada {
+    background: rgba(2, 177, 90, 0.15);
+    color: var(--green, #02B15A);
+}
+
+.navbar .tipoTransacao-saida {
+    background: rgba(235, 0, 27, 0.15);
+    color: var(--red, #E41414);
 }
 
 svg#vector {
@@ -138,8 +154,7 @@ svg#vector {
 
 .item .ButtonDelete {
     display: none;
-
-    background-color: transparent;
+    background-color: #FFF;
     margin: 0;
     padding: 0;
     cursor: pointer;

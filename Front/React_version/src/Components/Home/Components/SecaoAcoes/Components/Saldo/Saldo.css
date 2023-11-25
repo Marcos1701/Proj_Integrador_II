@@ -21,8 +21,8 @@
 .Saldo-icon {
     width: 34.99px;
     height: 34.99px;
-    background: #DFF6FF;
-    border-radius: 5px;
+    border-radius: 10px;
+    background: #6359E9;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -76,9 +76,17 @@
 
 .saldo-negativo {
     color: #9A1840;
-    
+
 
     &::before {
         background: #9A1840;
     }
+}
+
+#saldo .percentual-negativo::before {
+    content: '-';
+}
+
+#saldo .percentual-positivo::before {
+    content: '+';
 }

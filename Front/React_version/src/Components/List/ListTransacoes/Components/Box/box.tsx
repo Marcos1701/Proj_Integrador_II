@@ -41,7 +41,10 @@ export const Box = (
             }
             return response
         })
-        console.log(response)
+        if (response.status != 204) {
+            alert("Não foi possível deletar a transação")
+        }
+        return response
     }
 
     return (
@@ -55,18 +58,14 @@ export const Box = (
                         <div className="icon-div"><img className="icon-Categoria" src={`assets/icons/${categoria.icone ? categoria.icone : 'barraquinha'}.svg`} alt="Icone da categoria" /></div>
                         {transacao.titulo}
                     </div>
-                    <div className="div">{categoria.nome}</div>
                     <div className="text-wrapper-2">{tratarData(transacao.data.toString(), 'simplificado')}</div>
                     <div className={
                         "valorTransacao-" + transacao.tipo
                     } >R$ {realizarTratamentoValor(transacao.valor)}</div>
-
+                    <div className={"tipoTransacao-" + transacao.tipo}>{transacao.tipo}</div>
                 </a>
                 <button className="ButtonDelete" onClick={HandleDelete}><img className='icon' src="assets/ActionsIcons/delete.svg" alt="Deletar" /></button>
             </div>
-            <svg id="vector" width="530" height="2" viewBox="0 0 545 2" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M0.496094 0.805695H544.239" stroke="#47B5FF" strokeWidth="0.5" />
-            </svg>
 
         </div>
     );

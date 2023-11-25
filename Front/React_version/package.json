@@ -17,6 +17,7 @@
     "react-magic-motion": "^1.1.1",
     "react-router-dom": "^6.17.0",
     "react-select": "^5.8.0",
+    "swiper": "^11.0.5",
     "ulidx": "^2.2.1",
     "validator": "^13.11.0"
   },

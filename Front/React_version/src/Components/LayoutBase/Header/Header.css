@@ -8,7 +8,7 @@ header {
     margin: 0;
     padding: 0;
 
-    width: 97vw;
+    width: 60vw;
     max-width: 97vw;
     background: var(--background, #aabac1);
     backdrop-filter: blur(3px);
