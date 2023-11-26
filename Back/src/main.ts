@@ -17,7 +17,14 @@ async function bootstrap() {
   SwaggerModule.setup('docs', app, document);
   // await app.listen(3000);
   app.useGlobalPipes(new ValidationPipe());
-  app.enableCors();
+  app.enableCors(
+    {
+      origin: '*',
+      methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+      preflightContinue: false,
+      optionsSuccessStatus: 204,
+    } // libera o acesso para qualquer origem e qualquer método
+  );
   await app.listen(3300);
 }
 bootstrap();
