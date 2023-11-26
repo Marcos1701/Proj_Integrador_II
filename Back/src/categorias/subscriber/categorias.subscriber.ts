@@ -16,8 +16,24 @@ export class CategoriasSubscriber implements EntitySubscriberInterface<Categoria
         return Categoria;
     }
 
+    private async AtualizaSaldo(categoria: Categoria) {
+        const categoria_ = await this.mananger.findOne(Categoria, {
+            where: { id: categoria.id },
+            relations: { transacoes: true }
+        });
+
+        if (!categoria_) {
+            return;
+        }
+
+        categoria_.gasto = categoria_.transacoes.reduce((acc, curr) => { return acc + curr.valor }, 0);
+        await this.mananger.save(categoria_);
+    }
+
+
     afterLoad(entity: Categoria, event?: LoadEvent<Categoria>): void | Promise<any> {
         this.categoria = entity;
+        this.AtualizaSaldo(this.categoria);
     }
 
 
@@ -27,8 +43,12 @@ export class CategoriasSubscriber implements EntitySubscriberInterface<Categoria
 
     async afterUpdate(event: UpdateEvent<Categoria>) {
 
-        if (event.entity.orcamento && this.categoria.gasto > event.entity.orcamento) {
+        const gasto = event.entity.gasto ? Number(event.entity.gasto) : 0;
+        if (event.entity.orcamento && gasto > Number(event.entity.orcamento)) {
             await event.queryRunner.rollbackTransaction();
+            console.log(event.entity.orcamento, this.categoria.gasto)
+            console.log(event.entity)
+            console.log(this.categoria)
             throw new BadRequestException('O valor do orçamento é menor que o gasto da categoria');
         }
         // tudo certo

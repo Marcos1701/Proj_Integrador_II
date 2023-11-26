@@ -6,6 +6,7 @@ import './Secao.css'
 import { CategoriasContext } from "../../../../Contexts/CategoriasContext";
 import { AdicionarMetaForm } from "../Form/AdicionarMetaForm";
 import { MagicMotion } from "react-magic-motion";
+import { Gastos } from "./Components/Gastos";
 
 
 export function SecaoActions_Home() {
@@ -17,10 +18,11 @@ export function SecaoActions_Home() {
 
     const categorias = useContext(CategoriasContext)
     return (
-        <div className="Secao_acoes">
-            <Saldo />
+        <div className="div_Values">
+                <Saldo />
+                <Gastos />
 
-            <div className="buttons_Action_div">
+            {/* <div className="buttons_Action_div">
                 <button type="button" className="button_Action" onClick={() => setShowOptions(!showOptions)} title="Adicionar">
                     <img src="assets/ActionsIcons/plus.svg" alt="Adicionar" />
                 </button>
@@ -63,7 +65,7 @@ export function SecaoActions_Home() {
                 <div className="Background-blur" id="background-form">
                     <AdicionarMetaForm setExibirAdicionarMetaForm={setShowAdicionarMetaForm} />
                 </div>
-            }
+            }*/}
         </div>
     )
 }

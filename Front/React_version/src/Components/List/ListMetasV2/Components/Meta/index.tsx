@@ -1,11 +1,24 @@
 import { useContext } from "react";
 import "./Meta.css";
-import { IMeta } from "../../../ListMetas/Components/Meta";
 import { tratarData } from "../../../ListTransacoesCard/Components/Transacao";
 import { realizarTratamentoValor } from "../../../../Home/Components/SecaoAcoes/Components/Saldo";
 import { api_url, useAuth } from "../../../../../Contexts/AuthContext";
 import { MetasContext } from "../../../../../Contexts/MetasContext";
 import axios from "axios";
+
+export interface IMeta {
+    id: string;
+    valor: number;
+    valorAtual: number;
+    dataLimite: Date;
+    progresso: number;
+    titulo: string;
+    descricao?: string;
+    icon: string;
+    dataCriacao: Date;
+    concluida: boolean;
+    ativo: boolean;
+}
 
 interface IMetaBoxProps {
     meta: IMeta
@@ -38,7 +51,7 @@ export const MetaBox = (
             }
             return response
         })
-        // console.log(response)
+        if (response.status !== 204) alert('Erro ao deletar meta');
     }
 
     return (
@@ -47,25 +60,19 @@ export const MetaBox = (
                 setMeta && setMeta(meta)
                 setShowDetails && setShowDetails(true)
             }}
-            style={{ // cor do background de acordo com a porcentagem de conclusão da meta
-                background: meta.progresso > 0 ? meta.progresso > 0 && meta.progresso < 100 ? `linear-gradient(90deg, #0fa06162 ${meta.progresso}%, transparent ${meta.progresso}%)` : '#2844BD' : "transparent"
+            style={{// de baixo para cima
+                background: `linear-gradient(0deg, rgba(2, 177, 90, 0.15) 25%, rgba(255, 255, 255, 0) 0%)`,
             }}
-            title={meta.progresso + '% concluído'}
         >
-            <div className="item">
-
-                <div className="navbar">
-                    <div className="text-wrapper">{meta.titulo}</div>
-                    <div className="text-wrapper-2">{tratarData(meta.dataLimite.toISOString(), 'simplificado')}</div>
-                    <div className="text-wrapper-3">R$ {realizarTratamentoValor(meta.valor)}</div>
-                    <div className="text-wrapper-4">R$ {realizarTratamentoValor(meta.valorAtual)}</div>
-                </div>
-                <button className="ButtonDelete" onClick={HandleDelete}><img className='icon' src="assets/ActionsIcons/delete.svg" alt="Deletar" /></button>
+            <div className="value-date">
+                <div className="valor">R$ {realizarTratamentoValor(meta.valor)}</div>
+                <div className="data">{tratarData(meta.dataLimite.toISOString(), 'simplificado')}</div>
             </div>
-            <svg id="vector" width="550" height="2" viewBox="0 0 545 2" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M0.496094 0.805695H544.239" stroke="#2844BD" strokeWidth="0.5" />
-            </svg>
 
+            <div className="icon-text">
+                <img src={`assets/icons/${meta.icon ? meta.icon : 'dollar-bill'}.svg`} alt="Icone da meta" />
+                <div className="titulo-meta">{meta.titulo}</div>
+            </div>
         </a>
     );
 };

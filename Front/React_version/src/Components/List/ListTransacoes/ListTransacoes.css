@@ -13,6 +13,7 @@
     display: flex;
     height: 48%;
     justify-content: flex-start;
+    flex-direction: column;
     list-style: none;
     gap: 0.5em;
     width: 37em;
@@ -22,7 +23,7 @@
     align-self: flex-start;
     margin-left: 2em;
     width: 34em;
-    
+
 }
 
 .anchors_to_transacoesPage,
@@ -33,17 +34,14 @@
     gap: 48%;
 }
 
-.legend-transacoes,
-.legend-categorias {
+.legend-transacoes {
     width: 90%;
     justify-content: space-between;
-    border-bottom: 1px solid #adacac;
-
     padding: 0 1em 0.2em .3em;
     margin-left: .6em;
 
     & * {
-        color: var(--text-secondary, #455755);
+        color: var(--text-secondary, #AEABD8);
         font-family: Eina03-Regular;
         font-size: 14px;
         font-weight: 400;
@@ -51,7 +49,7 @@
 }
 
 :is(.ListTransacoesSimple, .div_categorias) h2 {
-    color: var(--text, #13201E);
+    color: var(--text, #FFF);
     font-family: Eina03-SemiBold;
     font-size: 20.1px;
     font-weight: 600;
@@ -60,9 +58,6 @@
     text-align: left;
     margin: 0;
     padding: 0;
-
-    border-bottom: 1px solid #BEBEBE;
-    text-shadow: 0px 2px 4px #00000029;
 }
 
 .ListTransacoesSimple,
@@ -70,8 +65,8 @@
     flex-direction: column;
     gap: 1em;
 
-    background-color: #d3d8d7;
-    border-radius: 19px;
+    border-radius: 20px;
+    background: #1D1D41;
     box-shadow: 3px 5px 10px #0000008f, 0px 2px 6px #0000000a, 0px 16px 24px #0000000f;
     height: 270px;
     width: 40em;

@@ -1,5 +1,5 @@
 import { createContext } from "react";
-import { IMeta } from "../Components/List/ListMetas/Components/Meta";
+import { IMeta } from "../Components/List/ListMetasV2/Components/Meta";
 import { OrderElements } from "../providers/CategoriasProvider";
 
 export enum ordenarMetas {
