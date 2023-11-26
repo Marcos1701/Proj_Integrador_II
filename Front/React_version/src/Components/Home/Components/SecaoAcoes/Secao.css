@@ -1,10 +1,9 @@
-.Secao_acoes {
+.div_Values {
     display: flex;
     justify-content: space-between;
     align-items: center;
-
-    width: 65%;
-    gap: 1em;
+    width: 100%;
+    padding-right: .5em;
 }
 
 .buttons_Action_div {
@@ -14,27 +13,29 @@
 .button_Action {
     width: fit-content;
     height: fit-content;
-    background: var(--buttons-secondary, #CCCFE0);
-    border-radius: 24.246px;
-    padding: .7em .9em;
-    border: 0.5px solid var(--accent, #256D85);
-
-    box-shadow: #13201E -3px 1px 10px;
+    background: transparent;
+    padding: 0;
+    border: none;
 
     & img {
-        width: 1.5em;
-        height: 1.5em;
+        width: 1.8em;
+        height: 1.8em;
         margin: 0;
         padding: 0;
+
+        box-shadow: none;
+        /* adicionando sombra na cor accent*/
+        filter: drop-shadow(0px 0px 2px rgba(0, 0, 0, 0.694));
     }
 
     &:hover {
-        background: var(--buttons-secondary-hover, #E5E5E5);
-
-        animation: pulse 1s infinite;
+        background: transparent;
+        border: none;
+        box-shadow: none;
 
         & img {
             animation: pulse 1s infinite;
+            filter: drop-shadow(2px 3px 2px rgba(0, 0, 0, 0.67));
         }
     }
 }
@@ -142,7 +143,7 @@ ul li button {
     gap: 0;
 
     &#background-form {
-        padding-bottom: 50%;
+        padding-bottom: 34%;
         min-height: 100vh;
         max-height: 140vh;
     }

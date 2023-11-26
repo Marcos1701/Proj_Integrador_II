@@ -128,12 +128,12 @@ export function DetailsTransacaoPage(
 
     return (
         <div className="Background-blur" id="background-form" >
-            <div className="details-div" > {/*onMouseLeave={(e) => {
+            <div className="details-div" onMouseLeave={(e) => {
                 if (e.target === e.currentTarget) {
                     setTransacao(undefined)
                     setShowDetails(false)
                 }
-            }}>*/}
+            }}>
                 <div className="header-details">
                     <button type="button" className="close-button" onClick={() => setShowDetails(false)}>
                         <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24">

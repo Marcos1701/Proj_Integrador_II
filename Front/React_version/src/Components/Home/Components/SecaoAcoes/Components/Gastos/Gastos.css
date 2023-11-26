@@ -1,0 +1,98 @@
+.values-layout {
+    width: 291px;
+    height: 86px;
+    flex-shrink: 0;
+    border-radius: 20px;
+    background: #1D1D41;
+    color: #fff;
+
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 20px;
+    flex-direction: row;
+    padding-left: 2em;
+    padding-right: 1.5em;
+}
+
+.Gastos-Icon {
+    width: 34.99px;
+    height: 34.99px;
+    border-radius: 10px;
+    background: #64CFF6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.Values {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: .5em;
+
+}
+
+.Gastos-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 0;
+
+    & h4 {
+        text-align: center;
+        color: #8C89B4;
+        font-family: Eina03-SemiBold;
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+        margin: 0;
+
+        & p {
+            font-size: 14px;
+            font-weight: 400;
+            margin: 0;
+        }
+    }
+}
+
+.percentual-negativo,
+.percentual-positivo {
+    width: fit-content;
+    height: fit-content;
+    padding: 2px 10px;
+    flex-shrink: 0;
+    border-radius: 10px;
+    font-family: Inter;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+
+    &::before {
+        vertical-align: 1px;
+        padding-right: 2px;
+    }
+}
+
+.percentual-positivo {
+    background: rgba(2, 177, 90, 0.15);
+    text-align: center;
+    color: #02B15A;
+
+    &::before {
+        content: '-';
+    }
+}
+
+.percentual-negativo {
+    background: rgba(235, 0, 27, 0.15);
+
+    color: #E41414;
+
+    &::before {
+        content: '+';
+    }
+}

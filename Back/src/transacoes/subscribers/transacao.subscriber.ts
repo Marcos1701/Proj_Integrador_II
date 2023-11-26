@@ -24,11 +24,25 @@ export class TransacaoSubscriber implements EntitySubscriberInterface<Transacao>
 
     async afterInsert(event: InsertEvent<Transacao>) {
 
+        const usuario = await this.mananger.findOne(Usuario, {
+            where: { id: event.entity.usuario.id },
+            relations: { transacoes: true }
+        }).catch(err => {
+            return undefined;
+        });
+
+        if (!usuario) {
+            event.queryRunner.rollbackTransaction();
+            throw new BadRequestException('Usuario não encontrado');
+        }
+
         const categoria = await this.mananger.findOne(Categoria, {
             where: { id: event.entity.categoria.id },
             relations: { usuario: true }
+        }).catch(err => {
+            return undefined;
         });
-        if (!categoria) {
+        if (!categoria && event.entity.tipo === 'saida') {
             event.queryRunner.rollbackTransaction();
             throw new BadRequestException('Categoria não encontrada');
         }
@@ -43,15 +57,14 @@ export class TransacaoSubscriber implements EntitySubscriberInterface<Transacao>
 
         event.entity.valor = Number(event.entity.valor);
 
-        if (event.entity.tipo === 'saida') {
-            categoria.gasto += event.entity.valor;
-            categoria.usuario.saldo -= event.entity.valor;
+        if (event.entity.tipo === 'entrada') {
+            usuario.saldo += event.entity.valor;
         } else {
-            categoria.gasto = categoria.gasto - event.entity.valor < 0 ? 0 : categoria.gasto - event.entity.valor;
-            categoria.usuario.saldo += event.entity.valor;
+            categoria.gasto += event.entity.valor;
+            usuario.saldo -= event.entity.valor;
         }
 
-        await this.mananger.save<Categoria>(categoria);
+        categoria && await this.mananger.save<Categoria>(categoria);
         await this.mananger.save<Usuario>(categoria.usuario);
 
         return; // tudo certo
@@ -64,6 +77,15 @@ export class TransacaoSubscriber implements EntitySubscriberInterface<Transacao>
             if (event.entity === undefined || !event.entity?.valor || !event.entity?.tipo) {
                 return;
             }
+            const usuario = await this.mananger.findOne(Usuario, {
+                where: {
+                    id: this.transacao.usuario.id
+                }
+            });
+
+            if (!usuario) {
+                throw new BadRequestException('Usuario não encontrado');
+            }
 
             const categoria = await this.mananger.findOne(Categoria, {
                 where: {
@@ -71,26 +93,19 @@ export class TransacaoSubscriber implements EntitySubscriberInterface<Transacao>
                 }
             });
 
-            if (!categoria) {
+            if (!categoria && event.entity.tipo === 'saida') {
                 throw new BadRequestException('Categoria não encontrada');
             }
 
             if (!event.entity.categoria) {
-                if (event.entity.tipo == this.transacao.tipo) {
-                    if (event.entity.tipo === 'saida') {
-                        categoria.gasto -= this.transacao.valor;
-                        categoria.gasto += event.entity.valor;
-                    } else {
-                        categoria.gasto += this.transacao.valor;
-                        categoria.gasto -= event.entity.valor;
-                    }
+                if (event.entity.tipo === 'saida') {
+                    categoria.gasto -= this.transacao.valor;
+                    categoria.gasto += event.entity.valor;
                 } else {
-                    if (event.entity.tipo === 'saida') {
-                        categoria.gasto += this.transacao.valor + event.entity.valor;
-                    } else {
-                        categoria.gasto -= this.transacao.valor + event.entity.valor;
-                    }
+                    usuario.saldo -= this.transacao.valor;
+                    usuario.saldo += event.entity.valor;
                 }
+
             } else {
                 const Novacategoria = await this.mananger.findOne(Categoria, { where: { id: event.entity.categoria.id } });
 
@@ -126,10 +141,8 @@ export class TransacaoSubscriber implements EntitySubscriberInterface<Transacao>
                 await Novacategoria.save()
             }
 
-            categoria.usuario.saldo = this.transacao.tipo === 'entrada' ? categoria.usuario.saldo + this.transacao.valor : categoria.usuario.saldo - this.transacao.valor;
-
-            await categoria.usuario.save();
-            await categoria.save();
+            await usuario.save();
+            categoria && await categoria.save();
         } catch (err) {
             console.error(err)
         }

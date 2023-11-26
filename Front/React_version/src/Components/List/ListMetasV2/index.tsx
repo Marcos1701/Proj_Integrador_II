@@ -21,12 +21,11 @@ interface IListaMetasProps {
 
 export function ListaMetas(
     {
-        limit = 3,
+        limit = 2,
         pagination = true,
         orderSelect = true,
         searchInput = true,
         page = 1,
-        classname = "ListaMetasSimple",
         setShowDetails,
         setMeta
     }: IListaMetasProps
@@ -36,27 +35,22 @@ export function ListaMetas(
     const [pageAtual, setPageAtual] = useState<number>(page);
 
     return (
-        <div className={classname}>
+        <div className="ListaMetas">
             {(searchInput || orderSelect) && (
                 <div className="search-order">
                     {orderSelect && <Orderdiv />}
                     {searchInput && <Searchdiv />}
                 </div>
             )}
-            {classname !== "list_on_page" &&
-                <div className="anchors_to_metasPage">
-                    <h2 className="title">Metas Recentes</h2>
-                    <Link to={`/metas`}>Ver todas</Link>
-                </div>
-            }
-            <div className="legend-metas">
-                <div className="legend-item" id="titulo-transacao">Titulo</div>
-                <div className="legend-item">Data Limite</div>
-                <div className="legend-item">Valor Desejado</div>
-                <div className="legend-item">Valor Obtido</div>
+
+            <div className="header">
+                <h2>Metas</h2>
             </div>
-            <MagicMotion>
-                <ul className="listValues" id="listaMetas">
+
+            <MagicMotion layoutDependency={
+                [metas.length]
+            } >
+                <ul className="list">
                     {metas.length === 0 && <li className="empty" key='EmptyMetas'>Nenhuma meta cadastrada</li>}
                     {
                         metas
@@ -74,6 +68,21 @@ export function ListaMetas(
                     }
                 </ul>
             </MagicMotion>
+
+            {!pagination && <div className="pagination-home">
+                <svg width="20" height="6" viewBox="0 0 20 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="20" height="6" rx="3" fill="#6359E9" />
+                </svg>
+                <svg width="6" height="6" viewBox="0 0 6 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="3" cy="3" r="3" fill="#27264E" />
+                </svg>
+
+                <svg width="6" height="6" viewBox="0 0 6 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="3" cy="3" r="3" fill="#27264E" />
+                </svg>
+
+            </div>
+            }
 
             {
                 pagination && <div className="pagination">

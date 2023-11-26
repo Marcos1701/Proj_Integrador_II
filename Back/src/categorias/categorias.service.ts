@@ -5,7 +5,7 @@ import { EntityManager } from 'typeorm';
 import { Categoria } from './entities/categoria.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm/repository/Repository';
-import { Usuario, CategoriasorderBy } from 'src/usuarios/entities/usuario.entity';
+import { Usuario, CategoriasorderBy, TransacoesorderBy } from 'src/usuarios/entities/usuario.entity';
 import { JwtService } from '@nestjs/jwt';
 import { jwtDecodeUser } from 'src/auth/jwt.strategy';
 // nest g service categorias
@@ -152,6 +152,42 @@ export class CategoriasService {
 
     const { usuario, ...retorno } = result;
     return retorno
+  }
+
+  async dados(access_token: string) {
+    const usuario = await this.getUserFromtoken(access_token);
+    const categorias = usuario.getCategorias('DESC', CategoriasorderBy.gasto);
+    const categoriasComTransacoes = categorias.map(categoria => {
+      const transacoes = usuario.getTransacoes("DESC", null, null, categoria.id);
+      return {
+        ...categoria,
+        transacoes
+      }
+    })
+
+    const data = new Date();
+    const dados = categoriasComTransacoes.filter(categoria => {
+      return categoria.transacoes.some(transacao => {
+        const dataTransacao = new Date(transacao.data);
+        return dataTransacao.getMonth() === data.getMonth() && dataTransacao.getFullYear() === data.getFullYear();
+      })
+    }).map(categoria => {
+      return {
+        id: categoria.id,
+        nome: categoria.nome,
+        gasto: categoria.gasto,
+        qtdTransacoes: categoria.transacoes.length
+      }
+    });
+
+    const totalGasto = categoriasComTransacoes.reduce((acc, categoria) => {
+      return categoria.gasto ? acc + categoria.gasto : acc
+    }, 0)
+
+    return {
+      dados,
+      totalGasto
+    }
   }
 
   private getUserFromtoken(token: string): Promise<Usuario> {

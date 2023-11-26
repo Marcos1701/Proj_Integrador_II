@@ -50,18 +50,20 @@ export function ListTransacoes(
 
             {classname !== "list_on_page" &&
                 <div className="anchors_to_transacoesPage">
-                    <h2 className="title">Últimas transações</h2>
+                    <h2 className="title">Transações Recentes</h2>
                     <Link to={`/transacoes`} key={"linkToTransacoes"}>Ver todas</Link>
                 </div>
             }
 
             <div className="legend-transacoes">
                 <div className="legend-item">Titulo</div>
-                <div className="legend-item">Categoria</div>
                 <div className="legend-item">Data</div>
                 <div className="legend-item">Valor</div>
+                <div className="legend-item">tipo</div>
             </div>
-            <MagicMotion>
+            <MagicMotion layoutDependency={
+                [transacoes.length]
+            }>
                 <ul className="listValues" id={classname === "list_on_page" ? "listTransacoes" : "listTransacoesSimple"}>
                     {transacoes.length === 0 && <li className="empty" key={"empty"}>Nenhuma transação cadastrada</li>}
                     {

@@ -4,6 +4,7 @@ import { CreateCategoriaDto } from './dto/create-categoria.dto';
 import { UpdateCategoriaDto } from './dto/update-categoria.dto';
 import { CategoriasorderBy } from 'src/usuarios/entities/usuario.entity';
 import { ApiBody, ApiHeader, ApiHeaders, ApiParam, ApiQuery, ApiResponse } from '@nestjs/swagger';
+import { isUUID } from 'class-validator';
 
 
 
@@ -100,6 +101,23 @@ export class CategoriasController {
   })
   @ApiResponse({
     status: 200,
+    description: 'Retorna as estatisticas das categorias',
+  })
+  @Get('dados')
+  async dados(@Headers('Authorization') token: string) {
+    if (!token) {
+      throw new BadRequestException('Token não informado');
+    }
+    return this.categoriasService.dados(token);
+  }
+
+  @ApiHeader({
+    name: 'Authorization',
+    description: 'Bearer token',
+    example: 'Bearer token'
+  })
+  @ApiResponse({
+    status: 200,
     description: 'Retorna uma categoria',
     type: CreateCategoriaDto,
     schema: {
@@ -117,6 +135,9 @@ export class CategoriasController {
   async findOne(@Param('id') id: string, @Headers('Authorization') access_token: string) {
     if (!access_token) {
       throw new BadRequestException('Token não informado');
+    }
+    if (!id || id === '' || !isUUID(id)) {
+      throw new BadRequestException('ID da categoria não informado');
     }
     return this.categoriasService.findOne(id, access_token);
   }
@@ -169,4 +190,6 @@ export class CategoriasController {
     }
     return this.categoriasService.remove(id, access_token);
   }
+
 }
+
