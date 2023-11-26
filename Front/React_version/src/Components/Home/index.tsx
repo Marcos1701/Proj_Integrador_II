@@ -5,10 +5,6 @@ import { useState } from "react";
 import { ICategoria } from "../List/ListCategorias/Components/Categoria";
 import { ITransacao } from "../List/ListTransacoesCard/Components/Transacao";
 import { DetailsTransacaoPage } from "../Pages/DetailsPage/Transacao";
-import { IMeta } from "../List/ListMetasV2/Components/Meta";
-import { DetailsMetaPage } from "../Pages/DetailsPage/Meta";
-import { ListaMetas } from "../List/ListMetasV2";
-import { SectionCategorias } from "./Components/SectionCategorias";
 
 export function Home() {
   const [showDetails, setShowDetails] = useState<boolean>(false);
