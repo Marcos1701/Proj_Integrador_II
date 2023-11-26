@@ -54,7 +54,6 @@ export class Transacao {
 
   @ManyToOne(() => Categoria, (categoria) => categoria.transacoes, {
     eager: true,
-    nullable: false,
     cascade: true,
     onDelete: 'CASCADE'
   })

@@ -61,7 +61,9 @@ export function ListTransacoes(
                 <div className="legend-item">Valor</div>
                 <div className="legend-item">tipo</div>
             </div>
-            <MagicMotion>
+            <MagicMotion layoutDependency={
+                [transacoes.length]
+            }>
                 <ul className="listValues" id={classname === "list_on_page" ? "listTransacoes" : "listTransacoesSimple"}>
                     {transacoes.length === 0 && <li className="empty" key={"empty"}>Nenhuma transação cadastrada</li>}
                     {

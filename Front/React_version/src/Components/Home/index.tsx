@@ -7,6 +7,8 @@ import { ITransacao } from "../List/ListTransacoesCard/Components/Transacao";
 import { DetailsTransacaoPage } from "../Pages/DetailsPage/Transacao";
 import { IMeta } from "../List/ListMetasV2/Components/Meta";
 import { DetailsMetaPage } from "../Pages/DetailsPage/Meta";
+import { ListaMetas } from "../List/ListMetasV2";
+import { SectionCategorias } from "./Components/SectionCategorias";
 
 export function Home() {
   const [showDetails, setShowDetails] = useState<boolean>(false);
@@ -16,22 +18,18 @@ export function Home() {
 
   return (
     <main className="Home">
-      <SecaoActions_Home />
 
       {showDetails && transacao !== undefined && <DetailsTransacaoPage transacao={transacao} setShowDetails={setShowDetails} setTransacao={setTransacao} />}
-      <section className="trasacoes-home">
+      <section className="Principle">
+        <SecaoActions_Home />
         <ListTransacoes pagination={false} setShowDetails={setShowDetails} setTransacao={setTransacao} searchInput={false} orderSelect={false} />
-      </section>
-
-      {/* {showDetails && categoria !== undefined && <DetailCategoriaPage categoria={categoria} setShowDetails={setShowDetails} setCategoria={setCategoria} />}
-      <section className="categorias-home">
-        <ListCategorias pagination={false} setShowDetails={setShowDetails} setCategoria={setCategoria} />
       </section>
 
       {showDetails && meta !== undefined && <DetailsMetaPage setShowDetails={setShowDetails} meta={meta} setMeta={setMeta} />}
       <section className="metas-home">
         <ListaMetas pagination={false} setShowDetails={setShowDetails} setMeta={setMeta} searchInput={false} orderSelect={false} />
-      </section> */}
+        <SectionCategorias />
+      </section>
     </main>
   )
 }

@@ -1,18 +1,9 @@
-.Secao_acoes {
+.div_Values {
     display: flex;
     justify-content: space-between;
     align-items: center;
-
-    width: 65%;
-    gap: 1em;
-}
-
-.div_Values {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    gap: 1.5em;
+    width: 100%;
+    padding-right: .5em;
 }
 
 .buttons_Action_div {

@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable, NotFoundException, UseGuards } from '@nestjs/common';
 import { CreateTransacoeDto } from './dto/create-transacoe.dto';
 import { UpdateTransacoeDto } from './dto/update-transacoe.dto';
-import { DeleteResult, EntityManager, UpdateResult } from 'typeorm';
+import { EntityManager, UpdateResult } from 'typeorm';
 import { Transacao } from './entities/transacao.entity';
 import { Categoria } from 'src/categorias/entities/categoria.entity';
 import { TransacoesorderBy, Usuario, ordenarTransacoes } from 'src/usuarios/entities/usuario.entity';
@@ -11,7 +11,6 @@ import { jwtDecodeUser } from 'src/auth/jwt.strategy';
 interface UpdateData {
   titulo?: string;
   descricao?: string;
-  tipo?: 'entrada' | 'saida';
   data?: Date;
   valor?: number;
   categoria?: Categoria;
@@ -44,21 +43,22 @@ export class TransacoesService {
       });
 
 
-    if (!categoria) {
+    if (!categoria && createTransacoeDto.tipo === 'saida') {
       throw new NotFoundException('Categoria não encontrada');
     }
 
-    if (categoria.orcamento &&
+    if (categoria && categoria.orcamento &&
       createTransacoeDto.tipo === 'saida' &&
       categoria.gasto + createTransacoeDto.valor > categoria.orcamento
     ) {
       throw new BadRequestException('O valor da transação excede o orçamento da categoria');
     }
 
+    const data = categoria ? { ...createTransacoeDto, categoria } : createTransacoeDto;
+
     const result = await this.entityManager.insert<Transacao>(Transacao, {
-      ...createTransacoeDto,
-      usuario,
-      categoria
+      ...data,
+      usuario
     });
 
     if (!result) {
@@ -136,7 +136,6 @@ export class TransacoesService {
     if (updateTransacoeDto.titulo) data.titulo = updateTransacoeDto.titulo;
     if (updateTransacoeDto.descricao) data.descricao = updateTransacoeDto.descricao;
     if (updateTransacoeDto.valor) data.valor = updateTransacoeDto.valor;
-    if (updateTransacoeDto.tipo) data.tipo = updateTransacoeDto.tipo;
     if (updateTransacoeDto.data) data.data = updateTransacoeDto.data;
     if (updateTransacoeDto.categoriaid) {
       const categoria = await this.entityManager.findOne(
@@ -149,10 +148,10 @@ export class TransacoesService {
             }
           }
         });
-      if (!categoria) {
+      if (!categoria && transacao.tipo === 'saida') {
         throw new NotFoundException('Categoria não encontrada');
       }
-      data.categoria = categoria;
+      categoria && (data.categoria = categoria);
     }
     const result: UpdateResult = await this.entityManager.update(
       Transacao, {
@@ -210,21 +209,13 @@ export class TransacoesService {
         throw new BadRequestException('O valor da transação excede o orçamento da categoria');
       }
 
-      if (transacao.tipo === 'entrada') {
-        categoriaAntiga.gasto += transacao.valor;
-        usuario.saldo -= transacao.valor;
-      } else {
-        categoriaAntiga.gasto -= transacao.valor;
-        usuario.saldo += transacao.valor;
-      }
 
-      if (updateTransacoeDto.tipo === 'entrada') {
-        categoriaNova.gasto -= updateTransacoeDto.valor;
-        usuario.saldo += updateTransacoeDto.valor;
-      } else {
-        categoriaNova.gasto += updateTransacoeDto.valor;
-        usuario.saldo -= updateTransacoeDto.valor;
-      }
+      categoriaAntiga.gasto -= transacao.valor;
+      usuario.saldo += transacao.valor;
+
+      categoriaNova.gasto += updateTransacoeDto.valor;
+      usuario.saldo -= updateTransacoeDto.valor;
+
 
       await this.entityManager.save(categoriaAntiga);
       await this.entityManager.save(categoriaNova);
