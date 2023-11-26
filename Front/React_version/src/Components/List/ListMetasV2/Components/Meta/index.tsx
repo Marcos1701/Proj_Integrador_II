@@ -1,10 +1,7 @@
-import { useContext } from "react";
 import "./Meta.css";
 import { tratarData } from "../../../ListTransacoesCard/Components/Transacao";
 import { realizarTratamentoValor } from "../../../../Home/Components/SecaoAcoes/Components/Saldo";
-import { api_url, useAuth } from "../../../../../Contexts/AuthContext";
-import { MetasContext } from "../../../../../Contexts/MetasContext";
-import axios from "axios";
+import { useAuth } from "../../../../../Contexts/AuthContext";
 
 export interface IMeta {
     id: string;
@@ -38,21 +35,21 @@ export const MetaBox = (
 
     if (!user) return (<></>)
 
-    const { setUpdated } = useContext(MetasContext)
+    // const { setUpdated } = useContext(MetasContext)
 
-    const HandleDelete = async () => {
-        const response = await axios.delete(`${api_url}meta/${meta.id}`, {
-            headers: {
-                Authorization: user.access_token
-            }
-        }).then((response) => {
-            if (response.status === 204) {
-                setUpdated(true)
-            }
-            return response
-        })
-        if (response.status !== 204) alert('Erro ao deletar meta');
-    }
+    // const HandleDelete = async () => {
+    //     const response = await axios.delete(`${api_url}meta/${meta.id}`, {
+    //         headers: {
+    //             Authorization: user.access_token
+    //         }
+    //     }).then((response) => {
+    //         if (response.status === 204) {
+    //             setUpdated(true)
+    //         }
+    //         return response
+    //     })
+    //     if (response.status !== 204) alert('Erro ao deletar meta');
+    // }
 
     return (
         <a className="meta-box" id={meta.id}

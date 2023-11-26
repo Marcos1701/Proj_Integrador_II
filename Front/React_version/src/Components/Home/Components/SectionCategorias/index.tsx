@@ -74,16 +74,12 @@ export function SectionCategorias() {
                         shadowBlur: 10,
                         shadowOffsetX: 0,
                         shadowColor: 'rgba(0, 0, 0, 0.5)'
-                    }
+                    },
                 },
                 label: {
-                    color: 'white'
-                },
-                labelLine: {
-                    lineStyle: {
-                        color: 'white'
-                    }
-                },
+                    show: false
+                }
+
             }
         ]
     };
@@ -94,13 +90,13 @@ export function SectionCategorias() {
                 <h2>Dados Categorias</h2>
             </div>
 
-            <div className="Relação de categorias">
+            <div className="RelacaoCategorias">
                 {
                     categorias.length > 0 ? <ReactECharts
                         option={option}
                         style={{ height: "150px", width: "250px" }}
                     />
-                        : <h3>Não há categorias cadastradas</h3>
+                        : <h3>Nenhuma categoria cadastrada</h3>
                 }
             </div>
 

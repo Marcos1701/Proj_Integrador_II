@@ -1,26 +1,20 @@
 import { Saldo } from "./Components/Saldo";
-import { AdicionarTransacaoForm } from "../Form/AdicionarTransacaoForm";
-import { AdicionarCategoriaForm } from "../Form/AdicionarCategoriaForm/intex";
-import { useContext, useState } from "react";
 import './Secao.css'
-import { CategoriasContext } from "../../../../Contexts/CategoriasContext";
-import { AdicionarMetaForm } from "../Form/AdicionarMetaForm";
-import { MagicMotion } from "react-magic-motion";
 import { Gastos } from "./Components/Gastos";
 
 
 export function SecaoActions_Home() {
 
-    const [showOptions, setShowOptions] = useState<boolean>(false);
-    const [showAdicionarTransacaoForm, setShowAdicionarTransacaoForm] = useState<boolean>(false);
-    const [showAdicionarCategoriaForm, setShowAdicionarCategoriaForm] = useState<boolean>(false);
-    const [showAdicionarMetaForm, setShowAdicionarMetaForm] = useState<boolean>(false);
+    // const [showOptions, setShowOptions] = useState<boolean>(false);
+    // const [showAdicionarTransacaoForm, setShowAdicionarTransacaoForm] = useState<boolean>(false);
+    // const [showAdicionarCategoriaForm, setShowAdicionarCategoriaForm] = useState<boolean>(false);
+    // const [showAdicionarMetaForm, setShowAdicionarMetaForm] = useState<boolean>(false);
 
-    const categorias = useContext(CategoriasContext)
+    // const categorias = useContext(CategoriasContext)
     return (
         <div className="div_Values">
-                <Saldo />
-                <Gastos />
+            <Saldo />
+            <Gastos />
 
             {/* <div className="buttons_Action_div">
                 <button type="button" className="button_Action" onClick={() => setShowOptions(!showOptions)} title="Adicionar">
