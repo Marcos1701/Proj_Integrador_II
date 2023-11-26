@@ -23,13 +23,27 @@ export function SectionCategorias() {
     const { user } = useAuth()
     if (!user) return <Navigate to="/login" />
     const [categorias, setCategorias] = useState<CategoriaData[]>([])
-    const [totalGasto, setTotalGasto] = useState<number>(0)
+
+    useEffect(() => {
+        const getData = async () => {
+            const response = await axios.get<dataResponse>(`${api_url}categorias/dados`, {
+                headers: {
+                    Authorization: user.access_token
+                }
+
+            })
+            setCategorias(response.data.dados)
+        }
+        getData()
+    }, [])
 
     const option: echarts.EChartsOption
         = {
+        options: [],
         tooltip: {
             trigger: 'item',
-            formatter: '{a} <br/>{b} : {c} ({d}%)'
+            formatter: '{a} <br/>{b} : {c} ({d}%)',
+
         },
         legend: {
 
@@ -38,7 +52,9 @@ export function SectionCategorias() {
             data: categorias.map((categoria) => categoria.nome),
             textStyle: {
                 color: 'white'
-            }
+            },
+            width: 100,
+            height: 100
         },
         series: [
             {
@@ -57,31 +73,16 @@ export function SectionCategorias() {
                     itemStyle: {
                         shadowBlur: 10,
                         shadowOffsetX: 0,
-                        shadowColor: 'rgba(0, 0, 0, 0.5)',
-                        color: 'white'
-                    }
+                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                    },
                 },
                 label: {
-                    color: 'white'
-                },
+                    show: false
+                }
+
             }
         ]
     };
-
-    useEffect(() => {
-        const getData = async () => {
-            const response = await axios.get<dataResponse>(`${api_url}categorias/dados`, {
-                headers: {
-                    Authorization: user.access_token
-                }
-
-            })
-            setCategorias(response.data.dados)
-            setTotalGasto(response.data.totalGasto)
-            console.log(response.data)
-        }
-        getData()
-    }, [])
 
     return (
         <div className="Categorias-section-home">
@@ -89,12 +90,13 @@ export function SectionCategorias() {
                 <h2>Dados Categorias</h2>
             </div>
 
-            <div className="Relação de categorias">
+            <div className="RelacaoCategorias">
                 {
-                    categorias && <ReactECharts
+                    categorias.length > 0 ? <ReactECharts
                         option={option}
-                        style={{ height: "100px", width: "100%" }}
+                        style={{ height: "150px", width: "250px" }}
                     />
+                        : <h3>Nenhuma categoria cadastrada</h3>
                 }
             </div>
 

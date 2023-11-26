@@ -7,12 +7,13 @@ main.Home {
     padding: 0 1em;
 }
 
-.Principle{
+.Principle,
+.Metas-CategoriasSection {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 1em;
+    gap: 1.5em;
     width: 100%;
     height: 100%;
 

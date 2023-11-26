@@ -1,5 +1,5 @@
-import React, { useRef, useEffect, useState } from "react";
-import { init, getInstanceByDom } from "echarts";
+import { useRef, useEffect, useState } from "react";
+import { init } from "echarts";
 import type { CSSProperties } from "react";
 import type { EChartsOption, ECharts, SetOptionOpts } from "echarts";
 import { LiquidFillGaugeOption } from "../interface";
@@ -21,47 +21,38 @@ export function ReactECharts({
 }: ReactEChartsProps): JSX.Element {
     const chartRef = useRef<HTMLDivElement>(null);
     const [chart, setChart] = useState<ECharts | undefined>();
+
+    setTimeout(() => {
+        if (chart !== undefined) {
+            chart.resize();
+        }
+    }, 800);
+
     useEffect(() => {
-        if (chartRef.current !== null) {
+        if (chartRef.current !== null && !window.onload) {
             setChart(init(chartRef.current, theme));
         }
     }, [theme]);
 
     useEffect(() => {
-        if (chart !== undefined) {
+        if (chart !== undefined && !window.onload) {
             chart.resize();
-
-            return () => {
-                chart.dispose();
-            };
         }
     }, [chart]);
 
     useEffect(() => {
         // Update chart
-        if (chart !== undefined) {
+        if (chart !== undefined && !window.onload) {
             chart.setOption(option, settings);
-
-            if (loading) {
-                chart.showLoading();
-            } else {
-                chart.hideLoading();
-            }
         }
     }, [chart, settings]);
 
 
     useEffect(() => {
         // Update chart
-        if (chartRef.current !== null) {
+        if (chartRef.current !== null && !window.onload) {
             if (chart !== undefined) {
                 chart.setOption(option, settings);
-            }
-
-            if (loading) {
-                getInstanceByDom(chartRef.current)?.showLoading();
-            } else {
-                getInstanceByDom(chartRef.current)?.hideLoading();
             }
         }
     }, [loading, theme]);

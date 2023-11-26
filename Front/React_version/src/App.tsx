@@ -1,5 +1,5 @@
 import './App.css'
-import { BrowserRouter, Link, NavLink } from 'react-router-dom';
+import { BrowserRouter, NavLink } from 'react-router-dom';
 import { TransacoesProvider } from './providers/TransacoesProvider';
 import { CategoriasProvider } from './providers/CategoriasProvider';
 import { MetasProvider } from './providers/MetasProvider';

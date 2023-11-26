@@ -1,6 +1,5 @@
 import { useContext, useState } from "react"
 import { IMetaContext, MetasContext } from "../../../Contexts/MetasContext"
-import { Link } from "react-router-dom";
 import { MetaBox } from "./Components/Meta";
 import './ListaMetas.css'
 import { IMeta } from "./Components/Meta";
