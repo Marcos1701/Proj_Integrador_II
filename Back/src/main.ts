@@ -23,7 +23,7 @@ async function bootstrap() {
       methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
       preflightContinue: false,
       optionsSuccessStatus: 204,
-    } // libera o acesso para qualquer origem
+    } // libera o acesso para qualquer origem e qualquer método
   );
   await app.listen(3300);
 }
