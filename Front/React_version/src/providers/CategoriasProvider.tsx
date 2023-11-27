@@ -27,6 +27,7 @@ export function CategoriasProvider({ children }: CategoriasProviderProps) {
     const [order, setOrder] = useState<OrderElements>(OrderElements.DESC)
     const [search, setSearch] = useState<string>('')
     const [updated, setUpdated] = useState<boolean>(false)
+    const [loading, setLoading] = useState<boolean>(true)
 
     const { user } = useAuth();
 
@@ -34,7 +35,7 @@ export function CategoriasProvider({ children }: CategoriasProviderProps) {
     useEffect(() => {
         async function loadCategorias() {
             if (!user) return
-
+            setLoading(true)
             const CategoriasResponse = await axios.get<ICategoria[]>(`${api_url}categorias`
                 , {
                     params: {
@@ -49,12 +50,14 @@ export function CategoriasProvider({ children }: CategoriasProviderProps) {
                 })
 
             if (CategoriasResponse.status == 404 || !CategoriasResponse.data) {
+                setLoading(false)
                 console.log('Categorias not found')
                 return
             }
 
             setCategorias(CategoriasResponse.data)
             setUpdated(false)
+            setLoading(false)
         }
 
         loadCategorias()
@@ -65,7 +68,8 @@ export function CategoriasProvider({ children }: CategoriasProviderProps) {
         order: { ordem: order, setOrdem: setOrder },
         orderby: { ordenarPor: orderby, setOrdenarPor: setOrderby },
         search: { search, setSearch },
-        setUpdated: setUpdated
+        setUpdated: setUpdated,
+        loading: loading
     }
     return (
         <CategoriasContext.Provider value={categorias}>

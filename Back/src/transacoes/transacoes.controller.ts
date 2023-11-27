@@ -3,7 +3,7 @@ import { TransacoesService } from './transacoes.service';
 import { CreateTransacoeDto } from './dto/create-transacoe.dto';
 import { UpdateTransacoeDto } from './dto/update-transacoe.dto';
 import { TransacoesorderBy } from 'src/usuarios/entities/usuario.entity';
-import { ApiBody, ApiHeader, ApiParam, ApiProperty, ApiResponse } from '@nestjs/swagger';
+import { ApiBody, ApiHeader, ApiParam, ApiProperty, ApiQuery, ApiResponse } from '@nestjs/swagger';
 import { ulid } from 'ulidx';
 
 @Controller('transacoes')
@@ -64,6 +64,77 @@ export class TransacoesController {
       throw new UnauthorizedException('Token não encontrado');
     }
     return this.transacoesService.findAll(access_token, orderby, order, search, categoriaid);
+  }
+
+  @ApiHeader({
+    name: 'Authorization',
+    description: 'Bearer token',
+    example: 'Bearer token'
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Retorna os dados das transações do usuário',
+    type: [CreateTransacoeDto]
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Token não encontrado',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Usuário não encontrado',
+  })
+  @ApiQuery({
+    name: 'ano',
+    description: 'Ano das transações',
+    example: 2021
+  })
+  @ApiQuery({
+    name: 'mes',
+    description: 'Mês das transações',
+    example: 4
+  })
+  @Get('dados/:ano?/:mes?')
+  findDados(@Headers('Authorization') access_token: string, @Query('ano') ano?: number, @Query('mes') mes?: number) {
+    if (!access_token) {
+      throw new UnauthorizedException('Token não encontrado');
+    }
+    if (ano && mes && (!isNaN(Number(ano)) && !isNaN(Number(mes)))) {
+      return this.transacoesService.findDados(access_token, Number(ano), Number(mes));
+    }
+    if (ano && !isNaN(Number(ano))) {
+      return this.transacoesService.findDados(access_token, Number(ano));
+    }
+    if (mes && !isNaN(Number(mes))) {
+      return this.transacoesService.findDados(access_token, null, Number(mes));
+    }
+    return this.transacoesService.findDados(access_token);
+  }
+
+  @ApiHeader({
+    name: 'Authorization',
+    description: 'Bearer token',
+    example: 'Bearer token'
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Retorna os dados das transações do usuário',
+    type: [CreateTransacoeDto]
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Token não encontrado',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Usuário não encontrado',
+  })
+  @Get('historico')
+  findHistorico(@Headers('Authorization') access_token: string) {
+    if (!access_token) {
+      throw new UnauthorizedException('Token não encontrado');
+    }
+    return this.transacoesService.findHistory(access_token);
   }
 
   @ApiHeader({

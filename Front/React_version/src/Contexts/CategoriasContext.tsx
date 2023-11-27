@@ -22,6 +22,7 @@ export interface CategoriasOrderContextData {
     order: orderData
     search: searchData
     setUpdated: (updated: boolean) => void
+    loading: boolean
 }
 
 export const CategoriasContext = createContext<ICategoria[]>([]);

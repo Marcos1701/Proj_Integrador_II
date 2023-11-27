@@ -21,6 +21,7 @@ export interface TransacoesContextData {
     setOrdenarPor: (orderby: ordenarTransacoes) => void,
     search: string,
     setSearch: (search: string) => void
+    loading: boolean
 }
 
 export const TransacoesContext = createContext<TransacoesContextData>({
@@ -32,5 +33,6 @@ export const TransacoesContext = createContext<TransacoesContextData>({
     ordenarPor: ordenarTransacoes.data,
     setOrdenarPor: () => { },
     search: '',
-    setSearch: () => { }
+    setSearch: () => { },
+    loading: true
 });

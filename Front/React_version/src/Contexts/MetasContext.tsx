@@ -21,6 +21,7 @@ export interface IMetaContext {
     setOrdenarPor: (orderby: ordenarMetas) => void,
     search: string,
     setSearch: (search: string) => void
+    loading: boolean
 }
 
 

@@ -190,6 +190,129 @@ export class CategoriasService {
     }
   }
 
+  async dadosCategoria(id: string, access_token: string) {
+    const usuario = await this.getUserFromtoken(access_token);
+    const categoria = await this.entityManager.findOne(
+      Categoria, {
+      where: {
+        id,
+        usuario: {
+          id: usuario.id
+        }
+      },
+      relations: {
+        transacoes: true
+      }
+    });
+
+    if (!categoria) {
+      throw new NotFoundException('Categoria não encontrada');
+    }
+
+    const data = new Date();
+    const transacoes = categoria.transacoes.filter(transacao => {
+      const dataTransacao = new Date(transacao.data);
+      return dataTransacao.getMonth() === data.getMonth() && dataTransacao.getFullYear() === data.getFullYear();
+    })
+
+    const totalGasto = transacoes.reduce((acc, transacao) => {
+      return transacao.valor ? acc + transacao.valor : acc
+    }, 0)
+
+    return {
+      id: categoria.id,
+      nome: categoria.nome,
+      gasto: categoria.gasto,
+      qtdTransacoes: transacoes.length,
+      totalGasto
+    }
+  }
+
+  async historicoCategorias(access_token: string) {
+    const usuario = await this.getUserFromtoken(access_token);
+    const categorias = usuario.getCategorias('DESC', CategoriasorderBy.gasto);
+
+    const categoriasComTransacoes = categorias.map(categoria => {
+      const transacoes = usuario.getTransacoes("DESC", null, null, categoria.id);
+      return {
+        ...categoria,
+        transacoes
+      }
+    })
+
+    // agrupa, em cada categoria, as transacoes por ano e mes
+    const history = categoriasComTransacoes.reduce((acc, categoria) => {
+      const transacoes = categoria.transacoes.reduce((acc, transacao) => {
+        const dataTransacao = new Date(transacao.data);
+        const ano = dataTransacao.getFullYear();
+        const mes = dataTransacao.getMonth();
+
+        if (!acc[ano]) {
+          acc[ano] = {}
+        }
+
+        if (!acc[ano][mes]) {
+          acc[ano][mes] = []
+        }
+
+        acc[ano][mes].push(transacao);
+
+        return acc
+      }
+        , {});
+
+      return {
+        ...acc,
+        [categoria.id]: transacoes
+      }
+    }
+      , {});
+
+    return history
+  }
+
+  async historicoCategoria(id: string, access_token: string) {
+    const usuario = await this.getUserFromtoken(access_token);
+    const categoria = await this.entityManager.findOne(
+      Categoria, {
+      where: {
+        id,
+        usuario: {
+          id: usuario.id
+        }
+      },
+      relations: {
+        transacoes: true
+      }
+    });
+
+    if (!categoria) {
+      throw new NotFoundException('Categoria não encontrada');
+    }
+
+    const history = categoria.transacoes.reduce((acc, transacao) => {
+      const dataTransacao = new Date(transacao.data);
+      const ano = dataTransacao.getFullYear();
+      const mes = dataTransacao.getMonth();
+
+      if (!acc[ano]) {
+        acc[ano] = {}
+      }
+
+      if (!acc[ano][mes]) {
+        acc[ano][mes] = []
+      }
+
+      acc[ano][mes].push(transacao);
+
+      return acc
+    }
+      , {});
+
+    return history
+  }
+
+
   private getUserFromtoken(token: string): Promise<Usuario> {
     const data = this.jwtService.decode(token) as jwtDecodeUser
 
