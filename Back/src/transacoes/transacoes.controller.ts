@@ -94,7 +94,7 @@ export class TransacoesController {
     description: 'Mês das transações',
     example: 4
   })
-  @Get('dados')
+  @Get('dados/:ano?/:mes?')
   findDados(@Headers('Authorization') access_token: string, @Query('ano') ano?: number, @Query('mes') mes?: number) {
     if (!access_token) {
       throw new UnauthorizedException('Token não encontrado');
@@ -109,6 +109,32 @@ export class TransacoesController {
       return this.transacoesService.findDados(access_token, null, Number(mes));
     }
     return this.transacoesService.findDados(access_token);
+  }
+
+  @ApiHeader({
+    name: 'Authorization',
+    description: 'Bearer token',
+    example: 'Bearer token'
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Retorna os dados das transações do usuário',
+    type: [CreateTransacoeDto]
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Token não encontrado',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Usuário não encontrado',
+  })
+  @Get('historico')
+  findHistorico(@Headers('Authorization') access_token: string) {
+    if (!access_token) {
+      throw new UnauthorizedException('Token não encontrado');
+    }
+    return this.transacoesService.findHistory(access_token);
   }
 
   @ApiHeader({

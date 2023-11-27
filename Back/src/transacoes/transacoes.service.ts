@@ -154,6 +154,40 @@ export class TransacoesService {
     }
   }
 
+  async findHistory(usuariotoken: string) {
+    const usuario = await this.getUserFromtoken(usuariotoken, ['transacoes']);
+
+    if (!usuario) {
+      throw new NotFoundException('Usuário não encontrado');
+    }
+
+    const transacoes = usuario.transacoes.map(t => {
+      return {
+        id: t.id,
+        titulo: t.titulo,
+        valor: Number(t.valor),
+        data: new Date(t.data),
+        tipo: t.tipo
+      }
+    })
+
+    // agrupa as transações pelo ano e mês
+    const history = transacoes.reduce((acc, cur) => {
+      const ano = cur.data.getFullYear();
+      const mes = cur.data.getMonth();
+      if (!acc[ano]) {
+        acc[ano] = {};
+      }
+      if (!acc[ano][mes]) {
+        acc[ano][mes] = [];
+      }
+      acc[ano][mes].push(cur);
+      return acc;
+    }, {}); // {ano: {mes: [transacoes]}}
+
+    return history;
+  }
+
   async findAll(usuariotoken: string, orderby?: TransacoesorderBy, order?: 'ASC' | 'DESC', search?: string, categoriaid?: string) {
     const usuario = await this.getUserFromtoken(usuariotoken, ['transacoes']);
 

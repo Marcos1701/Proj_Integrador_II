@@ -118,6 +118,77 @@ export class CategoriasController {
   })
   @ApiResponse({
     status: 200,
+    description: 'Retorna as estatisticas da categoria',
+  })
+  @ApiParam({
+    name: 'id',
+    description: 'ID da categoria'
+  })
+  @Get('dados/:id')
+  async dadosCategoria(@Param('id') id: string, @Headers('Authorization') token: string) {
+    if (!token) {
+      throw new BadRequestException('Token não informado');
+    }
+    if (!id || id === '' || !isUUID(id)) {
+      throw new BadRequestException('ID da categoria não informado');
+    }
+    return this.categoriasService.dadosCategoria(id, token);
+  }
+
+  @ApiHeader({
+    name: 'Authorization',
+    description: 'Bearer token',
+    example: 'Bearer token'
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Retorna o historico da categoria',
+  })
+  @ApiParam({
+    name: 'id',
+    description: 'ID da categoria'
+  })
+  @Get('historico')
+  async historicoCategorias(@Headers('Authorization') token: string) {
+    if (!token) {
+      throw new BadRequestException('Token não informado');
+    }
+    return this.categoriasService.historicoCategorias(token);
+  }
+
+  @ApiHeader({
+    name: 'Authorization',
+    description: 'Bearer token',
+    example: 'Bearer token'
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Retorna o historico da categoria',
+  })
+  @ApiParam({
+    name: 'id',
+    description: 'ID da categoria'
+  })
+  @Get('historico/:id')
+  async historicoCategoria(@Param('id') id: string, @Headers('Authorization') token: string) {
+    if (!token) {
+      throw new BadRequestException('Token não informado');
+    }
+    if (!id || id === '' || !isUUID(id)) {
+      throw new BadRequestException('ID da categoria não informado');
+    }
+    return this.categoriasService.historicoCategoria(id, token);
+  }
+
+
+
+  @ApiHeader({
+    name: 'Authorization',
+    description: 'Bearer token',
+    example: 'Bearer token'
+  })
+  @ApiResponse({
+    status: 200,
     description: 'Retorna uma categoria',
     type: CreateCategoriaDto,
     schema: {
