@@ -1,41 +1,16 @@
-import axios from "axios";
-import { useEffect, useState } from "react";
-import { NavLink, Navigate } from "react-router-dom";
-import { api_url, useAuth } from "../../../../Contexts/AuthContext";
+import { useContext } from "react";
+import { NavLink } from "react-router-dom";
 import * as echarts from 'echarts';
 import { ReactECharts } from "./components/Echarts";
 import './CategoriasSection.css'
-
-interface CategoriaData {
-    id: string
-    nome: string
-    gasto: number
-    qtdTransacoes: number
-}
-
-interface dataResponse {
-    dados: CategoriaData[]
-    totalGasto: number
-}
+import { SyncLoader } from "react-spinners";
+import { DataContext } from "../../../../Contexts/DataContext";
 
 export function SectionCategorias() {
 
-    const { user } = useAuth()
-    if (!user) return <Navigate to="/login" />
-    const [categorias, setCategorias] = useState<CategoriaData[]>([])
+    const { DadosCategoria, loading } = useContext(DataContext)
 
-    useEffect(() => {
-        const getData = async () => {
-            const response = await axios.get<dataResponse>(`${api_url}categorias/dados`, {
-                headers: {
-                    Authorization: user.access_token
-                }
-
-            })
-            setCategorias(response.data.dados)
-        }
-        getData()
-    }, [])
+    const categorias = DadosCategoria.dados || []
 
     const option: echarts.EChartsOption
         = {
@@ -92,11 +67,13 @@ export function SectionCategorias() {
 
             <div className="RelacaoCategorias">
                 {
-                    categorias.length > 0 ? <ReactECharts
-                        option={option}
-                        style={{ height: "150px", width: "250px" }}
-                    />
-                        : <h3>Nenhuma categoria cadastrada</h3>
+                    loading ? <SyncLoader color="#7949FF" />
+                        :
+                        categorias.length > 0 ? <ReactECharts
+                            option={option}
+                            style={{ height: "150px", width: "250px" }}
+                        />
+                            : <h3>Nenhuma categoria cadastrada</h3>
                 }
             </div>
 

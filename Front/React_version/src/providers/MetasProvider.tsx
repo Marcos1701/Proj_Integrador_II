@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import axios from "axios"
 import { useAuth, api_url } from "../Contexts/AuthContext"
-import { IMeta } from "../Components/List/ListMetasV2/Components/Meta" 
+import { IMeta } from "../Components/List/ListMetasV2/Components/Meta"
 import { IMetaContext, MetasContext, ordenarMetas } from "../Contexts/MetasContext"
 import { OrderElements } from "./CategoriasProvider"
 
@@ -17,12 +17,14 @@ export function MetasProvider({ children }: MetasProviderProps) {
     const [ordenarPor, setOrdenarPor] = useState<ordenarMetas>(ordenarMetas.dataCriacao)
     const [ordem, setOrdem] = useState<OrderElements>(OrderElements.DESC)
     const [search, setSearch] = useState<string>('')
+    const [loading, setLoading] = useState<boolean>(true)
     const { user } = useAuth();
 
 
     useEffect(() => {
         async function loadMetas() {
             if (!user) return
+            setLoading(true)
             const response = await axios.get(`${api_url}meta`, {
                 params: {
                     orderby: ordenarPor,
@@ -38,6 +40,7 @@ export function MetasProvider({ children }: MetasProviderProps) {
                 return
             }
             if (response.status !== 200) {
+                setLoading(false)
                 alert('Erro ao carregar metas')
                 return
             }
@@ -47,6 +50,7 @@ export function MetasProvider({ children }: MetasProviderProps) {
             })
             setMetas(response.data)
             setUpdated(false)
+            setLoading(false)
         }
         loadMetas()
         setUpdated(false)
@@ -62,7 +66,8 @@ export function MetasProvider({ children }: MetasProviderProps) {
         ordenarPor,
         setOrdenarPor,
         search,
-        setSearch
+        setSearch,
+        loading
     }
 
     return (

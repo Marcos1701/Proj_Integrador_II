@@ -16,6 +16,21 @@ interface UpdateData {
   categoria?: Categoria;
 }
 
+export interface TransacaoData {
+  id: string
+  titulo: string
+  valor: number
+  data: Date
+  tipo: string
+}
+
+
+export interface TransacoesDadosResponse {
+  dados: TransacaoData[]
+  totalGasto: number
+  totalEntrada: number
+}
+
 @Injectable()
 export class TransacoesService {
   constructor(
@@ -83,6 +98,60 @@ export class TransacoesService {
         }
       }
     });
+  }
+
+  async findDados(usuariotoken: string, ano?: number, mes?: number) {
+    const usuario = await this.getUserFromtoken(usuariotoken, ['transacoes']);
+
+    if (!usuario) {
+      throw new NotFoundException('Usuário não encontrado');
+    }
+
+    if (ano && ano > new Date().getFullYear()) {
+      throw new BadRequestException('Ano inválido');
+    }
+
+    if (mes && (mes > 11 || mes < 0)) {
+      throw new BadRequestException('Mês inválido');
+    }
+
+    const transacoes = usuario.transacoes.map(t => {
+      return {
+        id: t.id,
+        titulo: t.titulo,
+        valor: Number(t.valor),
+        data: new Date(t.data),
+        tipo: t.tipo
+      }
+    }).filter(t => {
+      if (ano && mes) {
+        return t.data.getFullYear() === ano && t.data.getMonth() === mes;
+      } else if (ano) {
+        return t.data.getFullYear() === ano;
+      } else if (mes) {
+        return t.data.getMonth() === mes;
+      }
+      return true;
+    })
+
+    const totalGasto = transacoes.filter(t => t.tipo === 'saida').reduce((acc, cur) => acc + cur.valor, 0);
+    const totalEntrada = transacoes.filter(t => t.tipo === 'entrada').reduce((acc, cur) => acc + cur.valor, 0);
+
+    const dados = transacoes.map(t => {
+      return {
+        id: t.id,
+        titulo: t.titulo,
+        valor: t.valor,
+        data: t.data,
+        tipo: t.tipo
+      }
+    })
+
+    return {
+      dados,
+      totalGasto,
+      totalEntrada
+    }
   }
 
   async findAll(usuariotoken: string, orderby?: TransacoesorderBy, order?: 'ASC' | 'DESC', search?: string, categoriaid?: string) {

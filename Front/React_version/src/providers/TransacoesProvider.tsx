@@ -17,11 +17,13 @@ export function TransacoesProvider({ children }: TransacoesProviderProps) {
     const [ordenarPor, setOrdenarPor] = useState<ordenarTransacoes>(ordenarTransacoes.data)
     const [ordem, setOrdem] = useState<OrderElements>(OrderElements.DESC)
     const [search, setSearch] = useState<string>('')
+    const [loading, setLoading] = useState<boolean>(true)
     const { user } = useAuth();
 
     useEffect(() => {
         async function loadTransacoes() {
             if (!user) return
+            setLoading(true)
             const response = await axios.get<ITransacao[]>(`${api_url}transacoes`, {
                 params: {
                     orderby: ordenarPor,
@@ -34,11 +36,13 @@ export function TransacoesProvider({ children }: TransacoesProviderProps) {
                 }
             })
             if (response.status === 401 || !response.data) {
+                setLoading(false)
                 alert('Sessão expirada')
                 return
             }
             setTransacoes(response.data)
             setUpdated(false)
+            setLoading(false)
         }
         loadTransacoes()
     }, [updated, user, ordem, ordenarPor, search])
@@ -52,7 +56,8 @@ export function TransacoesProvider({ children }: TransacoesProviderProps) {
         ordenarPor,
         setOrdenarPor,
         search,
-        setSearch
+        setSearch,
+        loading
     }
 
     return (

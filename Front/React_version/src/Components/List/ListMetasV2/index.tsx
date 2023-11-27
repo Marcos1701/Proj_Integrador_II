@@ -6,6 +6,7 @@ import { IMeta } from "./Components/Meta";
 import { Orderdiv } from "./Components/Orderdiv";
 import { Searchdiv } from "./Components/Searchdiv";
 import { MagicMotion } from "react-magic-motion";
+import { ScaleLoader } from "react-spinners";
 
 interface IListaMetasProps {
     limit?: number
@@ -30,7 +31,7 @@ export function ListaMetas(
     }: IListaMetasProps
 ): JSX.Element {
 
-    const { metas }: IMetaContext = useContext(MetasContext);
+    const { metas, loading }: IMetaContext = useContext(MetasContext);
     const [pageAtual, setPageAtual] = useState<number>(page);
 
     return (
@@ -46,27 +47,29 @@ export function ListaMetas(
                 <h2>Metas</h2>
             </div>
 
-            <MagicMotion layoutDependency={
-                [metas.length]
-            } >
-                <ul className="list">
-                    {metas.length === 0 && <li className="empty" key='EmptyMetas'>Nenhuma meta cadastrada</li>}
-                    {
-                        metas
-                            .slice(pageAtual * limit - limit, pageAtual * limit)
-                            .map(
-                                (meta) => <li key={meta.id} className="li-meta">
-                                    <MetaBox
-                                        meta={meta}
-                                        key={meta.id}
-                                        setShowDetails={setShowDetails}
-                                        setMeta={setMeta}
-                                    />
-                                </li>
-                            )
-                    }
-                </ul>
-            </MagicMotion>
+            {loading ? <ScaleLoader color="#7949FF" /> :
+                <MagicMotion layoutDependency={
+                    [metas.length]
+                } >
+                    <ul className="list">
+                        {metas.length === 0 && <li className="empty" key='EmptyMetas'>Nenhuma meta cadastrada</li>}
+                        {
+                            metas
+                                .slice(pageAtual * limit - limit, pageAtual * limit)
+                                .map(
+                                    (meta) => <li key={meta.id} className="li-meta">
+                                        <MetaBox
+                                            meta={meta}
+                                            key={meta.id}
+                                            setShowDetails={setShowDetails}
+                                            setMeta={setMeta}
+                                        />
+                                    </li>
+                                )
+                        }
+                    </ul>
+                </MagicMotion>
+            }
 
             {!pagination && <div className="pagination-home">
                 <svg width="20" height="6" viewBox="0 0 20 6" fill="none" xmlns="http://www.w3.org/2000/svg">
