@@ -73,3 +73,11 @@
     padding: .5em 1em 1.1em 2.5em;
     /* 1 => top, 2 => right, 3 => bottom, 4 => left */
 }
+
+.loader {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+}

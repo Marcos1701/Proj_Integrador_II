@@ -1,4 +1,4 @@
-import { CategoriasContext } from "../../../Contexts/CategoriasContext";
+import { CategoriasContext, CategoriasOrderContext } from "../../../Contexts/CategoriasContext";
 import { TransacoesContext, TransacoesContextData } from "../../../Contexts/TransacoesContext";
 import { ICategoria } from "../ListCategorias/Components/Categoria";
 import { ITransacao } from "../ListTransacoesCard/Components/Transacao";
@@ -9,6 +9,7 @@ import { Link } from "react-router-dom";
 import { Orderdiv } from "./Components/Orderdiv";
 import { Searchdiv } from "./Components/Searchdiv";
 import { MagicMotion } from "react-magic-motion";
+import { ScaleLoader } from "react-spinners";
 
 
 interface IListTransacoesProps {
@@ -34,8 +35,9 @@ export function ListTransacoes(
         setTransacao
     }: IListTransacoesProps) {
 
-    const { transacoes }: TransacoesContextData = useContext(TransacoesContext)
+    const { transacoes, loading }: TransacoesContextData = useContext(TransacoesContext)
     const categorias: ICategoria[] = useContext(CategoriasContext)
+    const { loading: loadingCategorias } = useContext(CategoriasOrderContext)
     const [pageAtual, setPageAtual] = useState<number>(page);
 
 
@@ -61,42 +63,45 @@ export function ListTransacoes(
                 <div className="legend-item">Valor</div>
                 <div className="legend-item">tipo</div>
             </div>
-            <MagicMotion layoutDependency={
-                [transacoes.length]
-            }>
-                <ul className="listValues" id={classname === "list_on_page" ? "listTransacoes" : "listTransacoesSimple"}>
-                    {transacoes.length === 0 && <li className="empty" key={"empty"}>Nenhuma transação cadastrada</li>}
-                    {
-                        transacoes
-                            .slice(pageAtual * limit - limit, pageAtual * limit)
-                            .map(
-                                (transacao: ITransacao) => {
-                                    const categoria: ICategoria | undefined = categorias.find(
-                                        (categoria: ICategoria) => {
-                                            return categoria.id === transacao.categoriaid
+            {loading || loadingCategorias ? <ScaleLoader color="#7949FF" className="loader" />
+                :
+                <MagicMotion layoutDependency={
+                    [transacoes.length]
+                }>
+                    <ul className="listValues" id={classname === "list_on_page" ? "listTransacoes" : "listTransacoesSimple"}>
+                        {transacoes.length === 0 && <li className="empty" key={"empty"}>Nenhuma transação cadastrada</li>}
+                        {
+                            transacoes
+                                .slice(pageAtual * limit - limit, pageAtual * limit)
+                                .map(
+                                    (transacao: ITransacao) => {
+                                        const categoria: ICategoria | undefined = categorias.find(
+                                            (categoria: ICategoria) => {
+                                                return categoria.id === transacao.categoriaid
+                                            }
+                                        );
+
+                                        if (!categoria) {
+                                            return <li key={transacao.id + 'noCategory'}></li>
                                         }
-                                    );
 
-                                    if (!categoria) {
-                                        return <li key={transacao.id + 'noCategory'}></li>
+                                        return (
+                                            <li className="listItem" key={transacao.id}>
+                                                <Box
+                                                    key={transacao.id + "box"}
+                                                    transacao={transacao}
+                                                    categoria={categoria}
+                                                    setShowDetails={setShowDetails}
+                                                    setTransacao={setTransacao}
+                                                />
+                                            </li>
+                                        )
                                     }
-
-                                    return (
-                                        <li className="listItem" key={transacao.id}>
-                                            <Box
-                                                key={transacao.id + "box"}
-                                                transacao={transacao}
-                                                categoria={categoria}
-                                                setShowDetails={setShowDetails}
-                                                setTransacao={setTransacao}
-                                            />
-                                        </li>
-                                    )
-                                }
-                            )
-                    }
-                </ul>
-            </MagicMotion>
+                                )
+                        }
+                    </ul>
+                </MagicMotion>
+            }
 
             {
                 pagination && <div className="pagination">
