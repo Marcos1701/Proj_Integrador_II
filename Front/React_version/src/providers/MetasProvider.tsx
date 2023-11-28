@@ -20,7 +20,6 @@ export function MetasProvider({ children }: MetasProviderProps) {
     const [loading, setLoading] = useState<boolean>(true)
     const { user } = useAuth();
 
-
     useEffect(() => {
         async function loadMetas() {
             if (!user) return

@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react"
-import { CategoriasDataResponse, DataContext, DataContextData, MetaData, MetasDataResponse, TransacoesDataResponse } from "../Contexts/DataContext"
+import { CategoriasDataResponse, CategoriasHistoryData, DataContext, DataContextData, MetasDataResponse, TransacoesDataResponse, TransacoesHistoryData } from "../Contexts/DataContext"
 import axios from "axios"
 import { api_url, useAuth } from "../Contexts/AuthContext"
-import { Navigate } from "react-router-dom"
 
 
 interface DataProviderProps {
@@ -26,6 +25,15 @@ export function DataProvider({ children }: DataProviderProps) {
     const [DadosMeta, setDadosMeta] = useState<MetasDataResponse>({
         dados: []
     })
+    const [DadosTransacoesHistory, setDadosTransacoesHistory] = useState<TransacoesHistoryData>({
+        data: []
+    })
+    const [DadosCategoriasHistory, setDadosCategoriasHistory] = useState<CategoriasHistoryData>({
+        data: []
+    })
+
+    const [TransacoesHistoryYear, setTransacoesHistoryYear] = useState<number>(new Date().getFullYear())
+    const [TransacoesHistoryMonth, setTransacoesHistoryMonth] = useState<number>(new Date().getMonth() + 1)
     const [loading, setLoading] = useState<boolean>(true)
     const [updated, setUpdated] = useState<boolean>(false)
 
@@ -65,17 +73,55 @@ export function DataProvider({ children }: DataProviderProps) {
             setDadosMeta(response.data)
             setLoading(false)
         }
+
         getDadosCategorias()
         getDadosTransacoes()
         getDadosMetas()
     }, [updated, user])
+
+    useEffect(() => {
+        const getDadosTransacoesHistory = async () => {
+            setLoading(true)
+            const response = await axios.get<TransacoesHistoryData>(`${api_url}transacoes/historico`, {
+                params: {
+                    ano: TransacoesHistoryYear ? TransacoesHistoryYear : new Date().getFullYear(),
+                    mes: TransacoesHistoryMonth ? TransacoesHistoryMonth : null
+                },
+                headers: {
+                    Authorization: user.access_token
+                }
+
+            })
+            setDadosTransacoesHistory(response.data)
+            setLoading(false)
+        }
+
+        const getDadosCategoriasHistory = async () => {
+            setLoading(true)
+            const response = await axios.get<CategoriasHistoryData>(`${api_url}categorias/historico`, {
+                headers: {
+                    Authorization: user.access_token
+                }
+            })
+            setDadosCategoriasHistory(response.data)
+            setLoading(false)
+        }
+
+        getDadosTransacoesHistory()
+        getDadosCategoriasHistory()
+
+    }, [TransacoesHistoryYear, TransacoesHistoryMonth, user])
 
     const value: DataContextData = {
         DadosCategoria,
         DadosTransacao,
         DadosMeta,
         loading,
-        setUpdated
+        setUpdated,
+        DadosTransacoesHistory,
+        DadosCategoriasHistory,
+        setTransacoesHistoryYear,
+        setTransacoesHistoryMonth
     }
 
     return (
