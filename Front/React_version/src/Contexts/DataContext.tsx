@@ -41,11 +41,44 @@ export interface MetasDataResponse {
     dados: MetaData[]
 }
 
+export interface TransacoesHistory {
+    history: {
+        [ano: number]: {
+            [mes: number]: TransacaoData[]
+        }
+    }
+}
+
+export interface TransacoesHistoryData {
+    data: TransacoesHistory[]
+}
+
+export interface CategoriasHistory {
+    history: {
+        [categoria: string]: {
+            [ano: number]: {
+                [mes: number]: {
+                    transacoes: TransacaoData[],
+                    nome: string,
+                    id: string
+                }
+            }
+        }
+    }
+}
+
+export interface CategoriasHistoryData {
+    data: CategoriasHistory[]
+}
 
 export interface DataContextData {
     DadosCategoria: CategoriasDataResponse
     DadosTransacao: TransacoesDataResponse
     DadosMeta: MetasDataResponse,
+    DadosTransacoesHistory: TransacoesHistoryData,
+    setTransacoesHistoryYear: (year: number) => void,
+    setTransacoesHistoryMonth: (month: number) => void,
+    DadosCategoriasHistory: CategoriasHistoryData,
     loading: boolean,
     setUpdated: (updated: boolean) => void
 }

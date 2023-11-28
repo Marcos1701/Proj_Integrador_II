@@ -11,5 +11,6 @@ export function ProtectedRoute({ children }: ProtectedRouteProps) {
     if (!isAuthenticated) {
         return <Navigate to="/login" />
     }
+    console.log("isAuthenticated: ", isAuthenticated)
     return <>{children}</>
 }

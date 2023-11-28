@@ -2,7 +2,6 @@ import { SecaoActions_Home } from "./Components/SecaoAcoes";
 import './Home.css'
 import { ListTransacoes } from "../List/ListTransacoes";
 import { useState } from "react";
-// import { ICategoria } from "../List/ListCategorias/Components/Categoria";
 import { ITransacao } from "../List/ListTransacoesCard/Components/Transacao";
 import { DetailsTransacaoPage } from "../Pages/DetailsPage/Transacao";
 import { ListaMetas } from "../List/ListMetasV2";

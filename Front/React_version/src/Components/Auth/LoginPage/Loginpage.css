@@ -1,5 +1,102 @@
-main {
-    width: 80vw;
-    height: 100%;
-    margin: 0 auto;
+.authPage {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
 }
+
+.authPage__image {
+    background: url("Icons/authBackground.svg"), lightgray 50% / cover no-repeat;
+    background-position: 50% 35%;
+    background-size: cover;
+    width: calc(100vw - 431px);
+    height: 100%;
+    left: 0;
+    position: absolute;
+    z-index: -1;
+}
+
+.logo_authPage {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: .5em;
+    position: absolute;
+    z-index: 2;
+    top: 0;
+    left: 0;
+    margin: 1em 0 0 2em;
+
+    & img {
+        width: 40px;
+        height: 40px;
+        border: 2px solid #000;
+        border-radius: 50%;
+        box-shadow: none;
+    }
+
+    & p {
+        color: var(--text, #FFF);
+        text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+
+        font-family: Eina03-SemiBold;
+        font-size: 25px;
+        font-style: normal;
+        font-weight: 600;
+        line-height: normal;
+    }
+}
+
+.loading {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 100;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    & .loading__content {
+        width: 20%;
+        height: 20%;
+        border-radius: 5px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        background: #1c1c1c6d
+    }
+}
+
+
+
+@media(max-width: 750px){
+    .authPage__image {
+        width: 100vw;
+    }
+
+    .logo_authPage {
+        margin: 1em 0 0 1em;
+    }
+
+    .loading {
+        & .loading__content {
+            width: 50%;
+            height: 50%;
+        }
+    }
+
+    .authPage {
+        align-items: center;
+    }
+
+    .authPage__image {
+        background-position: 50% 50%;
+    }
+
+}
+@media(max-width: 430px){}

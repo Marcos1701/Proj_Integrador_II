@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { createContext, useContext, useMemo, useState } from "react";
+import { redirect } from "react-router-dom";
 
 export type User = {
     nome: string;
@@ -26,6 +27,7 @@ interface AuthContextType {
     singup: (user: singupData) => Promise<string | void>
     signout: () => void
     isAuthenticated: boolean
+    loading?: boolean
 }
 
 const defaultValue = {} as AuthContextType
@@ -44,19 +46,22 @@ export const api_url: string = "https://finnapp.onrender.com/";
 // AuthProvider encapsula o AuthContextProvider e o AuthContext
 export const AuthProvider = ({ children }: AuthProviderProps) => {
     const [user, setUser] = useState<User | null>(
-        localStorage.getItem('access_token') ? JSON.parse(localStorage.getItem('access_token')!
-        ) : null
+        localStorage.getItem('access_token') ? JSON.parse(localStorage.getItem('access_token')!)
+            : null
     )
 
-    const signin = async (data: singinData): Promise<string | void> => {
+    const [loading, setLoading] = useState<boolean>(false)
 
+    const signin = async (data: singinData): Promise<string | void> => {
+        setLoading(true)
         const response = await axios.post<User>(`${api_url}auth/login`, {
             email: data.email,
             senha: data.senha
         })
 
-        if (response.status === 401) {
-            return response.statusText;
+        if (response.status !== 200) {
+            setLoading(false)
+            return response.status === 401 ? response.statusText : 'Ops, ocorreu um erro ao fazer login';
         }
 
         if (data.lembrar) {
@@ -64,41 +69,41 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         }
 
         setUser(response.data);
-        // axios.defaults.headers.common['Authorization'] = response.data.access_token;
-        // axios.defaults.headers.get.Authorization = true;
-        // axios.defaults.headers.common["Content-Type"] = "application/json";
+        setLoading(false)
     }
 
     const singup = async (user: singupData): Promise<string | void> => {
 
+        setLoading(true)
         const response = await axios.post<User>(`${api_url}auth/signup`, {
             nome: user.nome,
             email: user.email,
             senha: user.senha
         })
 
-        if (response.status === 401) {
-            return response.statusText;
+        if (response.status !== 201) {
+            setLoading(false)
+            return response.status === 401 ? response.statusText : 'Ops, ocorreu um erro ao realizar o cadastro..';
         }
+
         if (user.lembrar) {
             localStorage.setItem('access_token', JSON.stringify(response.data))
         }
         setUser(response.data);
-        // axios.defaults.headers.common['Authorization'] = response.data.access_token;
-        // axios.defaults.headers.get.Authorization = true;
-        // axios.defaults.headers.common["Content-Type"] = "application/json";
+        setLoading(false)
     }
 
     const signout = (): void => {
+        setLoading(true)
         setUser(null);
         localStorage.removeItem('access_token');
-        // axios.defaults.headers.common['Authorization'] = null;
-        // axios.defaults.headers.get.Authorization = false;
+        setLoading(false)
+        redirect('/')
     }
 
     const value = useMemo(() => ({
-        user, signin, singup, signout, isAuthenticated: user != null
-    }), [user])
+        user, signin, singup, signout, isAuthenticated: user != null, loading
+    }), [user, loading])
 
     return (
         <AuthContext.Provider value={value}>
