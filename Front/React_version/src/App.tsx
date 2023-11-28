@@ -112,17 +112,19 @@ function App() {
           </nav>
         }
         <div className="App-content">
-          {/* <Header /> */}
-          <AuthRoutes />
-          <TransacoesProvider>
-            <CategoriasProvider>
-              <MetasProvider>
-                <DataProvider>
-                  <PatchRoutes />
-                </DataProvider>
-              </MetasProvider>
-            </CategoriasProvider>
-          </TransacoesProvider>
+          {user ?
+            <TransacoesProvider>
+              <CategoriasProvider>
+                <MetasProvider>
+                  <DataProvider>
+                    <PatchRoutes />
+                  </DataProvider>
+                </MetasProvider>
+              </CategoriasProvider>
+            </TransacoesProvider>
+            :
+            <AuthRoutes />
+          }
         </div>
       </div>
       {/* <Footer /> */}

@@ -180,8 +180,6 @@ export class CategoriasController {
     return this.categoriasService.historicoCategoria(id, token);
   }
 
-
-
   @ApiHeader({
     name: 'Authorization',
     description: 'Bearer token',

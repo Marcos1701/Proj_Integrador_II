@@ -154,11 +154,20 @@ export class TransacoesService {
     }
   }
 
-  async findHistory(usuariotoken: string) {
+  async findHistory(usuariotoken: string, ano?: number, mes?: number) {
     const usuario = await this.getUserFromtoken(usuariotoken, ['transacoes']);
 
     if (!usuario) {
       throw new NotFoundException('Usuário não encontrado');
+    }
+
+
+    if (ano && ano > new Date().getFullYear()) {
+      throw new BadRequestException('Ano inválido');
+    }
+
+    if (mes && (mes > 11 || mes < 0)) {
+      throw new BadRequestException('Mês inválido');
     }
 
     const transacoes = usuario.transacoes.map(t => {
@@ -169,23 +178,39 @@ export class TransacoesService {
         data: new Date(t.data),
         tipo: t.tipo
       }
-    })
+    }).filter(t => {
+      if (ano && mes) {
+        return t.data.getFullYear() === ano && t.data.getMonth() === mes;
+      } else if (ano) {
+        return t.data.getFullYear() === ano;
+      } else if (mes) {
+        return t.data.getMonth() === mes;
+      }
+      return true;
+    });
 
     // agrupa as transações pelo ano e mês
-    const history = transacoes.reduce((acc, cur) => {
-      const ano = cur.data.getFullYear();
-      const mes = cur.data.getMonth();
-      if (!acc[ano]) {
-        acc[ano] = {};
+    const history: {
+      [ano: number]: {
+        [mes: number]: TransacaoData[]
       }
-      if (!acc[ano][mes]) {
-        acc[ano][mes] = [];
-      }
-      acc[ano][mes].push(cur);
-      return acc;
-    }, {}); // {ano: {mes: [transacoes]}}
+    }
+      = transacoes.reduce((acc, cur) => {
+        const ano = cur.data.getFullYear();
+        const mes = cur.data.getMonth();
+        if (!acc[ano]) {
+          acc[ano] = {};
+        }
+        if (!acc[ano][mes]) {
+          acc[ano][mes] = [];
+        }
+        acc[ano][mes].push(cur);
+        return acc;
+      }, {});
 
-    return history;
+    return {
+      history
+    }
   }
 
   async findAll(usuariotoken: string, orderby?: TransacoesorderBy, order?: 'ASC' | 'DESC', search?: string, categoriaid?: string) {

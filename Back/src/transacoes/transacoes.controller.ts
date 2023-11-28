@@ -94,7 +94,7 @@ export class TransacoesController {
     description: 'Mês das transações',
     example: 4
   })
-  @Get('dados/:ano?/:mes?')
+  @Get('dados')
   findDados(@Headers('Authorization') access_token: string, @Query('ano') ano?: number, @Query('mes') mes?: number) {
     if (!access_token) {
       throw new UnauthorizedException('Token não encontrado');
@@ -130,10 +130,23 @@ export class TransacoesController {
     description: 'Usuário não encontrado',
   })
   @Get('historico')
-  findHistorico(@Headers('Authorization') access_token: string) {
+  findHistorico(@Headers('Authorization') access_token: string, @Query('ano') ano?: number, @Query('mes') mes?: number) {
     if (!access_token) {
       throw new UnauthorizedException('Token não encontrado');
     }
+
+    if (ano && mes && (!isNaN(Number(ano)) && !isNaN(Number(mes)))) {
+      return this.transacoesService.findHistory(access_token, Number(ano), Number(mes));
+    }
+
+    if (ano && !isNaN(Number(ano))) {
+      return this.transacoesService.findHistory(access_token, Number(ano));
+    }
+
+    if (mes && !isNaN(Number(mes))) {
+      return this.transacoesService.findHistory(access_token, null, Number(mes));
+    }
+
     return this.transacoesService.findHistory(access_token);
   }
 

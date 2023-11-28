@@ -38,7 +38,7 @@ interface AuthProviderProps {
     children: React.ReactNode
 }
 
-export const api_url: string = "https://finnapp.onrender.com/";
+export const api_url: string = "http://localhost:3300/";
 //"http://localhost:3300/"
 //"https://legendary-space-spoon-gvjqgjx7gx92vv5g-3300.app.github.dev/"
 //https://finnapp.onrender.com/ => link da api no render
@@ -53,6 +53,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     const [loading, setLoading] = useState<boolean>(false)
 
     const signin = async (data: singinData): Promise<string | void> => {
+
         setLoading(true)
         const response = await axios.post<User>(`${api_url}auth/login`, {
             email: data.email,
