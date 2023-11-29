@@ -3,7 +3,7 @@ import { TransacoesService } from './transacoes.service';
 import { CreateTransacoeDto } from './dto/create-transacoe.dto';
 import { UpdateTransacoeDto } from './dto/update-transacoe.dto';
 import { TransacoesorderBy } from 'src/usuarios/entities/usuario.entity';
-import { ApiBody, ApiHeader, ApiParam, ApiProperty, ApiQuery, ApiResponse } from '@nestjs/swagger';
+import { ApiBody, ApiHeader, ApiHeaders, ApiParam, ApiProperty, ApiQuery, ApiResponse } from '@nestjs/swagger';
 import { ulid } from 'ulidx';
 
 @Controller('transacoes')
@@ -87,12 +87,14 @@ export class TransacoesController {
   @ApiQuery({
     name: 'ano',
     description: 'Ano das transações',
-    example: 2021
+    example: 2021,
+    required: false
   })
   @ApiQuery({
     name: 'mes',
     description: 'Mês das transações',
-    example: 4
+    example: 4,
+    required: false
   })
   @Get('dados')
   findDados(@Headers('Authorization') access_token: string, @Query('ano') ano?: number, @Query('mes') mes?: number) {
@@ -111,11 +113,11 @@ export class TransacoesController {
     return this.transacoesService.findDados(access_token);
   }
 
-  @ApiHeader({
+  @ApiHeaders([{
     name: 'Authorization',
     description: 'Bearer token',
     example: 'Bearer token'
-  })
+  }])
   @ApiResponse({
     status: 200,
     description: 'Retorna os dados das transações do usuário',
@@ -128,6 +130,18 @@ export class TransacoesController {
   @ApiResponse({
     status: 404,
     description: 'Usuário não encontrado',
+  })
+  @ApiQuery({
+    name: 'ano',
+    description: 'Ano das transações',
+    example: 2021,
+    required: false
+  })
+  @ApiQuery({
+    name: 'mes',
+    description: 'Mês das transações',
+    example: 4,
+    required: false
   })
   @Get('historico')
   findHistorico(@Headers('Authorization') access_token: string, @Query('ano') ano?: number, @Query('mes') mes?: number) {

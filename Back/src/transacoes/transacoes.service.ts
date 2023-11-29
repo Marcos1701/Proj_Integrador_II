@@ -166,7 +166,7 @@ export class TransacoesService {
       throw new BadRequestException('Ano inválido');
     }
 
-    if (mes && (mes > 11 || mes < 0)) {
+    if (mes && (mes > 12 || mes <= 0)) {
       throw new BadRequestException('Mês inválido');
     }
 
@@ -180,33 +180,49 @@ export class TransacoesService {
       }
     }).filter(t => {
       if (ano && mes) {
-        return t.data.getFullYear() === ano && t.data.getMonth() === mes;
+        return t.data.getFullYear() === ano && t.data.getMonth() === mes - 1;
       } else if (ano) {
         return t.data.getFullYear() === ano;
       } else if (mes) {
-        return t.data.getMonth() === mes;
+        return t.data.getMonth() === mes - 1;
       }
       return true;
     });
 
     // agrupa as transações pelo ano e mês
     const history: {
-      [ano: number]: {
-        [mes: number]: TransacaoData[]
+      ano: number,
+      meses: {
+        mes: number,
+        transacoes: TransacaoData[]
+      }[]
+    }[] = [];
+
+    transacoes.forEach(t => {
+      const ano = t.data.getFullYear();
+      const mes = t.data.getMonth() + 1;
+
+      const anoIndex = history.findIndex(h => h.ano === ano);
+      if (anoIndex === -1) {
+        history.push({
+          ano,
+          meses: [{
+            mes,
+            transacoes: [t]
+          }]
+        })
+      } else {
+        const mesIndex = history[anoIndex].meses.findIndex(m => m.mes === mes);
+        if (mesIndex === -1) {
+          history[anoIndex].meses.push({
+            mes,
+            transacoes: [t]
+          })
+        } else {
+          history[anoIndex].meses[mesIndex].transacoes.push(t);
+        }
       }
-    }
-      = transacoes.reduce((acc, cur) => {
-        const ano = cur.data.getFullYear();
-        const mes = cur.data.getMonth();
-        if (!acc[ano]) {
-          acc[ano] = {};
-        }
-        if (!acc[ano][mes]) {
-          acc[ano][mes] = [];
-        }
-        acc[ano][mes].push(cur);
-        return acc;
-      }, {});
+    });
 
     return {
       history

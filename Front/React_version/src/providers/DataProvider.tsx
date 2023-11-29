@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { CategoriasDataResponse, CategoriasHistoryData, DataContext, DataContextData, MetasDataResponse, TransacoesDataResponse, TransacoesHistoryData } from "../Contexts/DataContext"
+import { CategoriasDataResponse, CategoriasHistoryData, DataContext, DataContextData, MetasDataResponse, TransacoesDataResponse, TransacoesHistory } from "../Contexts/DataContext"
 import axios from "axios"
 import { api_url, useAuth } from "../Contexts/AuthContext"
 
@@ -25,8 +25,8 @@ export function DataProvider({ children }: DataProviderProps) {
     const [DadosMeta, setDadosMeta] = useState<MetasDataResponse>({
         dados: []
     })
-    const [DadosTransacoesHistory, setDadosTransacoesHistory] = useState<TransacoesHistoryData>({
-        data: []
+    const [DadosTransacoesHistory, setDadosTransacoesHistory] = useState<TransacoesHistory>({
+        history: []
     })
     const [DadosCategoriasHistory, setDadosCategoriasHistory] = useState<CategoriasHistoryData>({
         data: []
@@ -76,13 +76,13 @@ export function DataProvider({ children }: DataProviderProps) {
 
         getDadosCategorias()
         getDadosTransacoes()
-        getDadosMetas()
+        // getDadosMetas()
     }, [updated, user])
 
     useEffect(() => {
         const getDadosTransacoesHistory = async () => {
             setLoading(true)
-            const response = await axios.get<TransacoesHistoryData>(`${api_url}transacoes/historico`, {
+            const response = await axios.get<TransacoesHistory>(`${api_url}transacoes/historico`, {
                 params: {
                     ano: TransacoesHistoryYear ? TransacoesHistoryYear : new Date().getFullYear(),
                     mes: TransacoesHistoryMonth ? TransacoesHistoryMonth : null
@@ -93,6 +93,7 @@ export function DataProvider({ children }: DataProviderProps) {
 
             })
             setDadosTransacoesHistory(response.data)
+            console.log(response.data)
             setLoading(false)
         }
 

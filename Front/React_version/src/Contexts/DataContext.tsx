@@ -43,14 +43,12 @@ export interface MetasDataResponse {
 
 export interface TransacoesHistory {
     history: {
-        [ano: number]: {
-            [mes: number]: TransacaoData[]
-        }
-    }
-}
-
-export interface TransacoesHistoryData {
-    data: TransacoesHistory[]
+        ano: number,
+        meses: {
+            mes: number,
+            transacoes: TransacaoData[]
+        }[]
+    }[]
 }
 
 export interface CategoriasHistory {
@@ -75,7 +73,7 @@ export interface DataContextData {
     DadosCategoria: CategoriasDataResponse
     DadosTransacao: TransacoesDataResponse
     DadosMeta: MetasDataResponse,
-    DadosTransacoesHistory: TransacoesHistoryData,
+    DadosTransacoesHistory: TransacoesHistory,
     setTransacoesHistoryYear: (year: number) => void,
     setTransacoesHistoryMonth: (month: number) => void,
     DadosCategoriasHistory: CategoriasHistoryData,
