@@ -8,6 +8,7 @@ import { ListaMetas } from "../List/ListMetasV2";
 import { SectionCategorias } from "./Components/SectionCategorias";
 import { DetailsMetaPage } from "../Pages/DetailsPage/Meta";
 import { IMeta } from "../List/ListMetasV2/Components/Meta";
+import { GraphTransactionHistory } from "./Components/GraphHistory/Transaction";
 
 export function Home() {
   const [showDetails, setShowDetails] = useState<boolean>(false);
@@ -21,6 +22,7 @@ export function Home() {
       {showDetails && transacao !== undefined && <DetailsTransacaoPage transacao={transacao} setShowDetails={setShowDetails} setTransacao={setTransacao} />}
       <section className="Principle">
         <SecaoActions_Home />
+        <GraphTransactionHistory />
         <ListTransacoes pagination={false} setShowDetails={setShowDetails} setTransacao={setTransacao} searchInput={false} orderSelect={false} />
       </section>
 
