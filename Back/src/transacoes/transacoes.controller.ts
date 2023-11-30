@@ -1,5 +1,5 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Header, Headers, Query, UnauthorizedException, HttpCode } from '@nestjs/common';
-import { TransacoesService } from './transacoes.service';
+import { SortField, SortOrder, TransacoesService } from './transacoes.service';
 import { CreateTransacoeDto } from './dto/create-transacoe.dto';
 import { UpdateTransacoeDto } from './dto/update-transacoe.dto';
 import { TransacoesorderBy } from 'src/usuarios/entities/usuario.entity';
@@ -58,12 +58,42 @@ export class TransacoesController {
     status: 404,
     description: 'Usuário não encontrado',
   })
+  @ApiQuery({
+    name: 'page',
+    description: 'Número da página',
+    example: 1,
+    required: false
+  })
+  @ApiQuery({
+    name: 'limit',
+    description: 'Limite de transações por página',
+    example: 10,
+    required: false
+  })
+  @ApiQuery({
+    name: 'sortField',
+    description: 'Campo para ordenação',
+    example: 'data',
+    required: false
+  })
+  @ApiQuery({
+    name: 'sortOrder',
+    description: 'Direção da ordenação',
+    example: 'DESC',
+    required: false
+  })
   @Get('')
-  findAll(@Headers('Authorization') access_token: string, @Query('orderby') orderby?: TransacoesorderBy, @Query('order') order?: 'ASC' | 'DESC', @Query('search') search?: string, @Query('categoriaid') categoriaid?: string) {
+  findAll(
+    @Headers('Authorization') access_token: string,
+    @Query('page') page?: number,
+    @Query('limit') limit?: number,
+    @Query('sortField') sortField?: SortField,
+    @Query('sortOrder') sortOrder?: SortOrder
+  ) {
     if (!access_token) {
       throw new UnauthorizedException('Token não encontrado');
     }
-    return this.transacoesService.findAll(access_token, orderby, order, search, categoriaid);
+    return this.transacoesService.findAll(access_token, page, limit, sortField, sortOrder);
   }
 
   @ApiHeader({
