@@ -1,7 +1,6 @@
 import { EntityManager, EntitySubscriberInterface, EventSubscriber, InsertEvent, LoadEvent, RemoveEvent, UpdateEvent } from "typeorm";
 import { Categoria } from "../entities/categoria.entity";
 import { BadRequestException, Injectable } from "@nestjs/common";
-import { Usuario } from "src/usuarios/entities/usuario.entity";
 
 
 @EventSubscriber()

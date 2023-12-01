@@ -94,17 +94,4 @@ export class Categoria {
     return await this.entityManager.save<Categoria>(this);
   }
 
-
-  // @BeforeUpdate()
-  // async validaOrcamento(
-  //   event: UpdateEvent<Categoria>
-  // ) {
-  //   if (!event.updatedColumns.find(column => column.propertyName === 'orcamento')) {
-  //     return;
-  //   }
-
-  //   if (event.entity.orcamento && event.entity.gasto > event.entity.orcamento) {
-  //     throw new Error('O orçamento não pode ser menor que o gasto');
-  //   }
-  // }
 }

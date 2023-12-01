@@ -22,7 +22,7 @@ export function DataProvider({ children }: DataProviderProps) {
         totalGasto: 0,
         totalEntrada: 0
     })
-    const [DadosMeta, setDadosMeta] = useState<MetasDataResponse>({
+    const [DadosMeta] = useState<MetasDataResponse>({
         dados: []
     })
     const [DadosTransacoesHistory, setDadosTransacoesHistory] = useState<TransacoesHistory>({
@@ -62,17 +62,17 @@ export function DataProvider({ children }: DataProviderProps) {
             setLoading(false)
         }
 
-        const getDadosMetas = async () => {
-            setLoading(true)
-            const response = await axios.get<MetasDataResponse>(`${api_url}metas/dados`, {
-                headers: {
-                    Authorization: user.access_token
-                }
+        // const getDadosMetas = async () => {
+        //     setLoading(true)
+        //     const response = await axios.get<MetasDataResponse>(`${api_url}metas/dados`, {
+        //         headers: {
+        //             Authorization: user.access_token
+        //         }
 
-            })
-            setDadosMeta(response.data)
-            setLoading(false)
-        }
+        //     })
+        //     setDadosMeta(response.data)
+        //     setLoading(false)
+        // }
 
         getDadosCategorias()
         getDadosTransacoes()

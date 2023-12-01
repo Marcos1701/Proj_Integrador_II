@@ -92,14 +92,17 @@ export class TransacoesService {
         titulo: t.titulo,
         valor: Number(t.valor),
         data: new Date(t.data),
-        tipo: t.tipo
+        tipo: t.tipo,
+        categoriaid: t.categoria ? t.categoria.id : null,
       }
     }).filter(t => {
       if (ano && mes) {
         return t.data.getFullYear() === ano && t.data.getMonth() === mes;
       } else if (ano) {
+        console.log("ano")
         return t.data.getFullYear() === ano;
       } else if (mes) {
+        console.log("mes")
         return t.data.getMonth() === mes;
       }
       return true;
@@ -189,7 +192,6 @@ export class TransacoesService {
       throw new NotFoundException('Usuário não encontrado');
     }
 
-
     if (ano && ano > new Date().getFullYear()) {
       throw new BadRequestException('Ano inválido');
     }
@@ -198,7 +200,7 @@ export class TransacoesService {
       throw new BadRequestException('Mês inválido');
     }
 
-    const transacoes = this.mapAndFilterTransactions(usuario.transacoes, ano, mes);
+    const transacoes = this.mapAndFilterTransactions(usuario.transacoes, ano == undefined ? ano : null, mes == undefined ? mes : null);
 
     // agrupa as transações pelo ano e mês
     const history: {
@@ -209,32 +211,23 @@ export class TransacoesService {
       }[]
     }[] = [];
 
-    transacoes.forEach(t => {
-      const ano = t.data.getFullYear();
-      const mes = t.data.getMonth() + 1;
-
-      const anoIndex = history.findIndex(h => h.ano === ano);
-      if (anoIndex === -1) {
+    for (let m = 0; m < 12; m++) {
+      const transacoesDoMes = transacoes.filter(t => {
+        const anoTransacao = ano || new Date().getFullYear();
+        return t.data.getFullYear() === anoTransacao && t.data.getMonth() === m;
+      });
+      if (!history.find(h => h.ano === ano || new Date().getFullYear())) {
         history.push({
-          ano,
-          meses: [{
-            mes,
-            transacoes: [t]
-          }]
-        })
-      } else {
-        const mesIndex = history[anoIndex].meses.findIndex(m => m.mes === mes);
-        if (mesIndex === -1) {
-          history[anoIndex].meses.push({
-            mes,
-            transacoes: [t]
-          })
-        } else {
-          history[anoIndex].meses[mesIndex].transacoes.push(t);
-        }
+          ano: ano || new Date().getFullYear(),
+          meses: []
+        });
       }
-    });
-
+      history.find(h => h.ano === ano || new Date().getFullYear()).meses.push({
+        mes: m + 1,
+        transacoes: transacoesDoMes
+      });
+    }
+    
     return {
       history
     }

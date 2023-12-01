@@ -22,9 +22,7 @@ export class CategoriasService {
 
   ) { }
 
-  async create(createCategoriaDto: CreateCategoriaDto, token: string) {
-    const usuario = await this.getUserFromtoken(token);
-
+  private async validateCategoriaDto(createCategoriaDto: CreateCategoriaDto) {
     if (!createCategoriaDto.nome) {
       throw new BadRequestException('Nome da categoria não informado'); // 400
     }
@@ -36,6 +34,18 @@ export class CategoriasService {
     if (createCategoriaDto.descricao && createCategoriaDto.descricao.length > 250) {
       throw new BadRequestException('Descrição da categoria muito longa'); // 400
     }
+  }
+
+  private async validateId(id: string) {
+    if (!id || id === '') {
+      throw new BadRequestException('id da categoria não informado'); // 404
+    }
+  }
+
+
+  async create(createCategoriaDto: CreateCategoriaDto, token: string) {
+    await this.validateCategoriaDto(createCategoriaDto);
+    const usuario = await this.getUserFromtoken(token);
 
     const categoria = new Categoria({ ...createCategoriaDto, usuario });
     await this.entityManager.save(categoria);
@@ -43,9 +53,7 @@ export class CategoriasService {
   }
 
   async findOne(id: string, usertoken: string) {
-    if (!id || id === '') {
-      throw new BadRequestException('id da categoria não informado'); // 404
-    }
+    await this.validateId(id);
     const usuario = await this.getUserFromtoken(usertoken);
 
     return await this.categoriasRepository.findOneBy({

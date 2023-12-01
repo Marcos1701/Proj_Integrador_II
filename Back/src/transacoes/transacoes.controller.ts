@@ -175,6 +175,7 @@ export class TransacoesController {
   })
   @Get('historico')
   findHistorico(@Headers('Authorization') access_token: string, @Query('ano') ano?: number, @Query('mes') mes?: number) {
+
     if (!access_token) {
       throw new UnauthorizedException('Token não encontrado');
     }
