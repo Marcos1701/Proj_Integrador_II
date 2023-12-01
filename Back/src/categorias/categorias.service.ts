@@ -8,6 +8,7 @@ import { Repository } from 'typeorm/repository/Repository';
 import { Usuario, CategoriasorderBy, TransacoesorderBy } from 'src/usuarios/entities/usuario.entity';
 import { JwtService } from '@nestjs/jwt';
 import { jwtDecodeUser } from 'src/auth/jwt.strategy';
+import { TransacaoData } from 'src/transacoes/transacoes.service';
 // nest g service categorias
 // para criar tudo  de uma vez
 
@@ -21,9 +22,7 @@ export class CategoriasService {
 
   ) { }
 
-  async create(createCategoriaDto: CreateCategoriaDto, token: string) {
-    const usuario = await this.getUserFromtoken(token);
-
+  private async validateCategoriaDto(createCategoriaDto: CreateCategoriaDto) {
     if (!createCategoriaDto.nome) {
       throw new BadRequestException('Nome da categoria não informado'); // 400
     }
@@ -35,6 +34,18 @@ export class CategoriasService {
     if (createCategoriaDto.descricao && createCategoriaDto.descricao.length > 250) {
       throw new BadRequestException('Descrição da categoria muito longa'); // 400
     }
+  }
+
+  private async validateId(id: string) {
+    if (!id || id === '') {
+      throw new BadRequestException('id da categoria não informado'); // 404
+    }
+  }
+
+
+  async create(createCategoriaDto: CreateCategoriaDto, token: string) {
+    await this.validateCategoriaDto(createCategoriaDto);
+    const usuario = await this.getUserFromtoken(token);
 
     const categoria = new Categoria({ ...createCategoriaDto, usuario });
     await this.entityManager.save(categoria);
@@ -42,9 +53,7 @@ export class CategoriasService {
   }
 
   async findOne(id: string, usertoken: string) {
-    if (!id || id === '') {
-      throw new BadRequestException('id da categoria não informado'); // 404
-    }
+    await this.validateId(id);
     const usuario = await this.getUserFromtoken(usertoken);
 
     return await this.categoriasRepository.findOneBy({
@@ -241,34 +250,49 @@ export class CategoriasService {
     })
 
     // agrupa, em cada categoria, as transacoes por ano e mes
-    const history = categoriasComTransacoes.reduce((acc, categoria) => {
-      const transacoes = categoria.transacoes.reduce((acc, transacao) => {
-        const dataTransacao = new Date(transacao.data);
-        const ano = dataTransacao.getFullYear();
-        const mes = dataTransacao.getMonth();
-
-        if (!acc[ano]) {
-          acc[ano] = {}
+    const history: {
+      [categoria: string]: {
+        [ano: number]: {
+          [mes: number]: {
+            transacoes: TransacaoData[],
+            nome: string,
+            id: string
+          }
         }
+      }
+    }
+      = categoriasComTransacoes.reduce((acc, categoria) => {
+        const transacoes = categoria.transacoes.reduce((acc, transacao) => {
+          const dataTransacao = new Date(transacao.data);
+          const ano = dataTransacao.getFullYear();
+          const mes = dataTransacao.getMonth();
 
-        if (!acc[ano][mes]) {
-          acc[ano][mes] = []
+          if (!acc[ano]) {
+            acc[ano] = {}
+          }
+
+          if (!acc[ano][mes]) {
+            acc[ano][mes] = []
+          }
+
+          acc[ano][mes].push(transacao);
+
+          return acc
         }
+          , {});
 
-        acc[ano][mes].push(transacao);
-
-        return acc
+        return {
+          ...acc,
+          [categoria.nome]: {
+            ...transacoes,
+            nome: categoria.nome,
+            id: categoria.id
+          }
+        } // {nomeCategoria: {ano: {mes: [transacoes]}}}
       }
         , {});
 
-      return {
-        ...acc,
-        [categoria.id]: transacoes
-      }
-    }
-      , {});
-
-    return history
+    return { history }
   }
 
   async historicoCategoria(id: string, access_token: string) {
@@ -309,7 +333,7 @@ export class CategoriasService {
     }
       , {});
 
-    return history
+    return { history }
   }
 
 

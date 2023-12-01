@@ -31,6 +31,20 @@ export interface TransacoesDadosResponse {
   totalEntrada: number
 }
 
+export enum SortField {
+  ID = 'id',
+  TIPO = 'tipo',
+  VALOR = 'valor',
+  TITULO = 'titulo',
+  DESCRICAO = 'descricao',
+  DATA = 'data',
+}
+
+export enum SortOrder {
+  ASC = 'ASC',
+  DESC = 'DESC',
+}
+
 @Injectable()
 export class TransacoesService {
   constructor(
@@ -38,69 +52,140 @@ export class TransacoesService {
     private readonly jwtService: JwtService,
   ) { }
 
-
-  async create(createTransacoeDto: CreateTransacoeDto, access_token: string) {
-
-    const usuario = await this.getUserFromtoken(access_token, ['transacoes']);
-    const categoria = await this.entityManager.findOne(
-      Categoria,
-      {
-        where: {
-          id: createTransacoeDto.categoriaid,
-          usuario: {
-            id: usuario.id
-          },
-        },
-        relations: {
-          usuario: true,
-          transacoes: true
-        }
-      });
-
-
-    if (!categoria && createTransacoeDto.tipo === 'saida') {
-      throw new NotFoundException('Categoria não encontrada');
+  // Função para validar o id da transação
+  private validateTransactionId(id: string) {
+    if (!id || id === '') {
+      throw new BadRequestException('id da transação não informado');
     }
-
-    if (categoria && categoria.orcamento &&
-      createTransacoeDto.tipo === 'saida' &&
-      categoria.gasto + createTransacoeDto.valor > categoria.orcamento
-    ) {
-      throw new BadRequestException('O valor da transação excede o orçamento da categoria');
-    }
-
-    const data = categoria ? { ...createTransacoeDto, categoria } : createTransacoeDto;
-
-    const result = await this.entityManager.insert<Transacao>(Transacao, {
-      ...data,
-      usuario
-    });
-
-    if (!result) {
-      throw new NotFoundException('Transação não encontrada');
-    }
-
-    return result;
   }
 
+  // Função para buscar um usuário a partir de um token
+  private async getUserFromToken(token: string, relations?: string[]): Promise<Usuario> {
+    const data = this.jwtService.decode(token) as jwtDecodeUser
 
-  async findOne(id: string, usuariotoken: string) {
-    if (!id || id === '') {
-      throw new BadRequestException('id da transação não informado'); // 404
+    const usuario = await this.entityManager.findOne(
+      Usuario,
+      {
+        where: {
+          id: data.id
+        },
+        relations: {
+          categorias: relations && relations.includes('categorias') ? true : false,
+          transacoes: relations && relations.includes('transacoes') ? true : false
+        }
+      }
+    );
+
+    if (!usuario) {
+      console.log('Usuário não encontrado');
+      throw new NotFoundException('Usuário não encontrado');
     }
-    const usuario = await this.getUserFromtoken(usuariotoken);
-    return this.entityManager.findOne(
-      Transacao, {
+
+    return usuario
+  }
+
+  // Função para mapear e filtrar as transações
+  private mapAndFilterTransactions(transacoes: Transacao[], ano?: number, mes?: number) {
+    return transacoes.map(t => {
+      return {
+        id: t.id,
+        titulo: t.titulo,
+        valor: Number(t.valor),
+        data: new Date(t.data),
+        tipo: t.tipo,
+        categoriaid: t.categoria ? t.categoria.id : null,
+      }
+    }).filter(t => {
+      if (ano && mes) {
+        return t.data.getFullYear() === ano && t.data.getMonth() === mes;
+      } else if (ano) {
+        console.log("ano")
+        return t.data.getFullYear() === ano;
+      } else if (mes) {
+        console.log("mes")
+        return t.data.getMonth() === mes;
+      }
+      return true;
+    });
+  }
+
+  // Agora você pode reutilizar essas funções nas suas funções existentes
+  async findOne(id: string, usuariotoken: string) {
+    this.validateTransactionId(id);
+    const usuario = await this.getUserFromToken(usuariotoken);
+
+    const transacao = await this.entityManager.findOne(Transacao, {
       where: {
         id,
         usuario: {
           id: usuario.id
         }
+      },
+      relations: {
+        categoria: true
       }
     });
+
+    if (!transacao) {
+      console.log('Transação não encontrada');
+      throw new NotFoundException('Transação não encontrada');
+    }
+
+    return transacao;
+  }
+
+  async create(createTransacoeDto: CreateTransacoeDto, usuariotoken: string) {
+    const usuario = await this.getUserFromToken(usuariotoken, ['categorias']);
+
+    const categoria = createTransacoeDto.categoriaid &&
+      await this.entityManager.findOne(Categoria, {
+        where: {
+          id: createTransacoeDto.categoriaid,
+          usuario: {
+            id: usuario.id
+          }
+        }
+      });
+
+    if (!categoria && createTransacoeDto.tipo === 'saida') {
+      console.log('Categoria não encontrada');
+      throw new NotFoundException('Categoria não encontrada');
+    }
+
+    const transacao = this.entityManager.create(Transacao, {
+      ...createTransacoeDto,
+      categoria: categoria,
+      usuario: usuario
+    });
+
+    await this.entityManager.save(transacao);
+
+    return transacao;
   }
 
   async findDados(usuariotoken: string, ano?: number, mes?: number) {
+    const usuario = await this.getUserFromtoken(usuariotoken, ['transacoes']);
+
+    if (ano && ano > new Date().getFullYear()) {
+      throw new BadRequestException('Ano inválido');
+    }
+
+    if (mes && (mes > 11 || mes < 0)) {
+      throw new BadRequestException('Mês inválido');
+    }
+
+    const dados = this.mapAndFilterTransactions(usuario.transacoes, ano, mes);
+    const totalGasto = dados.filter(t => t.tipo === 'saida').reduce((acc, t) => acc + t.valor, 0);
+    const totalEntrada = dados.filter(t => t.tipo === 'entrada').reduce((acc, t) => acc + t.valor, 0);
+
+    return {
+      dados,
+      totalGasto,
+      totalEntrada
+    }
+  }
+
+  async findHistory(usuariotoken: string, ano?: number, mes?: number) {
     const usuario = await this.getUserFromtoken(usuariotoken, ['transacoes']);
 
     if (!usuario) {
@@ -111,99 +196,77 @@ export class TransacoesService {
       throw new BadRequestException('Ano inválido');
     }
 
-    if (mes && (mes > 11 || mes < 0)) {
+    if (mes && (mes > 12 || mes <= 0)) {
       throw new BadRequestException('Mês inválido');
     }
 
-    const transacoes = usuario.transacoes.map(t => {
-      return {
-        id: t.id,
-        titulo: t.titulo,
-        valor: Number(t.valor),
-        data: new Date(t.data),
-        tipo: t.tipo
-      }
-    }).filter(t => {
-      if (ano && mes) {
-        return t.data.getFullYear() === ano && t.data.getMonth() === mes;
-      } else if (ano) {
-        return t.data.getFullYear() === ano;
-      } else if (mes) {
-        return t.data.getMonth() === mes;
-      }
-      return true;
-    })
-
-    const totalGasto = transacoes.filter(t => t.tipo === 'saida').reduce((acc, cur) => acc + cur.valor, 0);
-    const totalEntrada = transacoes.filter(t => t.tipo === 'entrada').reduce((acc, cur) => acc + cur.valor, 0);
-
-    const dados = transacoes.map(t => {
-      return {
-        id: t.id,
-        titulo: t.titulo,
-        valor: t.valor,
-        data: t.data,
-        tipo: t.tipo
-      }
-    })
-
-    return {
-      dados,
-      totalGasto,
-      totalEntrada
-    }
-  }
-
-  async findHistory(usuariotoken: string) {
-    const usuario = await this.getUserFromtoken(usuariotoken, ['transacoes']);
-
-    if (!usuario) {
-      throw new NotFoundException('Usuário não encontrado');
-    }
-
-    const transacoes = usuario.transacoes.map(t => {
-      return {
-        id: t.id,
-        titulo: t.titulo,
-        valor: Number(t.valor),
-        data: new Date(t.data),
-        tipo: t.tipo
-      }
-    })
+    const transacoes = this.mapAndFilterTransactions(usuario.transacoes, ano == undefined ? ano : null, mes == undefined ? mes : null);
 
     // agrupa as transações pelo ano e mês
-    const history = transacoes.reduce((acc, cur) => {
-      const ano = cur.data.getFullYear();
-      const mes = cur.data.getMonth();
-      if (!acc[ano]) {
-        acc[ano] = {};
-      }
-      if (!acc[ano][mes]) {
-        acc[ano][mes] = [];
-      }
-      acc[ano][mes].push(cur);
-      return acc;
-    }, {}); // {ano: {mes: [transacoes]}}
+    const history: {
+      ano: number,
+      meses: {
+        mes: number,
+        transacoes: TransacaoData[]
+      }[]
+    }[] = [];
 
-    return history;
+    for (let m = 0; m < 12; m++) {
+      const transacoesDoMes = transacoes.filter(t => {
+        const anoTransacao = ano || new Date().getFullYear();
+        return t.data.getFullYear() === anoTransacao && t.data.getMonth() === m;
+      });
+      if (!history.find(h => h.ano === ano || new Date().getFullYear())) {
+        history.push({
+          ano: ano || new Date().getFullYear(),
+          meses: []
+        });
+      }
+      history.find(h => h.ano === ano || new Date().getFullYear()).meses.push({
+        mes: m + 1,
+        transacoes: transacoesDoMes
+      });
+    }
+    
+    return {
+      history
+    }
   }
 
-  async findAll(usuariotoken: string, orderby?: TransacoesorderBy, order?: 'ASC' | 'DESC', search?: string, categoriaid?: string) {
-    const usuario = await this.getUserFromtoken(usuariotoken, ['transacoes']);
+  async findAll(usuariotoken: string, page: number = 1, limit: number = 10, sortField: SortField = SortField.DATA, sortOrder: SortOrder = SortOrder.DESC) {
+    // Validação dos parâmetros de paginação
+    if (page < 1) throw new BadRequestException('Número da página deve ser maior ou igual a 1');
+    if (limit < 1) throw new BadRequestException('Limite deve ser maior ou igual a 1');
 
-    if (!usuario) {
-      throw new NotFoundException('Usuário não encontrado');
+    // Validação dos parâmetros de ordenação
+    if (!Object.values(SortField).includes(sortField)) {
+      throw new BadRequestException('Campo de ordenação inválido');
+    }
+    if (!Object.values(SortOrder).includes(sortOrder)) {
+      throw new BadRequestException('Direção de ordenação inválida');
     }
 
-    const transacoes = usuario.getTransacoes(
-      order ? order : null,
-      orderby ? orderby : null,
-      search ? search : null,
-      categoriaid ? categoriaid : null
-    )
-    return transacoes;
-  }
+    const usuario = await this.getUserFromToken(usuariotoken, ['transacoes']);
 
+    // Cálculo do offset
+    const offset = (page - 1) * limit;
+
+    // Busca das transações com paginação e ordenação
+    const transacoes = await this.entityManager.find(Transacao, {
+      where: { usuario: { id: usuario.id } },
+      take: limit,
+      skip: offset,
+      relations: ['categoria'],
+      order: {
+        [sortField]: sortOrder,
+      },
+    });
+
+    // Mapeamento e filtragem das transações
+    const mappedTransacoes = this.mapAndFilterTransactions(transacoes);
+
+    return mappedTransacoes;
+  }
 
 
   async update(id: string, updateTransacoeDto: UpdateTransacoeDto, access_token: string) {

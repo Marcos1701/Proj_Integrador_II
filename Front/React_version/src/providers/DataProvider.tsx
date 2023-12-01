@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { CategoriasDataResponse, CategoriasHistoryData, DataContext, DataContextData, MetasDataResponse, TransacoesDataResponse, TransacoesHistoryData } from "../Contexts/DataContext"
+import { CategoriasDataResponse, CategoriasHistoryData, DataContext, DataContextData, MetasDataResponse, TransacoesDataResponse, TransacoesHistory } from "../Contexts/DataContext"
 import axios from "axios"
 import { api_url, useAuth } from "../Contexts/AuthContext"
 
@@ -22,11 +22,11 @@ export function DataProvider({ children }: DataProviderProps) {
         totalGasto: 0,
         totalEntrada: 0
     })
-    const [DadosMeta, setDadosMeta] = useState<MetasDataResponse>({
+    const [DadosMeta] = useState<MetasDataResponse>({
         dados: []
     })
-    const [DadosTransacoesHistory, setDadosTransacoesHistory] = useState<TransacoesHistoryData>({
-        data: []
+    const [DadosTransacoesHistory, setDadosTransacoesHistory] = useState<TransacoesHistory>({
+        history: []
     })
     const [DadosCategoriasHistory, setDadosCategoriasHistory] = useState<CategoriasHistoryData>({
         data: []
@@ -62,27 +62,27 @@ export function DataProvider({ children }: DataProviderProps) {
             setLoading(false)
         }
 
-        const getDadosMetas = async () => {
-            setLoading(true)
-            const response = await axios.get<MetasDataResponse>(`${api_url}metas/dados`, {
-                headers: {
-                    Authorization: user.access_token
-                }
+        // const getDadosMetas = async () => {
+        //     setLoading(true)
+        //     const response = await axios.get<MetasDataResponse>(`${api_url}metas/dados`, {
+        //         headers: {
+        //             Authorization: user.access_token
+        //         }
 
-            })
-            setDadosMeta(response.data)
-            setLoading(false)
-        }
+        //     })
+        //     setDadosMeta(response.data)
+        //     setLoading(false)
+        // }
 
         getDadosCategorias()
         getDadosTransacoes()
-        getDadosMetas()
+        // getDadosMetas()
     }, [updated, user])
 
     useEffect(() => {
         const getDadosTransacoesHistory = async () => {
             setLoading(true)
-            const response = await axios.get<TransacoesHistoryData>(`${api_url}transacoes/historico`, {
+            const response = await axios.get<TransacoesHistory>(`${api_url}transacoes/historico`, {
                 params: {
                     ano: TransacoesHistoryYear ? TransacoesHistoryYear : new Date().getFullYear(),
                     mes: TransacoesHistoryMonth ? TransacoesHistoryMonth : null
@@ -93,6 +93,7 @@ export function DataProvider({ children }: DataProviderProps) {
 
             })
             setDadosTransacoesHistory(response.data)
+            console.log(response.data)
             setLoading(false)
         }
 

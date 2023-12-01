@@ -37,6 +37,7 @@ export function FormLogin() {
         }
 
         setRequest(true)
+
         const error = await signin(dados)
 
         if (error) {

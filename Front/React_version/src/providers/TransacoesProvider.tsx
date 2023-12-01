@@ -35,11 +35,13 @@ export function TransacoesProvider({ children }: TransacoesProviderProps) {
                     Authorization: user.access_token,
                 }
             })
+
             if (response.status === 401 || !response.data) {
                 setLoading(false)
                 alert('Sessão expirada')
                 return
             }
+
             setTransacoes(response.data)
             setUpdated(false)
             setLoading(false)

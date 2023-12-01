@@ -1,3 +1,51 @@
+@font-face {
+  font-family: Eina03-SemiBold;
+  src: url('fonts/Eina/Eina03-SemiBold.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+@font-face {
+  font-family: Eina03-Bold;
+  src: url('fonts/Eina/Eina03-Bold.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+@font-face {
+  font-family: Eina03-Regular;
+  src: url('fonts/Eina/Eina03-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+@font-face {
+  font-family: Eina01-Regular;
+  src: url('fonts/Eina/Eina01-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+@font-face {
+  font-family: Eina01-Bold;
+  src: url('fonts/Eina/Eina01-Bold.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+@font-face {
+  font-family: Eina01-SemiBold;
+  src: url('fonts/Eina/Eina01-SemiBold.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
 * {
   margin: 0;
   padding: 0;

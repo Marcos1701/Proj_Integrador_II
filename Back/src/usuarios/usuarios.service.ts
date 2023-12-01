@@ -1,13 +1,11 @@
 import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { CreateUsuarioDto } from './dto/create-usuario.dto';
 import { UpdateUsuarioDto } from './dto/update-usuario.dto';
-import { EntityManager, IsNull, Not } from 'typeorm';
+import { EntityManager } from 'typeorm';
 import { Usuario } from './entities/usuario.entity';
-import { InjectRepository } from '@nestjs/typeorm';
 import { JwtService } from '@nestjs/jwt';
 import { jwtConstants } from 'src/auth/auth.constants';
 import { jwtDecodeUser } from 'src/auth/jwt.strategy';
-import { Transacao } from 'src/transacoes/entities/transacao.entity';
 
 @Injectable()
 export class UsuariosService {

@@ -1,4 +1,4 @@
-import { Body, Controller, Post, UseGuards } from '@nestjs/common';
+import { BadRequestException, Body, Controller, HttpCode, Post, UseGuards } from '@nestjs/common';
 import { SingInData } from './auth.models';
 import { AuthService, SingUpData } from './auth.service';
 import { ApiBody, ApiResponse } from '@nestjs/swagger';
@@ -43,10 +43,13 @@ export class AuthController {
             }
         }
     })
-
     // @UseGuards(LocalAuthGuard)
+    @HttpCode(200)
     @Post('login')
     async login(@Body() data: SingInData) {
+        if (!data.email || !data.senha) {
+            throw new BadRequestException("Dados inválidos, login não realizado!!")
+        }
         return this.authService.validarUsuario(data);
     }
 
@@ -114,8 +117,15 @@ export class AuthController {
             }
         }
     })
+    @HttpCode(201)
+    // @UseGuards(LocalAuthGuard)
     @Post('signup')
     async signup(@Body() user: SingUpData) {
+
+        if (!user.email || !user.senha || !user.nome) {
+            throw new BadRequestException("Dados inválidos, cadastro não realizado!!")
+        }
+
         return this.authService.signup(user);
     }
 }

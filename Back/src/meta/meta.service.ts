@@ -102,7 +102,7 @@ export class MetaService {
       throw new BadRequestException('O valor a ser adicionado deve ser maior que o valor atual'); // 400
     }
     if (valor > meta.valor) {
-      throw new BadRequestException('O valor a ser adicionado deve ser menor que o valor da meta'); // 400
+      throw new BadRequestException('O valor a ser adicionado deve ser menor ou igual ao valor da meta'); // 400
     }
 
     const result = await this.entityManager.update(

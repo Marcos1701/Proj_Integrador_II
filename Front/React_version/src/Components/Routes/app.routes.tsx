@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import { ProtectedRoute } from "../ProtectedRoute";
 import { Home } from "../Home";
 import { TransacoesPage } from "../Pages/TransacoesPage";
@@ -28,6 +28,12 @@ export function PatchRoutes() {
                 <ProtectedRoute>
                     <MetasPage />
                 </ProtectedRoute>
+            } />
+            <Route path="/login" element={
+                <Navigate to={'/'} />
+            } />
+            <Route path="/signup" element={
+                <Navigate to={'/'} />
             } />
             <Route path="*" element={
                 <NotFoundPage />

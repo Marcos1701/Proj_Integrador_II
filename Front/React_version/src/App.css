@@ -106,6 +106,16 @@ form.add-element-form {
   }
 }
 
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
 .App-sidebar-footer {
   display: flex;
   flex-direction: column;
@@ -114,7 +124,7 @@ form.add-element-form {
   gap: 0;
   padding: 1em 0;
   width: clamp(150px, 100%, 300px);
-  height: fit-content;
+  min-height: 170px;
   border-radius: 20px;
   background: #1D1D41;
 
@@ -134,6 +144,7 @@ form.add-element-form {
     background: #1D1D41;
     gap: 1em;
     margin-left: 3em;
+    animation: fade-in 0.5s ease-in-out;
 
     & li {
 
@@ -180,17 +191,22 @@ form.add-element-form {
 
 .sidebar-footer-button {
   margin: 0;
-  padding: 0;
+  padding: .7em 1em;
   background: none;
   margin-bottom: 1em;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 1em;
+  font-size: clamp(12px, 1vw, 16px);
+  text-wrap: nowrap;
 
   & img {
     background: var(--background, #bed2daf0);
     border-radius: 50%;
+    width: clamp(25px, 3.5vw, 40px);
+    height: clamp(25px, 3.5vw, 40px);
+    
   }
 }
 

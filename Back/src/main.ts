@@ -19,10 +19,9 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
   app.enableCors(
     {
-      origin: '*',
-      methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-      preflightContinue: false,
-      optionsSuccessStatus: 204,
+      origin: '*', // libera o acesso para qualquer origem
+      methods: '*', // libera o acesso para qualquer método
+
     } // libera o acesso para qualquer origem e qualquer método
   );
   await app.listen(3300);
