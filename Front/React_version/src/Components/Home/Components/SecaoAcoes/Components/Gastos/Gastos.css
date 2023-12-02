@@ -1,6 +1,7 @@
 .values-layout {
-    width: 291px;
-    height: 86px;
+    width: fit-content;
+    max-width: 291px;
+    height: 76px;
     flex-shrink: 0;
     border-radius: 20px;
     background: #1D1D41;
@@ -9,15 +10,14 @@
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    gap: 20px;
-    flex-direction: row;
-    padding-left: 2em;
-    padding-right: 1.5em;
+    gap: 15px;
+    padding-left: 1.5em;
+    padding-right: 2.5em;
 }
 
 .Gastos-Icon {
-    width: 34.99px;
-    height: 34.99px;
+    width: 32.99px;
+    height: 32.99px;
     border-radius: 10px;
     background: #64CFF6;
     display: flex;
@@ -44,17 +44,18 @@
         text-align: center;
         color: #8C89B4;
         font-family: Eina03-SemiBold;
-        font-size: 16px;
+        font-size: 15px;
         font-style: normal;
         font-weight: 400;
         line-height: normal;
         margin: 0;
 
-        & p {
-            font-size: 14px;
-            font-weight: 400;
-            margin: 0;
-        }
+    }
+
+    & p {
+        font-size: 15.7px;
+        font-weight: 400;
+        margin: 0
     }
 }
 

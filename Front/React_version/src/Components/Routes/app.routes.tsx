@@ -5,6 +5,8 @@ import { TransacoesPage } from "../Pages/TransacoesPage";
 import { CategoriasPage } from "../Pages/CategoriasPage";
 import { NotFoundPage } from "../Pages/NotFoundPage";
 import { MetasPage } from "../Pages/MetasPage";
+import { AddTransacaoPage } from "../Home/Components/AddItemPage/Transacao";
+import { AddCategoriaPage } from "../Home/Components/AddItemPage/Categoria";
 
 export function PatchRoutes() {
     return (
@@ -14,28 +16,42 @@ export function PatchRoutes() {
                     <Home />
                 </ProtectedRoute>
             } />
-            <Route path="/transacoes" element={
-                <ProtectedRoute>
-                    <TransacoesPage />
-                </ProtectedRoute>
-            } />
-            <Route path="/categorias" element={
-                <ProtectedRoute>
-                    <CategoriasPage />
-                </ProtectedRoute>
-            } />
-            <Route path="/metas" element={
+            <Route path="transacoes" >
+                <Route path="" element={ // rota relativa à rota pai "transacoes"
+                    <ProtectedRoute>
+                        <TransacoesPage />
+                    </ProtectedRoute>
+                } />
+                <Route path="add" element={ // rota relativa à rota pai "transacoes"
+                    <ProtectedRoute>
+                        <AddTransacaoPage />
+                    </ProtectedRoute>
+                } />
+            </Route>
+            <Route path="categorias">
+                <Route path="" element={ // rota relativa à rota pai "categorias"
+                    <ProtectedRoute>
+                        <CategoriasPage />
+                    </ProtectedRoute>
+                } />
+                <Route path="add" element={ // rota relativa à rota pai "categorias"
+                    <ProtectedRoute>
+                        <AddCategoriaPage />
+                    </ProtectedRoute>
+                } />
+            </Route>
+            <Route path="metas" element={
                 <ProtectedRoute>
                     <MetasPage />
                 </ProtectedRoute>
             } />
-            <Route path="/login" element={
+            <Route path="login" element={ // rota absoluta, pois não está aninhada
                 <Navigate to={'/'} />
             } />
-            <Route path="/signup" element={
+            <Route path="signup" element={ // rota absoluta, pois não está aninhada
                 <Navigate to={'/'} />
             } />
-            <Route path="*" element={
+            <Route path="*" element={ // rota absoluta, pois não está aninhada
                 <NotFoundPage />
             } />
         </Routes>

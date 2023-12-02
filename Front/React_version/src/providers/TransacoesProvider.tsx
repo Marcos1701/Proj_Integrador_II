@@ -5,6 +5,7 @@ import { useAuth, api_url } from "../Contexts/AuthContext"
 import { TransacoesContext, TransacoesContextData, SortFieldTransacao } from "../Contexts/TransacoesContext"
 import { ITransacao } from "../Components/List/ListTransacoesCard/Components/Transacao"
 import { OrderElements } from "./CategoriasProvider"
+import { Navigate } from "react-router-dom"
 
 
 interface TransacoesProviderProps {
@@ -17,7 +18,7 @@ export function TransacoesProvider({ children }: TransacoesProviderProps) {
     const [ordenarPor, setOrdenarPor] = useState<SortFieldTransacao>(SortFieldTransacao.DATA)
     const [ordem, setOrdem] = useState<OrderElements>(OrderElements.DESC)
     const [pagina, setPagina] = useState<number>(1)
-    const [limite, setLimite] = useState<number>(10)
+    const [limite, setLimite] = useState<number>(3)
     const [search, setSearch] = useState<string>('')
     const [loading, setLoading] = useState<boolean>(true)
     const { user } = useAuth();
@@ -43,7 +44,7 @@ export function TransacoesProvider({ children }: TransacoesProviderProps) {
             if (response.status === 401 || !response.data) {
                 setLoading(false)
                 alert('Sessão expirada')
-                return
+                return <Navigate to={'/login'} />
             }
 
             setTransacoes(response.data)

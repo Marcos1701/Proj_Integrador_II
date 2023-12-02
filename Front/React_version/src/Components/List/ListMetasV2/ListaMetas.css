@@ -1,6 +1,6 @@
 .ListaMetas {
     width: clamp(200px, 340px, 350px);
-    height: 320px;
+    height: 300px;
     flex-shrink: 0;
     border-radius: 20px;
     background: #1D1D41;
@@ -9,7 +9,7 @@
     flex-direction: column;
     gap: 0;
     align-items: center;
-    justify-content: space-around;
+    justify-content: space-evenly;
 
     & .header {
         width: 100%;

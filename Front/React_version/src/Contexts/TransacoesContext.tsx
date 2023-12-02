@@ -41,6 +41,6 @@ export const TransacoesContext = createContext<TransacoesContextData>({
     loading: true,
     pagina: 1,
     setPagina: () => { },
-    limite: 10,
+    limite: 3,
     setLimite: () => { }
 });

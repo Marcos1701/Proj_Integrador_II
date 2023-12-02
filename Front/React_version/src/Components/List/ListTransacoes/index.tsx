@@ -2,7 +2,7 @@ import { CategoriasContext, CategoriasOrderContext } from "../../../Contexts/Cat
 import { TransacoesContext, TransacoesContextData } from "../../../Contexts/TransacoesContext";
 import { ICategoria } from "../ListCategorias/Components/Categoria";
 import { ITransacao } from "../ListTransacoesCard/Components/Transacao";
-import { useContext, useState } from "react";
+import { useContext, useEffect } from "react";
 import './ListTransacoes.css'
 import { Box } from "./Components/Box/box";
 import { Link } from "react-router-dom";
@@ -38,6 +38,17 @@ export function ListTransacoes(
     const { transacoes, loading, pagina, setPagina, limite, setLimite }: TransacoesContextData = useContext(TransacoesContext)
     const categorias: ICategoria[] = useContext(CategoriasContext)
     const { loading: loadingCategorias } = useContext(CategoriasOrderContext)
+
+    useEffect(() => {
+        if (pagina !== page) {
+            setPagina(page)
+        }
+
+        if (limite !== limit) {
+            setLimite(limit)
+        }
+
+    }, [pagina, page, limite, limit])
 
 
     return (

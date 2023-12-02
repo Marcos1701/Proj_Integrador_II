@@ -1,13 +1,10 @@
 import axios from "axios";
 import { useAuth, api_url } from "../../../../../Contexts/AuthContext";
-import { useContext, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { CategoriasContext, CategoriasOrderContext, CategoriasOrderContextData } from "../../../../../Contexts/CategoriasContext";
 import { TransacoesContext, TransacoesContextData } from "../../../../../Contexts/TransacoesContext";
 import "../Form.css"
-
-interface IAdicionarTransacaoFormProps {
-    setExibirAdicionarTransacaoForm: React.Dispatch<React.SetStateAction<boolean>>;
-}
+import { Navigate } from "react-router-dom";
 
 
 export const MoneyValidation = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -33,13 +30,9 @@ export const MoneyValidation = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.target.value = valueAsMoney;
 }
 
-export function AdicionarTransacaoForm({ setExibirAdicionarTransacaoForm }: IAdicionarTransacaoFormProps) {
+export function AdicionarTransacaoForm() {
 
     const categorias = useContext(CategoriasContext);
-    if (!categorias || categorias.length === 0) {
-        confirm("Você precisa adicionar uma categoria antes de adicionar uma transação");
-        setExibirAdicionarTransacaoForm(false);
-    }
 
     const titulo = useRef<HTMLInputElement>(null);
     const valor = useRef<HTMLInputElement>(null);
@@ -56,31 +49,69 @@ export function AdicionarTransacaoForm({ setExibirAdicionarTransacaoForm }: IAdi
     const [msgErroText, setMsgErroText] = useState<string>('')
     const { setUpdated }: TransacoesContextData = useContext(TransacoesContext)
     const { setUpdated: setUpdatedCat }: CategoriasOrderContextData = useContext(CategoriasOrderContext)
+    const [retorno, setRetorno] = useState<boolean>(false);
+
+    const [ableCategoria, setAbleCategoria] = useState<boolean>(false);
+
+    const [abletoAdd, setAbletoAdd] = useState<boolean>(false);
+
+    const validate = () => {
+        if (titulo.current?.value && valor.current?.value && data.current?.value && tipo.current?.value && (categoria.current?.value || tipo.current?.value === 'entrada')) {
+            return setAbletoAdd(true);
+        }
+        setAbletoAdd(false);
+    }
+
+
+    useEffect(() => {
+        validate();
+    }, [titulo.current?.value, valor.current?.value, data.current?.value, tipo.current?.value])
+    // habilitar o select de categorias se houver categorias
+
+    useEffect(() => {
+        if (categorias.length > 0 && tipo.current?.value === 'saida') {
+            setAbleCategoria(true);
+        }
+    }, [categorias, tipo.current?.value])
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
-        if (!titulo.current?.value || !valor.current?.value || !data.current?.value || !tipo.current?.value || !categoria.current?.value) {
+        if (!titulo.current?.value || !valor.current?.value || !data.current?.value || !tipo.current?.value) {
             return
         }
 
-        const transacao =
+        if (!categoria.current?.value && tipo.current?.value === 'saida') {
+            setMsgErro(true);
+            setMsgErroText('Selecione uma categoria');
+            return;
+        }
+
+        const transacao: {
+            titulo: string,
+            valor: number,
+            data: Date,
+            tipo: string,
+            descricao?: string,
+            categoriaid?: string
+        } =
             !descricao.current?.value || descricao.current?.value === '' ?
                 {
-                    categoriaid: categoria.current.value,
                     titulo: titulo.current.value,
                     valor: Number(valor.current.value.replace(/[^0-9]/g, '')),
                     data: new Date(data.current.value),
                     tipo: tipo.current.value,
                 } :
                 {
-                    categoriaid: categoria.current.value,
                     titulo: titulo.current.value,
                     valor: Number(valor.current.value.replace(/[^0-9]/g, '')),
                     data: new Date(data.current.value),
                     tipo: tipo.current.value,
                     descricao: descricao.current.value,
                 }
+        if (categoria.current?.value) {
+            transacao.categoriaid = categoria.current.value;
+        }
 
         await axios.post(`${api_url}transacoes`, transacao, {
             headers: {
@@ -99,7 +130,10 @@ export function AdicionarTransacaoForm({ setExibirAdicionarTransacaoForm }: IAdi
         valor.current.value = 'R$ 0';
         data.current.value = new Date().toISOString().split('T')[0];
         tipo.current.value = '';
-        categoria.current.value = '';
+        if (categoria.current) {
+            categoria.current.value = '';
+        }
+
         if (descricao.current) {
             descricao.current.value = '';
         }
@@ -109,7 +143,7 @@ export function AdicionarTransacaoForm({ setExibirAdicionarTransacaoForm }: IAdi
         setMsgSucesso(true);
         setTimeout(() => {
             setMsgSucesso(false);
-            setExibirAdicionarTransacaoForm(false);
+            setRetorno(true);
         }, 3000);
     }
 
@@ -117,21 +151,29 @@ export function AdicionarTransacaoForm({ setExibirAdicionarTransacaoForm }: IAdi
     return (
 
         <form className="add-element-form" onSubmit={handleSubmit}>
-            <h2>Adicionar Transação</h2>
 
             {msgSucesso && <p className="successmsg">Transação adicionada com sucesso!</p>}
             {msgErro && <p className="errormsg">{msgErroText}</p>}
-
+            {retorno && <>
+                <p className="successmsg">Redirecionando...</p>
+                <Navigate to="/" />
+            </>
+            }
             <div className="input-div">
                 <label htmlFor="titulo">Titulo</label>
-                <input type="text" placeholder="Titulo da Transação" ref={titulo} className="input-nome" required />
+                <input type="text" placeholder="Titulo da Transação" ref={titulo} className="input-nome" required onChange={validate} />
             </div>
 
             <div className="valor-data-div">
                 <div className="input-div">
                     <label htmlFor="valor">Valor</label>
                     <input type="text"
-                        onChange={MoneyValidation}
+                        onChange={(
+                            (event: React.ChangeEvent<HTMLInputElement>) => {
+                                MoneyValidation(event)
+                                validate()
+                            }
+                        )}
                         defaultValue="R$ 0"
                         ref={valor} className="input-valor"
                         required
@@ -145,6 +187,7 @@ export function AdicionarTransacaoForm({ setExibirAdicionarTransacaoForm }: IAdi
                         max={new Date().toISOString().split('T')[0]}
                         // initial value
                         defaultValue={new Date().toISOString().split('T')[0]}
+                        onChange={validate}
                     />
                 </div>
             </div>
@@ -153,26 +196,42 @@ export function AdicionarTransacaoForm({ setExibirAdicionarTransacaoForm }: IAdi
 
                 <div className="label-element-div">
                     <label htmlFor="tipo">Tipo</label>
-                    <select ref={tipo} required defaultValue=''>
+                    <select ref={tipo} required defaultValue='' onChange={
+                        (event) => {
+                            validate();
+                            if (event.target.value === 'saida') {
+                                return setAbleCategoria(true);
+                            }
+                            setAbleCategoria(false);
+                        }
+                    }>
                         <option value="" disabled>Selecione o tipo</option> {/* o value vazio é necessário para o required funcionar */}
                         <option value="entrada">Entrada</option>
-                        <option value="saida">Saída</option>
+                        <option value="saida"
+                            disabled={categorias.length === 0}
+                            // desabilitar a opção de saída se não houver categorias
+                            title={
+                                categorias.length === 0 ? // se não houver categorias, exibir o título
+                                    'Adicione uma categoria para poder adicionar uma transação de saída' :
+                                    '' // se houver categorias, não exibir o título
+                            }
+                        >Saída</option>
                     </select>
                 </div>
 
-                <div className="label-element-div">
-                    <label htmlFor="categoria">Categoria</label>
-                    <select ref={categoria} required defaultValue=''>
-                        <option value="" disabled>Selecione uma categoria</option>
-                        {
-                            // categorias.length > 0 ?
-                            categorias.map(categoria => (
-                                <option key={categoria.id} value={categoria.id}>{categoria.nome}</option>
-                            ))
-                            // : <option value="Sem categoria">Sem categoria</option>
-                        }
-                    </select>
-                </div>
+                {ableCategoria && // se o tipo for saída, exibir o select de categorias
+                    <div className="label-element-div">
+                        <label htmlFor="categoria">Categoria</label>
+                        <select ref={categoria} required defaultValue='' onChange={validate}>
+                            <option value="" disabled>Selecione uma categoria</option>
+                            {
+                                categorias.map(categoria => (
+                                    <option key={categoria.id} value={categoria.id}>{categoria.nome}</option>
+                                ))
+                            }
+                        </select>
+                    </div>
+                }
             </div>
 
             <div className="label-element-div">
@@ -181,10 +240,10 @@ export function AdicionarTransacaoForm({ setExibirAdicionarTransacaoForm }: IAdi
             </div>
 
             <div className="button-div">
-                <button type="button" onClick={() => setExibirAdicionarTransacaoForm(false)} className="cancel-form-button">Cancelar</button>
-                <button type="submit" className="submit-form-button">Adicionar</button>
+                <button type="button" onClick={() => setRetorno(true)} className="cancel-form-button">Cancelar</button>
+                <button type="submit" className="submit-form-button" disabled={!abletoAdd}>Adicionar</button>
             </div>
-        </form>
+        </form >
 
     )
 }

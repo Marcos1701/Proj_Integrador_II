@@ -2,9 +2,125 @@ main.Home {
     display: flex;
     align-items: center;
     flex-direction: row;
-    gap: 1.5em;
+    gap: 1.2em;
     width: 100%;
     padding: 0 1em;
+}
+
+.Home-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 95%;
+
+    & h1 {
+        color: var(--text, #FFF);
+        font-family: Eina03-SemiBold;
+        font-size: 19.1px;
+        font-weight: 600;
+        letter-spacing: 0;
+        line-height: normal;
+        text-align: left;
+        margin: 0;
+        padding: 0;
+    }
+
+    & p {
+        color: var(--text-secondary, #AEABD8);
+        font-family: Eina03-Regular;
+        font-size: 13px;
+        font-weight: 400;
+        letter-spacing: 0;
+        line-height: normal;
+        text-align: left;
+        margin: 0;
+        padding: 0;
+    }
+}
+
+.AddItem {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 0.5em;
+    margin-left: 1em;
+    margin-top: 1em;
+
+    & button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: fit-content;
+        height: fit-content;
+        gap: 0.5em;
+        padding: 0.5em 1em;
+        border-radius: 10px;
+        border: 1px solid var(--accent, #2844BD);
+        background-color: var(--buttons-primary, #7949FF);
+        color: var(--buttons-text, #FFF);
+        font-family: Eina03-SemiBold;
+        font-size: 14px;
+        font-weight: 600;
+        letter-spacing: 0;
+        line-height: normal;
+        text-align: center;
+        text-transform: uppercase;
+        transition: all .2s ease-in-out;
+
+        & img {
+            width: 1.5em;
+            height: 1.5em;
+        }
+
+        &:hover {
+            background: var(--buttons-primary-hover, #646cff);
+        }
+    }
+
+    & .opcoes_adicionar {
+        display: none;
+    }
+
+    & .opcoes_adicionar-active {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        gap: 0.5em;
+        width: fit-content;
+        padding: 0.5em 1em;
+        margin-left: 1em;
+        margin-top: 1em;
+
+        background: var(--background-secondary, #1F1D2B);
+        position: absolute;
+        z-index: 1;
+        border-radius: 10px;
+        box-shadow: 0px 4.74877px 10px 0px rgba(0, 0, 0, 0.08);
+        transition: all .2s ease-in-out;
+        top: 10%;
+
+        & a {
+            text-align: left;
+            color: var(--text-secondary, #AEABD8);
+            font-family: Eina03-Regular;
+            font-size: 13px;
+            font-weight: 400;
+            letter-spacing: 0;
+            line-height: normal;
+            text-align: left;
+            margin: 0;
+
+            &:hover {
+                color: var(--text-secondary-hover, #FFF);
+            }
+        }
+
+
+
+    }
+
 }
 
 .Principle,
@@ -13,7 +129,7 @@ main.Home {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 1.5em;
+    gap: 1.2em;
     width: 100%;
     height: 100%;
 

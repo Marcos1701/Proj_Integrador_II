@@ -32,22 +32,14 @@ export function GraphTransactionHistory() {
 
     useEffect(() => {
         if (!DadosTransacoesHistory) return
-
         setValores(calculateValues(DadosTransacoesHistory.history, ano))
-
     }, [DadosTransacoesHistory, updated, ano])
 
     const option: echarts.EChartsOption
         = useMemo(() => ({
             title: {
                 text: 'Gastos por ano',
-                textStyle: {
-                    color: '#7949FF',
-                    fontSize: 20,
-                    fontWeight: 'bold'
-                },
-                left: 'center',
-                top: '10px'
+                show: false
             },
             tooltip: {
                 trigger: 'axis',
@@ -100,17 +92,20 @@ export function GraphTransactionHistory() {
 
     return (
         <div className="transaction-graph">
-            <select name="ano" id="ano" onChange={(e) => { setAno(Number(e.target.value)) }} value={ano} disabled={loading} title="Selecione um ano">
-                {DadosTransacoesHistory?.history.length === 0 ? <option value={0} disabled={true}>Carregando...</option> : <option value={0} disabled={true}>Selecione um ano</option>}
-                {DadosTransacoesHistory?.history.sort((a, b) => b.ano - a.ano).map((valor, index) => {
-                    return <option key={index} value={valor.ano}>{valor.ano}</option>
-                })}
-            </select>
+            <div className="header">
+                <h2 className="title">Gastos por ano</h2>
+                <select name="ano" id="ano" onChange={(e) => { setAno(Number(e.target.value)) }} value={ano} disabled={loading} title="Selecione um ano">
+                    {DadosTransacoesHistory?.history.length === 0 ? <option value={0} disabled={true}>Carregando...</option> : <option value={0} disabled={true}>Selecione um ano</option>}
+                    {DadosTransacoesHistory?.history.sort((a, b) => b.ano - a.ano).map((valor, index) => {
+                        return <option key={index} value={valor.ano}>{valor.ano}</option>
+                    })}
+                </select>
+            </div>
             {loading ? <ScaleLoader color="#7949FF" className="loader" content="Carregando..." />
                 :
                 <ReactECharts
                     option={option}
-                    style={{ height: "250px", width: "550px", gap: "10px" }}
+                    style={{ height: "300px", width: "550px", gap: "10px" }}
                 />
             }
         </div >
