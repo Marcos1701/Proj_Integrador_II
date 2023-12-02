@@ -4,7 +4,7 @@ import { Transform } from 'class-transformer';
 import { Categoria } from 'src/categorias/entities/categoria.entity';
 import { Meta } from 'src/meta/entities/meta.entity';
 import { Transacao } from 'src/transacoes/entities/transacao.entity';
-import { Column, Entity, EntityManager, JoinColumn, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, EntityManager, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 export enum CategoriasorderBy {
   nome = "nome",

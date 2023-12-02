@@ -4,7 +4,6 @@ import { Transacao } from "../entities/transacao.entity";
 import { Categoria } from "src/categorias/entities/categoria.entity";
 import { Usuario } from "src/usuarios/entities/usuario.entity";
 
-
 @EventSubscriber()
 @Injectable()
 export class TransacaoSubscriber implements EntitySubscriberInterface<Transacao>{
@@ -22,26 +21,34 @@ export class TransacaoSubscriber implements EntitySubscriberInterface<Transacao>
         this.transacao.valor = Number(this.transacao.valor);
     }
 
-    async afterInsert(event: InsertEvent<Transacao>) {
-
-        const usuario = await this.mananger.findOne(Usuario, {
-            where: { id: event.entity.usuario.id },
+    private async getUsuario(id: string) {
+        return await this.mananger.findOne(Usuario, {
+            where: { id: id },
             relations: { transacoes: true }
         }).catch(err => {
             return undefined;
         });
+    }
+
+    private async getCategoria(id: string) {
+        return await this.mananger.findOne(Categoria, {
+            where: { id: id },
+            relations: { usuario: true }
+        }).catch(err => {
+            return undefined;
+        });
+    }
+
+    async afterInsert(event: InsertEvent<Transacao>) {
+        const usuario = await this.getUsuario(event.entity.usuario.id);
 
         if (!usuario) {
             event.queryRunner.rollbackTransaction();
             throw new BadRequestException('Usuario não encontrado');
         }
 
-        const categoria = await this.mananger.findOne(Categoria, {
-            where: { id: event.entity.categoria.id },
-            relations: { usuario: true }
-        }).catch(err => {
-            return undefined;
-        });
+        const categoria = await this.getCategoria(event.entity.categoria.id);
+
         if (!categoria && event.entity.tipo === 'saida') {
             event.queryRunner.rollbackTransaction();
             throw new BadRequestException('Categoria não encontrada');

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 
 import axios from "axios"
 import { useAuth, api_url } from "../Contexts/AuthContext"
-import { TransacoesContext, TransacoesContextData, ordenarTransacoes } from "../Contexts/TransacoesContext"
+import { TransacoesContext, TransacoesContextData, SortFieldTransacao } from "../Contexts/TransacoesContext"
 import { ITransacao } from "../Components/List/ListTransacoesCard/Components/Transacao"
 import { OrderElements } from "./CategoriasProvider"
 
@@ -14,8 +14,10 @@ interface TransacoesProviderProps {
 export function TransacoesProvider({ children }: TransacoesProviderProps) {
     const [transacoes, setTransacoes] = useState<ITransacao[]>([])
     const [updated, setUpdated] = useState<boolean>(false)
-    const [ordenarPor, setOrdenarPor] = useState<ordenarTransacoes>(ordenarTransacoes.data)
+    const [ordenarPor, setOrdenarPor] = useState<SortFieldTransacao>(SortFieldTransacao.DATA)
     const [ordem, setOrdem] = useState<OrderElements>(OrderElements.DESC)
+    const [pagina, setPagina] = useState<number>(1)
+    const [limite, setLimite] = useState<number>(10)
     const [search, setSearch] = useState<string>('')
     const [loading, setLoading] = useState<boolean>(true)
     const { user } = useAuth();
@@ -26,9 +28,11 @@ export function TransacoesProvider({ children }: TransacoesProviderProps) {
             setLoading(true)
             const response = await axios.get<ITransacao[]>(`${api_url}transacoes`, {
                 params: {
-                    orderby: ordenarPor,
-                    order: ordem,
-                    search: search
+                    sortField: ordenarPor,
+                    sortOrder: ordem,
+                    search: search,
+                    page: pagina,
+                    limit: limite
                 },
                 headers: {
                     getAuthorization: true,
@@ -47,7 +51,7 @@ export function TransacoesProvider({ children }: TransacoesProviderProps) {
             setLoading(false)
         }
         loadTransacoes()
-    }, [updated, user, ordem, ordenarPor, search])
+    }, [updated, user, ordem, ordenarPor, search, pagina, limite])
 
     const value: TransacoesContextData = {
         transacoes,
@@ -59,7 +63,11 @@ export function TransacoesProvider({ children }: TransacoesProviderProps) {
         setOrdenarPor,
         search,
         setSearch,
-        loading
+        loading,
+        pagina,
+        setPagina,
+        limite,
+        setLimite
     }
 
     return (

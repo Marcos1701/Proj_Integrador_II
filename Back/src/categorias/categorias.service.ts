@@ -9,8 +9,6 @@ import { Usuario, CategoriasorderBy, TransacoesorderBy } from 'src/usuarios/enti
 import { JwtService } from '@nestjs/jwt';
 import { jwtDecodeUser } from 'src/auth/jwt.strategy';
 import { TransacaoData } from 'src/transacoes/transacoes.service';
-// nest g service categorias
-// para criar tudo  de uma vez
 
 @Injectable()
 export class CategoriasService {
@@ -64,7 +62,6 @@ export class CategoriasService {
   }
 
   async findAll(usertoken: string, orderby?: CategoriasorderBy, order?: 'ASC' | 'DESC', search?: string) {
-
     const usuario: Usuario = await this.getUserFromtoken(usertoken);
     const categorias = usuario.getCategorias(order, orderby, search);
 
@@ -165,8 +162,7 @@ export class CategoriasService {
 
   async dados(access_token: string) {
     const usuario = await this.getUserFromtoken(access_token);
-    const categorias = usuario.getCategorias('DESC', CategoriasorderBy.gasto);
-    const categoriasComTransacoes = categorias.map(categoria => {
+    const categoriasComTransacoes = usuario.getCategorias('DESC', CategoriasorderBy.gasto).map(categoria => {
       const transacoes = usuario.getTransacoes("DESC", null, null, categoria.id);
       return {
         ...categoria,
@@ -175,19 +171,18 @@ export class CategoriasService {
     })
 
     const data = new Date();
-    const dados = categoriasComTransacoes.filter(categoria => {
-      return categoria.transacoes.some(transacao => {
+    const dados = categoriasComTransacoes.map(categoria => {
+      categoria.transacoes = categoria.transacoes.filter(transacao => {
         const dataTransacao = new Date(transacao.data);
         return dataTransacao.getMonth() === data.getMonth() && dataTransacao.getFullYear() === data.getFullYear();
       })
-    }).map(categoria => {
       return {
         id: categoria.id,
         nome: categoria.nome,
         gasto: categoria.gasto,
         qtdTransacoes: categoria.transacoes.length
       }
-    });
+    })
 
     const totalGasto = categoriasComTransacoes.reduce((acc, categoria) => {
       return categoria.gasto ? acc + categoria.gasto : acc

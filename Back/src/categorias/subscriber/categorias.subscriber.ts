@@ -2,7 +2,6 @@ import { EntityManager, EntitySubscriberInterface, EventSubscriber, InsertEvent,
 import { Categoria } from "../entities/categoria.entity";
 import { BadRequestException, Injectable } from "@nestjs/common";
 
-
 @EventSubscriber()
 @Injectable()
 export class CategoriasSubscriber implements EntitySubscriberInterface<Categoria>{
@@ -15,11 +14,15 @@ export class CategoriasSubscriber implements EntitySubscriberInterface<Categoria
         return Categoria;
     }
 
-    private async AtualizaSaldo(categoria: Categoria) {
-        const categoria_ = await this.mananger.findOne(Categoria, {
+    private async getCategoria(categoria: Categoria) {
+        return await this.mananger.findOne(Categoria, {
             where: { id: categoria.id },
             relations: { transacoes: true }
         });
+    }
+
+    private async AtualizaSaldo(categoria: Categoria) {
+        const categoria_ = await this.getCategoria(categoria);
 
         if (!categoria_) {
             return;
@@ -27,17 +30,13 @@ export class CategoriasSubscriber implements EntitySubscriberInterface<Categoria
 
         categoria_.gasto = categoria_.transacoes.reduce((acc, curr) => { return acc + curr.valor }, 0);
         await this.mananger.save(categoria_);
+        return categoria_;
     }
-
 
     afterLoad(entity: Categoria, event?: LoadEvent<Categoria>): void | Promise<any> {
         this.categoria = entity;
         this.AtualizaSaldo(this.categoria);
-    }
-
-
-    async beforeInsert(event: InsertEvent<Categoria>) {
-        console.log(`Adicionando categoria ${event.entity.nome} ao usuário ${event.entity.usuario.nome}`)
+        return;
     }
 
     async afterUpdate(event: UpdateEvent<Categoria>) {
@@ -45,9 +44,9 @@ export class CategoriasSubscriber implements EntitySubscriberInterface<Categoria
         const gasto = event.entity.gasto ? Number(event.entity.gasto) : 0;
         if (event.entity.orcamento && gasto > Number(event.entity.orcamento)) {
             await event.queryRunner.rollbackTransaction();
-            console.log(event.entity.orcamento, this.categoria.gasto)
-            console.log(event.entity)
-            console.log(this.categoria)
+            // console.log(event.entity.orcamento, this.categoria.gasto)
+            // console.log(event.entity)
+            // console.log(this.categoria)
             throw new BadRequestException('O valor do orçamento é menor que o gasto da categoria');
         }
         // tudo certo
@@ -55,11 +54,7 @@ export class CategoriasSubscriber implements EntitySubscriberInterface<Categoria
     }
 
     async beforeRemove(event: RemoveEvent<Categoria>) {
-
-        const categoria = await this.mananger.findOne(Categoria, {
-            where: { id: event.entity.id },
-            relations: { usuario: true, transacoes: true }
-        });
+        const categoria = await this.getCategoria(event.entity);
 
         if (!categoria) {
             return;
@@ -67,7 +62,6 @@ export class CategoriasSubscriber implements EntitySubscriberInterface<Categoria
 
         categoria.usuario.saldo += categoria.gasto;
         await this.mananger.save(categoria.usuario);
+        return categoria;
     }
-
-
 }

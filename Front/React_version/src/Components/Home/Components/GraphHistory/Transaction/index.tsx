@@ -66,6 +66,9 @@ export function GraphTransactionHistory() {
                 },
                 axisLabel: {
                     color: '#7949FF'
+                },
+                axisTick: {
+                    show: false
                 }
             },
             yAxis: {
@@ -79,6 +82,7 @@ export function GraphTransactionHistory() {
                     color: '#7949FF'
                 }
             },
+            // para remover as linhas de grade
             series: [{
                 data: valores,
                 type: 'bar',

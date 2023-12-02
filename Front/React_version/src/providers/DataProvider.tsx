@@ -46,6 +46,7 @@ export function DataProvider({ children }: DataProviderProps) {
                 }
 
             })
+            console.log(response.data)
             setDadosCategoria(response.data)
             setLoading(false)
         }
