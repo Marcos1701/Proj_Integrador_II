@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { CreateUsuarioDto } from './dto/create-usuario.dto';
 import { UpdateUsuarioDto } from './dto/update-usuario.dto';
 import { EntityManager } from 'typeorm';
@@ -15,12 +15,18 @@ export class UsuariosService {
   ) { }
 
   async create(createUsuarioDto: CreateUsuarioDto) {
-    const usuario = new Usuario({
-      ...createUsuarioDto,
-      saldo: 0
-    });
-    await this.entityManager.save(usuario);
-    return usuario;
+    const usuario = await this.entityManager.insert<Usuario>(
+      Usuario,
+      {
+        ...createUsuarioDto
+      }
+    )
+
+    if (usuario.identifiers.length === 0) {
+      throw new BadRequestException(usuario.raw.message ? usuario.raw.message : 'Erro ao criar usuário');
+    }
+    //retorna o usuário criado
+    return await this.entityManager.findOne(Usuario, usuario.identifiers[0].id)
   }
 
   async findOneByEmail(email: string): Promise<Usuario | null> {
@@ -73,7 +79,11 @@ export class UsuariosService {
 
     const { access_token } = await this.gerarToken(usuario);
 
-    await this.entityManager.save(usuario);
+    await this.entityManager.update(
+      Usuario,
+      { id },
+      { ...usuario }
+    )
     return access_token;
   }
 
@@ -93,16 +103,18 @@ export class UsuariosService {
   }
 
   remove(access_token: string) {
-    return this.entityManager.delete(
-      Usuario, { JWT: access_token }
-    );
+    const { id } = this.jwtService.decode(access_token) as jwtDecodeUser
+    if (!id) {
+      throw new UnauthorizedException('Usuário não encontrado');
+    }
+    return this.entityManager.delete(Usuario, { id })
   }
 
   async getSaldo(access_token: string) {
-    const usuario = await this.getUserFromtoken(access_token)
+    const usuario = await this.getUserFromtoken(access_token, false, true, false)
     const saldo = usuario.saldo
     usuario.atualizarSaldo()
-    saldo !== usuario.saldo && await this.entityManager.save(usuario)
+    saldo !== usuario.saldo && await this.entityManager.update(Usuario, { id: usuario.id }, { saldo: usuario.saldo })
     return usuario.saldo
   }
 
@@ -111,7 +123,7 @@ export class UsuariosService {
     return usuario
   }
 
-  private getUserFromtoken(token: string): Promise<Usuario> {
+  private getUserFromtoken(token: string, metas?: boolean, transacoes?: boolean, categorias?: boolean): Promise<Usuario> {
     const data = this.jwtService.decode(token) as jwtDecodeUser
 
     if (!data || !data.id) {
@@ -120,16 +132,23 @@ export class UsuariosService {
 
     const { id } = data;
 
+    const relations = [
+      metas ? 'metas' : '',
+      transacoes ? 'transacoes' : '',
+      transacoes ? 'transacoes.categoria' : '',
+      categorias ? 'categorias' : ''
+    ].filter(rel => rel !== '')
+
     const usuario = this.entityManager.findOne<Usuario>(
       Usuario,
       {
         where: { id },
-        relations: ['transacoes', 'transacoes.categoria']
+        relations: relations
       }
     )
 
     if (!usuario) {
-      console.log('Usuário não encontrado');
+      // console.log('Usuário não encontrado');
       throw new NotFoundException('Usuário não encontrado'); // 404
     }
 

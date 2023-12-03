@@ -18,7 +18,7 @@ export class MetaService {
   async create(access_token: string, createMetaDto: CreateMetaDto) {
     const usuario: Usuario = await this.getUserFromtoken(access_token)
 
-    const meta = this.entityManager.create(
+    const meta = await this.entityManager.insert(
       'Meta',
       {
         ...createMetaDto,
@@ -26,7 +26,10 @@ export class MetaService {
       }
     )
 
-    await this.entityManager.save(meta)
+    if (meta.identifiers.length === 0) {
+      throw new BadRequestException(meta.raw.message ? meta.raw.message : 'Erro ao criar meta');
+    }
+    // await this.entityManager.save(meta) // -> não precisa mais, pois o insert já salva
 
     return meta
   }

@@ -48,6 +48,7 @@ export function TransacoesProvider({ children }: TransacoesProviderProps) {
             }
 
             setTransacoes(response.data)
+            console.log(response.data)
             setUpdated(false)
             setLoading(false)
         }

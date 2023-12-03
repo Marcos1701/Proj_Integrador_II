@@ -24,16 +24,49 @@ export class TransacaoSubscriber implements EntitySubscriberInterface<Transacao>
     private async getUsuario(id: string) {
         return await this.mananger.findOne(Usuario, {
             where: { id: id },
-            relations: { transacoes: true }
+            select: {
+                id: true,
+                saldo: true,
+                transacoes: {
+                    id: true,
+                    tipo: true,
+                    valor: true,
+                    titulo: true,
+                    data: true
+                }
+            }
         }).catch(err => {
             return undefined;
         });
     }
 
-    private async getCategoria(id: string) {
+    private async getCategoria(id: string, usuario?: boolean, transacoes?: boolean) {
         return await this.mananger.findOne(Categoria, {
             where: { id: id },
-            relations: { usuario: true }
+            select: {
+                id: true,
+                nome: true,
+                gasto: true,
+                orcamento: true,
+                usuario: usuario ? {
+                    id: true,
+                    saldo: true,
+                    transacoes: transacoes ? {
+                        id: true,
+                        tipo: true,
+                        valor: true,
+                        titulo: true,
+                        data: true
+                    } : false
+                } : {},
+                transacoes: transacoes ? {
+                    id: true,
+                    tipo: true,
+                    valor: true,
+                    titulo: true,
+                    data: true
+                } : false
+            }
         }).catch(err => {
             return undefined;
         });
@@ -71,8 +104,13 @@ export class TransacaoSubscriber implements EntitySubscriberInterface<Transacao>
             usuario.saldo -= event.entity.valor;
         }
 
-        categoria && await this.mananger.save<Categoria>(categoria);
-        await this.mananger.save<Usuario>(categoria.usuario);
+        categoria && await this.mananger.update<Categoria>(Categoria, { id: categoria.id }, {
+            gasto: categoria.gasto
+        });
+
+        await this.mananger.update<Usuario>(Usuario, { id: usuario.id }, {
+            saldo: usuario.saldo
+        });
 
         return; // tudo certo
     }
@@ -162,9 +200,6 @@ export class TransacaoSubscriber implements EntitySubscriberInterface<Transacao>
         const categoria = await this.mananger.findOne(Categoria, {
             where: {
                 id: event.entity.categoria.id
-            },
-            relations: {
-                transacoes: true
             }
         });
 
@@ -176,9 +211,6 @@ export class TransacaoSubscriber implements EntitySubscriberInterface<Transacao>
         const usuario = await this.mananger.findOne(Usuario, {
             where: {
                 id: event.entity.usuario.id
-            },
-            relations: {
-                transacoes: true
             }
         });
 
@@ -197,7 +229,13 @@ export class TransacaoSubscriber implements EntitySubscriberInterface<Transacao>
         }
 
 
-        await this.mananger.save<Categoria>(categoria);
-        await this.mananger.save<Usuario>(usuario);
+        await Promise.all([
+            await this.mananger.update<Usuario>(Usuario, { id: usuario.id }, {
+                saldo: usuario.saldo
+            }),
+            await this.mananger.update<Categoria>(Categoria, { id: categoria.id }, {
+                gasto: categoria.gasto
+            })
+        ]) // dessa forma, as duas queries são executadas ao mesmo tempo
     }
 }

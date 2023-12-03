@@ -1,6 +1,8 @@
 import { EntityManager, EntitySubscriberInterface, EventSubscriber, InsertEvent, LoadEvent, RemoveEvent, UpdateEvent } from "typeorm";
 import { Categoria } from "../entities/categoria.entity";
 import { BadRequestException, Injectable } from "@nestjs/common";
+import { Usuario } from "src/usuarios/entities/usuario.entity";
+import { Transacao } from "src/transacoes/entities/transacao.entity";
 
 @EventSubscriber()
 @Injectable()
@@ -14,12 +16,30 @@ export class CategoriasSubscriber implements EntitySubscriberInterface<Categoria
         return Categoria;
     }
 
-    private async getCategoria(categoria: Categoria) {
-        return await this.mananger.findOne(Categoria, {
+    private async getCategoria(categoria: Categoria, user?: boolean) {
+        if (categoria.transacoes) return categoria;
+        const categoria_ = await this.mananger.findOne(Categoria, {
             where: { id: categoria.id },
-            relations: { transacoes: true }
+            select: {
+                id: true,
+                nome: true,
+                gasto: true,
+                orcamento: true,
+                usuario: user ? {
+                    id: true,
+                    saldo: true
+                } : {}
+            }
         });
+
+        if (categoria_) {
+            categoria_.transacoes = await this.mananger.find(Transacao, {
+                where: { categoria: { id: categoria_.id } },
+            });
+        }
+        return categoria_;
     }
+
 
     private async AtualizaSaldo(categoria: Categoria) {
         const categoria_ = await this.getCategoria(categoria);
@@ -28,8 +48,15 @@ export class CategoriasSubscriber implements EntitySubscriberInterface<Categoria
             return;
         }
 
-        categoria_.gasto = categoria_.transacoes.reduce((acc, curr) => { return acc + curr.valor }, 0);
-        await this.mananger.save(categoria_);
+        categoria_.gasto = categoria_.transacoes.reduce((acc, curr) => {
+            curr.data = new Date(curr.data);
+            if (curr.data.getMonth() === new Date().getMonth() && curr.data.getFullYear() === new Date().getFullYear()) {
+                return acc + Number(curr.valor);
+            }
+            return acc;
+        }, 0);
+
+        await this.mananger.update(Categoria, categoria_.id, { gasto: categoria_.gasto });
         return categoria_;
     }
 
@@ -44,9 +71,6 @@ export class CategoriasSubscriber implements EntitySubscriberInterface<Categoria
         const gasto = event.entity.gasto ? Number(event.entity.gasto) : 0;
         if (event.entity.orcamento && gasto > Number(event.entity.orcamento)) {
             await event.queryRunner.rollbackTransaction();
-            // console.log(event.entity.orcamento, this.categoria.gasto)
-            // console.log(event.entity)
-            // console.log(this.categoria)
             throw new BadRequestException('O valor do orçamento é menor que o gasto da categoria');
         }
         // tudo certo
@@ -61,7 +85,7 @@ export class CategoriasSubscriber implements EntitySubscriberInterface<Categoria
         }
 
         categoria.usuario.saldo += categoria.gasto;
-        await this.mananger.save(categoria.usuario);
+        await this.mananger.update(Usuario, categoria.usuario.id, categoria.usuario);
         return categoria;
     }
 }
