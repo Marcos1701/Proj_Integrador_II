@@ -78,7 +78,7 @@ export function GraphTransactionHistory() {
                 axisLabel: {
                     color: '#7949FF',
                     formatter: (value: number) => {
-                        return `R$ ${value.toFixed(2)}`
+                        return `R$ ${value.toFixed(0)}`
                     },
                     fontSize: 12,
                     fontFamily: 'Eina03-SemiBold',
@@ -132,8 +132,10 @@ export function GraphTransactionHistory() {
                             type: 'average', name: 'Média', label: {
                                 show: true, position: 'end',
                                 formatter: (params: any) => {
-                                    return `R$ ${params.value.toFixed(2)}`
-                                }
+                                    return `R$ ${params.value.toFixed(0)}`
+                                },
+                                color: '#FFF',
+                                borderColor: '#7949FF',
                             }
                         },
                     ],
@@ -162,13 +164,14 @@ export function GraphTransactionHistory() {
                     // para definir o width e height do gráfico, é necessário definir no css da div pai
                     // para evitar que o grafico exceda o tamanho da div pai, é necessário definir overflow: hidden no css da div pai
                     style={{
-                        width: 'clamp(300px, 550px, 100%)',
-                        height: '100%',
+                        width: 'clamp(300px, 550px, 600px)',
+                        height: 'clamp(200px, 200px, 300px)',
+                        padding: '0',
+                        margin: '0',
                         display: 'flex',
                         justifyContent: 'center',
                         alignItems: 'center',
-                        overflow: 'hidden',
-                        contentVisibility: 'auto'
+                        overflow: 'visible',
                     }}
 
                     settings={{

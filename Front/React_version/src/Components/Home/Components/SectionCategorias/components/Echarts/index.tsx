@@ -4,6 +4,9 @@ import type { CSSProperties } from "react";
 import type { EChartsOption, ECharts, SetOptionOpts } from "echarts";
 import { LiquidFillGaugeOption } from "../interface";
 
+//npm install --save echarts-for-react
+//yarn add echarts-for-react
+
 export interface ReactEChartsProps {
     option: EChartsOption | LiquidFillGaugeOption;
     style?: CSSProperties;
@@ -60,7 +63,6 @@ export function ReactECharts({
     // para que o grafico não exceda o tamanho da div pai, é necessário definir overflow: hidden no css da div pai
 
     return <div ref={chartRef} style={{
-        ...style,
-        overflow: 'hidden'
+        ...style
     }} />;
 }
