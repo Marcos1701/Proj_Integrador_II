@@ -5,6 +5,10 @@ import "./Transaction.css"
 import { TransacoesContext } from "../../../../../Contexts/TransacoesContext";
 import { ScaleLoader } from "react-spinners";
 
+//npm install apexcharts --save
+// yarn add apexcharts
+// para salvar globalmente: yarn add apexcharts --global
+
 export function GraphTransactionHistory() {
     const { DadosTransacoesHistory, loading } = useContext(DataContext);
     const { updated } = useContext(TransacoesContext)
@@ -33,19 +37,20 @@ export function GraphTransactionHistory() {
     useEffect(() => {
         if (!DadosTransacoesHistory) return
         setValores(calculateValues(DadosTransacoesHistory.history, ano))
-    }, [DadosTransacoesHistory, updated, ano])
+        console.log('valores', valores)
+    }, [DadosTransacoesHistory, updated, ano, loading])
 
     const option: echarts.EChartsOption
-        = useMemo(() => ({
-            title: {
-                text: 'Gastos por ano',
-                show: false
-            },
+        = useMemo(() => ({ // para definir o width e height do gráfico, é necessário definir no css da div pai
+
             tooltip: {
                 trigger: 'axis',
                 axisPointer: {
                     type: 'shadow'
-                }
+                },
+                formatter: (params: any) => {
+                    return `R$ ${params[0].value.toFixed(2)}`
+                },
             },
             xAxis: {
                 type: 'category',
@@ -71,8 +76,30 @@ export function GraphTransactionHistory() {
                     }
                 },
                 axisLabel: {
-                    color: '#7949FF'
-                }
+                    color: '#7949FF',
+                    formatter: (value: number) => {
+                        return `R$ ${value.toFixed(2)}`
+                    },
+                    fontSize: 12,
+                    fontFamily: 'Eina03-SemiBold',
+                    fontWeight: 'bold',
+                    width: '100%',
+                    overflow: 'break',
+                    whiteSpace: 'nowrap',
+                },
+                axisTick: {
+                    show: false
+                },
+                splitLine: {
+                    show: false
+                },
+                splitArea: {
+                    show: false
+                },
+                minInterval: 1,
+                min: 0,
+                max: 1000
+
             },
             // para remover as linhas de grade
             series: [{
@@ -82,13 +109,76 @@ export function GraphTransactionHistory() {
                     color: '#7949FF',
                     opacity: 0.8,
                     BorderRadius: 5,
+                    shadowColor: '#7949FF',
+                    shadowBlur: 5,
+                    shadowOffsetY: 5
                 },
                 label: {
                     show: true,
-                    color: '#7949FF'
-                }
-            }]
+                    color: '#FFF'
+                },
+                barWidth: 18,
+                barMinHeight: 5,
+                barGap: 0,
+                barCategoryGap: 0,
+                animationDelay: (idx: number) => idx * 10,
+                animationDelayUpdate: (idx: number) => idx * 10,
+                animationEasing: 'elasticOut',
+                animationDuration: 1000,
+                animationDurationUpdate: 1000,
+                markLine: {
+                    data: [
+                        {
+                            type: 'average', name: 'Média', label: {
+                                show: true, position: 'end',
+                                formatter: (params: any) => {
+                                    return `R$ ${params.value.toFixed(2)}`
+                                }
+                            }
+                        },
+                    ],
+                    lineStyle: {
+                        color: '#7949FF',
+                        type: 'dashed',
+                        opacity: 0.8,
+                        width: 1
+                    },
+                    animationDelay: (idx: number) => idx * 10,
+                    animationDelayUpdate: (idx: number) => idx * 10,
+                    animationEasing: 'elasticOut',
+                    animationDuration: 1000,
+                    animationDurationUpdate: 1000,
+                },
+                showBackground: true
+            }],
         }), [valores]);
+
+    const Graph = () => {
+        return (
+            <div className="graph">
+                <ReactECharts
+                    option={option}
+                    loading={loading || !DadosTransacoesHistory}
+                    // para definir o width e height do gráfico, é necessário definir no css da div pai
+                    // para evitar que o grafico exceda o tamanho da div pai, é necessário definir overflow: hidden no css da div pai
+                    style={{
+                        width: 'clamp(300px, 550px, 100%)',
+                        height: '100%',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        overflow: 'hidden',
+                        contentVisibility: 'auto'
+                    }}
+
+                    settings={{
+                        silent: true,
+                    }}
+                    key={ano}
+                />
+            </div>
+        )
+    }
 
     return (
         <div className="transaction-graph">
@@ -103,10 +193,7 @@ export function GraphTransactionHistory() {
             </div>
             {loading ? <ScaleLoader color="#7949FF" className="loader" content="Carregando..." />
                 :
-                <ReactECharts
-                    option={option}
-                    style={{ height: "300px", width: "550px", gap: "10px" }}
-                />
+                <Graph />
             }
         </div >
     )

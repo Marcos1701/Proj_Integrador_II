@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { CategoriasDataResponse, CategoriasHistoryData, DataContext, DataContextData, MetasDataResponse, TransacoesDataResponse, TransacoesHistory } from "../Contexts/DataContext"
+import { CategoriasDataResponse, CategoriasHistory, DataContext, DataContextData, MetasDataResponse, TransacoesDataResponse, TransacoesHistory } from "../Contexts/DataContext"
 import axios from "axios"
 import { api_url, useAuth } from "../Contexts/AuthContext"
 
@@ -28,9 +28,7 @@ export function DataProvider({ children }: DataProviderProps) {
     const [DadosTransacoesHistory, setDadosTransacoesHistory] = useState<TransacoesHistory>({
         history: []
     })
-    const [DadosCategoriasHistory, setDadosCategoriasHistory] = useState<CategoriasHistoryData>({
-        data: []
-    })
+    const [DadosCategoriasHistory, setDadosCategoriasHistory] = useState<CategoriasHistory | null>(null)
 
     const [TransacoesHistoryYear, setTransacoesHistoryYear] = useState<number>(new Date().getFullYear())
     const [TransacoesHistoryMonth, setTransacoesHistoryMonth] = useState<number>(new Date().getMonth() + 1)
@@ -76,6 +74,7 @@ export function DataProvider({ children }: DataProviderProps) {
         // }
 
         // getDadosMetas()
+        getAllData()
     }, [updated, user])
 
     useEffect(() => {
@@ -83,12 +82,12 @@ export function DataProvider({ children }: DataProviderProps) {
         const getAllData = async () => {
             setLoading(true)
             const [responseCategorias, responseTransacoes] = await Promise.all([
-                axios.get<CategoriasDataResponse>(`${api_url}categorias/dados`, {
+                axios.get<CategoriasHistory>(`${api_url}categorias/historico`, {
                     headers: {
                         Authorization: user.access_token
                     }
                 }),
-                axios.get<TransacoesDataResponse>(`${api_url}transacoes/dados`, {
+                axios.get<TransacoesHistory>(`${api_url}transacoes/historico`, {
                     headers: {
                         Authorization: user.access_token
                     }
@@ -100,8 +99,8 @@ export function DataProvider({ children }: DataProviderProps) {
 
             if (!responseCategorias || !responseTransacoes) return
 
-            setDadosCategoria(responseCategorias.data)
-            setDadosTransacao(responseTransacoes.data)
+            setDadosCategoriasHistory(responseCategorias.data)
+            setDadosTransacoesHistory(responseTransacoes.data)
             setLoading(false)
         }
 

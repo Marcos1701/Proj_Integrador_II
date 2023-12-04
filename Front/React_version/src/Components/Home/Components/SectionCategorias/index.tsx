@@ -5,14 +5,12 @@ import { ReactECharts } from "./components/Echarts";
 import './CategoriasSection.css'
 import { SyncLoader } from "react-spinners";
 import { DataContext } from "../../../../Contexts/DataContext";
-import Chart from 'react-apexcharts'
-import ReactApexChart from "react-apexcharts";
 
 export function SectionCategorias() {
 
     const { DadosCategoria, loading } = useContext(DataContext)
 
-    const categorias = DadosCategoria.dados || []
+    const categorias = DadosCategoria ? DadosCategoria.dados : []
 
     const option: echarts.EChartsOption
         = {

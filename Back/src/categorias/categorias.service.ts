@@ -264,18 +264,24 @@ export class CategoriasService {
 
     // agrupa, em cada categoria, as transacoes por ano e mes
     const history: {
-      [categoria: string]: {
-        [ano: number]: {
-          [mes: number]: {
-            transacoes: TransacaoData[],
-            nome: string,
-            id: string
-          }
+      categorias:
+      {
+        id: string,
+        nome: string,
+        history: {
+          anos: {
+            ano: number,
+            meses: {
+              mes: number,
+              transacoes: TransacaoData[]
+            }[]
+          }[]
         }
-      }
+      }[]
     }
-      = categoriasComTransacoes.reduce((acc, categoria) => {
-        const transacoes = categoria.transacoes.reduce((acc, transacao) => {
+      = {
+      categorias: categoriasComTransacoes.map(categoria => {
+        const history = categoria.transacoes.reduce((acc, transacao) => {
           const dataTransacao = new Date(transacao.data);
           const ano = dataTransacao.getFullYear();
           const mes = dataTransacao.getMonth();
@@ -294,16 +300,27 @@ export class CategoriasService {
         }
           , {});
 
-        return {
-          ...acc,
-          [categoria.nome]: {
-            ...transacoes,
-            nome: categoria.nome,
-            id: categoria.id
+        const anos = Object.keys(history).map(ano => {
+          return {
+            ano: Number(ano),
+            meses: Object.keys(history[ano]).map(mes => {
+              return {
+                mes: Number(mes),
+                transacoes: history[ano][mes]
+              }
+            })
           }
-        } // {nomeCategoria: {ano: {mes: [transacoes]}}}
-      }
-        , {});
+        })
+
+        return {
+          id: categoria.id,
+          nome: categoria.nome,
+          history: {
+            anos
+          }
+        }
+      })
+    }
 
     return { history }
   }

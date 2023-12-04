@@ -56,6 +56,11 @@ export function ReactECharts({
             }
         }
     }, [loading, theme]);
+    // para fazer com que o gráfico seja responsivo, é necessário definir o width e height da div pai
+    // para que o grafico não exceda o tamanho da div pai, é necessário definir overflow: hidden no css da div pai
 
-    return <div ref={chartRef} style={{ width: "100%", height: "100px", ...style }} />;
+    return <div ref={chartRef} style={{
+        ...style,
+        overflow: 'hidden'
+    }} />;
 }

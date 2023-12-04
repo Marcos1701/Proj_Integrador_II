@@ -24,7 +24,6 @@ export interface TransacaoData {
   tipo: string
 }
 
-
 export interface TransacoesDadosResponse {
   dados: TransacaoData[]
   totalGasto: number
@@ -177,11 +176,11 @@ export class TransacoesService {
       throw new NotFoundException('Usuário não encontrado');
     }
 
-    if (ano && ano > new Date().getFullYear()) {
+    if (ano !== undefined && ano > new Date().getFullYear()) {
       throw new BadRequestException('Ano inválido');
     }
 
-    if (mes && (mes > 12 || mes <= 0)) {
+    if (mes !== undefined && (mes > 12 || mes <= 0)) {
       throw new BadRequestException('Mês inválido');
     }
 
