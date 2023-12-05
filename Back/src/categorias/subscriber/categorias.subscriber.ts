@@ -18,26 +18,32 @@ export class CategoriasSubscriber implements EntitySubscriberInterface<Categoria
 
     private async getCategoria(categoria: Categoria, user?: boolean) {
         if (categoria.transacoes) return categoria;
-        const categoria_ = await this.mananger.findOne(Categoria, {
-            where: { id: categoria.id },
-            select: {
-                id: true,
-                nome: true,
-                gasto: true,
-                orcamento: true,
-                usuario: user ? {
+        try {
+            const categoria_ = await this.mananger.findOne(Categoria, {
+                where: { id: categoria.id },
+                select: {
                     id: true,
-                    saldo: true
-                } : {}
-            }
-        });
-
-        if (categoria_) {
-            categoria_.transacoes = await this.mananger.find(Transacao, {
-                where: { categoria: { id: categoria_.id } },
+                    nome: true,
+                    gasto: true,
+                    orcamento: true,
+                    usuario: user ? {
+                        id: true,
+                        saldo: true
+                    } : {}
+                },
+                loadEagerRelations: false // para resolver o erro acima
             });
+
+            if (categoria_) {
+                categoria_.transacoes = await this.mananger.find(Transacao, {
+                    where: { categoria: { id: categoria_.id } },
+                });
+            }
+            return categoria_;
+        } catch (error) {
+            console.log('Erro ao buscar a categoria:', error);
         }
-        return categoria_;
+        return null;
     }
 
 
@@ -56,7 +62,11 @@ export class CategoriasSubscriber implements EntitySubscriberInterface<Categoria
             return acc;
         }, 0);
 
-        await this.mananger.update(Categoria, categoria_.id, { gasto: categoria_.gasto });
+        try {
+            await this.mananger.update(Categoria, categoria_.id, { gasto: categoria_.gasto });
+        } catch (error) {
+            console.error('Erro ao atualizar a categoria:', error);
+        }
         return categoria_;
     }
 

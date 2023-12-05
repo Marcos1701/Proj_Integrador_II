@@ -58,7 +58,7 @@ export function GraphTransactionHistory() {
                     'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
                 axisLine: {
                     lineStyle: {
-                        color: '#7949FF'
+                        color: '#7949FF',
                     }
                 },
                 axisLabel: {
@@ -66,7 +66,7 @@ export function GraphTransactionHistory() {
                 },
                 axisTick: {
                     show: false
-                }
+                },
             },
             yAxis: {
                 type: 'value',
@@ -145,6 +145,12 @@ export function GraphTransactionHistory() {
                         opacity: 0.8,
                         width: 1
                     },
+                    tooltip: {
+                        trigger: 'item',
+                        formatter: (params: any) => {
+                            return `Média: R$ ${params.data.value.toFixed(0)}`
+                        },
+                    },
                     animationDelay: (idx: number) => idx * 10,
                     animationDelayUpdate: (idx: number) => idx * 10,
                     animationEasing: 'elasticOut',
@@ -153,6 +159,22 @@ export function GraphTransactionHistory() {
                 },
                 showBackground: true
             }],
+            animationEasing: 'elasticOut',
+            animationDuration: 1000,
+            animationDurationUpdate: 1000,
+            backgroundColor: 'transparent',
+            textStyle: {
+                fontFamily: 'Eina03-SemiBold',
+                fontWeight: 'bold',
+                color: '#FFF'
+            },
+            grid: {
+                top: '5%',
+                left: '10%',
+                right: '10%',
+                bottom: '5%',
+                containLabel: true
+            },
         }), [valores]);
 
     const Graph = () => {
@@ -164,14 +186,8 @@ export function GraphTransactionHistory() {
                     // para definir o width e height do gráfico, é necessário definir no css da div pai
                     // para evitar que o grafico exceda o tamanho da div pai, é necessário definir overflow: hidden no css da div pai
                     style={{
-                        width: 'clamp(300px, 550px, 600px)',
-                        height: 'clamp(200px, 200px, 300px)',
-                        padding: '0',
-                        margin: '0',
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        overflow: 'visible',
+                        width: 'clamp(300px, 650px, 700px)',
+                        height: 'clamp(100px, 130px, 250px)'
                     }}
 
                     settings={{

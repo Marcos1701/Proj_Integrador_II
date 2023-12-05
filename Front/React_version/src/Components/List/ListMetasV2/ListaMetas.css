@@ -37,3 +37,26 @@
         width: 100%;
     }
 }
+
+#ListaMetas {
+    & ul {
+        padding-left: 1em;
+        width: 100%;
+        height: 100%;
+        overflow-x: hidden;
+
+    }
+}
+
+.pagination_metas_home-div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 0;
+    height: 0;
+
+}
+
+.pagination_metas_home {
+    position: absolute;
+}

@@ -80,6 +80,8 @@ body {
   max-width: 99vw;
   max-height: 100vh;
   background: var(--background, #141332);
+  align-items: center;
+  justify-content: center;
 }
 
 h1 {

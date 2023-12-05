@@ -7,7 +7,7 @@
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    padding: 0 1em;
+    padding: .5em 1em;
 }
 
 #ano {
@@ -40,18 +40,5 @@ option {
     margin: 0;
     justify-content: center;
     align-items: center;
-}
-
-canvas {
-    aspect-ratio: auto 1/1 !important;
-    width: 100% !important;
-    height: 100% !important;
-    max-width: 100% !important;
-    max-height: 100% !important;
-    padding: 0 !important;
-    margin: 0 !important;
-
-    /* remover o espaçamento interno */
-    border: none !important;
-    outline: none !important;
+    align-self: flex-end;
 }
