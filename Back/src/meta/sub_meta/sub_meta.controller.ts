@@ -91,7 +91,6 @@ export class SubMetaController {
   @ApiBody({
     type: [CreateSubMetaDto]
   })
-
   @Post('many')
   create_many(@Headers('Authorization') access_token: string, @Param('id') id_meta: string, @Body() createSubMetaDto: CreateSubMetaDto[]) {
     if (!access_token) {
@@ -100,6 +99,7 @@ export class SubMetaController {
     if (!Array.isArray(createSubMetaDto)) {
       throw new BadRequestException('O atributo submetas deve ser um array');
     }
+
     return this.subMetaService.create_many(access_token, id_meta, createSubMetaDto);
   }
 

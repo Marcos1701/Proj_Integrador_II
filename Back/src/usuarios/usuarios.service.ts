@@ -6,6 +6,7 @@ import { Usuario } from './entities/usuario.entity';
 import { JwtService } from '@nestjs/jwt';
 import { jwtConstants } from 'src/auth/auth.constants';
 import { jwtDecodeUser } from 'src/auth/jwt.strategy';
+import { ResolveField } from '@nestjs/graphql';
 
 @Injectable()
 export class UsuariosService {
@@ -123,6 +124,16 @@ export class UsuariosService {
     }
   }
 
+  async getGasto(access_token: string) {
+    const usuario = await this.getUserFromtoken(access_token, false, true, false)
+    const gasto: number = usuario.getGasto()
+    const gastoMesAnterior: number = usuario.getGasto(new Date().getMonth() === 0 ? 12 : new Date().getMonth() - 1);
+    return {
+      gasto,
+      gastoMesAnterior
+    }
+  }
+
   async me(access_token: string) {
     const usuario = await this.getUserFromtoken(access_token)
     return usuario
@@ -132,7 +143,7 @@ export class UsuariosService {
     const data = this.jwtService.decode(token) as jwtDecodeUser
 
     if (!data || !data.id) {
-      throw new Error('Invalid token');
+      throw new BadRequestException('Token não encontrado');
     }
 
     const { id } = data;

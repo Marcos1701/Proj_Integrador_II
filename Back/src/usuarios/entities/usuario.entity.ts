@@ -258,6 +258,27 @@ export class Usuario {
     return saldo;
   }
 
+  getGasto(mes?: number, ano?: number) {
+
+    if (this.transacoes.length === 0) { return 0 }
+
+    if (!mes || !ano) {
+      const data = new Date();
+      mes = mes || data.getMonth();
+      ano = ano || data.getFullYear(); // se não for passado o ano, pega o ano atual
+    }
+
+    const gasto: number = this.transacoes.reduce((acc, curr) => {
+      const data = new Date(curr.data);
+      if ((data.getFullYear() === ano && data.getMonth() === mes) && curr.tipo === 'saida') {
+        return acc + curr.valor;
+      }
+      return acc;
+    }, 0);
+
+    return gasto;
+  }
+
   async save() {
     return await this.entityManager.save<Usuario>(this);
   }

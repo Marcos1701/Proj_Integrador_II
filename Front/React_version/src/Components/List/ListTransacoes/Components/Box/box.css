@@ -79,6 +79,20 @@
     text-wrap: nowrap;
 }
 
+.title-icon {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 5px;
+
+    & p {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        width: 90%;
+    }
+
+}
+
 :is(.transacao-box, .meta-box, .categoria-box) :is(.title-icon, .title-icon .icon-div) {
     display: flex;
     align-items: center;

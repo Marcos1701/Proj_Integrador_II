@@ -56,7 +56,7 @@ export const Box = (
                 }}>
                     <div className="title-icon">
                         <div className="icon-div"><img className="icon-Categoria" src={`assets/icons/${categoria && categoria.icone ? categoria.icone : 'barraquinha'}.svg`} alt="Icone da categoria" /></div>
-                        {transacao.titulo}
+                        <p className="title">{transacao.titulo}</p>
                     </div>
                     <div className="text-wrapper-2">{tratarData(transacao.data.toString(), 'simplificado')}</div>
                     <div className={

@@ -19,9 +19,10 @@ export class MetaService {
     const usuario: Usuario = await this.getUserFromtoken(access_token)
 
     const meta = await this.entityManager.insert(
-      'Meta',
+      Meta,
       {
         ...createMetaDto,
+        // valorAtual: 0,
         usuario
       }
     )
@@ -31,7 +32,7 @@ export class MetaService {
     }
     // await this.entityManager.save(meta) // -> não precisa mais, pois o insert já salva
 
-    return meta
+    return meta.identifiers[0]
   }
 
   async findAll(access_token: string, orderby?: Metasorderby, order: 'ASC' | 'DESC' = 'ASC', search?: string) {

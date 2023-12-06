@@ -96,16 +96,33 @@ export function AdicionarMetaForm() {
 
         const submetas = SubMetas.map((submeta) => {
             return {
-                valor: Number(submeta.ref.current?.value?.replace(/[^0-9]/g, '')),
-                metaId: id
+                titulo: submeta.refTitle.current?.value || '',
+                valor: Number(submeta.ref.current?.value?.replace(/[^0-9]/g, ''))
             }
-        })
+        }).filter((submeta) => submeta.titulo.length > 0 && submeta.valor > 0)
+
+        if (submetas.length > 0) {
+            const retornoSubMetas = await axios.post(`${api_url}meta/${id}/sub-meta/many`, submetas, {
+                headers: {
+                    getAuthorization: true,
+                    Authorization: user.access_token
+                }
+            })
+
+            if (retornoSubMetas.status === 401) {
+                alert('Sessão expirada')
+                return
+            }
+
+            if (retornoSubMetas.status !== 201) {
+                alert('Erro ao adicionar submetas')
+                return
+            }
+        }
 
         setUpdated(true); // atualizar metas
         setRetornar(true); // retornar à página anterior
     }
-
-    // const newSubMetaRef = useRef<HTMLInputElement>(null);
 
     const handleAddSubMeta = (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
         event.preventDefault();
