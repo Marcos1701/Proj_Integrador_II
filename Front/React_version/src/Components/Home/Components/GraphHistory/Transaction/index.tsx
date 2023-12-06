@@ -29,7 +29,10 @@ export function GraphTransactionHistory() {
     ) => {
         return history.find((valor) => valor.ano === ano)?.meses.map((valor) => {
             return valor.transacoes.reduce((acc, valor) => {
-                return acc + valor.valor
+                if (valor.tipo === "saida") {
+                    return acc + valor.valor
+                }
+                return acc
             }, 0)
         }) || []
     }
@@ -37,7 +40,6 @@ export function GraphTransactionHistory() {
     useEffect(() => {
         if (!DadosTransacoesHistory) return
         setValores(calculateValues(DadosTransacoesHistory.history, ano))
-        console.log('valores', valores)
     }, [DadosTransacoesHistory, updated, ano, loading])
 
     const option: echarts.EChartsOption
@@ -98,8 +100,7 @@ export function GraphTransactionHistory() {
                 },
                 minInterval: 1,
                 min: 0,
-                max: 1000
-
+                max: Math.max(...valores) + Math.max(...valores) * 0.2,
             },
             // para remover as linhas de grade
             series: [{
@@ -175,6 +176,7 @@ export function GraphTransactionHistory() {
                 bottom: '5%',
                 containLabel: true
             },
+
         }), [valores]);
 
     const Graph = () => {
@@ -182,16 +184,9 @@ export function GraphTransactionHistory() {
             <div className="graph">
                 <ReactECharts
                     option={option}
-                    loading={loading || !DadosTransacoesHistory}
-                    // para definir o width e height do gráfico, é necessário definir no css da div pai
-                    // para evitar que o grafico exceda o tamanho da div pai, é necessário definir overflow: hidden no css da div pai
                     style={{
                         width: 'clamp(300px, 650px, 700px)',
                         height: 'clamp(100px, 130px, 250px)'
-                    }}
-
-                    settings={{
-                        silent: true,
                     }}
                     key={ano}
                 />

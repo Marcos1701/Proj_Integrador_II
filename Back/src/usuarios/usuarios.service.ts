@@ -115,7 +115,12 @@ export class UsuariosService {
     const saldo = usuario.saldo
     usuario.atualizarSaldo()
     saldo !== usuario.saldo && await this.entityManager.update(Usuario, { id: usuario.id }, { saldo: usuario.saldo })
-    return usuario.saldo
+    const saldoAnterior = usuario.getSaldoAnterior(new Date().getMonth() === 0 ? 12 : new Date().getMonth() - 1)
+
+    return {
+      saldo,
+      saldoAnterior
+    }
   }
 
   async me(access_token: string) {

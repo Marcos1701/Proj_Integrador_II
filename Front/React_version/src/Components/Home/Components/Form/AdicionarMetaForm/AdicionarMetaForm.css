@@ -1,0 +1,130 @@
+#AddMetaForm {
+    width: 50%;
+}
+
+.submeta-div {
+    display: grid;
+    /* 
+     apenas uma linha, os elementos vão se alinhar e o scroll vai ser horizontal
+    */
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;
+    grid-auto-rows: 1fr;
+    align-items: center;
+
+    width: 100%;
+    height: 90px;
+    padding: 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
+.submeta-input-div {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: 200px;
+    height: 70px;
+    gap: 0;
+    margin: 0;
+    padding: 0;
+    padding-right: 10px;
+
+    & input {
+        margin: 0;
+    }
+
+    &:hover {
+        & .ButtonDelete {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    }
+}
+
+.submeta-input-div .ButtonDelete {
+    display: none;
+    background-color: #FFF;
+    margin: 0;
+    padding: 0;
+    cursor: pointer;
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+
+    animation: move 0.5s ease-in-out forwards;
+
+    & .icon {
+        width: 27px;
+        height: 27px;
+    }
+}
+
+.group_vlues {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 10px;
+    width: 100%;
+    padding-left: 15px;
+
+    & .input-valor {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: center;
+
+        & label {
+            margin-left: 5px;
+        }
+
+        & input {
+            width: 150px;
+        }
+    }
+}
+
+#desc_meta {
+    margin: 0;
+    margin-bottom: 3px;
+}
+
+#submetaslabelDiv {
+    flex-direction: row;
+    justify-content: space-between;
+    width: 90%;
+}
+
+#submetasDiv {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 90%;
+
+
+    & * {
+        margin: 0;
+    }
+
+    & .submeta-div {
+        margin: 0 0 0 10%;
+    }
+
+    & input {
+        width: 150px;
+        
+    }
+}
+
+.submeta-inputs {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 5px;
+    width: 100%;
+    padding-left: 15px;
+}

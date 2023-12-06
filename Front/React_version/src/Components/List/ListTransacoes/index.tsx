@@ -85,15 +85,11 @@ export function ListTransacoes(
                                 .slice(pagina * limite - limite, pagina * limite)
                                 .map(
                                     (transacao: ITransacao) => {
-                                        const categoria: ICategoria | undefined = categorias.find(
+                                        const categoria: ICategoria | null = categorias.find(
                                             (categoria: ICategoria) => {
                                                 return categoria.id === transacao.categoriaid
                                             }
-                                        );
-
-                                        if (!categoria) {
-                                            return <li key={transacao.id + 'noCategory'}></li>
-                                        }
+                                        ) || null // se não encontrar a categoria, retorna null
 
                                         return (
                                             <li className="listItem" key={transacao.id}>

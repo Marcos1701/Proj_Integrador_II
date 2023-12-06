@@ -132,6 +132,7 @@ export function AdicionarTransacaoForm() {
         tipo.current.value = '';
         if (categoria.current) {
             categoria.current.value = '';
+            setUpdatedCat(true);
         }
 
         if (descricao.current) {
@@ -139,7 +140,6 @@ export function AdicionarTransacaoForm() {
         }
 
         setUpdated(true);
-        setUpdatedCat(true);
         setMsgSucesso(true);
         setTimeout(() => {
             setMsgSucesso(false);

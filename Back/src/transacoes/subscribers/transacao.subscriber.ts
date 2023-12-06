@@ -80,7 +80,8 @@ export class TransacaoSubscriber implements EntitySubscriberInterface<Transacao>
             throw new BadRequestException('Usuario não encontrado');
         }
 
-        const categoria = await this.getCategoria(event.entity.categoria.id);
+
+        const categoria = event.entity.categoria && await this.getCategoria(event.entity.categoria.id);
 
         if (!categoria && event.entity.tipo === 'saida') {
             event.queryRunner.rollbackTransaction();
@@ -88,7 +89,7 @@ export class TransacaoSubscriber implements EntitySubscriberInterface<Transacao>
         }
 
         if (
-            categoria.orcamento && categoria.orcamento < event.entity.valor
+            categoria && categoria.orcamento && categoria.orcamento < event.entity.valor
             && event.entity.tipo === 'saida'
         ) {
             event.queryRunner.rollbackTransaction();

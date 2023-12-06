@@ -7,6 +7,7 @@ import { NotFoundPage } from "../Pages/NotFoundPage";
 import { MetasPage } from "../Pages/MetasPage";
 import { AddTransacaoPage } from "../Home/Components/AddItemPage/Transacao";
 import { AddCategoriaPage } from "../Home/Components/AddItemPage/Categoria";
+import { AddMetaPage } from "../Home/Components/AddItemPage/Meta";
 
 export function PatchRoutes() {
     return (
@@ -40,11 +41,20 @@ export function PatchRoutes() {
                     </ProtectedRoute>
                 } />
             </Route>
-            <Route path="metas" element={
-                <ProtectedRoute>
-                    <MetasPage />
-                </ProtectedRoute>
-            } />
+            <Route path="metas" >
+                <Route path="" element={ // rota relativa à rota pai "metas"
+                    <ProtectedRoute>
+                        <MetasPage />
+                    </ProtectedRoute>
+                } />
+
+                <Route path="add" element={ // rota relativa à rota pai "metas"
+                    <ProtectedRoute>
+                        <AddMetaPage />
+                    </ProtectedRoute>
+                } />
+
+            </Route>
             <Route path="login" element={ // rota absoluta, pois não está aninhada
                 <Navigate to={'/'} />
             } />

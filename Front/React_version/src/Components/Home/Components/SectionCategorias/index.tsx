@@ -62,7 +62,7 @@ export function SectionCategorias() {
     return (
         <div className="Categorias-section-home">
             <div className="header">
-                <h2>Dados Categorias</h2>
+                <h2>Gastos por Categoria</h2>
             </div>
 
             <div className="RelacaoCategorias">
