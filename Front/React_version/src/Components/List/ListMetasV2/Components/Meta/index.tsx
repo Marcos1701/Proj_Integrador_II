@@ -3,6 +3,18 @@ import { tratarData } from "../../../ListTransacoesCard/Components/Transacao";
 import { realizarTratamentoValor } from "../../../../Home/Components/SecaoAcoes/Components/Saldo";
 import { useAuth } from "../../../../../Contexts/AuthContext";
 
+export interface submeta {
+    id: string,
+    titulo: string,
+    valor: number
+}
+
+export interface Marco {
+    id: string,
+    data: Date,
+    valor: number
+}
+
 export interface IMeta {
     id: string;
     valor: number;
@@ -15,7 +27,8 @@ export interface IMeta {
     dataCriacao: Date;
     concluida: boolean;
     ativo: boolean;
-
+    subMetas?: submeta[]
+    marcos?: Marco[]
 }
 
 interface IMetaBoxProps {

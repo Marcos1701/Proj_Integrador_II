@@ -46,16 +46,18 @@ export function ListaMetas(
                 </div>
             )}
 
-            <div className="header">
-                <h2>Metas</h2>
-            </div>
+            {id !== "list_on_page" &&
+                <div className="header">
+                    <h2>Metas</h2>
+                </div>
+            }
 
             {loading ? <ScaleLoader color="#7949FF" className="loader" /> :
                 <MagicMotion layoutDependency={
                     [metas.length]
                 } >
                     <ul className="list">
-                        {metas.length === 0 && <li className="empty" key='EmptyMetas'>Nenhuma meta cadastrada</li>}
+                        {metas.length === 0 && <li className="empty" key='EmptyMetas'>Nenhuma meta encontrada</li>}
                         {
                             metas
                                 .slice(pageAtual * limit - limit, pageAtual * limit)

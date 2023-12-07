@@ -8,6 +8,7 @@ import { MetasPage } from "../Pages/MetasPage";
 import { AddTransacaoPage } from "../Home/Components/AddItemPage/Transacao";
 import { AddCategoriaPage } from "../Home/Components/AddItemPage/Categoria";
 import { AddMetaPage } from "../Home/Components/AddItemPage/Meta";
+import { PerfilPage } from "../Pages/Perfil";
 
 export function PatchRoutes() {
     return (
@@ -55,6 +56,13 @@ export function PatchRoutes() {
                 } />
 
             </Route>
+
+            <Route path="perfil" element={
+                <ProtectedRoute>
+                    <PerfilPage />
+                </ProtectedRoute>
+            } />
+
             <Route path="login" element={ // rota absoluta, pois não está aninhada
                 <Navigate to={'/'} />
             } />

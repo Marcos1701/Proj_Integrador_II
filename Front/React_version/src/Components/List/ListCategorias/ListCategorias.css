@@ -20,6 +20,12 @@
     height: 35vh;
 }
 
+.list_on_page .legend-categorias{
+    align-self: flex-start;
+    margin-left: 5%;
+    width: 80%;
+}
+
 #title-list-categoria {
     gap: 40%;
 }

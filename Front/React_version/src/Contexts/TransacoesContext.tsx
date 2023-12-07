@@ -25,7 +25,8 @@ export interface TransacoesContextData {
     pagina: number,
     setPagina: (page: number) => void,
     limite: number,
-    setLimite: (limit: number) => void
+    setLimite: (limit: number) => void,
+    qtd: number
 }
 
 export const TransacoesContext = createContext<TransacoesContextData>({
@@ -42,5 +43,6 @@ export const TransacoesContext = createContext<TransacoesContextData>({
     pagina: 1,
     setPagina: () => { },
     limite: 3,
-    setLimite: () => { }
+    setLimite: () => { },
+    qtd: 0
 });

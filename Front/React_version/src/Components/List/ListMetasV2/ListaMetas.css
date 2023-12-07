@@ -30,6 +30,18 @@
     }
 }
 
+#list_on_page {
+    width: 100%;
+    height: 70vh;
+    gap: 1.5em;
+
+    & ul {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        height: 85vh;
+    }
+}
+
 #ListaMetas {
     & ul {
 

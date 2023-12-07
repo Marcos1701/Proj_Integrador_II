@@ -1,11 +1,12 @@
 import { useState } from "react";
-import { Navigate } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { ListaMetas } from "../../List/ListMetasV2";
 
 
 export function MetasPage() {
 
     const [voltar, setVoltar] = useState<boolean>(false);
+    const [showAddItem, setShowAddItem] = useState<boolean>(false);
     return (
         <main className="page">
             {voltar && <Navigate to={'/'} />}
@@ -25,9 +26,22 @@ export function MetasPage() {
                 </button>
 
                 <h2 className="title">Metas</h2>
+
+                <div className="AddItem">
+                    <button className="AddItem-Button" onClick={() => setShowAddItem(!showAddItem)}>
+                        <img src="assets/ActionsIcons/plus.svg" alt="Adicionar Item" />
+                    </button>
+                    <div className={
+                        showAddItem ? "opcoes_adicionar-active" : "opcoes_adicionar"
+                    } onMouseLeave={() => setShowAddItem(false)}>
+                        <Link to="/metas/add">
+                            Adicionar Meta
+                        </Link>
+                    </div>
+                </div>
             </div>
 
-            <ListaMetas page={1} limit={6} classname="list_on_page" />
+            <ListaMetas page={1} limit={6} id="list_on_page" />
         </main>
     )
 }

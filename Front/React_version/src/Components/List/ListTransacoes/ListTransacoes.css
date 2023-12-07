@@ -24,6 +24,7 @@
     align-self: flex-start;
     margin-left: 2em;
     width: 34em;
+    color: #FFF;
 }
 
 .anchors_to_transacoesPage,
@@ -34,7 +35,8 @@
     gap: 48%;
 }
 
-.legend-transacoes {
+.legend-transacoes,
+.list_on_page .legend-categorias {
     width: 90%;
     justify-content: space-between;
     padding: 0 1em 0.2em .3em;

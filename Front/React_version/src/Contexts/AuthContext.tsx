@@ -29,7 +29,8 @@ interface AuthContextType {
     signout: () => void
     isAuthenticated: boolean
     loading?: boolean,
-    client: ApolloClient<NormalizedCacheObject>
+    client: ApolloClient<NormalizedCacheObject>,
+    RefreshUser: () => void
 }
 
 const defaultValue = {} as AuthContextType
@@ -40,7 +41,7 @@ interface AuthProviderProps {
     children: React.ReactNode
 }
 
-export const api_url: string = "http://localhost:3000/api/";
+export const api_url: string = "https://finnapp.onrender.com/";
 const graphql_url: string = api_url.replace('api/', 'graphql/')
 //"http://localhost:3000/"
 //"https://legendary-space-spoon-gvjqgjx7gx92vv5g-3300.app.github.dev/"
@@ -52,6 +53,19 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         localStorage.getItem('access_token') ? JSON.parse(localStorage.getItem('access_token')!)
             : null
     )
+
+    const RefreshUser = () => {
+        const access_token = localStorage.getItem('access_token') ? JSON.parse(localStorage.getItem('access_token')!)
+            : null
+
+        const nome = localStorage.getItem('access_token') ? JSON.parse(localStorage.getItem('nome')!)
+            : null
+
+        setUser({
+            access_token,
+            nome
+        })
+    }
 
     const [loading, setLoading] = useState<boolean>(false)
 
@@ -118,7 +132,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     }), [user])
 
     const value = useMemo(() => ({
-        user, signin, singup, signout, isAuthenticated: user != null, loading, client
+        user, signin, singup, signout, isAuthenticated: user != null, loading, client, RefreshUser
     }), [user, loading])
 
     return (

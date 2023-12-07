@@ -35,20 +35,16 @@ export function ListTransacoes(
         setTransacao
     }: IListTransacoesProps) {
 
-    const { transacoes, loading, pagina, setPagina, limite, setLimite }: TransacoesContextData = useContext(TransacoesContext)
+    const { transacoes, loading, pagina, setPagina, limite, setLimite, qtd }: TransacoesContextData = useContext(TransacoesContext)
     const categorias: ICategoria[] = useContext(CategoriasContext)
     const { loading: loadingCategorias } = useContext(CategoriasOrderContext)
 
     useEffect(() => {
-        if (pagina !== page) {
-            setPagina(page)
-        }
-
         if (limite !== limit) {
             setLimite(limit)
         }
 
-    }, [pagina, page, limite, limit])
+    }, [limite, limit])
 
 
     return (
@@ -76,13 +72,12 @@ export function ListTransacoes(
             {loading || loadingCategorias ? <ScaleLoader color="#7949FF" className="loader" />
                 :
                 <MagicMotion layoutDependency={
-                    [transacoes.length]
+                    [limite]
                 }>
                     <ul className="listValues" id={classname === "list_on_page" ? "listTransacoes" : "listTransacoesSimple"}>
-                        {transacoes.length === 0 && <li className="empty" key={"empty"}>Nenhuma transação cadastrada</li>}
+                        {qtd === 0 && <li className="empty" key={"empty"}>Nenhuma transação cadastrada</li>}
                         {
                             transacoes
-                                .slice(pagina * limite - limite, pagina * limite)
                                 .map(
                                     (transacao: ITransacao) => {
                                         const categoria: ICategoria | null = categorias.find(
@@ -128,12 +123,12 @@ export function ListTransacoes(
                             </defs>
                         </svg></a>
                     <a className="pagination-button-active">{pagina}</a>
-                    {pagina < Math.ceil(transacoes.length / limite) && <a className="pagination-button" onClick={() => setPagina(pagina + 1)}>{pagina + 1}</a>}
-                    {pagina + 1 < Math.ceil(transacoes.length / limite) && <a className="pagination-button" onClick={() => setPagina(pagina + 2)}>{pagina + 2}</a>}
+                    {pagina < Math.ceil(qtd / limite) && <a className="pagination-button" onClick={() => setPagina(pagina + 1)}>{pagina + 1}</a>}
+                    {pagina + 1 < Math.ceil(qtd / limite) && <a className="pagination-button" onClick={() => setPagina(pagina + 2)}>{pagina + 2}</a>}
                     <a className="pagination-button">...</a>
-                    {pagina < Math.ceil(transacoes.length / limite) && <a className="pagination-button" onClick={() => setPagina(Math.ceil(transacoes.length / limite))}>{Math.ceil(transacoes.length / limite)}</a>}
+                    {pagina < Math.ceil(qtd / limite) && <a className="pagination-button" onClick={() => setPagina(Math.ceil(qtd / limite))}>{Math.ceil(qtd / limite)}</a>}
                     <a className="pagination-button" onClick={() => {
-                        if (pagina < Math.ceil(transacoes.length / limite)) {
+                        if (pagina < Math.ceil(qtd / limite)) {
                             setPagina(pagina + 1);
                         }
                     }}><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">

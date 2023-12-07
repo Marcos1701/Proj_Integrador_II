@@ -133,10 +133,6 @@
 
 }
 
-.navbar .orcamento-true {
-    color: var(--accent, #256D85);
-}
-
 .navbar .valorTransacao-entrada {
     color: var(--green, #02B15A);
 }

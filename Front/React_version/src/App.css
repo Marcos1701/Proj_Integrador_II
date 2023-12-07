@@ -9,6 +9,7 @@
 #root,
 main,
 form.element-details,
+form.perfil-form,
 form.add-element-form {
   display: flex;
   flex-direction: column;
@@ -45,10 +46,12 @@ form.add-element-form {
   .App-sidebar-footer {
     display: none;
   }
+
   padding-top: 3.5em;
 
   & .App-sidebar-header {
     padding-left: .5em;
+
     & button {
       background: #256D85;
     }
@@ -341,6 +344,7 @@ form.add-element-form {
 /* Define a exibição e alinhamento dos itens para footer e algumas divs dentro de form.element-details,form.add-element-form */
 footer,
 form.element-details :is(.valor-data-div, .select-group, .button-div, .checkbox-div),
+form.perfil-form :is(.valor-data-div, .select-group, .button-div, .checkbox-div),
 form.add-element-form :is(.valor-data-div, .select-group, .button-div, .checkbox-div) {
   display: flex;
   align-items: center;
@@ -438,11 +442,13 @@ form.add-element-form select:focus,
 }
 
 form.element-details *,
+form.perfil-form *,
 form.add-element-form * {
   margin: .5em;
 }
 
 form.element-details label,
+form.perfil-form label,
 form.add-element-form label {
   font-size: 12.3px;
   margin: 0;
@@ -450,6 +456,7 @@ form.add-element-form label {
 }
 
 form.element-details :is(.label-element-div, .input-div),
+form.perfil-form :is(.label-element-div, .input-div),
 form.add-element-form :is(.label-element-div, .input-div) {
   display: flex;
   flex-direction: column;
@@ -459,16 +466,19 @@ form.add-element-form :is(.label-element-div, .input-div) {
 }
 
 form.element-details .input-div input,
+form.perfil-form .input-div input,
 form.add-element-form .input-div input {
   border: 1.4px solid var(--accent, #47B5FF);
 }
 
 form.element-details .input-div input:focus,
+form.perfil-form .input-div input:focus,
 form.add-element-form .input-div input:focus {
   border: 1.4px solid var(--accent-hover, #256D85);
 }
 
 form.element-details .input-div .input-valor,
+form.perfil-form .input-div .input-valor,
 form.add-element-form .input-div .input-valor {
   min-width: 10em;
   height: 2em;
@@ -477,6 +487,7 @@ form.add-element-form .input-div .input-valor {
 }
 
 form.element-details :is(.input-div .input-nome, textarea),
+form.perfil-form :is(.input-div .input-nome, textarea),
 form.add-element-form :is(.input-div .input-nome, textarea) {
   padding: 0.8em 1em;
   border-radius: 12px;
@@ -491,12 +502,14 @@ form.add-element-form :is(.input-div .input-nome, textarea) {
 }
 
 form.element-details .input-div .input-nome,
+form.perfil-form .input-div .input-nome,
 form.add-element-form .input-div .input-nome {
   width: 25em;
   height: 2.4em;
 }
 
 form.element-details .input-div .input-data,
+form.perfil-form .input-div .input-data,
 form.add-element-form .input-div .input-data {
   width: 10em;
   height: 2em;
@@ -519,6 +532,7 @@ form.add-element-form textarea {
 }
 
 form.element-details :is(.cancel-form-button, .submit-form-button),
+form.perfil-form :is(.cancel-form-button, .submit-form-button),
 form.add-element-form :is(.cancel-form-button, .submit-form-button) {
   width: 145px;
   height: 33px;
@@ -541,6 +555,7 @@ form.add-element-form :is(.cancel-form-button, .submit-form-button) {
 }
 
 form.element-details .submit-form-button,
+form.perfil-form .submit-form-button,
 form.add-element-form .submit-form-button {
   width: 200px;
   border: 0.8px solid var(--text, #06283D);
@@ -566,6 +581,7 @@ form.add-element-form .submit-form-button {
 }
 
 form.element-details h2,
+form.perfil-form h2,
 form.add-element-form h2 {
   font-family: Eina03-SemiBold;
   font-size: 1.5em;
@@ -577,6 +593,7 @@ form.add-element-form h2 {
 }
 
 form.element-details .input-div .input-data,
+form.perfil-form .input-div .input-data,
 form.add-element-form .input-div .input-data {
   &::-webkit-calendar-picker-indicator {
     /* -webkit-calendar-picker-indicator = pseudo-elemento para o input */

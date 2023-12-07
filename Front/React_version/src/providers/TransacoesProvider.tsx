@@ -12,6 +12,11 @@ interface TransacoesProviderProps {
     children: React.ReactNode
 }
 
+interface getTransacoesResponse {
+    transacoes: ITransacao[]
+    qtd: number
+}
+
 export function TransacoesProvider({ children }: TransacoesProviderProps) {
     const [transacoes, setTransacoes] = useState<ITransacao[]>([])
     const [updated, setUpdated] = useState<boolean>(false)
@@ -21,13 +26,14 @@ export function TransacoesProvider({ children }: TransacoesProviderProps) {
     const [limite, setLimite] = useState<number>(3)
     const [search, setSearch] = useState<string>('')
     const [loading, setLoading] = useState<boolean>(true)
+    const [qtd, setqQtd] = useState<number>(0)
     const { user } = useAuth();
 
     useEffect(() => {
         async function loadTransacoes() {
             if (!user) return
             setLoading(true)
-            const response = await axios.get<ITransacao[]>(`${api_url}transacoes`, {
+            const response = await axios.get<getTransacoesResponse>(`${api_url}transacoes`, {
                 params: {
                     sortField: ordenarPor,
                     sortOrder: ordem,
@@ -47,7 +53,8 @@ export function TransacoesProvider({ children }: TransacoesProviderProps) {
                 return <Navigate to={'/login'} />
             }
 
-            setTransacoes(response.data)
+            setTransacoes(response.data.transacoes)
+            setqQtd(response.data.qtd)
 
             setUpdated(false)
             setLoading(false)
@@ -69,7 +76,8 @@ export function TransacoesProvider({ children }: TransacoesProviderProps) {
         pagina,
         setPagina,
         limite,
-        setLimite
+        setLimite,
+        qtd
     }
 
     return (

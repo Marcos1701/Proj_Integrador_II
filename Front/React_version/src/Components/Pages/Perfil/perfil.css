@@ -1,0 +1,36 @@
+.perfil {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 65%;
+    margin: 2em 5em;
+    padding: 0 1em 0.2em .3em;
+    position: absolute;
+    top: 0;
+    z-index: 3;
+
+    background: var(--background, #1D1D41);
+    backdrop-filter: blur(3px);
+    border-radius: 64.108px;
+    box-shadow: 16px 38px 17px 0px rgba(0, 0, 0, 0.2);
+
+    height: 90vh;
+
+}
+
+#perfil-form {
+    align-items: flex-start;
+
+    & label {
+        color: #FFF;
+    }
+
+    & .nome-div {
+        margin-left: 0;
+    }
+
+    & .input-div input::placeholder {
+        color: black;
+    }
+
+}

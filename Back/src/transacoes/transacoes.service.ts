@@ -237,7 +237,7 @@ export class TransacoesService {
     const usuario = await this.getUserFromtoken(usuariotoken, false, true);
 
     // Busca das transações com paginação e ordenação
-    const transacoes = await this.entityManager.find(Transacao, {
+    const transacoesUsuario = await this.entityManager.find(Transacao, {
       where: { usuario: { id: usuario.id } },
       take: limit,
       skip: (page - 1) * limit,
@@ -263,10 +263,19 @@ export class TransacoesService {
       },
     });
 
-    // Mapeamento e filtragem das transações
-    const mappedTransacoes = this.mapAndFilterTransactions(transacoes);
+    // para pegar o total de transacoes
+    const qtd = await this.entityManager.count(Transacao,
+      {
+        where: { usuario: { id: usuario.id } },
+      })
 
-    return mappedTransacoes;
+    // Mapeamento e filtragem das transações
+    const mappedTransacoes = this.mapAndFilterTransactions(transacoesUsuario);
+
+    return {
+      qtd,
+      transacoes: mappedTransacoes
+    }
   }
 
 

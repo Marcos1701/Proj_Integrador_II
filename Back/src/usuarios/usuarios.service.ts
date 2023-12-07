@@ -6,7 +6,6 @@ import { Usuario } from './entities/usuario.entity';
 import { JwtService } from '@nestjs/jwt';
 import { jwtConstants } from 'src/auth/auth.constants';
 import { jwtDecodeUser } from 'src/auth/jwt.strategy';
-import { ResolveField } from '@nestjs/graphql';
 
 @Injectable()
 export class UsuariosService {
