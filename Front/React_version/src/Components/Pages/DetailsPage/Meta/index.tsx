@@ -9,7 +9,7 @@ import './MetaDetail.css'
 import { IconSelect } from "../../../Home/Components/Form/AdicionarCategoriaForm/Components/IconSelect";
 import { MetasContext } from "../../../../Contexts/MetasContext";
 import isDate from 'validator/lib/isDate';
-import { IMeta, Marco, submeta } from "../../../List/ListMetasV2/Components/Meta";
+import { IMeta } from "../../../List/ListMetasV2/Components/Meta";
 import { ulid } from "ulidx";
 
 
