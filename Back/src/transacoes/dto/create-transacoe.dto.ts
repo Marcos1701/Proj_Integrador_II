@@ -87,12 +87,14 @@ export class CreateTransacoeDto {
     type: String,
     default: "00000000-0000-0000-0000-000000000000"
   })
-  @IsUUID("all", {
-    message: "ID da categoria inválido",
-    each: true, // valida cada id do array
-    context: {
-      IsUUID: true
+
+  @IsOptional(
+    {
+      message: "ID da categoria inválido",
+      context: {
+        IsUUID: true
+      }
     }
-  })
+  )
   categoriaid: string;
 }

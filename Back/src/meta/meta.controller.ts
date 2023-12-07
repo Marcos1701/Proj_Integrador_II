@@ -3,8 +3,6 @@ import { MetaService } from './meta.service';
 import { CreateMetaDto } from './dto/create-meta.dto';
 import { UpdateMetaDto } from './dto/update-meta.dto';
 import { ApiBody, ApiHeader, ApiQuery, ApiResponse } from '@nestjs/swagger';
-import { Meta } from './entities/meta.entity';
-import { MarcoMeta } from './marco_meta/entities/marco_meta.entity';
 import { Metasorderby } from 'src/usuarios/entities/usuario.entity';
 
 @Controller('meta')
@@ -262,7 +260,7 @@ export class MetaController {
     return this.metaService.remove(access_token, id);
   }
 
-  @Post(':id/AdicionarValor')
+  @Patch(':id/addvalor')
   AdicionarValor(@Headers('Authorization') access_token: string, @Param('id') id: string, @Body() body: { valor: number }) {
     if (!access_token) {
       throw new UnauthorizedException('Token não encontrado');

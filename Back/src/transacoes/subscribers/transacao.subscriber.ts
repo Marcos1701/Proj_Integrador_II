@@ -4,7 +4,6 @@ import { Transacao } from "../entities/transacao.entity";
 import { Categoria } from "src/categorias/entities/categoria.entity";
 import { Usuario } from "src/usuarios/entities/usuario.entity";
 
-
 @EventSubscriber()
 @Injectable()
 export class TransacaoSubscriber implements EntitySubscriberInterface<Transacao>{
@@ -22,33 +21,75 @@ export class TransacaoSubscriber implements EntitySubscriberInterface<Transacao>
         this.transacao.valor = Number(this.transacao.valor);
     }
 
-    async afterInsert(event: InsertEvent<Transacao>) {
-
-        const usuario = await this.mananger.findOne(Usuario, {
-            where: { id: event.entity.usuario.id },
-            relations: { transacoes: true }
+    private async getUsuario(id: string) {
+        return await this.mananger.findOne(Usuario, {
+            where: { id: id },
+            select: {
+                id: true,
+                saldo: true,
+                transacoes: {
+                    id: true,
+                    tipo: true,
+                    valor: true,
+                    titulo: true,
+                    data: true
+                }
+            }
         }).catch(err => {
             return undefined;
         });
+    }
+
+    private async getCategoria(id: string, usuario?: boolean, transacoes?: boolean) {
+        return await this.mananger.findOne(Categoria, {
+            where: { id: id },
+            select: {
+                id: true,
+                nome: true,
+                gasto: true,
+                orcamento: true,
+                usuario: usuario ? {
+                    id: true,
+                    saldo: true,
+                    transacoes: transacoes ? {
+                        id: true,
+                        tipo: true,
+                        valor: true,
+                        titulo: true,
+                        data: true
+                    } : false
+                } : {},
+                transacoes: transacoes ? {
+                    id: true,
+                    tipo: true,
+                    valor: true,
+                    titulo: true,
+                    data: true
+                } : false
+            }
+        }).catch(err => {
+            return undefined;
+        });
+    }
+
+    async afterInsert(event: InsertEvent<Transacao>) {
+        const usuario = await this.getUsuario(event.entity.usuario.id);
 
         if (!usuario) {
             event.queryRunner.rollbackTransaction();
             throw new BadRequestException('Usuario não encontrado');
         }
 
-        const categoria = await this.mananger.findOne(Categoria, {
-            where: { id: event.entity.categoria.id },
-            relations: { usuario: true }
-        }).catch(err => {
-            return undefined;
-        });
+
+        const categoria = event.entity.categoria && await this.getCategoria(event.entity.categoria.id);
+
         if (!categoria && event.entity.tipo === 'saida') {
             event.queryRunner.rollbackTransaction();
             throw new BadRequestException('Categoria não encontrada');
         }
 
         if (
-            categoria.orcamento && categoria.orcamento < event.entity.valor
+            categoria && categoria.orcamento && categoria.orcamento < event.entity.valor
             && event.entity.tipo === 'saida'
         ) {
             event.queryRunner.rollbackTransaction();
@@ -59,13 +100,20 @@ export class TransacaoSubscriber implements EntitySubscriberInterface<Transacao>
 
         if (event.entity.tipo === 'entrada') {
             usuario.saldo += event.entity.valor;
-        } else {
+        } else if (new Date(event.entity.data).getMonth() === new Date().getMonth()
+            && new Date(event.entity.data).getFullYear() === new Date().getFullYear()
+        ) {
             categoria.gasto += event.entity.valor;
             usuario.saldo -= event.entity.valor;
         }
 
-        categoria && await this.mananger.save<Categoria>(categoria);
-        await this.mananger.save<Usuario>(categoria.usuario);
+        categoria && await this.mananger.update<Categoria>(Categoria, { id: categoria.id }, {
+            gasto: categoria.gasto
+        });
+
+        await this.mananger.update<Usuario>(Usuario, { id: usuario.id }, {
+            saldo: usuario.saldo
+        });
 
         return; // tudo certo
     }
@@ -155,9 +203,6 @@ export class TransacaoSubscriber implements EntitySubscriberInterface<Transacao>
         const categoria = await this.mananger.findOne(Categoria, {
             where: {
                 id: event.entity.categoria.id
-            },
-            relations: {
-                transacoes: true
             }
         });
 
@@ -169,9 +214,6 @@ export class TransacaoSubscriber implements EntitySubscriberInterface<Transacao>
         const usuario = await this.mananger.findOne(Usuario, {
             where: {
                 id: event.entity.usuario.id
-            },
-            relations: {
-                transacoes: true
             }
         });
 
@@ -190,7 +232,13 @@ export class TransacaoSubscriber implements EntitySubscriberInterface<Transacao>
         }
 
 
-        await this.mananger.save<Categoria>(categoria);
-        await this.mananger.save<Usuario>(usuario);
+        await Promise.all([
+            await this.mananger.update<Usuario>(Usuario, { id: usuario.id }, {
+                saldo: usuario.saldo
+            }),
+            await this.mananger.update<Categoria>(Categoria, { id: categoria.id }, {
+                gasto: categoria.gasto
+            })
+        ]) // dessa forma, as duas queries são executadas ao mesmo tempo
     }
 }

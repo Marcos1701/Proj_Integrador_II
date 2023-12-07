@@ -9,7 +9,7 @@ import { TransacoesContext } from "../../../../../Contexts/TransacoesContext";
 
 export interface ITransacaoboxProps {
     transacao: ITransacao;
-    categoria: ICategoria;
+    categoria?: ICategoria | null;
     setShowDetails?: React.Dispatch<React.SetStateAction<boolean>>;
     setTransacao?: React.Dispatch<React.SetStateAction<ITransacao | undefined>>;
 }
@@ -18,7 +18,7 @@ export interface ITransacaoboxProps {
 export const Box = (
     {
         transacao,
-        categoria,
+        categoria = null,
         setShowDetails,
         setTransacao
     }: ITransacaoboxProps
@@ -55,8 +55,8 @@ export const Box = (
                     setShowDetails && setShowDetails(true)
                 }}>
                     <div className="title-icon">
-                        <div className="icon-div"><img className="icon-Categoria" src={`assets/icons/${categoria.icone ? categoria.icone : 'barraquinha'}.svg`} alt="Icone da categoria" /></div>
-                        {transacao.titulo}
+                        <div className="icon-div"><img className="icon-Categoria" src={`assets/icons/${categoria && categoria.icone ? categoria.icone : 'barraquinha'}.svg`} alt="Icone da categoria" /></div>
+                        <p className="title">{transacao.titulo}</p>
                     </div>
                     <div className="text-wrapper-2">{tratarData(transacao.data.toString(), 'simplificado')}</div>
                     <div className={

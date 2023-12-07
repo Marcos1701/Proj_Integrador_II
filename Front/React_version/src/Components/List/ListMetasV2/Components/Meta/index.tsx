@@ -3,6 +3,18 @@ import { tratarData } from "../../../ListTransacoesCard/Components/Transacao";
 import { realizarTratamentoValor } from "../../../../Home/Components/SecaoAcoes/Components/Saldo";
 import { useAuth } from "../../../../../Contexts/AuthContext";
 
+export interface submeta {
+    id: string,
+    titulo: string,
+    valor: number
+}
+
+export interface Marco {
+    id: string,
+    data: Date,
+    valor: number
+}
+
 export interface IMeta {
     id: string;
     valor: number;
@@ -15,6 +27,8 @@ export interface IMeta {
     dataCriacao: Date;
     concluida: boolean;
     ativo: boolean;
+    subMetas?: submeta[]
+    marcos?: Marco[]
 }
 
 interface IMetaBoxProps {
@@ -35,22 +49,6 @@ export const MetaBox = (
 
     if (!user) return (<></>)
 
-    // const { setUpdated } = useContext(MetasContext)
-
-    // const HandleDelete = async () => {
-    //     const response = await axios.delete(`${api_url}meta/${meta.id}`, {
-    //         headers: {
-    //             Authorization: user.access_token
-    //         }
-    //     }).then((response) => {
-    //         if (response.status === 204) {
-    //             setUpdated(true)
-    //         }
-    //         return response
-    //     })
-    //     if (response.status !== 204) alert('Erro ao deletar meta');
-    // }
-
     return (
         <a className="meta-box" id={meta.id}
             onClick={() => {
@@ -58,7 +56,7 @@ export const MetaBox = (
                 setShowDetails && setShowDetails(true)
             }}
             style={{// de baixo para cima
-                background: `linear-gradient(0deg, rgba(2, 177, 90, 0.15) 25%, rgba(255, 255, 255, 0) 0%)`,
+                background: `linear-gradient(0deg, rgba(2, 177, 90, 0.15) ${meta.progresso}%, rgba(255, 255, 255, 0) ${100 - meta.progresso}%)`
             }}
         >
             <div className="value-date">

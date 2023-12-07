@@ -5,8 +5,9 @@ import { Navigate } from "react-router-dom";
 import { MoneyValidation } from "../../../Home/Components/Form/AdicionarTransacaoForm";
 import '../Details.css'
 import { TransacoesContext } from "../../../../Contexts/TransacoesContext";
-import { CategoriasContext } from "../../../../Contexts/CategoriasContext";
+import { CategoriasContext, CategoriasOrderContext } from "../../../../Contexts/CategoriasContext";
 import { ITransacao } from "../../../List/ListTransacoesCard/Components/Transacao";
+import { DataContext } from "../../../../Contexts/DataContext";
 
 
 interface IProps {
@@ -40,6 +41,9 @@ export function DetailsTransacaoPage(
     if (!user) return <Navigate to="/login" />
 
     const { setUpdated } = useContext(TransacoesContext)
+    const { setUpdated: setUpData } = useContext(DataContext)
+    const { setUpdated: setUpCat } = useContext(CategoriasOrderContext)
+
     const ValidateValues = () => {
 
         if ((!titulo.current || !descricao.current || !valor.current || !data.current || !tipo.current || !categoria.current)
@@ -104,6 +108,8 @@ export function DetailsTransacaoPage(
         setError('')
         setSuccess('Transação atualizada com sucesso')
         setUpdated(true);
+        setUpCat(true);
+        setUpData(true);
         setTransacao(undefined)
 
         setShowDetails(false)

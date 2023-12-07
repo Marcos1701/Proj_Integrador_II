@@ -2,7 +2,7 @@ import { CategoriasContext, CategoriasOrderContext } from "../../../Contexts/Cat
 import { TransacoesContext, TransacoesContextData } from "../../../Contexts/TransacoesContext";
 import { ICategoria } from "../ListCategorias/Components/Categoria";
 import { ITransacao } from "../ListTransacoesCard/Components/Transacao";
-import { useContext, useState } from "react";
+import { useContext, useEffect } from "react";
 import './ListTransacoes.css'
 import { Box } from "./Components/Box/box";
 import { Link } from "react-router-dom";
@@ -35,10 +35,16 @@ export function ListTransacoes(
         setTransacao
     }: IListTransacoesProps) {
 
-    const { transacoes, loading }: TransacoesContextData = useContext(TransacoesContext)
+    const { transacoes, loading, pagina, setPagina, limite, setLimite, qtd }: TransacoesContextData = useContext(TransacoesContext)
     const categorias: ICategoria[] = useContext(CategoriasContext)
     const { loading: loadingCategorias } = useContext(CategoriasOrderContext)
-    const [pageAtual, setPageAtual] = useState<number>(page);
+
+    useEffect(() => {
+        if (limite !== limit) {
+            setLimite(limit)
+        }
+
+    }, [limite, limit])
 
 
     return (
@@ -66,24 +72,19 @@ export function ListTransacoes(
             {loading || loadingCategorias ? <ScaleLoader color="#7949FF" className="loader" />
                 :
                 <MagicMotion layoutDependency={
-                    [transacoes.length]
+                    [limite]
                 }>
                     <ul className="listValues" id={classname === "list_on_page" ? "listTransacoes" : "listTransacoesSimple"}>
-                        {transacoes.length === 0 && <li className="empty" key={"empty"}>Nenhuma transação cadastrada</li>}
+                        {qtd === 0 && <li className="empty" key={"empty"}>Nenhuma transação cadastrada</li>}
                         {
                             transacoes
-                                .slice(pageAtual * limit - limit, pageAtual * limit)
                                 .map(
                                     (transacao: ITransacao) => {
-                                        const categoria: ICategoria | undefined = categorias.find(
+                                        const categoria: ICategoria | null = categorias.find(
                                             (categoria: ICategoria) => {
                                                 return categoria.id === transacao.categoriaid
                                             }
-                                        );
-
-                                        if (!categoria) {
-                                            return <li key={transacao.id + 'noCategory'}></li>
-                                        }
+                                        ) || null // se não encontrar a categoria, retorna null
 
                                         return (
                                             <li className="listItem" key={transacao.id}>
@@ -106,9 +107,9 @@ export function ListTransacoes(
             {
                 pagination && <div className="pagination">
                     <a className={
-                        pageAtual === 1 ? "pagination-button-disabled" : "pagination-button"} onClick={() => {
-                            if (pageAtual > 1) {
-                                setPageAtual(pageAtual - 1);
+                        pagina === 1 ? "pagination-button-disabled" : "pagination-button"} onClick={() => {
+                            if (pagina > 1) {
+                                setPagina(pagina - 1);
                             }
                         }}
                         id="previous"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -121,14 +122,14 @@ export function ListTransacoes(
                                 </clipPath>
                             </defs>
                         </svg></a>
-                    <a className="pagination-button-active">{pageAtual}</a>
-                    {pageAtual < Math.ceil(transacoes.length / limit) && <a className="pagination-button" onClick={() => setPageAtual(pageAtual + 1)}>{pageAtual + 1}</a>}
-                    {pageAtual + 1 < Math.ceil(transacoes.length / limit) && <a className="pagination-button" onClick={() => setPageAtual(pageAtual + 2)}>{pageAtual + 2}</a>}
+                    <a className="pagination-button-active">{pagina}</a>
+                    {pagina < Math.ceil(qtd / limite) && <a className="pagination-button" onClick={() => setPagina(pagina + 1)}>{pagina + 1}</a>}
+                    {pagina + 1 < Math.ceil(qtd / limite) && <a className="pagination-button" onClick={() => setPagina(pagina + 2)}>{pagina + 2}</a>}
                     <a className="pagination-button">...</a>
-                    {pageAtual < Math.ceil(transacoes.length / limit) && <a className="pagination-button" onClick={() => setPageAtual(Math.ceil(transacoes.length / limit))}>{Math.ceil(transacoes.length / limit)}</a>}
+                    {pagina < Math.ceil(qtd / limite) && <a className="pagination-button" onClick={() => setPagina(Math.ceil(qtd / limite))}>{Math.ceil(qtd / limite)}</a>}
                     <a className="pagination-button" onClick={() => {
-                        if (pageAtual < Math.ceil(transacoes.length / limit)) {
-                            setPageAtual(pageAtual + 1);
+                        if (pagina < Math.ceil(qtd / limite)) {
+                            setPagina(pagina + 1);
                         }
                     }}><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                             <g clipPath="url(#clip0_206_57)">

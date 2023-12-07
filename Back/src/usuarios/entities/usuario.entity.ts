@@ -4,7 +4,7 @@ import { Transform } from 'class-transformer';
 import { Categoria } from 'src/categorias/entities/categoria.entity';
 import { Meta } from 'src/meta/entities/meta.entity';
 import { Transacao } from 'src/transacoes/entities/transacao.entity';
-import { Column, Entity, EntityManager, JoinColumn, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, EntityManager, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 export enum CategoriasorderBy {
   nome = "nome",
@@ -37,7 +37,7 @@ export interface returnTransacao {
   titulo: string;
   descricao?: string;
   data: Date;
-  categoriaid: string;
+  categoriaid?: string;
 }
 
 export enum Metasorderby {
@@ -112,10 +112,14 @@ export class Usuario {
     let TransacoesOrdenadas: returnTransacao[] = this.transacoes.map(transacao => {
       const { categoria, ...retorno } = transacao;
 
-      return {
-        ...retorno,
-        categoriaid: categoria.id
+      if (categoria) {
+        return {
+          ...retorno,
+          categoriaid: categoria.id
+        }
       }
+      return retorno
+
     })
 
     if (orderby) {
@@ -129,7 +133,7 @@ export class Usuario {
       }
     }
 
-    if (categoriaid) { TransacoesOrdenadas = TransacoesOrdenadas.filter(transacao => transacao.categoriaid === categoriaid) }
+    if (categoriaid) { TransacoesOrdenadas = TransacoesOrdenadas.filter(transacao => transacao.categoriaid && transacao.categoriaid === categoriaid) }
 
     if (search) {
       search = search.trim();
@@ -207,10 +211,8 @@ export class Usuario {
       const { categoria, ...retorno } = transacao;
 
       retorno.valor = Number(retorno.valor);
-      return {
-        ...retorno,
-        categoriaid: categoria.id
-      }
+      return retorno
+
     })
 
     this.saldo = transacoes.reduce((acc, curr) => {
@@ -219,6 +221,62 @@ export class Usuario {
       }
       return acc - curr.valor;
     }, 0);
+  }
+
+  getSaldoAtual() {
+    this.atualizarSaldo();
+    return this.saldo;
+  }
+
+  getSaldoAnterior(mes?: number, ano?: number) {
+
+    if (!mes || !ano) {
+      const data = new Date();
+      mes = mes || data.getMonth();
+      ano = ano || data.getFullYear(); // se não for passado o ano, pega o ano atual
+    }
+
+    if (!this.transacoes) { return 0 }
+    const transacoes = this.transacoes.map(transacao => {
+      const { categoria, ...retorno } = transacao;
+
+      retorno.valor = Number(retorno.valor);
+      return retorno
+    })
+
+    const saldo = transacoes.reduce((acc, curr) => {
+      const data = new Date(curr.data);
+      if (data.getFullYear() === ano && data.getMonth() === mes) {
+        if (curr.tipo === 'entrada') {
+          return acc + curr.valor;
+        }
+        return acc - curr.valor;
+      }
+      return acc;
+    }, 0);
+
+    return saldo;
+  }
+
+  getGasto(mes?: number, ano?: number) {
+
+    if (this.transacoes.length === 0) { return 0 }
+
+    if (!mes || !ano) {
+      const data = new Date();
+      mes = mes || data.getMonth();
+      ano = ano || data.getFullYear(); // se não for passado o ano, pega o ano atual
+    }
+
+    const gasto: number = this.transacoes.reduce((acc, curr) => {
+      const data = new Date(curr.data);
+      if ((data.getFullYear() === ano && data.getMonth() === mes) && curr.tipo === 'saida') {
+        return acc + curr.valor;
+      }
+      return acc;
+    }, 0);
+
+    return gasto;
   }
 
   async save() {

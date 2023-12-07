@@ -1,15 +1,12 @@
 import { useState } from "react";
-import { Navigate } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { ListaMetas } from "../../List/ListMetasV2";
-import { IMeta } from "../../List/ListMetasV2/Components/Meta";
-import { DetailsMetaPage } from "../DetailsPage/Meta";
 
 
 export function MetasPage() {
 
-    const [showDetails, setShowDetails] = useState<boolean>(false);
     const [voltar, setVoltar] = useState<boolean>(false);
-    const [meta, setMeta] = useState<IMeta | undefined>();
+    const [showAddItem, setShowAddItem] = useState<boolean>(false);
     return (
         <main className="page">
             {voltar && <Navigate to={'/'} />}
@@ -29,10 +26,22 @@ export function MetasPage() {
                 </button>
 
                 <h2 className="title">Metas</h2>
+
+                <div className="AddItem">
+                    <button className="AddItem-Button" onClick={() => setShowAddItem(!showAddItem)}>
+                        <img src="assets/ActionsIcons/plus.svg" alt="Adicionar Item" />
+                    </button>
+                    <div className={
+                        showAddItem ? "opcoes_adicionar-active" : "opcoes_adicionar"
+                    } onMouseLeave={() => setShowAddItem(false)}>
+                        <Link to="/metas/add">
+                            Adicionar Meta
+                        </Link>
+                    </div>
+                </div>
             </div>
 
-            {showDetails && meta !== undefined && <DetailsMetaPage setShowDetails={setShowDetails} meta={meta} setMeta={setMeta} />}
-            <ListaMetas page={1} limit={6} classname="list_on_page" setShowDetails={setShowDetails} setMeta={setMeta} />
+            <ListaMetas page={1} limit={6} id="list_on_page" />
         </main>
     )
 }

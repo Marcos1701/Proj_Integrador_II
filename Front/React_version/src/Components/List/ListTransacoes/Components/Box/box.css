@@ -79,6 +79,21 @@
     text-wrap: nowrap;
 }
 
+.title-icon {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 2px;
+    width: 120px;
+
+    & p {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        width: 65px;
+    }
+
+}
+
 :is(.transacao-box, .meta-box, .categoria-box) :is(.title-icon, .title-icon .icon-div) {
     display: flex;
     align-items: center;
@@ -116,10 +131,6 @@
     margin: 0;
     padding: 0;
 
-}
-
-.navbar .orcamento-true {
-    color: var(--accent, #256D85);
 }
 
 .navbar .valorTransacao-entrada {

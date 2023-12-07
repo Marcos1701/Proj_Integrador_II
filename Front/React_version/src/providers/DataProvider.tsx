@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { CategoriasDataResponse, CategoriasHistoryData, DataContext, DataContextData, MetasDataResponse, TransacoesDataResponse, TransacoesHistoryData } from "../Contexts/DataContext"
+import { CategoriasDataResponse, CategoriasHistory, DataContext, DataContextData, MetasDataResponse, TransacoesDataResponse, TransacoesHistory } from "../Contexts/DataContext"
 import axios from "axios"
 import { api_url, useAuth } from "../Contexts/AuthContext"
 
@@ -18,19 +18,16 @@ export function DataProvider({ children }: DataProviderProps) {
         totalGasto: 0
     })
     const [DadosTransacao, setDadosTransacao] = useState<TransacoesDataResponse>({
-        dados: [],
         totalGasto: 0,
         totalEntrada: 0
     })
-    const [DadosMeta, setDadosMeta] = useState<MetasDataResponse>({
+    const [DadosMeta] = useState<MetasDataResponse>({
         dados: []
     })
-    const [DadosTransacoesHistory, setDadosTransacoesHistory] = useState<TransacoesHistoryData>({
-        data: []
+    const [DadosTransacoesHistory, setDadosTransacoesHistory] = useState<TransacoesHistory>({
+        history: []
     })
-    const [DadosCategoriasHistory, setDadosCategoriasHistory] = useState<CategoriasHistoryData>({
-        data: []
-    })
+    const [DadosCategoriasHistory, setDadosCategoriasHistory] = useState<CategoriasHistory | null>(null)
 
     const [TransacoesHistoryYear, setTransacoesHistoryYear] = useState<number>(new Date().getFullYear())
     const [TransacoesHistoryMonth, setTransacoesHistoryMonth] = useState<number>(new Date().getMonth() + 1)
@@ -38,77 +35,75 @@ export function DataProvider({ children }: DataProviderProps) {
     const [updated, setUpdated] = useState<boolean>(false)
 
     useEffect(() => {
-        const getDadosCategorias = async () => {
+        const getAllData = async () => {
             setLoading(true)
-            const response = await axios.get<CategoriasDataResponse>(`${api_url}categorias/dados`, {
-                headers: {
-                    Authorization: user.access_token
-                }
-
+            const [responseCategorias, responseTransacoes] = await Promise.all([
+                axios.get<CategoriasDataResponse>(`${api_url}categorias/dados`, {
+                    headers: {
+                        Authorization: user.access_token
+                    }
+                }),
+                axios.get<TransacoesDataResponse>(`${api_url}transacoes/dados`, {
+                    headers: {
+                        Authorization: user.access_token
+                    }
+                })
+            ]).catch(err => {
+                console.log(err)
+                return [null, null]
             })
-            setDadosCategoria(response.data)
+
+            if (!responseCategorias || !responseTransacoes) return
+
+            setDadosCategoria(responseCategorias.data)
+            setDadosTransacao(responseTransacoes.data)
             setLoading(false)
         }
 
-        const getDadosTransacoes = async () => {
-            setLoading(true)
-            const response = await axios.get<TransacoesDataResponse>(`${api_url}transacoes/dados`, {
-                headers: {
-                    Authorization: user.access_token
-                }
+        // const getDadosMetas = async () => {
+        //     setLoading(true)
+        //     const response = await axios.get<MetasDataResponse>(`${api_url}metas/dados`, {
+        //         headers: {
+        //             Authorization: user.access_token
+        //         }
 
-            })
-            setDadosTransacao(response.data)
-            setLoading(false)
-        }
+        //     })
+        //     setDadosMeta(response.data)
+        //     setLoading(false)
+        // }
 
-        const getDadosMetas = async () => {
-            setLoading(true)
-            const response = await axios.get<MetasDataResponse>(`${api_url}metas/dados`, {
-                headers: {
-                    Authorization: user.access_token
-                }
-
-            })
-            setDadosMeta(response.data)
-            setLoading(false)
-        }
-
-        getDadosCategorias()
-        getDadosTransacoes()
-        getDadosMetas()
+        // getDadosMetas()
+        getAllData()
     }, [updated, user])
 
     useEffect(() => {
-        const getDadosTransacoesHistory = async () => {
-            setLoading(true)
-            const response = await axios.get<TransacoesHistoryData>(`${api_url}transacoes/historico`, {
-                params: {
-                    ano: TransacoesHistoryYear ? TransacoesHistoryYear : new Date().getFullYear(),
-                    mes: TransacoesHistoryMonth ? TransacoesHistoryMonth : null
-                },
-                headers: {
-                    Authorization: user.access_token
-                }
 
+        const getAllData = async () => {
+            setLoading(true)
+            const [responseCategorias, responseTransacoes] = await Promise.all([
+                axios.get<CategoriasHistory>(`${api_url}categorias/historico`, {
+                    headers: {
+                        Authorization: user.access_token
+                    }
+                }),
+                axios.get<TransacoesHistory>(`${api_url}transacoes/historico`, {
+                    headers: {
+                        Authorization: user.access_token
+                    }
+                })
+            ]).catch(err => {
+                console.log(err)
+                return [null, null]
             })
-            setDadosTransacoesHistory(response.data)
+
+            if (!responseCategorias || !responseTransacoes) return
+
+            setDadosCategoriasHistory(responseCategorias.data)
+            setDadosTransacoesHistory(responseTransacoes.data)
             setLoading(false)
         }
 
-        const getDadosCategoriasHistory = async () => {
-            setLoading(true)
-            const response = await axios.get<CategoriasHistoryData>(`${api_url}categorias/historico`, {
-                headers: {
-                    Authorization: user.access_token
-                }
-            })
-            setDadosCategoriasHistory(response.data)
-            setLoading(false)
-        }
-
-        getDadosTransacoesHistory()
-        getDadosCategoriasHistory()
+        getAllData()
 
     }, [TransacoesHistoryYear, TransacoesHistoryMonth, user])
 

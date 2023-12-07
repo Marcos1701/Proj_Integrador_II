@@ -1,3 +1,51 @@
+@font-face {
+  font-family: Eina03-SemiBold;
+  src: url('fonts/Eina/Eina03-SemiBold.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+@font-face {
+  font-family: Eina03-Bold;
+  src: url('fonts/Eina/Eina03-Bold.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+@font-face {
+  font-family: Eina03-Regular;
+  src: url('fonts/Eina/Eina03-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+@font-face {
+  font-family: Eina01-Regular;
+  src: url('fonts/Eina/Eina01-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+@font-face {
+  font-family: Eina01-Bold;
+  src: url('fonts/Eina/Eina01-Bold.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+@font-face {
+  font-family: Eina01-SemiBold;
+  src: url('fonts/Eina/Eina01-SemiBold.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -32,6 +80,8 @@ body {
   max-width: 99vw;
   max-height: 100vh;
   background: var(--background, #141332);
+  align-items: center;
+  justify-content: center;
 }
 
 h1 {
@@ -112,7 +162,7 @@ ul.list-values-2columns {
 .page-header h2.title {
   grid-area: title;
 
-  color: #06283D;
+  color: #FFFFFF;
   font-family: Eina03-SemiBold;
   font-size: 27px;
   font-style: normal;

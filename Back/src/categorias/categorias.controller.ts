@@ -3,10 +3,9 @@ import { CategoriasService } from './categorias.service';
 import { CreateCategoriaDto } from './dto/create-categoria.dto';
 import { UpdateCategoriaDto } from './dto/update-categoria.dto';
 import { CategoriasorderBy } from 'src/usuarios/entities/usuario.entity';
-import { ApiBody, ApiHeader, ApiHeaders, ApiParam, ApiQuery, ApiResponse } from '@nestjs/swagger';
+import { ApiBody, ApiHeader, ApiParam, ApiQuery, ApiResponse } from '@nestjs/swagger';
 import { isUUID } from 'class-validator';
-
-
+import { MiddlewareBuilder } from '@nestjs/core';
 
 @Controller('categorias')
 export class CategoriasController {
@@ -32,6 +31,7 @@ export class CategoriasController {
     type: CreateCategoriaDto,
     description: 'Cria uma nova categoria'
   })
+
   @Post('')
   async create(@Headers('Authorization') token: string, @Body() createCategoriaDto: CreateCategoriaDto) {
     if (!token) {
@@ -179,8 +179,6 @@ export class CategoriasController {
     }
     return this.categoriasService.historicoCategoria(id, token);
   }
-
-
 
   @ApiHeader({
     name: 'Authorization',

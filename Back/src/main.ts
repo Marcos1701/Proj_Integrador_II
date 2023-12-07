@@ -1,7 +1,9 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { ValidationPipe } from '@nestjs/common';
+import { Logger, ValidationPipe } from '@nestjs/common';
+
+const logger = new Logger('Main');
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -15,16 +17,11 @@ async function bootstrap() {
 
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('docs', app, document);
-  // await app.listen(3000);
   app.useGlobalPipes(new ValidationPipe());
-  app.enableCors(
-    {
-      origin: '*',
-      methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-      preflightContinue: false,
-      optionsSuccessStatus: 204,
-    } // libera o acesso para qualquer origem e qualquer método
-  );
-  await app.listen(3300);
+  app.setGlobalPrefix('api');
+  app.enableCors();
+  await app.listen(3000);
+
+  logger.log(`🚀 Application listening on port 3000`);
 }
 bootstrap();

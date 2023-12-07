@@ -2,3 +2,15 @@
     min-height: 80vh;
     top: 2em;
 }
+
+.page {
+    background: #1D1D41;
+    border-radius: 20px;
+    padding: 1em;
+    margin: 0 1em;
+    width: 70vw;
+}
+
+.page-header .opcoes_adicionar-active{
+    top: 20%;
+}

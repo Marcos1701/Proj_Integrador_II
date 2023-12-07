@@ -1,4 +1,5 @@
 .ListTransacoesSimple,
+.transaction-graph,
 .div_categorias,
 .legend-transacoes,
 .legend-categorias,
@@ -23,7 +24,7 @@
     align-self: flex-start;
     margin-left: 2em;
     width: 34em;
-
+    color: #FFF;
 }
 
 .anchors_to_transacoesPage,
@@ -34,7 +35,8 @@
     gap: 48%;
 }
 
-.legend-transacoes {
+.legend-transacoes,
+.list_on_page .legend-categorias {
     width: 90%;
     justify-content: space-between;
     padding: 0 1em 0.2em .3em;
@@ -43,15 +45,15 @@
     & * {
         color: var(--text-secondary, #AEABD8);
         font-family: Eina03-Regular;
-        font-size: 14px;
+        font-size: 13px;
         font-weight: 400;
     }
 }
 
-:is(.ListTransacoesSimple, .div_categorias) h2 {
+:is(.ListTransacoesSimple, .transaction-graph, .div_categorias) h2 {
     color: var(--text, #FFF);
     font-family: Eina03-SemiBold;
-    font-size: 20.1px;
+    font-size: 19.1px;
     font-weight: 600;
     letter-spacing: 0;
     line-height: normal;
@@ -61,6 +63,7 @@
 }
 
 .ListTransacoesSimple,
+.transaction-graph,
 .div_categorias {
     flex-direction: column;
     gap: 1em;
@@ -68,7 +71,7 @@
     border-radius: 20px;
     background: #1D1D41;
     box-shadow: 3px 5px 10px #0000008f, 0px 2px 6px #0000000a, 0px 16px 24px #0000000f;
-    height: 270px;
+    height: 240px;
     width: 40em;
     padding: .5em 1em 1.1em 2.5em;
     /* 1 => top, 2 => right, 3 => bottom, 4 => left */

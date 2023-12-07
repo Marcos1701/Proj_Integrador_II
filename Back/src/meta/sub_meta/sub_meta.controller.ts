@@ -88,6 +88,30 @@ export class SubMetaController {
     status: 401,
     description: 'Token não encontrado',
   })
+  @ApiBody({
+    type: [CreateSubMetaDto]
+  })
+  @Post('many')
+  create_many(@Headers('Authorization') access_token: string, @Param('id') id_meta: string, @Body() createSubMetaDto: CreateSubMetaDto[]) {
+    if (!access_token) {
+      throw new UnauthorizedException('Token não encontrado');
+    }
+    if (!Array.isArray(createSubMetaDto)) {
+      throw new BadRequestException('O atributo submetas deve ser um array');
+    }
+
+    return this.subMetaService.create_many(access_token, id_meta, createSubMetaDto);
+  }
+
+  @ApiHeader({
+    name: 'Authorization',
+    description: 'Bearer token',
+    example: 'Bearer token'
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Token não encontrado',
+  })
   @ApiResponse({
     status: 200,
     description: 'SubMeta encontrada',

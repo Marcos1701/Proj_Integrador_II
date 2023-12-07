@@ -1,5 +1,3 @@
-import { InjectEntityManager } from '@nestjs/typeorm';
-import { Transform } from 'class-transformer';
 import { Categoria } from 'src/categorias/entities/categoria.entity';
 import { Usuario } from 'src/usuarios/entities/usuario.entity';
 import {
@@ -53,7 +51,6 @@ export class Transacao {
   usuario: Usuario; // usuario é o nome da coluna na tabela transacao
 
   @ManyToOne(() => Categoria, (categoria) => categoria.transacoes, {
-    eager: true,
     cascade: true,
     onDelete: 'CASCADE'
   })
@@ -67,14 +64,6 @@ export class Transacao {
   updateData(transacao: Partial<Transacao>) {
     Object.assign(this, transacao);
   }
-
-  // @AfterInsert()
-  // @AfterUpdate()
-  // @AfterRemove()
-  // async atualizaGastoCategoria() {
-  //   this.categoria.atualizaGasto();
-  //   await this.entityMananger.save<Categoria>(this.categoria);
-  // }
 
 
 }

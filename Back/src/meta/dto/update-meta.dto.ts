@@ -1,6 +1,8 @@
+import { IsOptional } from 'class-validator';
 import { PartialType } from '@nestjs/mapped-types';
 import { CreateMetaDto } from './create-meta.dto';
-import { IsOptional } from 'class-validator';
+import { SubMeta } from '../sub_meta/entities/sub_meta.entity';
+import { MarcoMeta } from '../marco_meta/entities/marco_meta.entity';
 
 export class UpdateMetaDto extends PartialType(CreateMetaDto) {
 
@@ -33,6 +35,14 @@ export class UpdateMetaDto extends PartialType(CreateMetaDto) {
     valor?: number;
 
     @IsOptional({
+        message: "Valor inválido",
+        context: {
+            IsPositive: true
+        }
+    })
+    valorAtual?: number;
+
+    @IsOptional({
         message: "Data inválida",
         context: {
             IsDateString: true,
@@ -49,4 +59,26 @@ export class UpdateMetaDto extends PartialType(CreateMetaDto) {
         }
     })
     icone?: string;
+
+    //submeta?: Submeta[];
+    @IsOptional({
+        message: "Submetas inválidas",
+        context: {
+            IsArray: true,
+            type: [SubMeta]
+        }
+    })
+    submeta?: SubMeta[];
+
+    // marcos?: Marco[];
+
+    @IsOptional({
+        message: "Marcos inválidos",
+        context: {
+            IsArray: true,
+            type: [MarcoMeta]
+        }
+    })
+    marcos?: MarcoMeta[];
+
 }

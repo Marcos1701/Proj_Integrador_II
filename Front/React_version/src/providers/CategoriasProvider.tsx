@@ -3,7 +3,7 @@ import axios from "axios"
 import { useAuth, api_url } from "../Contexts/AuthContext"
 import { CategoriasContext, CategoriasOrderContext, CategoriasOrderContextData } from "../Contexts/CategoriasContext"
 import { ICategoria } from "../Components/List/ListCategorias/Components/Categoria"
-
+import { Navigate } from "react-router-dom"
 
 interface CategoriasProviderProps {
     children: React.ReactNode
@@ -52,7 +52,7 @@ export function CategoriasProvider({ children }: CategoriasProviderProps) {
             if (CategoriasResponse.status == 404 || !CategoriasResponse.data) {
                 setLoading(false)
                 console.log('Categorias not found')
-                return
+                return <Navigate to={'/login'} />
             }
 
             setCategorias(CategoriasResponse.data)

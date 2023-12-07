@@ -6,13 +6,10 @@ import { MoneyValidation } from "../AdicionarTransacaoForm";
 import { ICategoria } from "../../../../List/ListCategorias/Components/Categoria";
 import { IconSelect } from "./Components/IconSelect";
 import { CategoriasOrderContext } from "../../../../../Contexts/CategoriasContext";
+import { Navigate } from "react-router-dom";
 
 
-interface IAdicionarCategoriaFormProps {
-    setExibirAdicionarCategoriaForm: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
-export function AdicionarCategoriaForm({ setExibirAdicionarCategoriaForm }: IAdicionarCategoriaFormProps) {
+export function AdicionarCategoriaForm() {
 
     const { user } = useAuth();
     if (!user) return <p>Usuário não encontrado</p>
@@ -26,7 +23,8 @@ export function AdicionarCategoriaForm({ setExibirAdicionarCategoriaForm }: IAdi
 
     const { setUpdated } = useContext(CategoriasOrderContext)
     const [showOrcamento, setShowOrcamento] = useState<boolean>(false);
-
+    const [retornar, setRetornar] = useState<boolean>(false);
+    const [msgSucesso, setMsgSucesso] = useState<boolean>(false);
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -71,12 +69,19 @@ export function AdicionarCategoriaForm({ setExibirAdicionarCategoriaForm }: IAdi
         }
 
         setUpdated(true); // atualizar categorias
-        setExibirAdicionarCategoriaForm(false);
+        setMsgSucesso(true);
+        setRetornar(true);
     }
 
     return (
         <form className="add-element-form" onSubmit={handleSubmit}>
-            <h2>Adicionar Categoria</h2>
+            {msgSucesso && <p>Categoria adicionada com sucesso</p>}
+            {retornar && <>
+                <p>redirecionando...</p>
+                <Navigate to="/" />
+            </>
+            }
+
             <div className="input-div">
                 <label className="label-nome" htmlFor="input-nome">Nome</label>
                 <input type="text" placeholder="Nome da Categoria" className="input-nome" ref={nome} required />
@@ -102,7 +107,7 @@ export function AdicionarCategoriaForm({ setExibirAdicionarCategoriaForm }: IAdi
 
 
             <div className="button-div">
-                <button type="button" onClick={() => setExibirAdicionarCategoriaForm(false)} className="cancel-form-button">Cancelar</button>
+                <button type="button" onClick={() => setRetornar(true)} className="cancel-form-button">Cancelar</button>
                 <button type="submit" className="submit-form-button">Adicionar Categoria</button>
             </div>
         </form>

@@ -26,3 +26,13 @@
         opacity: 0;
     }
 }
+
+.label-element-div select option:disabled {
+    color: #000000;
+    background: #c7e1ec;
+
+    &:hover {
+        color: #000000;
+        background: #c7e1ec;
+    }
+}

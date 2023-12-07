@@ -15,19 +15,22 @@ interface IListaMetasProps {
     searchInput?: boolean
     page?: number
     classname?: string
+    id?: string
     setShowDetails?: React.Dispatch<React.SetStateAction<boolean>>
     setMeta?: React.Dispatch<React.SetStateAction<IMeta | undefined>>
 }
 
 export function ListaMetas(
     {
-        limit = 2,
+        limit = 4,
         pagination = true,
         orderSelect = true,
         searchInput = true,
         page = 1,
+        id = "ListaMetas",
         setShowDetails,
         setMeta
+
     }: IListaMetasProps
 ): JSX.Element {
 
@@ -35,7 +38,7 @@ export function ListaMetas(
     const [pageAtual, setPageAtual] = useState<number>(page);
 
     return (
-        <div className="ListaMetas">
+        <div className="ListaMetas" id={id}>
             {(searchInput || orderSelect) && (
                 <div className="search-order">
                     {orderSelect && <Orderdiv />}
@@ -43,21 +46,23 @@ export function ListaMetas(
                 </div>
             )}
 
-            <div className="header">
-                <h2>Metas</h2>
-            </div>
+            {id !== "list_on_page" &&
+                <div className="header">
+                    <h2>Metas</h2>
+                </div>
+            }
 
-            {loading ? <ScaleLoader color="#7949FF" /> :
+            {loading ? <ScaleLoader color="#7949FF" className="loader" /> :
                 <MagicMotion layoutDependency={
                     [metas.length]
                 } >
                     <ul className="list">
-                        {metas.length === 0 && <li className="empty" key='EmptyMetas'>Nenhuma meta cadastrada</li>}
+                        {metas.length === 0 && <li className="empty" key='EmptyMetas'>Nenhuma meta encontrada</li>}
                         {
                             metas
                                 .slice(pageAtual * limit - limit, pageAtual * limit)
                                 .map(
-                                    (meta) => <li key={meta.id} className="li-meta">
+                                    (meta) => <li key={meta.id + "-li"} className="li-meta">
                                         <MetaBox
                                             meta={meta}
                                             key={meta.id}
@@ -69,21 +74,6 @@ export function ListaMetas(
                         }
                     </ul>
                 </MagicMotion>
-            }
-
-            {!pagination && <div className="pagination-home">
-                <svg width="20" height="6" viewBox="0 0 20 6" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <rect width="20" height="6" rx="3" fill="#6359E9" />
-                </svg>
-                <svg width="6" height="6" viewBox="0 0 6 6" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="3" cy="3" r="3" fill="#27264E" />
-                </svg>
-
-                <svg width="6" height="6" viewBox="0 0 6 6" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="3" cy="3" r="3" fill="#27264E" />
-                </svg>
-
-            </div>
             }
 
             {

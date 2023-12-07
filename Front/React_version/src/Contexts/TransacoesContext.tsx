@@ -2,13 +2,13 @@ import { createContext } from "react";
 import { ITransacao } from "../Components/List/ListTransacoesCard/Components/Transacao";
 import { OrderElements } from "../providers/CategoriasProvider";
 
-export enum ordenarTransacoes {
-    titulo = "titulo",
-    descricao = "descricao",
-    valor = "valor",
-    entrada = 'entrada',
-    saida = 'saida',
-    data = "data"
+export enum SortFieldTransacao {
+    ID = 'id',
+    TIPO = 'tipo',
+    VALOR = 'valor',
+    TITULO = 'titulo',
+    DESCRICAO = 'descricao',
+    DATA = 'data',
 }
 
 export interface TransacoesContextData {
@@ -17,11 +17,16 @@ export interface TransacoesContextData {
     updated: boolean,
     ordem: OrderElements,
     setOrdem: (order: OrderElements) => void,
-    ordenarPor: ordenarTransacoes,
-    setOrdenarPor: (orderby: ordenarTransacoes) => void,
+    ordenarPor: SortFieldTransacao,
+    setOrdenarPor: (orderby: SortFieldTransacao) => void,
     search: string,
     setSearch: (search: string) => void
-    loading: boolean
+    loading: boolean,
+    pagina: number,
+    setPagina: (page: number) => void,
+    limite: number,
+    setLimite: (limit: number) => void,
+    qtd: number
 }
 
 export const TransacoesContext = createContext<TransacoesContextData>({
@@ -30,9 +35,14 @@ export const TransacoesContext = createContext<TransacoesContextData>({
     updated: false,
     ordem: OrderElements.ASC,
     setOrdem: () => { },
-    ordenarPor: ordenarTransacoes.data,
+    ordenarPor: SortFieldTransacao.DATA,
     setOrdenarPor: () => { },
     search: '',
     setSearch: () => { },
-    loading: true
+    loading: true,
+    pagina: 1,
+    setPagina: () => { },
+    limite: 3,
+    setLimite: () => { },
+    qtd: 0
 });

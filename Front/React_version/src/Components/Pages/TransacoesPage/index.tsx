@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Navigate } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { ITransacao } from "../../List/ListTransacoesCard/Components/Transacao";
 import { DetailsTransacaoPage } from "../DetailsPage/Transacao";
 import { ListTransacoes } from "../../List/ListTransacoes";
@@ -10,6 +10,7 @@ export function TransacoesPage() {
     const [voltar, setVoltar] = useState<boolean>(false);
     const [showDetails, setShowDetails] = useState<boolean>(false);
     const [transacao, setTransacao] = useState<ITransacao | undefined>();
+    const [showAddItem, setShowAddItem] = useState<boolean>(false);
 
     return (
         <main className="page">
@@ -31,6 +32,22 @@ export function TransacoesPage() {
                 </button>
 
                 <h2 className="title">Transações</h2>
+
+                <div className="AddItem">
+                    <button className="AddItem-Button" onClick={() => setShowAddItem(!showAddItem)}>
+                        <img src="assets/ActionsIcons/plus.svg" alt="Adicionar Item" />
+                    </button>
+                    <div className={
+                        showAddItem ? "opcoes_adicionar-active" : "opcoes_adicionar"
+                    } onMouseLeave={() => setShowAddItem(false)}>
+                        <Link to="/transacoes/add">
+                            Adicionar Transação
+                        </Link>
+                        <Link to="/categorias/add">
+                            Adicionar Categoria
+                        </Link>
+                    </div>
+                </div>
             </div>
 
             <ListTransacoes page={1} limit={6} classname="list_on_page" setShowDetails={setShowDetails} setTransacao={setTransacao} />

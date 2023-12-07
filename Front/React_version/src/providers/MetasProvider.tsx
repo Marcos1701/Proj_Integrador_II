@@ -24,7 +24,7 @@ export function MetasProvider({ children }: MetasProviderProps) {
         async function loadMetas() {
             if (!user) return
             setLoading(true)
-            const response = await axios.get(`${api_url}meta`, {
+            const response = await axios.get<IMeta[]>(`${api_url}meta`, {
                 params: {
                     orderby: ordenarPor,
                     order: ordem,
@@ -47,6 +47,7 @@ export function MetasProvider({ children }: MetasProviderProps) {
                 meta.dataCriacao = new Date(meta.dataCriacao)
                 meta.dataLimite = new Date(meta.dataLimite)
             })
+
             setMetas(response.data)
             setUpdated(false)
             setLoading(false)

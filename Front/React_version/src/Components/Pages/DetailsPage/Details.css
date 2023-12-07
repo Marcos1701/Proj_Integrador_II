@@ -18,12 +18,8 @@ p.created-at {
 
 }
 
-#detais-div-meta{
+#detais-div-meta {
     min-height: 60vh;
-}
-
-#details-meta{
-    gap: .6em;
 }
 
 .select-orcamento-group,

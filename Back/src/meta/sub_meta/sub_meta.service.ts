@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateSubMetaDto } from './dto/create-sub_meta.dto';
 import { UpdateSubMetaDto } from './dto/update-sub_meta.dto';
 import { EntityManager } from 'typeorm';
@@ -14,6 +14,33 @@ export class SubMetaService {
     private readonly entityManager: EntityManager,
     private readonly jwtService: JwtService,
   ) { }
+
+  async create_many(access_token: string, id_meta: string, createSubMetaDto: CreateSubMetaDto[]) {
+    const usuario = await this.getUserFromtoken(access_token)
+    const meta = usuario.metas.find(meta => meta.id === id_meta)
+
+    if (!meta) {
+      throw new NotFoundException('Meta não encontrada'); // 404
+    }
+
+    const subMetas = createSubMetaDto.map(async (subMeta) => {
+      const result = await this.entityManager.insert(
+        SubMeta,
+        {
+          ...subMeta,
+          meta
+        }
+      )
+
+      if (!result.identifiers[0]) {
+        throw new BadRequestException('Erro ao criar subMeta: ' + subMeta.titulo + ' - ' + subMeta.valor)
+      }
+    }
+    )
+
+    return subMetas
+  }
+
   async create(access_token: string, id_meta: string, createSubMetaDto: CreateSubMetaDto) {
     const usuario = await this.getUserFromtoken(access_token)
     const meta = usuario.metas.find(meta => meta.id === id_meta)

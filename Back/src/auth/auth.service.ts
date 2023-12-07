@@ -46,15 +46,16 @@ export class AuthService {
     async signup(data: SingUpData): Promise<SingUpResponse> {
         const userExists = await this.usersService.findOneByEmail(data.email);
         if (userExists) {
-            throw new UnauthorizedException('Usuário já cadastrado');
+            throw new UnauthorizedException('E-mail já cadastrado');
         }
 
         const usuario = await this.usersService.create(data);
+        
         const token = await this.gerarToken(usuario);
 
         const { senha, email, saldo, ...user } = usuario;
         return {
-            ...user,
+            nome: user.nome,
             ...token
         };
     }
