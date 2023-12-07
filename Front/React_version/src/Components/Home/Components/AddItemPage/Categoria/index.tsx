@@ -5,8 +5,8 @@ import '../AddItemPage.css'
 export function AddCategoriaPage() {
 
     return (
-        <main className="AddPage">
-            <div className="AddPage__content">
+        <main className="Page">
+            <div className="Page__content">
                 <h1>Adicionar Categoria</h1>
                 <AdicionarCategoriaForm />
             </div>

@@ -69,7 +69,7 @@ export function Saldo() {
 
 
     // se o saldo atual é -1200 e o saldo anterior é 800, o percentual é positivo, pois o saldo atual é maior que o anterior
-    const percentual = ((saldo - SaldoAnterior) / SaldoAnterior) * 100 // (-1200 - 800) / 800 = -2000 / 800 = -2.5 * 100 = -250%
+    const percentual = SaldoAnterior === 0 ? 100 : ((saldo - SaldoAnterior) / SaldoAnterior) * 100 // (-1200 - 800) / 800 = -2000 / 800 = -2.5 * 100 = -250%
 
     return (
 

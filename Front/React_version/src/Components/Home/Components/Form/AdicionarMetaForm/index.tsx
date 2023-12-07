@@ -1,4 +1,4 @@
-import React, { Ref, useContext, useRef, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
 import { useAuth, api_url } from "../../../../../Contexts/AuthContext";
 import axios from "axios";
 import { MoneyValidation } from "../AdicionarTransacaoForm";

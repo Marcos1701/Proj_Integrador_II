@@ -18,7 +18,6 @@ export function DataProvider({ children }: DataProviderProps) {
         totalGasto: 0
     })
     const [DadosTransacao, setDadosTransacao] = useState<TransacoesDataResponse>({
-        dados: [],
         totalGasto: 0,
         totalEntrada: 0
     })

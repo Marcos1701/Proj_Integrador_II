@@ -73,10 +73,10 @@ export class TransacoesService {
       if (ano && mes) {
         return t.data.getFullYear() === ano && t.data.getMonth() === mes;
       } else if (ano) {
-        console.log("ano")
+
         return t.data.getFullYear() === ano;
       } else if (mes) {
-        console.log("mes")
+
         return t.data.getMonth() === mes;
       }
       return true;
@@ -160,10 +160,9 @@ export class TransacoesService {
       throw new BadRequestException('Mês inválido');
     }
 
-    const dados = this.mapAndFilterTransactions(usuario.transacoes, ano, mes);
+    const dados = this.mapAndFilterTransactions(usuario.transacoes, ano == undefined ? ano : null, mes == undefined ? mes : null);
 
     return {
-      dados,
       totalGasto: dados.filter(t => t.tipo === 'saida').reduce((acc, t) => acc + t.valor, 0),
       totalEntrada: dados.filter(t => t.tipo === 'entrada').reduce((acc, t) => acc + t.valor, 0)
     }
@@ -186,6 +185,8 @@ export class TransacoesService {
 
     const transacoes = this.mapAndFilterTransactions(usuario.transacoes, ano == undefined ? ano : null, mes == undefined ? mes : null);
 
+    const anos = ano == undefined ? [...new Set(transacoes.map(t => t.data.getFullYear()))] : [ano];
+
     // agrupa as transações pelo ano e mês
     const history: {
       ano: number,
@@ -195,22 +196,25 @@ export class TransacoesService {
       }[]
     }[] = [];
 
-    for (let m = 0; m < 12; m++) {
-      const transacoesDoMes = transacoes.filter(t => {
-        const anoTransacao = ano || new Date().getFullYear();
-        return t.data.getFullYear() === anoTransacao && t.data.getMonth() === m;
-      });
-      if (!history.find(h => h.ano === ano || new Date().getFullYear())) {
-        history.push({
-          ano: ano || new Date().getFullYear(),
-          meses: []
+    anos.forEach(anoTransacao => {
+      for (let m = 0; m < 12; m++) {
+        const transacoesDoMes = transacoes.filter(t => {
+          return t.data.getFullYear() === anoTransacao && t.data.getMonth() === m;
+        });
+        if (!history.find(h => h.ano === anoTransacao)) {
+          history.push({
+            ano: anoTransacao,
+            meses: []
+          });
+        }
+
+        history.find(h => h.ano === anoTransacao).meses.push({
+          mes: m,
+          transacoes: transacoesDoMes
         });
       }
-      history.find(h => h.ano === ano || new Date().getFullYear()).meses.push({
-        mes: m,
-        transacoes: transacoesDoMes
-      });
-    }
+    });
+
 
     return {
       history

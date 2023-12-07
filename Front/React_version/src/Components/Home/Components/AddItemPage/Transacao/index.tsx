@@ -4,8 +4,8 @@ import '../AddItemPage.css'
 export function AddTransacaoPage() {
 
     return (
-        <main className="AddPage">
-            <div className="AddPage__content">
+        <main className="Page">
+            <div className="Page__content">
                 <h1>Adicionar Transação</h1>
                 <AdicionarTransacaoForm />
             </div>

@@ -6,19 +6,17 @@ import { ITransacao } from "../List/ListTransacoesCard/Components/Transacao";
 import { DetailsTransacaoPage } from "../Pages/DetailsPage/Transacao";
 import { ListaMetas } from "../List/ListMetasV2";
 import { SectionCategorias } from "./Components/SectionCategorias";
-import { DetailsMetaPage } from "../Pages/DetailsPage/Meta";
 import { IMeta } from "../List/ListMetasV2/Components/Meta";
 import { GraphTransactionHistory } from "./Components/GraphHistory/Transaction";
 import { useAuth } from "../../Contexts/AuthContext";
 import { Link } from "react-router-dom";
+import { DetailsMetaForm } from "../Pages/DetailsPage/Meta/Components/DetailsForm";
 
 export function Home() {
   const [showDetails, setShowDetails] = useState<boolean>(false);
   const [showAddItem, setShowAddItem] = useState<boolean>(false);
   // const [categoria, setCategoria] = useState<ICategoria>();
   const [transacao, setTransacao] = useState<ITransacao | undefined>();
-  const [meta, setMeta] = useState<IMeta | undefined>();
-  const [showMenu, setShowMenu] = useState<boolean>(false);
 
   const { user } = useAuth()
   if (!user) return <></>
@@ -58,9 +56,8 @@ export function Home() {
         <ListTransacoes pagination={false} setShowDetails={setShowDetails} setTransacao={setTransacao} searchInput={false} orderSelect={false} />
       </section>
 
-      {showDetails && meta !== undefined && <DetailsMetaPage setShowDetails={setShowDetails} meta={meta} setMeta={setMeta} />}
       <section className="Metas-CategoriasSection">
-        <ListaMetas pagination={false} setShowDetails={setShowDetails} setMeta={setMeta} searchInput={false} orderSelect={false} />
+        <ListaMetas pagination={false} searchInput={false} orderSelect={false} />
         <SectionCategorias />
       </section>
     </main >

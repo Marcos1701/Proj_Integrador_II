@@ -15,8 +15,6 @@ interface IListaMetasProps {
     searchInput?: boolean
     page?: number
     classname?: string
-    setShowDetails?: React.Dispatch<React.SetStateAction<boolean>>
-    setMeta?: React.Dispatch<React.SetStateAction<IMeta | undefined>>
     id?: string
 }
 
@@ -27,8 +25,6 @@ export function ListaMetas(
         orderSelect = true,
         searchInput = true,
         page = 1,
-        setShowDetails,
-        setMeta,
         id = "ListaMetas"
     }: IListaMetasProps
 ): JSX.Element {
@@ -49,7 +45,7 @@ export function ListaMetas(
                 <h2>Metas</h2>
             </div>
 
-            {loading ? <ScaleLoader color="#7949FF" /> :
+            {loading ? <ScaleLoader color="#7949FF" className="loader" /> :
                 <MagicMotion layoutDependency={
                     [metas.length]
                 } >
@@ -59,39 +55,16 @@ export function ListaMetas(
                             metas
                                 .slice(pageAtual * limit - limit, pageAtual * limit)
                                 .map(
-                                    (meta) => <li key={meta.id} className="li-meta">
+                                    (meta) => <li key={meta.id + "-li"} className="li-meta">
                                         <MetaBox
                                             meta={meta}
                                             key={meta.id}
-                                            setShowDetails={setShowDetails}
-                                            setMeta={setMeta}
                                         />
                                     </li>
                                 )
                         }
                     </ul>
                 </MagicMotion>
-            }
-
-            {!pagination && <div className="pagination-home">
-                <div className="pagination_metas_home-div">
-                    <svg width="20" height="6" viewBox="0 0 20 6" fill="none" xmlns="http://www.w3.org/2000/svg" className="pagination_metas_home">
-                        <rect width="20" height="6" rx="3" fill="#6359E9" />
-                    </svg>
-                </div>
-                <svg width="6" height="6" viewBox="0 0 6 6" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="3" cy="3" r="3" fill="#27264E" />
-                </svg>
-
-                <svg width="6" height="6" viewBox="0 0 6 6" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="3" cy="3" r="3" fill="#27264E" />
-                </svg>
-
-                <svg width="6" height="6" viewBox="0 0 6 6" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="3" cy="3" r="3" fill="#27264E" />
-                </svg>
-
-            </div>
             }
 
             {

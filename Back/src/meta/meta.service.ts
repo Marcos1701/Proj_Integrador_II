@@ -102,11 +102,8 @@ export class MetaService {
       throw new NotFoundException('Meta não encontrada'); // 404
     }
 
-    if (valor <= meta.valorAtual) {
-      throw new BadRequestException('O valor a ser adicionado deve ser maior que o valor atual'); // 400
-    }
-    if (valor > meta.valor) {
-      throw new BadRequestException('O valor a ser adicionado deve ser menor ou igual ao valor da meta'); // 400
+    if (valor <= 0) {
+      throw new BadRequestException('O valor deve ser maior que 0'); // 400
     }
 
     const result = await this.entityManager.update(
@@ -115,7 +112,8 @@ export class MetaService {
         id
       },
       {
-        valorAtual: valor
+        valorAtual: valor,
+        concluida: valor >= Number(meta.valor)
       }
     )
 

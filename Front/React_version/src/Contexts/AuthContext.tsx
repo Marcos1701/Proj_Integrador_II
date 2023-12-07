@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { createContext, useContext, useMemo, useState } from "react";
 import { redirect } from "react-router-dom";
-import { ApolloClient, InMemoryCache, ApolloProvider, gql, NormalizedCacheObject } from '@apollo/client';
+import { ApolloClient, InMemoryCache, NormalizedCacheObject } from '@apollo/client';
 
 export type User = {
     nome: string;

@@ -83,12 +83,13 @@
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    gap: 5px;
+    gap: 2px;
+    width: 120px;
 
     & p {
         overflow: hidden;
         text-overflow: ellipsis;
-        width: 90%;
+        width: 65px;
     }
 
 }

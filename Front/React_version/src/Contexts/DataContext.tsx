@@ -22,7 +22,6 @@ export interface TransacaoData {
 
 
 export interface TransacoesDataResponse {
-    dados: TransacaoData[]
     totalGasto: number
     totalEntrada: number
 }

@@ -281,6 +281,7 @@ export class CategoriasService {
     }
       = {
       categorias: categoriasComTransacoes.map(categoria => {
+
         const history = categoria.transacoes.reduce((acc, transacao) => {
           const dataTransacao = new Date(transacao.data);
           const ano = dataTransacao.getFullYear();

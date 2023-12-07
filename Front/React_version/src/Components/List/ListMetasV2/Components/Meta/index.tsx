@@ -2,6 +2,7 @@ import "./Meta.css";
 import { tratarData } from "../../../ListTransacoesCard/Components/Transacao";
 import { realizarTratamentoValor } from "../../../../Home/Components/SecaoAcoes/Components/Saldo";
 import { useAuth } from "../../../../../Contexts/AuthContext";
+import { Link } from "react-router-dom";
 
 export interface IMeta {
     id: string;
@@ -19,15 +20,11 @@ export interface IMeta {
 
 interface IMetaBoxProps {
     meta: IMeta
-    setShowDetails?: React.Dispatch<React.SetStateAction<boolean>>
-    setMeta?: React.Dispatch<React.SetStateAction<IMeta | undefined>>
 }
 
 export const MetaBox = (
     {
-        meta,
-        setShowDetails,
-        setMeta
+        meta
     }: IMetaBoxProps
 ): JSX.Element => {
 
@@ -35,30 +32,11 @@ export const MetaBox = (
 
     if (!user) return (<></>)
 
-    // const { setUpdated } = useContext(MetasContext)
-
-    // const HandleDelete = async () => {
-    //     const response = await axios.delete(`${api_url}meta/${meta.id}`, {
-    //         headers: {
-    //             Authorization: user.access_token
-    //         }
-    //     }).then((response) => {
-    //         if (response.status === 204) {
-    //             setUpdated(true)
-    //         }
-    //         return response
-    //     })
-    //     if (response.status !== 204) alert('Erro ao deletar meta');
-    // }
-
     return (
-        <a className="meta-box" id={meta.id}
-            onClick={() => {
-                setMeta && setMeta(meta)
-                setShowDetails && setShowDetails(true)
-            }}
+        <Link className="meta-box" id={meta.id}
+            to={`/metas/${meta.id}`}
             style={{// de baixo para cima
-                background: `linear-gradient(0deg, rgba(2, 177, 90, 0.15) 25%, rgba(255, 255, 255, 0) 0%)`,
+                background: `linear-gradient(0deg, rgba(2, 177, 90, 0.15) ${meta.progresso}%, rgba(255, 255, 255, 0) ${100 - meta.progresso}%)`
             }}
         >
             <div className="value-date">
@@ -70,6 +48,6 @@ export const MetaBox = (
                 <img src={`assets/icons/${meta.icon ? meta.icon : 'dollar-bill'}.svg`} alt="Icone da meta" />
                 <div className="titulo-meta">{meta.titulo}</div>
             </div>
-        </a>
+        </Link>
     );
 };

@@ -1,5 +1,4 @@
-import { useContext, useEffect, useState } from "react";
-import { TransacoesContext } from "../../../../../../Contexts/TransacoesContext";
+import { useEffect, useState } from "react";
 import './Gastos.css'
 import { useAuth } from "../../../../../../Contexts/AuthContext";
 import { gql } from "@apollo/client";
@@ -45,7 +44,7 @@ export function Gastos() {
         getGastos()
     }, [client])
 
-    console.log(gastos)
+
     const percentual = gastos.gastoMesAnterior !== 0 ? (gastos.gasto / gastos.gastoMesAnterior) * 100 : 0
     const totalGastos = gastos.gasto
 

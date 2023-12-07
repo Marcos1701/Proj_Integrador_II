@@ -1,5 +1,5 @@
 .ListaMetas {
-    width: clamp(200px, 340px, 350px);
+    width: clamp(200px, 330px, 350px);
     height: 300px;
     flex-shrink: 0;
     border-radius: 20px;
@@ -7,9 +7,9 @@
     box-shadow: 0px 0px 1px 0px rgba(0, 0, 0, 0.04), 0px 2px 6px 0px rgba(0, 0, 0, 0.04), 0px 16px 24px 0px rgba(0, 0, 0, 0.06);
     display: flex;
     flex-direction: column;
-    gap: 0;
+    gap: 8px;
     align-items: center;
-    justify-content: space-evenly;
+    justify-content: center;
 
     & .header {
         width: 100%;
@@ -28,35 +28,20 @@
         padding: 0;
         margin: 0;
     }
-
-    & .pagination-home {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 2px;
-        width: 100%;
-    }
 }
 
 #ListaMetas {
     & ul {
-        padding-left: 1em;
-        width: 100%;
+
+        width: 90%;
         height: 100%;
-        overflow-x: hidden;
+        overflow-x: auto;
+        padding: .032em;
+
+        &::-webkit-scrollbar {
+            width: 0px;
+            background: transparent;
+        }
 
     }
-}
-
-.pagination_metas_home-div {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 0;
-    height: 0;
-
-}
-
-.pagination_metas_home {
-    position: absolute;
 }

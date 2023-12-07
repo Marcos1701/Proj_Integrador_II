@@ -100,7 +100,9 @@ export class TransacaoSubscriber implements EntitySubscriberInterface<Transacao>
 
         if (event.entity.tipo === 'entrada') {
             usuario.saldo += event.entity.valor;
-        } else {
+        } else if (new Date(event.entity.data).getMonth() === new Date().getMonth()
+            && new Date(event.entity.data).getFullYear() === new Date().getFullYear()
+        ) {
             categoria.gasto += event.entity.valor;
             usuario.saldo -= event.entity.valor;
         }
