@@ -44,7 +44,7 @@ export function ListTransacoes(
             setLimite(limit)
         }
 
-    }, [limite, limit])
+    }, [limite, limit, page])
 
 
     return (
