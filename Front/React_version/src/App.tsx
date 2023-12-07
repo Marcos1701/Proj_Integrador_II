@@ -1,5 +1,5 @@
 import './App.css'
-import { BrowserRouter, NavLink } from 'react-router-dom';
+import { BrowserRouter, NavLink, Navigate } from 'react-router-dom';
 import { TransacoesProvider } from './providers/TransacoesProvider';
 import { CategoriasProvider } from './providers/CategoriasProvider';
 import { MetasProvider } from './providers/MetasProvider';
@@ -15,17 +15,45 @@ function App() {
   const { user, signout } = useAuth()
 
   const [showOptions, setShowOptions] = useState<boolean>(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [Perfil, setShowPerfil] = useState(false)
+
   return (
     <BrowserRouter>
-
+      {Perfil && <Navigate to='/perfil' />}
       <div className="App">
         {user &&
-          <nav className="App-sidebar">
+          <nav className={
+            isMenuOpen ? "App-sidebar-active" : "App-sidebar"
+          }>
             <div className='App-logo'>
               <img src="Icons/icone.png" alt="Logo" />
               <p>FinnApp</p>
             </div>
-            <ul>
+            <div className="App-sidebar-header">
+              {!isMenuOpen ? (
+                <div className="menu-div">
+                  <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="menu" aria-label="Main Menu">
+                    <svg width="30" height="30" viewBox="0 0 100 100">
+                      <path className="line line1" d="M 20,29.000046 H 80.000231 C 80.000231,29.000046 94.498839,28.817352 94.532987,66.711331 94.543142,77.980673 90.966081,81.670246 85.259173,81.668997 79.552261,81.667751 75.000211,74.999942 75.000211,74.999942 L 25.000021,25.000058" />
+                      <path className="line line2" d="M 20,50 H 80" />
+                      <path className="line line3" d="M 20,70.999954 H 80.000231 C 80.000231,70.999954 94.498839,71.182648 94.532987,33.288669 94.543142,22.019327 90.966081,18.329754 85.259173,18.331003 79.552261,18.332249 75.000211,25.000058 75.000211,25.000058 L 25.000021,74.999942" />
+                    </svg>
+                  </button>
+                </div>
+              ) : (
+                <div className="menu-actived">
+                  <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="opened">
+                    <svg width="30" height="30" viewBox="0 0 100 100">
+                      <path className="line line1" d="M 20,29.000046 H 80.000231 C 80.000231,29.000046 94.498839,28.817352 94.532987,66.711331 94.543142,77.980673 90.966081,81.670246 85.259173,81.668997 79.552261,81.667751 75.000211,74.999942 75.000211,74.999942 L 25.000021,25.000058" />
+                      <path className="line line2" d="M 20,50 H 80" />
+                      <path className="line line3" d="M 20,70.999954 H 80.000231 C 80.000231,70.999954 94.498839,71.182648 94.532987,33.288669 94.543142,22.019327 90.966081,18.329754 85.259173,18.331003 79.552261,18.332249 75.000211,25.000058 75.000211,25.000058 L 25.000021,74.999942" />
+                    </svg>
+                  </button>
+                </div>
+              )}
+            </div>
+            <ul className="App-sidebar-menu">
               <li>
                 <NavLink to={"/"}>
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -93,7 +121,7 @@ function App() {
               </button>}
               <ul className={"options_perfil" + (showOptions ? "-active" : "")}>
                 <li key="perfil">
-                  <button type="button" onClick={() => setShowOptions(false)}>
+                  <button type="button" onClick={() => setShowPerfil(true)}>
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <path d="M3 20C5.33579 17.5226 8.50702 16 12 16C15.493 16 18.6642 17.5226 21 20M16.5 7.5C16.5 9.98528 14.4853 12 12 12C9.51472 12 7.5 9.98528 7.5 7.5C7.5 5.01472 9.51472 3 12 3C14.4853 3 16.5 5.01472 16.5 7.5Z" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>

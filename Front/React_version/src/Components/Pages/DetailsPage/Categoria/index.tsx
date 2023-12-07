@@ -116,7 +116,7 @@ export function DetailCategoriaPage(
 
 
     return (
-        <main className="page">
+        <main className="page" id="">
             {redirect && <Navigate to={returnPage} />}
             <form className="element-details" onSubmit={handleUpdate}>
                 <h2>Detalhes da categoria</h2>
@@ -173,7 +173,7 @@ export function DetailCategoriaPage(
 
                         </div>
 
-                        <div className="dataCriacao">
+                        <div className="dataCriacao-details">
                             <p className="created-at">Criado em: <span>{tratarData(categoria.dataCriacao.toString())}</span></p>
                         </div>
                     </div>

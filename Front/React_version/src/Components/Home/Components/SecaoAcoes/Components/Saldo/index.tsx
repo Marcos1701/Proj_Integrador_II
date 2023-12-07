@@ -33,43 +33,43 @@ export const realizarTratamentoValor = (valor: number) => {
 
 }
 
+interface SaldoData {
+    saldo: number,
+    saldoAnterior: number
+}
+
 export function Saldo() {
-    const { updated, transacoes }: TransacoesContextData = useContext<TransacoesContextData>(TransacoesContext);
+    const { updated }: TransacoesContextData = useContext<TransacoesContextData>(TransacoesContext);
     const [saldo, setSaldo] = useState<number>(0);
+    const [SaldoAnterior, setSaldoAnterior] = useState<number>(0);
 
     const { user } = useAuth();
     if (!user) return <p>Usuário não encontrado</p>
 
     useEffect(() => {
-        const getSaldo = async () => {
-            const saldo: number = (await axios.get<number>(`${api_url}usuarios/saldo`, {
+        const getdadosSaldo = async () => {
+            const response = (await axios.get<SaldoData>(`${api_url}usuarios/saldo`, {
                 headers: {
                     getAuthorization: true,
                     Authorization: user.access_token
                 }
-            })).data
+            }))
+
+            if (!response.data) return
+
+            if (response.status !== 200) return;
+
+            const { saldo, saldoAnterior } = response.data
+
             setSaldo(saldo);
+            setSaldoAnterior(saldoAnterior)
         }
-        getSaldo()
+        getdadosSaldo()
     }, [updated])
 
-    // o saldo é a soma de todas as transações
 
-    const data = new Date()
-
-    const SaldoAnterior = transacoes.filter(transacao => {
-        const dataTransacao = new Date(transacao.data)
-        // retorna as transações anteriores ao mês atual
-        return dataTransacao.getMonth() < data.getMonth() && dataTransacao.getFullYear() === data.getFullYear()
-    })
-
-    const totalSaldoAnterior = SaldoAnterior.reduce((acc, transacao) => {
-        return transacao.tipo === 'entrada' ? acc + transacao.valor : acc - transacao.valor
-    }, 0)
-
-    const percentual = totalSaldoAnterior === 0 ? 0 : (saldo / totalSaldoAnterior) * 100
-    // se o saldo for maior que o saldo anterior, o percentual é positivo, se não, é negativo
-
+    // se o saldo atual é -1200 e o saldo anterior é 800, o percentual é positivo, pois o saldo atual é maior que o anterior
+    const percentual = SaldoAnterior === 0 ? 100 : ((saldo - SaldoAnterior) / SaldoAnterior) * 100 // (-1200 - 800) / 800 = -2000 / 800 = -2.5 * 100 = -250%
 
     return (
 
@@ -85,11 +85,12 @@ export function Saldo() {
                     <p>Saldo</p>
                     <span className={saldo < 0 ? "saldo-negativo" : "saldo-positivo"}>{realizarTratamentoValor(saldo)}</span>
                 </div>
-                <span className={percentual > 100 ? "percentual-negativo" : "percentual-positivo"}>
+                <span className={percentual < 100 ? "percentual-negativo" : "percentual-positivo"}>
                     {percentual.toLocaleString('pt-br', {
                         maximumFractionDigits: 2,
                         minimumFractionDigits: 2
-                    })}%
+                    }).replace('-', '') // se o percentual for negativo, o sinal de menos é removido pois ele é adicionada via css com a estilização específica
+                    }%
                 </span>
             </div>
         </div>

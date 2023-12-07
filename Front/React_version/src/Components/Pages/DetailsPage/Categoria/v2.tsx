@@ -126,12 +126,15 @@ export function DetailCategoriaPage({ categoria, setShowDetails, setCategoria }:
 
     return (
         <div className="Background-blur" id="background-form" >
-            <div className="details-div" onMouseLeave={(e) => {
-                if (e.target === e.currentTarget) {
-                    setCategoria && setCategoria(undefined)
-                    setShowDetails(false)
-                }
-            }}>
+            <div className="details-div"
+                // onMouseLeave={(e) => {
+                //     if (e.target === e.currentTarget) {
+                //         setCategoria && setCategoria(undefined)
+                //         setShowDetails(false)
+                //     }
+                // }}
+                id="categoria-details"
+            >
                 <div className="header-details">
                     <button type="button" className="close-button" onClick={() => setShowDetails(false)}>
                         <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24">
@@ -177,13 +180,16 @@ export function DetailCategoriaPage({ categoria, setShowDetails, setCategoria }:
 
                     <div className="label-element-div">
                         <label htmlFor="input-descricao">Descrição:</label>
-                        <textarea name="input-descricao" className="input-descricao" ref={descricaoRef} defaultValue={categoria.descricao} onChange={e => {
-                            if (e.target.value.length > 250) return;
-                            setAbleToSubmit(ValidateValues())
-                        }} />
+                        <textarea name="input-descricao" className="input-descricao" ref={descricaoRef} defaultValue={categoria.descricao ? categoria.descricao : ''}
+                            placeholder="Descrição da Categoria"
+                            id="desc_textarea"
+                            onChange={e => {
+                                if (e.target.value.length > 250) return;
+                                setAbleToSubmit(ValidateValues())
+                            }} />
                     </div>
 
-                    <div className="dataCriacao">
+                    <div className="dataCriacao-details">
                         <p className="created-at">Criada em: <span>{tratarData(categoria.dataCriacao.toString())}</span></p>
                     </div>
 

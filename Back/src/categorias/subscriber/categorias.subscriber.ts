@@ -1,7 +1,8 @@
 import { EntityManager, EntitySubscriberInterface, EventSubscriber, InsertEvent, LoadEvent, RemoveEvent, UpdateEvent } from "typeorm";
 import { Categoria } from "../entities/categoria.entity";
 import { BadRequestException, Injectable } from "@nestjs/common";
-
+import { Usuario } from "src/usuarios/entities/usuario.entity";
+import { Transacao } from "src/transacoes/entities/transacao.entity";
 
 @EventSubscriber()
 @Injectable()
@@ -15,29 +16,64 @@ export class CategoriasSubscriber implements EntitySubscriberInterface<Categoria
         return Categoria;
     }
 
+    private async getCategoria(categoria: Categoria, user?: boolean) {
+        if (categoria.transacoes) return categoria;
+        try {
+            const categoria_ = await this.mananger.findOne(Categoria, {
+                where: { id: categoria.id },
+                select: {
+                    id: true,
+                    nome: true,
+                    gasto: true,
+                    orcamento: true,
+                    usuario: user ? {
+                        id: true,
+                        saldo: true
+                    } : {}
+                },
+                loadEagerRelations: false // para resolver o erro acima
+            });
+
+            if (categoria_) {
+                categoria_.transacoes = await this.mananger.find(Transacao, {
+                    where: { categoria: { id: categoria_.id } },
+                });
+            }
+            return categoria_;
+        } catch (error) {
+            console.log('Erro ao buscar a categoria:', error);
+        }
+        return null;
+    }
+
+
     private async AtualizaSaldo(categoria: Categoria) {
-        const categoria_ = await this.mananger.findOne(Categoria, {
-            where: { id: categoria.id },
-            relations: { transacoes: true }
-        });
+        const categoria_ = await this.getCategoria(categoria);
 
         if (!categoria_) {
             return;
         }
 
-        categoria_.gasto = categoria_.transacoes.reduce((acc, curr) => { return acc + curr.valor }, 0);
-        await this.mananger.save(categoria_);
-    }
+        categoria_.gasto = categoria_.transacoes.reduce((acc, curr) => {
+            curr.data = new Date(curr.data);
+            if (curr.data.getMonth() === new Date().getMonth() && curr.data.getFullYear() === new Date().getFullYear()) {
+                return acc + Number(curr.valor);
+            }
+            return acc;
+        }, 0);
 
+        try {
+            await this.mananger.update(Categoria, categoria_.id, { gasto: categoria_.gasto });
+        } catch (error) {
+            console.error('Erro ao atualizar a categoria:', error);
+        }
+        return categoria_;
+    }
 
     afterLoad(entity: Categoria, event?: LoadEvent<Categoria>): void | Promise<any> {
         this.categoria = entity;
         this.AtualizaSaldo(this.categoria);
-    }
-
-
-    async beforeInsert(event: InsertEvent<Categoria>) {
-        console.log(`Adicionando categoria ${event.entity.nome} ao usuário ${event.entity.usuario.nome}`)
+        return;
     }
 
     async afterUpdate(event: UpdateEvent<Categoria>) {
@@ -45,9 +81,6 @@ export class CategoriasSubscriber implements EntitySubscriberInterface<Categoria
         const gasto = event.entity.gasto ? Number(event.entity.gasto) : 0;
         if (event.entity.orcamento && gasto > Number(event.entity.orcamento)) {
             await event.queryRunner.rollbackTransaction();
-            console.log(event.entity.orcamento, this.categoria.gasto)
-            console.log(event.entity)
-            console.log(this.categoria)
             throw new BadRequestException('O valor do orçamento é menor que o gasto da categoria');
         }
         // tudo certo
@@ -55,19 +88,14 @@ export class CategoriasSubscriber implements EntitySubscriberInterface<Categoria
     }
 
     async beforeRemove(event: RemoveEvent<Categoria>) {
-
-        const categoria = await this.mananger.findOne(Categoria, {
-            where: { id: event.entity.id },
-            relations: { usuario: true, transacoes: true }
-        });
+        const categoria = await this.getCategoria(event.entity);
 
         if (!categoria) {
             return;
         }
 
         categoria.usuario.saldo += categoria.gasto;
-        await this.mananger.save(categoria.usuario);
+        await this.mananger.update(Usuario, categoria.usuario.id, categoria.usuario);
+        return categoria;
     }
-
-
 }

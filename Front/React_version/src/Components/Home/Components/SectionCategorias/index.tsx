@@ -10,7 +10,7 @@ export function SectionCategorias() {
 
     const { DadosCategoria, loading } = useContext(DataContext)
 
-    const categorias = DadosCategoria.dados || []
+    const categorias = DadosCategoria ? DadosCategoria.dados : []
 
     const option: echarts.EChartsOption
         = {
@@ -62,7 +62,7 @@ export function SectionCategorias() {
     return (
         <div className="Categorias-section-home">
             <div className="header">
-                <h2>Dados Categorias</h2>
+                <h2>Gastos por Categoria</h2>
             </div>
 
             <div className="RelacaoCategorias">
@@ -73,6 +73,32 @@ export function SectionCategorias() {
                             option={option}
                             style={{ height: "150px", width: "250px" }}
                         />
+                            // :
+                            // categorias.length > 0 ? <ReactApexChart options={{
+                            //     chart: {
+                            //         type: 'pie',
+                            //         width: 250,
+                            //         height: 150,
+                            //         fontFamily: 'Montserrat',
+                            //         foreColor: '#fff',
+                            //         toolbar: {
+                            //             show: false
+                            //         }
+                            //     },
+                            //     labels: categorias.map((categoria) => categoria.nome),
+                            //     // para alterar a cor das legendas
+                            //     responsive: [{
+                            //         breakpoint: 480,
+                            //         options: {
+                            //             chart: {
+                            //                 width: 200
+                            //             },
+                            //             legend: {
+                            //                 position: 'bottom',
+                            //             }
+                            //         }
+                            //     }]
+                            // }} series={categorias.map((categoria) => categoria.gasto)} type="pie" width={250} height={150} />
                             : <h3>Nenhuma categoria cadastrada</h3>
                 }
             </div>

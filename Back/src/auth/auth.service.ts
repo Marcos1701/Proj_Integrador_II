@@ -50,6 +50,7 @@ export class AuthService {
         }
 
         const usuario = await this.usersService.create(data);
+        
         const token = await this.gerarToken(usuario);
 
         const { senha, email, saldo, ...user } = usuario;

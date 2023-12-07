@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { createContext, useContext, useMemo, useState } from "react";
 import { redirect } from "react-router-dom";
+import { ApolloClient, InMemoryCache, NormalizedCacheObject } from '@apollo/client';
 
 export type User = {
     nome: string;
@@ -27,7 +28,9 @@ interface AuthContextType {
     singup: (user: singupData) => Promise<string | void>
     signout: () => void
     isAuthenticated: boolean
-    loading?: boolean
+    loading?: boolean,
+    client: ApolloClient<NormalizedCacheObject>,
+    RefreshUser: () => void
 }
 
 const defaultValue = {} as AuthContextType
@@ -38,8 +41,9 @@ interface AuthProviderProps {
     children: React.ReactNode
 }
 
-export const api_url: string = "http://localhost:3300/";
-//"http://localhost:3300/"
+export const api_url: string = "https://finnapp.onrender.com/";
+const graphql_url: string = api_url.replace('api/', 'graphql/')
+//"http://localhost:3000/"
 //"https://legendary-space-spoon-gvjqgjx7gx92vv5g-3300.app.github.dev/"
 //https://finnapp.onrender.com/ => link da api no render
 
@@ -49,6 +53,19 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         localStorage.getItem('access_token') ? JSON.parse(localStorage.getItem('access_token')!)
             : null
     )
+
+    const RefreshUser = () => {
+        const access_token = localStorage.getItem('access_token') ? JSON.parse(localStorage.getItem('access_token')!)
+            : null
+
+        const nome = localStorage.getItem('access_token') ? JSON.parse(localStorage.getItem('nome')!)
+            : null
+
+        setUser({
+            access_token,
+            nome
+        })
+    }
 
     const [loading, setLoading] = useState<boolean>(false)
 
@@ -102,8 +119,20 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         redirect('/')
     }
 
+    const client = useMemo(() => new ApolloClient({
+        uri: graphql_url,
+        cache: new InMemoryCache(),
+        defaultOptions: {
+            query: {
+                variables: {
+                    access_token: user ? user.access_token : ''
+                }
+            }
+        }
+    }), [user])
+
     const value = useMemo(() => ({
-        user, signin, singup, signout, isAuthenticated: user != null, loading
+        user, signin, singup, signout, isAuthenticated: user != null, loading, client, RefreshUser
     }), [user, loading])
 
     return (

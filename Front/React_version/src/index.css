@@ -80,6 +80,8 @@ body {
   max-width: 99vw;
   max-height: 100vh;
   background: var(--background, #141332);
+  align-items: center;
+  justify-content: center;
 }
 
 h1 {
@@ -160,7 +162,7 @@ ul.list-values-2columns {
 .page-header h2.title {
   grid-area: title;
 
-  color: #06283D;
+  color: #FFFFFF;
   font-family: Eina03-SemiBold;
   font-size: 27px;
   font-style: normal;

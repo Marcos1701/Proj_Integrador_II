@@ -1,6 +1,6 @@
 import { useContext, useEffect, useRef } from "react";
 import { OrderElements } from "../../../../../providers/CategoriasProvider";
-import { TransacoesContext, TransacoesContextData, ordenarTransacoes } from "../../../../../Contexts/TransacoesContext";
+import { TransacoesContext, TransacoesContextData, SortFieldTransacao } from "../../../../../Contexts/TransacoesContext";
 
 export const Orderdiv = () => {
 
@@ -20,7 +20,7 @@ export const Orderdiv = () => {
 
     const handleOrderby = () => {
         if (SelectOrdenarPor.current && SelectOrdenarPor.current.value !== ordenarPor) {
-            setOrdenarPor(SelectOrdenarPor.current.value as ordenarTransacoes);
+            setOrdenarPor(SelectOrdenarPor.current.value as SortFieldTransacao);
         }
     }
 

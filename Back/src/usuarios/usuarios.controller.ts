@@ -1,4 +1,4 @@
-import { Controller, Get, Body, Patch, Delete, UseGuards, Param, Headers } from '@nestjs/common';
+import { Controller, Get, Body, Patch, Delete, UseGuards, Param, Headers, HttpCode } from '@nestjs/common';
 import { UsuariosService } from './usuarios.service';
 import { UpdateUsuarioDto } from './dto/update-usuario.dto';
 import { ApiBody, ApiResponse } from '@nestjs/swagger';
@@ -48,6 +48,7 @@ export class UsuariosController {
     description: 'Nenhum campo foi alterado'
   })
 
+  @HttpCode(200)
   @Patch() // retorna o status code 200
   update(@Body() updateUsuarioDto: UpdateUsuarioDto) {
     return this.usuariosService.update(updateUsuarioDto);

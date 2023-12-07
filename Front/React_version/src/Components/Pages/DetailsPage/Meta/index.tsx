@@ -1,15 +1,16 @@
 
-
-import { useContext, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { api_url, useAuth } from "../../../../Contexts/AuthContext";
 import { Navigate } from "react-router-dom";
 import { MoneyValidation } from "../../../Home/Components/Form/AdicionarTransacaoForm";
 import '../Details.css'
+import './MetaDetail.css'
 import { IconSelect } from "../../../Home/Components/Form/AdicionarCategoriaForm/Components/IconSelect";
 import { MetasContext } from "../../../../Contexts/MetasContext";
 import isDate from 'validator/lib/isDate';
-import { IMeta } from "../../../List/ListMetasV2/Components/Meta";
+import { IMeta, Marco, submeta } from "../../../List/ListMetasV2/Components/Meta";
+import { ulid } from "ulidx";
 
 
 interface IProps {
@@ -39,11 +40,13 @@ export function DetailsMetaPage(
     const { user } = useAuth()
     if (!user) return <Navigate to="/login" />
 
+
     const { setUpdated } = useContext(MetasContext)
     const ValidateValues = () => {
 
-        if ((!tituloRef.current || !descricaoRef.current || !ValorDesejadoRef.current || !data.current)
-            || (tituloRef.current.value === meta.titulo && descricaoRef.current.value === meta.descricao && ValorDesejadoRef.current.value.split(' ')[1] === "0" && data.current.value === meta.dataLimite.toString().split('T')[0])
+        if ((!tituloRef.current || !descricaoRef.current || !ValorDesejadoRef.current || !data.current
+        )
+            || (tituloRef.current.value === meta.titulo && descricaoRef.current.value === meta.descricao && ValorDesejadoRef.current.value.split(' ')[1] === "0" && data.current.value === meta.dataLimite.toISOString().split('T')[0])
         ) {
             return false
         }
@@ -52,6 +55,22 @@ export function DetailsMetaPage(
     }
     const [ableToSubmit, setAbleToSubmit] = useState(false);
 
+    // guardar submetas em um array
+    const [SubMetas, setSubMetas] = useState<{
+        id: string,
+        refTitle: React.RefObject<HTMLInputElement>,
+        titulo?: string,
+        ref: React.RefObject<HTMLInputElement>,
+        valor?: number
+    }[]>(
+        meta.subMetas?.map((submeta) => ({
+            id: submeta.id,
+            refTitle: React.createRef(),
+            titulo: submeta.titulo,
+            ref: React.createRef(),
+            valor: submeta.valor
+        })) || []
+    );
 
     const handleUpdate = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
@@ -75,18 +94,43 @@ export function DetailsMetaPage(
             valorDesejado?: number;
             icone?: string;
             dataFinal?: string;
+            submeta?: {
+                id?: string,
+                titulo?: string | null,
+                valor?: number | null
+            }[] | null,
+            marcos?: {
+                id?: string,
+                data?: string | null,
+                valor?: number | null
+            }[]
         } = {}
 
         if (nome !== meta.titulo && nome.length > 0) values.nome = nome;
         if (descricao !== meta.descricao && descricao.length > 0) values.descricao = descricao;
         if (valorDesejado !== meta.valor && valorDesejado > 0) values.valorDesejado = valorDesejado;
-        if (dataFinal !== meta.dataLimite.toString().split('T')[0] && isDate(dataFinal, { format: 'YYYY-MM-DD', delimiters: ['-'] })) values.dataFinal = dataFinal;
+        if (dataFinal !== meta.dataLimite.toISOString().split('T')[0] && isDate(dataFinal, { format: 'YYYY-MM-DD', delimiters: ['-'] })) values.dataFinal = dataFinal;
 
         if (icone !== meta.icon) {
             values = {
                 ...values,
                 icone
             }
+        }
+
+        if (SubMetas.length > 0) {
+            values = {
+                ...values,
+                submeta: SubMetas.map(({ id, ref, refTitle }) => ({
+                    id,
+                    titulo: refTitle.current?.value ? refTitle.current.value : null,
+                    valor: ref.current?.value ? Number(ref.current.value.replace(/[^0-9]/g, '')) : null
+                })).filter(({ titulo, valor }) => titulo && valor) // remove submetas sem titulo ou valor
+            }
+        }
+
+        if (values.submeta && values.submeta.length === 0) {
+            values.submeta = null
         }
 
         const response = await axios.patch(`${api_url}categorias/${meta.id}`, values, {
@@ -124,18 +168,43 @@ export function DetailsMetaPage(
         if (response.status !== 204) alert('Erro ao deletar meta');
     }
 
+    const handleDeleteSubMeta = async (id: string) => {
+        const submeta = meta.subMetas?.find(
+            (submeta) => submeta.id === id
+        )
+
+        if (submeta) {
+            const response = await axios.delete(`${api_url}meta/${meta.id}/sub-meta/${id}`)
+            if (response.status !== 204) {
+                console.log("submeta removida..")
+            }
+        }
+
+    }
+
+    const handleAddSubMeta = (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+        event.preventDefault();
+        setSubMetas(oldSubMetas => [...oldSubMetas, { id: ulid(), ref: React.createRef(), refTitle: React.createRef() }]);
+    }
+
+    useEffect(() => {
+        setAbleToSubmit(ValidateValues())
+    }, [tituloRef.current?.value, descricaoRef.current?.value, ValorDesejadoRef.current?.value, data.current?.value, icone])
+
 
     return (
         <div className="Background-blur" id="background-form" >
-            <div className="details-div" id="detais-div-meta" onMouseLeave={(e) => {
-                if (e.target === e.currentTarget) {
-                    setMeta(undefined)
-                    setShowDetails(false)
-                }
-            }}>
+            <div className="details-div" id="detais-div-meta"
+            // onMouseLeave={(e) => {
+            //     if (e.target === e.currentTarget) {
+            //         setMeta(undefined)
+            //         setShowDetails(false)
+            //     }
+            // }}
+            >
                 <div className="header-details">
                     <button type="button" className="close-button" onClick={() => setShowDetails(false)}>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24">
                             <g clipPath="url(#clip0_206_145)">
                                 <path d="M15.41 16.59L10.83 12L15.41 7.41L14 6L8 12L14 18L15.41 16.59Z" fill="black" />
                             </g>
@@ -155,7 +224,7 @@ export function DetailsMetaPage(
 
                     <div className="values-group">
                         <div className="meta-info" id="details-meta">
-                            <div className="input-div">
+                            <div className="input-div" id="title_meta_div">
                                 <label htmlFor="Titulo">Titulo</label>
                                 <input type="text" name="Titulo" id="Titulo"
                                     ref={tituloRef}
@@ -169,8 +238,7 @@ export function DetailsMetaPage(
                                         setAbleToSubmit(ValidateValues())
                                     }} />
                             </div>
-
-                            <div className="select-orcamento-group">
+                            <div className="select-orcamento-group" id="valor_data_div">
                                 <div className="input-valor" id="Valor-div">
                                     <label htmlFor="Valor" className="label-valor">Valor Desejado</label>
                                     <input type="text" name="Valor"
@@ -189,7 +257,7 @@ export function DetailsMetaPage(
                                         required // para aceitar apenas datas posteriores ou iguais à data atual
                                         min={new Date().toISOString().split('T')[0]}
                                         // initial value
-                                        defaultValue={meta.dataLimite.toString().split('T')[0]}
+                                        defaultValue={meta.dataLimite.toISOString().split('T')[0]}
                                         disabled={meta.dataLimite < new Date()}
                                         onChange={e => {
                                             if (e.target.value === '') return;
@@ -198,10 +266,34 @@ export function DetailsMetaPage(
                                     />
                                 </div>
                             </div>
-                            <IconSelect setIcone={setIcone} valueDefault={icone} />
 
+                            <div className="input-valor" id="ValorAtual">
+                                <label htmlFor="Valor" className="label-valor">Valor Atual</label>
+                                <input type="text" name="Valor"
+                                    id="input-Valor"
+                                    defaultValue={`R$ ${meta.valorAtual}`}
+                                    onChange={(e) => {
+                                        // verificar se o valor atual é maior que o valor desejado ou se é negativo
+                                        MoneyValidation(e)
+                                        const value = Number(e.target.value.replace(/[^0-9]/g, ''))
+                                        const ValorDesejado = Number(ValorDesejadoRef.current?.value.replace(/[^0-9]/g, ''))
 
-                            <div className="label-element-div">
+                                        if (!isNaN(value) && !isNaN(ValorDesejado) && value > ValorDesejado) {
+                                            e.target.value = ValorDesejadoRef.current?.value || 'R$ 0'
+                                        }
+                                        setAbleToSubmit(ValidateValues())
+                                    }
+                                    }
+                                />
+
+                            </div>
+
+                            <IconSelect setIcone={setIcone} valueDefault={icone} onChange={
+                                () => setAbleToSubmit(ValidateValues())
+                            }
+                            />
+
+                            <div className="label-element-div" id="desc_meta_div">
                                 <label htmlFor="descricao">Descrição</label>
                                 <textarea name="descricao" id="descricao"
                                     ref={descricaoRef}
@@ -214,18 +306,48 @@ export function DetailsMetaPage(
                                     }} />
                             </div>
 
-                        </div>
 
-                        <div className="button-div">
-                            <button className="submit-form-button" type="submit" disabled={ableToSubmit}>Salvar</button>
-                            <button type="button" className="delete-value-form" onClick={HandleDelete}>Deletar</button>
+                            <div className="label-element-div" id="submetasDiv">
+                                <div className="label-element-div" id="submetaslabelDiv">
+                                    <label htmlFor="add-submeta">Submetas</label>
+                                    <a href="#" onClick={handleAddSubMeta} className="add-submeta">Adicionar submeta</a>
+                                </div>
+                                <div className="submeta-div">
+                                    {SubMetas.map(({ id, ref, refTitle, titulo, valor }) => (
+                                        <div key={id} className="submeta-input-div">
+                                            <div className="submeta-inputs">
+                                                <input type="text" placeholder="Titulo" ref={refTitle} required defaultValue={titulo ? titulo : ''}
+                                                />
+                                                <input type="text" placeholder="Valor" ref={ref} onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                                                    const value = Number(event.target.value.replace(/[^0-9]/g, ''))
+                                                    const ValorMeta = Number(ValorDesejadoRef.current?.value.replace(/[^0-9]/g, ''))
+                                                    if (!isNaN(value) && !isNaN(ValorMeta) && value > ValorMeta) {
+                                                        event.target.value = ValorDesejadoRef.current?.value || 'R$ 0'
+                                                    }
+                                                    MoneyValidation(event)
+                                                }} required defaultValue={valor ? `R$ ${valor}` : ValorDesejadoRef.current?.value || 'R$ 0'}
+                                                />
+                                            </div>
+                                            <button className="ButtonDelete" onClick={(event) => {
+                                                event.preventDefault();
+                                                handleDeleteSubMeta(id)
+                                                setSubMetas(SubMetas.filter((submeta) => submeta.id !== id))
+                                            }}><img className='icon' src="/assets/ActionsIcons/delete.svg" alt="Deletar" /></button>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
                         </div>
+                    </div>
 
+                    <div className="button-div">
+                        <button className="submit-form-button" type="submit" disabled={ableToSubmit}>Salvar</button>
+                        <button type="button" className="delete-value-form" onClick={HandleDelete}>Deletar</button>
                     </div>
 
                 </form>
-            </div>
+            </div >
 
-        </div>
+        </div >
     )
 }

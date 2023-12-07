@@ -6,6 +6,8 @@ import { JwtService } from '@nestjs/jwt';
 import { Metasorderby, Usuario } from 'src/usuarios/entities/usuario.entity';
 import { jwtDecodeUser } from 'src/auth/jwt.strategy';
 import { Meta } from './entities/meta.entity';
+import { SubMeta } from './sub_meta/entities/sub_meta.entity';
+import { MarcoMeta } from './marco_meta/entities/marco_meta.entity';
 
 @Injectable()
 export class MetaService {
@@ -18,17 +20,21 @@ export class MetaService {
   async create(access_token: string, createMetaDto: CreateMetaDto) {
     const usuario: Usuario = await this.getUserFromtoken(access_token)
 
-    const meta = this.entityManager.create(
-      'Meta',
+    const meta = await this.entityManager.insert(
+      Meta,
       {
         ...createMetaDto,
+        // valorAtual: 0,
         usuario
       }
     )
 
-    await this.entityManager.save(meta)
+    if (meta.identifiers.length === 0) {
+      throw new BadRequestException(meta.raw.message ? meta.raw.message : 'Erro ao criar meta');
+    }
+    // await this.entityManager.save(meta) // -> não precisa mais, pois o insert já salva
 
-    return meta
+    return meta.identifiers[0]
   }
 
   async findAll(access_token: string, orderby?: Metasorderby, order: 'ASC' | 'DESC' = 'ASC', search?: string) {
@@ -62,16 +68,58 @@ export class MetaService {
       throw new BadRequestException('Nenhuma alteração foi feita'); // 400
     }
 
+    if (updateMetaDto.valorAtual && updateMetaDto.valorAtual < 0) {
+      throw new BadRequestException('O valor atual deve ser maior que 0'); // 400
+    }
+
+    if (updateMetaDto.valor && updateMetaDto.valor < 0) {
+      throw new BadRequestException('O valor deve ser maior que 0'); // 400
+    }
+
+    if ((updateMetaDto.valorAtual && updateMetaDto.valor && updateMetaDto.valorAtual > updateMetaDto.valor)
+      || (updateMetaDto.valorAtual && updateMetaDto.valorAtual > meta.valor)
+    ) {
+      throw new BadRequestException('O valor atual deve ser menor que o valor'); // 400
+    }
+
+    const { submeta, marcos, ...restante } = updateMetaDto
+
     const result = await this.entityManager.update(
       Meta,
       {
         id
       },
-      updateMetaDto
+      restante
     )
 
     if (!result || result.affected === 0) {
       throw new BadRequestException('Nenhuma alteração foi feita'); // 400
+    }
+
+    if (submeta) {
+      submeta.forEach(async (submeta) => {
+        await this.entityManager.update(
+          SubMeta,
+          {
+            id: submeta.id
+          },
+          submeta
+        )
+      }
+      )
+    }
+
+    if (marcos) {
+      marcos.forEach(async (marco) => {
+        await this.entityManager.update(
+          MarcoMeta,
+          {
+            id: marco.id
+          },
+          marco
+        )
+      }
+      )
     }
 
     return result
@@ -98,11 +146,8 @@ export class MetaService {
       throw new NotFoundException('Meta não encontrada'); // 404
     }
 
-    if (valor <= meta.valorAtual) {
-      throw new BadRequestException('O valor a ser adicionado deve ser maior que o valor atual'); // 400
-    }
-    if (valor > meta.valor) {
-      throw new BadRequestException('O valor a ser adicionado deve ser menor ou igual ao valor da meta'); // 400
+    if (valor <= 0) {
+      throw new BadRequestException('O valor deve ser maior que 0'); // 400
     }
 
     const result = await this.entityManager.update(
@@ -111,7 +156,8 @@ export class MetaService {
         id
       },
       {
-        valorAtual: valor
+        valorAtual: valor,
+        concluida: valor >= Number(meta.valor)
       }
     )
 
@@ -132,9 +178,7 @@ export class MetaService {
         where: {
           id: data.id
         },
-        relations: {
-          metas: true
-        }
+        relations: ['metas', 'metas.subMetas', 'metas.marcos']
       })
 
     if (!usuario) {

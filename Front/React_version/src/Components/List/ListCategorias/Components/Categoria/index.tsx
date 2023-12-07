@@ -36,13 +36,14 @@ export function Categoria({ categoria, setShowDetails, setCategoria }: ICategori
             headers: {
                 Authorization: user.access_token
             }
-        }).then((response) => {
-            if (response.status === 204) {
-                setUpdated(true)
-            }
-            return response
+        }).catch((error) => {
+            console.log(error)
+            return error
         })
-        console.log(response)
+
+        if (response && response.status === 200) {
+            setUpdated && setUpdated(true)
+        }
     }
 
     const valorGasto: number = categoria.gasto ? categoria.gasto : 0
@@ -61,7 +62,7 @@ export function Categoria({ categoria, setShowDetails, setCategoria }: ICategori
                         <div className="icon-div"><img className="icon-Categoria" src={`assets/icons/${categoria.icone ? categoria.icone : 'barraquinha'}.svg`} alt="Icone da categoria" /></div>
                         {categoria.nome}
                     </div>
-                    <div className="text-wrapper-2">{tratarData(categoria.dataCriacao.toString(), 'simplificado')}</div>
+                    <div className="dataCriacao">{tratarData(categoria.dataCriacao.toString(), 'simplificado')}</div>
                     <div className="gastoCategoria" >R$ {realizarTratamentoValor(valorGasto)}</div>
                     <div className={"orcamento" + (valorOrcamento ? "-true" : "-false")} >{
                         valorOrcamento ?

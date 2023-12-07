@@ -1,0 +1,50 @@
+#background-form {
+    top: 0;
+    left: 0;
+    max-height: 100vh;
+
+    & .close-button svg {
+        filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(288deg) brightness(102%) contrast(102%);
+
+        &:hover {
+            /* escurecer a cor do icone
+            */
+            filter: invert(66%) sepia(29%) saturate(3676%) hue-rotate(177deg) brightness(101%) contrast(101%);
+        }
+    }
+}
+
+#ValorAtual,
+#title_meta_div,
+#valor_data_div {
+    margin: 0;
+    padding: 0;
+    height: fit-content;
+}
+
+#desc_meta_div {
+    margin-bottom: 0;
+    padding-bottom: 0;
+
+    & textarea {
+        height: 4em;
+        padding-top: .4em;
+    }
+}
+
+#ValorAtual {
+    margin-right: 40%;
+}
+
+#checkbox-div-meta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
+
+    & label {
+        font-size: .8rem;
+        font-family: 'Eina03-Regular';
+    }
+}

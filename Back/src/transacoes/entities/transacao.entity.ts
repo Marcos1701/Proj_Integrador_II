@@ -51,7 +51,6 @@ export class Transacao {
   usuario: Usuario; // usuario é o nome da coluna na tabela transacao
 
   @ManyToOne(() => Categoria, (categoria) => categoria.transacoes, {
-    eager: true,
     cascade: true,
     onDelete: 'CASCADE'
   })

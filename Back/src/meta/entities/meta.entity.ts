@@ -33,7 +33,8 @@ export class Meta {
     @Column({
         type: 'decimal',
         precision: 10,
-        scale: 2
+        scale: 2,
+        default: 0
     }) // 10 digitos no total, sendo 2 depois da virgula
     valorAtual: number = 0; // inicializa com 0
 

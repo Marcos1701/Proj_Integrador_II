@@ -1,26 +1,52 @@
-import { useContext } from "react";
-import { TransacoesContext } from "../../../../../../Contexts/TransacoesContext";
+import { useEffect, useState } from "react";
 import './Gastos.css'
+import { useAuth } from "../../../../../../Contexts/AuthContext";
+import { gql } from "@apollo/client";
+import { Navigate } from "react-router-dom";
+
+export interface RelacaoGasto {
+    gasto: number;
+    gastoMesAnterior: number;
+}
+
+interface gastoReturn {
+    gasto: RelacaoGasto
+}
 
 export function Gastos() {
 
-    const { transacoes } = useContext(TransacoesContext)
+    const { client, user } = useAuth()
 
-    const data = new Date()
+    if (!user) return <Navigate to="/login" />
 
-    const gastos = transacoes.filter(transacao => {
-        const dataTransacao = new Date(transacao.data)
-        return dataTransacao.getMonth() === data.getMonth() && dataTransacao.getFullYear() === data.getFullYear() && transacao.tipo === 'saida'
+    const [gastos, setGastos] = useState<RelacaoGasto>({
+        gasto: 0,
+        gastoMesAnterior: 0
     })
 
-    const gastosMesAnterior = transacoes.filter(transacao => {
-        const dataTransacao = new Date(transacao.data)
-        return dataTransacao.getMonth() === data.getMonth() - 1 && dataTransacao.getFullYear() === data.getFullYear() && transacao.tipo === 'saida'
-    })
+    useEffect(() => {
+        const getGastos = async () => {
 
-    const totalGastos = gastos.reduce((acc, transacao) => acc + transacao.valor, 0)
+            const resultado = await client.query<gastoReturn>({
+                query: gql`
+                query GastosResult{
+                    gasto(access_token: "${user.access_token}")
+                    {
+                      gasto,
+                      gastoMesAnterior
+                    }
+                  }
+                `
+            })
 
-    const percentual = gastosMesAnterior.length === 0 ? 0 : (totalGastos / gastosMesAnterior.reduce((acc, transacao) => acc + transacao.valor, 0)) * 100
+            setGastos(resultado.data.gasto)
+        }
+        getGastos()
+    }, [client])
+
+
+    const percentual = gastos.gastoMesAnterior !== 0 ? (gastos.gasto / gastos.gastoMesAnterior) * 100 : 0
+    const totalGastos = gastos.gasto
 
     return (
         <div className="values-layout" title="Gastos" >
@@ -39,10 +65,16 @@ export function Gastos() {
                     })}</p>
                 </div>
                 <span className={percentual > 100 ? "percentual-negativo" : "percentual-positivo"}>
-                    {percentual.toLocaleString('pt-br', {
-                        maximumFractionDigits: 2,
-                        minimumFractionDigits: 2
-                    })}%
+                    {percentual > 100 ?
+                        (percentual - 100).toLocaleString('pt-br', {
+                            maximumFractionDigits: 2,
+                            minimumFractionDigits: 2
+                        }) :
+                        (100 - percentual).toLocaleString('pt-br', {
+                            maximumFractionDigits: 2,
+                            minimumFractionDigits: 2
+                        })
+                    }%
                 </span>
             </div>
 

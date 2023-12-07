@@ -22,7 +22,6 @@ export interface TransacaoData {
 
 
 export interface TransacoesDataResponse {
-    dados: TransacaoData[]
     totalGasto: number
     totalEntrada: number
 }
@@ -53,30 +52,31 @@ export interface TransacoesHistory {
 
 export interface CategoriasHistory {
     history: {
-        [categoria: string]: {
-            [ano: number]: {
-                [mes: number]: {
-                    transacoes: TransacaoData[],
-                    nome: string,
-                    id: string
-                }
-            }
+        categorias:
+        {
+            id: string,
+            nome: string,
+            history: {
+                anos: {
+                    ano: number,
+                    meses: {
+                        mes: number,
+                        transacoes: TransacaoData[]
+                    }[]
+                }[]
+            }[]
         }
     }
 }
 
-export interface CategoriasHistoryData {
-    data: CategoriasHistory[]
-}
-
 export interface DataContextData {
-    DadosCategoria: CategoriasDataResponse
-    DadosTransacao: TransacoesDataResponse
-    DadosMeta: MetasDataResponse,
-    DadosTransacoesHistory: TransacoesHistory,
+    DadosCategoria: CategoriasDataResponse | null,
+    DadosTransacao: TransacoesDataResponse | null,
+    DadosMeta: MetasDataResponse | null,
+    DadosTransacoesHistory: TransacoesHistory | null,
     setTransacoesHistoryYear: (year: number) => void,
     setTransacoesHistoryMonth: (month: number) => void,
-    DadosCategoriasHistory: CategoriasHistoryData,
+    DadosCategoriasHistory: CategoriasHistory | null,
     loading: boolean,
     setUpdated: (updated: boolean) => void
 }

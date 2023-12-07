@@ -4,7 +4,7 @@ import { UpdateTransacoeDto } from './dto/update-transacoe.dto';
 import { EntityManager, UpdateResult } from 'typeorm';
 import { Transacao } from './entities/transacao.entity';
 import { Categoria } from 'src/categorias/entities/categoria.entity';
-import { TransacoesorderBy, Usuario, ordenarTransacoes } from 'src/usuarios/entities/usuario.entity';
+import { Usuario } from 'src/usuarios/entities/usuario.entity';
 import { JwtService } from '@nestjs/jwt';
 import { jwtDecodeUser } from 'src/auth/jwt.strategy';
 
@@ -23,7 +23,6 @@ export interface TransacaoData {
   data: Date
   tipo: string
 }
-
 
 export interface TransacoesDadosResponse {
   dados: TransacaoData[]
@@ -59,31 +58,6 @@ export class TransacoesService {
     }
   }
 
-  // Função para buscar um usuário a partir de um token
-  private async getUserFromToken(token: string, relations?: string[]): Promise<Usuario> {
-    const data = this.jwtService.decode(token) as jwtDecodeUser
-
-    const usuario = await this.entityManager.findOne(
-      Usuario,
-      {
-        where: {
-          id: data.id
-        },
-        relations: {
-          categorias: relations && relations.includes('categorias') ? true : false,
-          transacoes: relations && relations.includes('transacoes') ? true : false
-        }
-      }
-    );
-
-    if (!usuario) {
-      console.log('Usuário não encontrado');
-      throw new NotFoundException('Usuário não encontrado');
-    }
-
-    return usuario
-  }
-
   // Função para mapear e filtrar as transações
   private mapAndFilterTransactions(transacoes: Transacao[], ano?: number, mes?: number) {
     return transacoes.map(t => {
@@ -99,10 +73,10 @@ export class TransacoesService {
       if (ano && mes) {
         return t.data.getFullYear() === ano && t.data.getMonth() === mes;
       } else if (ano) {
-        console.log("ano")
+
         return t.data.getFullYear() === ano;
       } else if (mes) {
-        console.log("mes")
+
         return t.data.getMonth() === mes;
       }
       return true;
@@ -112,7 +86,7 @@ export class TransacoesService {
   // Agora você pode reutilizar essas funções nas suas funções existentes
   async findOne(id: string, usuariotoken: string) {
     this.validateTransactionId(id);
-    const usuario = await this.getUserFromToken(usuariotoken);
+    const usuario = await this.getUserFromtoken(usuariotoken);
 
     const transacao = await this.entityManager.findOne(Transacao, {
       where: {
@@ -121,13 +95,23 @@ export class TransacoesService {
           id: usuario.id
         }
       },
-      relations: {
-        categoria: true
+      select: {
+        id: true,
+        titulo: true,
+        descricao: true,
+        valor: true,
+        data: true,
+        tipo: true,
+        categoria: {
+          id: true,
+          nome: true,
+          orcamento: true,
+          gasto: true
+        }
       }
     });
 
     if (!transacao) {
-      console.log('Transação não encontrada');
       throw new NotFoundException('Transação não encontrada');
     }
 
@@ -135,9 +119,9 @@ export class TransacoesService {
   }
 
   async create(createTransacoeDto: CreateTransacoeDto, usuariotoken: string) {
-    const usuario = await this.getUserFromToken(usuariotoken, ['categorias']);
+    const usuario = await this.getUserFromtoken(usuariotoken, true, false);
 
-    const categoria = createTransacoeDto.categoriaid &&
+    const categoria = createTransacoeDto.categoriaid ?
       await this.entityManager.findOne(Categoria, {
         where: {
           id: createTransacoeDto.categoriaid,
@@ -145,26 +129,28 @@ export class TransacoesService {
             id: usuario.id
           }
         }
-      });
+      }) : null;
 
     if (!categoria && createTransacoeDto.tipo === 'saida') {
-      console.log('Categoria não encontrada');
+      // console.log('Categoria não encontrada');
       throw new NotFoundException('Categoria não encontrada');
     }
 
-    const transacao = this.entityManager.create(Transacao, {
+    const transacao = await this.entityManager.insert(Transacao, {
       ...createTransacoeDto,
       categoria: categoria,
       usuario: usuario
     });
 
-    await this.entityManager.save(transacao);
+    if (transacao.identifiers.length === 0) {
+      throw new BadRequestException(transacao.raw.message ? transacao.raw.message : 'Erro ao criar transação');
+    }
 
     return transacao;
   }
 
   async findDados(usuariotoken: string, ano?: number, mes?: number) {
-    const usuario = await this.getUserFromtoken(usuariotoken, ['transacoes']);
+    const usuario = await this.getUserFromtoken(usuariotoken, false, true);
 
     if (ano && ano > new Date().getFullYear()) {
       throw new BadRequestException('Ano inválido');
@@ -174,33 +160,32 @@ export class TransacoesService {
       throw new BadRequestException('Mês inválido');
     }
 
-    const dados = this.mapAndFilterTransactions(usuario.transacoes, ano, mes);
-    const totalGasto = dados.filter(t => t.tipo === 'saida').reduce((acc, t) => acc + t.valor, 0);
-    const totalEntrada = dados.filter(t => t.tipo === 'entrada').reduce((acc, t) => acc + t.valor, 0);
+    const dados = this.mapAndFilterTransactions(usuario.transacoes, ano == undefined ? ano : null, mes == undefined ? mes : null);
 
     return {
-      dados,
-      totalGasto,
-      totalEntrada
+      totalGasto: dados.filter(t => t.tipo === 'saida').reduce((acc, t) => acc + t.valor, 0),
+      totalEntrada: dados.filter(t => t.tipo === 'entrada').reduce((acc, t) => acc + t.valor, 0)
     }
   }
 
   async findHistory(usuariotoken: string, ano?: number, mes?: number) {
-    const usuario = await this.getUserFromtoken(usuariotoken, ['transacoes']);
+    const usuario = await this.getUserFromtoken(usuariotoken, false, true);
 
     if (!usuario) {
       throw new NotFoundException('Usuário não encontrado');
     }
 
-    if (ano && ano > new Date().getFullYear()) {
+    if (ano !== undefined && ano > new Date().getFullYear()) {
       throw new BadRequestException('Ano inválido');
     }
 
-    if (mes && (mes > 12 || mes <= 0)) {
+    if (mes !== undefined && (mes > 12 || mes <= 0)) {
       throw new BadRequestException('Mês inválido');
     }
 
     const transacoes = this.mapAndFilterTransactions(usuario.transacoes, ano == undefined ? ano : null, mes == undefined ? mes : null);
+
+    const anos = ano == undefined ? [...new Set(transacoes.map(t => t.data.getFullYear()))] : [ano];
 
     // agrupa as transações pelo ano e mês
     const history: {
@@ -211,23 +196,26 @@ export class TransacoesService {
       }[]
     }[] = [];
 
-    for (let m = 0; m < 12; m++) {
-      const transacoesDoMes = transacoes.filter(t => {
-        const anoTransacao = ano || new Date().getFullYear();
-        return t.data.getFullYear() === anoTransacao && t.data.getMonth() === m;
-      });
-      if (!history.find(h => h.ano === ano || new Date().getFullYear())) {
-        history.push({
-          ano: ano || new Date().getFullYear(),
-          meses: []
+    anos.forEach(anoTransacao => {
+      for (let m = 0; m < 12; m++) {
+        const transacoesDoMes = transacoes.filter(t => {
+          return t.data.getFullYear() === anoTransacao && t.data.getMonth() === m;
+        });
+        if (!history.find(h => h.ano === anoTransacao)) {
+          history.push({
+            ano: anoTransacao,
+            meses: []
+          });
+        }
+
+        history.find(h => h.ano === anoTransacao).meses.push({
+          mes: m,
+          transacoes: transacoesDoMes
         });
       }
-      history.find(h => h.ano === ano || new Date().getFullYear()).meses.push({
-        mes: m + 1,
-        transacoes: transacoesDoMes
-      });
-    }
-    
+    });
+
+
     return {
       history
     }
@@ -246,26 +234,48 @@ export class TransacoesService {
       throw new BadRequestException('Direção de ordenação inválida');
     }
 
-    const usuario = await this.getUserFromToken(usuariotoken, ['transacoes']);
-
-    // Cálculo do offset
-    const offset = (page - 1) * limit;
+    const usuario = await this.getUserFromtoken(usuariotoken, false, true);
 
     // Busca das transações com paginação e ordenação
-    const transacoes = await this.entityManager.find(Transacao, {
+    const transacoesUsuario = await this.entityManager.find(Transacao, {
       where: { usuario: { id: usuario.id } },
       take: limit,
-      skip: offset,
-      relations: ['categoria'],
+      skip: (page - 1) * limit,
+      select: {
+        id: true,
+        titulo: true,
+        descricao: true,
+        valor: true,
+        data: true,
+        tipo: true,
+        categoria: {
+          id: true,
+          nome: true,
+          orcamento: true,
+          gasto: true
+        }
+      },
+      relations: {
+        categoria: true
+      },
       order: {
         [sortField]: sortOrder,
       },
     });
 
-    // Mapeamento e filtragem das transações
-    const mappedTransacoes = this.mapAndFilterTransactions(transacoes);
+    // para pegar o total de transacoes
+    const qtd = await this.entityManager.count(Transacao,
+      {
+        where: { usuario: { id: usuario.id } },
+      })
 
-    return mappedTransacoes;
+    // Mapeamento e filtragem das transações
+    const mappedTransacoes = this.mapAndFilterTransactions(transacoesUsuario);
+
+    return {
+      qtd,
+      transacoes: mappedTransacoes
+    }
   }
 
 
@@ -278,7 +288,7 @@ export class TransacoesService {
       throw new BadRequestException('Valor inválido'); // 400
     }
 
-    const usuario = await this.getUserFromtoken(access_token, ['transacoes']);
+    const usuario = await this.getUserFromtoken(access_token, false, true)
 
     const transacao: Transacao = await this.entityManager.findOne(
       Transacao, {
@@ -287,6 +297,20 @@ export class TransacoesService {
         usuario: {
           id: usuario.id
         },
+      },
+      select: {
+        id: true,
+        titulo: true,
+        descricao: true,
+        valor: true,
+        data: true,
+        tipo: true,
+        categoria: {
+          id: true,
+          nome: true,
+          orcamento: true,
+          gasto: true
+        }
       },
       relations: {
         categoria: true
@@ -383,14 +407,14 @@ export class TransacoesService {
       usuario.saldo -= updateTransacoeDto.valor;
 
 
-      await this.entityManager.save(categoriaAntiga);
-      await this.entityManager.save(categoriaNova);
+      await this.entityManager.update(Categoria, { id: categoriaAntiga.id }, { ...categoriaAntiga });
+      await this.entityManager.update(Categoria, { id: categoriaNova.id }, { ...categoriaNova });
 
     } else if (updateTransacoeDto.valor && updateTransacoeDto.valor !== transacao.valor) {
       usuario.saldo = updateTransacoeDto.tipo === 'entrada' ? usuario.saldo + updateTransacoeDto.valor : usuario.saldo - updateTransacoeDto.valor;
     }
 
-    await this.entityManager.save(usuario);
+    await this.entityManager.update(Usuario, { id: usuario.id }, { ...usuario });
 
     return result;
   }
@@ -411,12 +435,25 @@ export class TransacoesService {
           id: usuario.id
         },
       },
-      relations: {
-        usuario: true,
-        categoria: true
+      select: {
+        id: true,
+        titulo: true,
+        descricao: true,
+        valor: true,
+        data: true,
+        tipo: true,
+        categoria: {
+          id: true,
+          nome: true,
+          orcamento: true,
+          gasto: true
+        },
+        usuario: {
+          id: true,
+          saldo: true
+        }
       }
-    }
-    );
+    });
 
     const result: Transacao = await this.entityManager.remove<Transacao>(
       transacao
@@ -429,8 +466,14 @@ export class TransacoesService {
     return result;
   }
 
-  private async getUserFromtoken(token: string, relations?: string[]): Promise<Usuario> {
+  private async getUserFromtoken(token: string, categorias?: boolean, transacoes?: boolean): Promise<Usuario> {
     const data = this.jwtService.decode(token) as jwtDecodeUser
+
+    const relations = [
+      categorias ? 'categorias' : '',
+      transacoes ? 'transacoes' : '',
+      transacoes ? 'transacoes.categoria' : ''
+    ].filter(rel => rel !== '')
 
     const usuario = await this.entityManager.findOne(
       Usuario,
@@ -438,17 +481,35 @@ export class TransacoesService {
         where: {
           id: data.id
         },
-        relations: {
-          categorias: relations && relations.includes('categorias') ? true : false,
-          transacoes: relations && relations.includes('transacoes') ? true : false
-        }
-      }
-    );
-
-
+        select: {
+          id: true,
+          saldo: true,
+          categorias: categorias ? {
+            id: true,
+            nome: true,
+            orcamento: true,
+            gasto: true,
+            dataCriacao: true
+          } : false,
+          transacoes: transacoes ? {
+            id: true,
+            titulo: true,
+            valor: true,
+            data: true,
+            tipo: true,
+            categoria: {
+              id: true,
+              nome: true,
+              orcamento: true,
+              gasto: true
+            }
+          } : false
+        },
+        relations: relations
+      });
 
     if (!usuario) {
-      console.log('Usuário não encontrado');
+      // console.log('Usuário não encontrado');
       throw new NotFoundException('Usuário não encontrado'); // 404
     }
 
