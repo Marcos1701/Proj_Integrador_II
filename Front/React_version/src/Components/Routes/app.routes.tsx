@@ -8,7 +8,6 @@ import { MetasPage } from "../Pages/MetasPage";
 import { AddTransacaoPage } from "../Home/Components/AddItemPage/Transacao";
 import { AddCategoriaPage } from "../Home/Components/AddItemPage/Categoria";
 import { AddMetaPage } from "../Home/Components/AddItemPage/Meta";
-import { DetailsMetaPage } from "../Pages/DetailsPage/Meta";
 
 export function PatchRoutes() {
     return (
@@ -52,12 +51,6 @@ export function PatchRoutes() {
                 <Route path="add" element={ // rota relativa à rota pai "metas"
                     <ProtectedRoute>
                         <AddMetaPage />
-                    </ProtectedRoute>
-                } />
-
-                <Route path=":id" element={ // rota relativa à rota pai "metas"	
-                    <ProtectedRoute>
-                        <DetailsMetaPage />
                     </ProtectedRoute>
                 } />
 

@@ -1,6 +1,10 @@
 form.element-details {
     background: transparent;
     box-shadow: none;
+
+    & label {
+        color: #FFF;
+    }
 }
 
 .details-div {
@@ -15,13 +19,13 @@ form.element-details {
     top: 0;
     z-index: 3;
 
-    background: var(--background, #DFF6FF);
+    background: var(--background, #1D1D41);
     backdrop-filter: blur(3px);
     border-radius: 64.108px;
-    box-shadow: 16px 38px 17px 0px rgba(0, 0, 0, 0.25);
+    box-shadow: 16px 38px 17px 0px rgba(0, 0, 0, 0.2);
 
     height: fit-content;
-    max-height: 85vh;
+    max-height: 95vh;
 
     & .close-button {
         /* background: transparent; */
@@ -47,7 +51,7 @@ form.element-details {
     & h2 {
         font-size: clamp(1em, 2vw, 1.5em);
         font-weight: 800;
-        color: #47B5FF;
+        color: #FFF;
 
         text-wrap: nowrap;
     }

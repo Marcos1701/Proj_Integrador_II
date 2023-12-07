@@ -16,6 +16,8 @@ interface IListaMetasProps {
     page?: number
     classname?: string
     id?: string
+    setShowDetails?: React.Dispatch<React.SetStateAction<boolean>>
+    setMeta?: React.Dispatch<React.SetStateAction<IMeta | undefined>>
 }
 
 export function ListaMetas(
@@ -25,7 +27,10 @@ export function ListaMetas(
         orderSelect = true,
         searchInput = true,
         page = 1,
-        id = "ListaMetas"
+        id = "ListaMetas",
+        setShowDetails,
+        setMeta
+
     }: IListaMetasProps
 ): JSX.Element {
 
@@ -59,6 +64,8 @@ export function ListaMetas(
                                         <MetaBox
                                             meta={meta}
                                             key={meta.id}
+                                            setShowDetails={setShowDetails}
+                                            setMeta={setMeta}
                                         />
                                     </li>
                                 )
