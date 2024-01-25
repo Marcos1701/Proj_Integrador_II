@@ -1,3 +1,8 @@
+<p align="center">
+       <img src="https://scontent-for1-1.cdninstagram.com/v/t51.2885-15/420153961_1744709529353880_7061879135138921426_n.jpg?stp=dst-jpg_e35&efg=eyJ2ZW5jb2RlX3RhZyI6ImltYWdlX3VybGdlbi4xMDgweDEyMDEuc2RyIn0&_nc_ht=scontent-for1-1.cdninstagram.com&_nc_cat=100&_nc_ohc=cLspQ6v2fT4AX_3b3xe&edm=ACOOH6wBAAAA&ccb=7-5&ig_cache_key=MzI4NTMxNDk3MDQ4Nzg1MTAxMw%3D%3D.2-ccb7-5&oh=00_AfBa2F-vix4Pnn3vB4I949k6jfOQOztjLrYr5jVafcTi7g&oe=65B7352E&_nc_sid=aa4e97" width=400
+              />
+</p>
+
 # **:sparkles:Projeto Integrador II.:sparkles:**
 
 ## **:dizzy: - Nome do Projeto:**
